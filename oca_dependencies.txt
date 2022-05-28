@@ -1,0 +1,6 @@
+# See https://github.com/OCA/odoo-community.org/blob/master/website/Contribution/CONTRIBUTING.rst#oca_dependencies-txt
+
+oca-server-tools https://github.com/OCA/server-tools.git 14.0
+ssi-mixin https://github.com/open-synergy/ssi-mixin.git 14.0
+opnsynid-hr https://github.com/open-synergy/opnsynid-hr.git 14.0
+opnsynid-hr-employee-directory https://github.com/open-synergy/opnsynid-hr-employee-directory.git 14.0
