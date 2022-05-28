@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+<!-- Configurator -->
+<record id="hr_timesheet_computation_item_group" model="res.groups">
+    <field name="name">Timesheet Computation Item</field>
+    <field
+            name="category_id"
+            ref="ssi_hr.human_resource_configurator_module_category"
+        />
+    <field
+            name="users"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
+</record>
+
+<!-- Workflow -->
+<record id="hr_timesheet_viewer_group" model="res.groups">
+    <field name="name">Viewer</field>
+    <field name="category_id" ref="hr_timesheet_module_category" />
+</record>
+
+<record id="hr_timesheet_user_group" model="res.groups">
+    <field name="name">User</field>
+    <field name="category_id" ref="hr_timesheet_module_category" />
+    <field name="implied_ids" eval="[(4, ref('hr_timesheet_viewer_group'))]" />
+</record>
+
+<record id="hr_timesheet_validator_group" model="res.groups">
+    <field name="name">Validator</field>
+    <field name="category_id" ref="hr_timesheet_module_category" />
+    <field name="implied_ids" eval="[(4, ref('hr_timesheet_user_group'))]" />
+    <field
+            name="users"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
+</record>
+
+<!-- Data Ownership -->
+<record id="timesheet_direct_subordinate_group" model="res.groups">
+    <field name="name">Direct Subordinate</field>
+    <field
+            name="category_id"
+            ref="ssi_timesheet.hr_timesheet_data_ownership_module_category"
+        />
+</record>
+
+<record id="timesheet_direct_all_subordinate_group" model="res.groups">
+    <field name="name">All Subordinate</field>
+    <field
+            name="category_id"
+            ref="ssi_timesheet.hr_timesheet_data_ownership_module_category"
+        />
+    <field name="implied_ids" eval="[(4, ref('timesheet_direct_subordinate_group'))]" />
+</record>
+
+<record id="timesheet_company_group" model="res.groups">
+    <field name="name">Company</field>
+    <field
+            name="category_id"
+            ref="ssi_timesheet.hr_timesheet_data_ownership_module_category"
+        />
+    <field
+            name="implied_ids"
+            eval="[(4, ref('timesheet_direct_all_subordinate_group'))]"
+        />
+</record>
+
+<record id="timesheet_company_child_group" model="res.groups">
+    <field name="name">Company and All Child Companies</field>
+    <field
+            name="category_id"
+            ref="ssi_timesheet.hr_timesheet_data_ownership_module_category"
+        />
+    <field
+            name="implied_ids"
+            eval="[(4, ref('ssi_timesheet.timesheet_company_group'))]"
+        />
+</record>
+
+<record id="timesheet_all_group" model="res.groups">
+    <field name="name">All</field>
+    <field
+            name="category_id"
+            ref="ssi_timesheet.hr_timesheet_data_ownership_module_category"
+        />
+    <field
+            name="implied_ids"
+            eval="[(4, ref('ssi_timesheet.timesheet_company_child_group'))]"
+        />
+</record>
+</odoo>

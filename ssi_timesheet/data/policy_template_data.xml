@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+<data noupdate="0">
+<record id="policy_template_timesheet" model="policy.template">
+    <field name="name">Standard Timesheet</field>
+    <field name="model_id" ref="ssi_timesheet.model_hr_timesheet" />
+    <field
+                name="state_field_id"
+                search="[('model_id.model','=','hr.timesheet'),('name','=','state')]"
+            />
+    <field name="sequence" eval="100" />
+    <field name="python_code">result=True</field>
+</record>
+
+<!-- T:mesheet  open_ok -->
+<record id="policy_template_timesheet_open" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_timesheet" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','hr.timesheet'),('name','=','open_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','hr.timesheet'),('value','=','draft')]"
+            />
+    <field name="restrict_user" eval="1" />
+    <field name="computation_method">use_group</field>
+    <field
+                name="group_ids"
+                eval="[(6,0,[ref('ssi_timesheet.hr_timesheet_user_group')])]"
+            />
+    <field name="restrict_additional" eval="0" />
+</record>
+
+<!-- Timesheet: confirm_ok -->
+<record id="policy_template_timesheet_confirm" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_timesheet" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','hr.timesheet'),('name','=','confirm_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','hr.timesheet'),('value','=','open')]"
+            />
+    <field name="restrict_user" eval="1" />
+    <field name="computation_method">use_group</field>
+    <field
+                name="group_ids"
+                eval="[(6,0,[ref('ssi_timesheet.hr_timesheet_user_group')])]"
+            />
+    <field name="restrict_additional" eval="0" />
+</record>
+
+<!-- Timesheet: approve_ok -->
+<record id="policy_template_timesheet_approve" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_timesheet" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','hr.timesheet'),('name','=','approve_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','hr.timesheet'),('value','=','confirm')]"
+            />
+    <field name="restrict_user" eval="0" />
+    <field name="restrict_additional" eval="1" />
+    <field name="additional_python_code">result = False
+if env.user.id in document.active_approver_user_ids.ids:
+    result = True</field>
+</record>
+
+<!-- Timesheet: reject_ok -->
+<record id="policy_template_timesheet_reject" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_timesheet" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','hr.timesheet'),('name','=','reject_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','hr.timesheet'),('value','=','confirm')]"
+            />
+    <field name="restrict_user" eval="0" />
+    <field name="restrict_additional" eval="1" />
+    <field name="additional_python_code">result = False
+if env.user.id in document.active_approver_user_ids.ids:
+    result = True</field>
+</record>
+
+
+<!-- Timesheet: restart_approval_ok -->
+<record id="policy_template_timesheet_restart_approval" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_timesheet" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','hr.timesheet'),('name','=','restart_approval_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','hr.timesheet'),('value','in',['confirm'])]"
+            />
+    <field name="restrict_user" eval="1" />
+    <field name="computation_method">use_group</field>
+    <field
+                name="group_ids"
+                eval="[(6,0,[ref('ssi_timesheet.hr_timesheet_validator_group')])]"
+            />
+    <field name="restrict_additional" eval="1" />
+    <field name="additional_python_code">result = False
+if not document.approval_template_id:
+    result = True</field>
+</record>
+
+<!-- Timesheet: cancel_ok -->
+<record id="policy_template_timesheet_cancel" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_timesheet" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','hr.timesheet'),('name','=','cancel_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','hr.timesheet'),('value','in',['draft','confirm','done'])]"
+            />
+      <field name="restrict_user" eval="1" />
+      <field name="computation_method">use_group</field>
+      <field
+                name="group_ids"
+                eval="[(6,0,[ref('ssi_timesheet.hr_timesheet_validator_group')])]"
+            />
+    <field name="restrict_additional" eval="0" />
+</record>
+
+
+<!-- Timesheet: restart_ok -->
+<record id="policy_template_timesheet_restart" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_timesheet" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','hr.timesheet'),('name','=','restart_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','hr.timesheet'),('value','in',['cancel','reject'])]"
+            />
+    <field name="restrict_user" eval="1" />
+    <field name="computation_method">use_group</field>
+    <field
+                name="group_ids"
+                eval="[(6,0,[ref('ssi_timesheet.hr_timesheet_validator_group')])]"
+            />
+    <field name="restrict_additional" eval="0" />
+</record>
+
+<!-- Evaluation Batch: manual_number_ok -->
+<record id="policy_template_timesheet_manual_number" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_timesheet" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','hr.timesheet'),('name','=','manual_number_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','hr.timesheet'),('value','=','draft')]"
+            />
+    <field name="restrict_user" eval="1" />
+    <field name="computation_method">use_group</field>
+    <field
+                name="group_ids"
+                eval="[(6,0,[ref('ssi_timesheet.hr_timesheet_validator_group')])]"
+            />
+    <field name="restrict_additional" eval="0" />
+</record>
+</data>
+</odoo>
