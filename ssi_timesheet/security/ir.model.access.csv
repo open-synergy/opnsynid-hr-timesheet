@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_timesheet_computation_item_configurator,hr.timesheet_computation_item - configurator,model_hr_timesheet_computation_item,hr_timesheet_computation_item_group,1,1,1,1
+access_hr_timesheet_computation_item_all,hr.timesheet_computation_item - all,model_hr_timesheet_computation_item,,1,0,0,0
+access_hr_timesheet_all,hr.timesheet - all,model_hr_timesheet,,1,0,0,0
+access_hr_timesheet_viewer,hr.timesheet - viewer,model_hr_timesheet,hr_timesheet_viewer_group,1,0,0,0
+access_hr_timesheet_user,hr.timesheet - user,model_hr_timesheet,hr_timesheet_user_group,1,1,1,1

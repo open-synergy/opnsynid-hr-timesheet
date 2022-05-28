@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2021 OpenSynergy Indonesia
+     Copyright 2021 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+<record id="hr_timesheet_view_tree" model="ir.ui.view">
+    <field name="name">hr.timesheet tree</field>
+    <field name="model">hr.timesheet</field>
+    <field name="mode">primary</field>
+    <field name="inherit_id" ref="ssi_transaction_mixin.mixin_transaction_view_tree" />
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="date_start" string="Start Date" />
+                <field name="date_end" string="End date" />
+                <field name="employee_id" string="Employee" />
+            </xpath>
+        </data>
+    </field>
+</record>
+
+<record id="hr_timesheet_view_search" model="ir.ui.view">
+    <field name="name">hr.timesheet search</field>
+    <field name="model">hr.timesheet</field>
+    <field name="mode">primary</field>
+    <field
+            name="inherit_id"
+            ref="ssi_transaction_mixin.mixin_transaction_view_search"
+        />
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//group[@name='group_by']" position="inside">
+                <filter
+                        name="grp_date_start"
+                        string="Date Start"
+                        context="{'group_by':'date_start'}"
+                    />
+                <filter
+                        name="grp_date_end"
+                        string="Date End"
+                        context="{'group_by':'date_end'}"
+                    />
+            </xpath>
+        </data>
+    </field>
+</record>
+
+<record id="hr_timesheet_view_form" model="ir.ui.view">
+    <field name="name">hr.timesheet form</field>
+    <field name="model">hr.timesheet</field>
+    <field name="mode">primary</field>
+    <field name="inherit_id" ref="ssi_transaction_mixin.mixin_transaction_view_form" />
+    <field name="arch" type="xml">
+        <data>
+          <xpath expr="//field[@name='user_id']" position="after">
+              <field name="employee_id" />
+              <field name="department_id" />
+              <field name="manager_id" />
+              <field name="job_id" />
+          </xpath>
+          <xpath expr="//group[@name='header_right']" position="inside">
+              <field name="date_start" />
+              <field name="date_end" />
+          </xpath>
+        </data>
+    </field>
+</record>
+
+<record id="hr_timesheet_action" model="ir.actions.act_window">
+    <field name="name">Timesheets</field>
+    <field name="res_model">hr.timesheet</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+<menuitem
+        id="menu_hr_timesheet"
+        name="Timesheets"
+        parent="timesheet_menu"
+        groups="hr_timesheet_viewer_group"
+        action="hr_timesheet_action"
+        sequence="1"
+    />
+
+</odoo>
