@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_timesheet_attendance_all,hr.timesheet_attendance - all,model_hr_timesheet_attendance,,1,0,0,0
+access_hr_timesheet_attendance_viewer,hr.timesheet_attendance - viewer,model_hr_timesheet_attendance,ssi_timesheet.hr_timesheet_viewer_group,1,0,0,0
+access_hr_timesheet_attendance_user,hr.timesheet_attendance - user,model_hr_timesheet_attendance,ssi_timesheet.hr_timesheet_user_group,1,1,1,1
+access_hr_timesheet_attendance_schedule_all,hr.timesheet - all,model_hr_timesheet_attendance_schedule,,1,0,0,0
+access_hr_timesheet_attendance_schedule_viewer,hr.timesheet_attendance_schedule - viewer,model_hr_timesheet_attendance_schedule,ssi_timesheet.hr_timesheet_viewer_group,1,0,0,0
+access_hr_timesheet_attendance_schedule_user,hr.timesheet_attendance_schedule - user,model_hr_timesheet_attendance_schedule,ssi_timesheet.hr_timesheet_user_group,1,1,1,1
+access_hr_attendance_reason_configurator,hr.attendance_reason - configurator,model_hr_attendance_reason,hr_attendance_reason_group,1,1,1,1
+access_hr_attendance_reason_all,hr.attendance_reason - all,model_hr_attendance_reason,,1,0,0,0
