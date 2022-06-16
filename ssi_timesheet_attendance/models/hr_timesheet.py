@@ -16,15 +16,14 @@ class HRTimesheet(models.Model):
     def _compute_total_attendance(self):
         for sheet in self:
             sheet.total_attendance = 0.0
-            # for attendance in sheet.attendance_ids.sorted(key=lambda r: r.check_in:
             for attendance in sheet.attendance_ids:
                 sheet.total_attendance += attendance.total_hour
 
     working_schedule_id = fields.Many2one(
         string="Working Schedule",
         comodel_name="resource.calendar",
-        # related="employee_id.resource_calendar_id",
         store=True,
+        compute_sudo=True,
     )
     total_attendance = fields.Float(
         string="Total Attendance",
@@ -64,5 +63,3 @@ class HRTimesheet(models.Model):
         self.working_schedule_id = False
         if self.employee_id:
             self.working_schedule_id = self.employee_id.resource_calendar_id
-
-    # def _create_schedule(self):

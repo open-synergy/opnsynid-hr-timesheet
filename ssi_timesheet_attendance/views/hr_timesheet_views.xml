@@ -77,15 +77,14 @@
                                             <field invisible="0" name="sheet_id" />
                                             <field invisible="0" name="schedule_id" />
                                             <field
-                                                invisible="0"
                                                 name="total_hour"
                                                 widget="float_time"
                                             />
                                             <field
-                                                invisible="0"
                                                 name="total_valid_hour"
                                                 widget="float_time"
                                             />
+
                                         </group>
                                     </group>
                                 </form>
@@ -132,6 +131,10 @@
                                     name="finish_late_hour"
                                     widget="float_time"
                                 />
+                                <field name="early_start_hour" widget="float_time" />
+                                <field name="late_start_hour" widget="float_time" />
+                                <field name="finish_early_hour" widget="float_time" />
+                                <field name="finish_late_hour" widget="float_time" />
                                 <field name="state" />
                             </tree>
                             <form>
