@@ -62,6 +62,12 @@ class HRTimesheet(models.Model):
         "dom_cancel",
     ]
 
+    computation_ids = fields.One2many(
+        string="Computations",
+        comodel_name="hr.timesheet_computation",
+        inverse_name="sheet_id",
+        readonly=True,
+    )
     state = fields.Selection(
         string="State",
         selection=[
@@ -104,3 +110,47 @@ class HRTimesheet(models.Model):
     def onchange_policy_template_id(self):
         template_id = self._get_template_policy()
         self.policy_template_id = template_id
+
+    def action_compute_computation(self):
+        for record in self.sudo():
+            record._compute_computation()
+
+    def action_reload_timesheet_computation(self):
+        for record in self.sudo():
+            record._reload_timesheet_computation()
+            record._compute_computation()
+
+    def action_open(self):
+        _super = super(HRTimesheet, self)
+        _super.action_open()
+        for record in self.sudo():
+            record._reload_timesheet_computation()
+            record._compute_computation()
+
+    def action_confirm(self):
+        _super = super(HRTimesheet, self)
+        _super.action_confirm()
+        for record in self.sudo():
+            record._compute_computation()
+
+    def _get_computation_localdict(self):
+        self.ensure_one()
+        return {
+            "document": self,
+            "env": self.env,
+        }
+
+    def _compute_computation(self):
+        self.ensure_one()
+        localdict = self._get_computation_localdict()
+        for computation in self.computation_ids:
+            result = computation._evaluate_computation(localdict)
+            localdict[computation.code] = result
+
+    def _reload_timesheet_computation(self):
+        self.ensure_one()
+        self.computation_ids.unlink()
+        result = []
+        for computation in self.employee_id.timesheet_computation_ids:
+            result.append((0, 0, {"item_id": computation.id}))
+        self.write({"computation_ids": result})

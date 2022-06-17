@@ -2,7 +2,9 @@
 # Copyright 2022 PT. Simetri Sinergi Indonesia
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
-from odoo import fields, models
+from odoo import _, fields, models
+from odoo.exceptions import UserError
+from odoo.tools.safe_eval import safe_eval
 
 
 class HrTimesheetComputationItem(models.Model):
@@ -23,3 +25,13 @@ class HrTimesheetComputationItem(models.Model):
         default=DEFAULT_PYTHON_CODE,
         copy=True,
     )
+
+    def _evaluate_computation(self, localdict):
+        self.ensure_one()
+        try:
+            safe_eval(self.python_code, localdict, mode="exec", nocopy=True)
+            result = localdict["result"]
+        except Exception as error:
+            msg_err = _("Error evaluating conditions.\n %s") % error
+            raise UserError(msg_err)
+        return result

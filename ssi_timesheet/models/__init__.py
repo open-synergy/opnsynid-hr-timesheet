@@ -5,4 +5,6 @@
 from . import (
     hr_timesheet_computation_item,
     hr_timesheet,
+    hr_timesheet_computation,
+    hr_employee,
 )

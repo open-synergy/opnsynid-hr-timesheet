@@ -4,3 +4,6 @@ access_hr_timesheet_computation_item_all,hr.timesheet_computation_item - all,mod
 access_hr_timesheet_all,hr.timesheet - all,model_hr_timesheet,,1,0,0,0
 access_hr_timesheet_viewer,hr.timesheet - viewer,model_hr_timesheet,hr_timesheet_viewer_group,1,0,0,0
 access_hr_timesheet_user,hr.timesheet - user,model_hr_timesheet,hr_timesheet_user_group,1,1,1,1
+access_hr_timesheet_computation_all,hr.timesheet_computation - all,model_hr_timesheet_computation,,1,0,0,0
+access_hr_timesheet_computation_viewer,hr.timesheet_computation - viewer,model_hr_timesheet_computation,hr_timesheet_viewer_group,1,0,0,0
+access_hr_timesheet_computation_user,hr.timesheet_computation - user,model_hr_timesheet_computation,hr_timesheet_user_group,1,1,1,1
