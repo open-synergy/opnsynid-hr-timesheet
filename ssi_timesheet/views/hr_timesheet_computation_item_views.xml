@@ -22,11 +22,7 @@
     <field name="inherit_id" ref="ssi_master_data_mixin.mixin_master_data_view_tree" />
     <field name="mode">primary</field>
     <field name="arch" type="xml">
-        <data>
-            <xpath expr="//field[@name='name']" position="after">
-                <field name="python_code" />
-            </xpath>
-        </data>
+        <data />
     </field>
 </record>
 
@@ -37,9 +33,9 @@
     <field name="mode">primary</field>
     <field name="arch" type="xml">
         <data>
-            <xpath expr="//notebook" position="inside">
+            <xpath expr="//page[1]" position="before">
                 <page name="code" string="Computation">
-                    <field name="python_code" />
+                    <field name="python_code" widget="ace" />
                 </page>
             </xpath>
         </data>
@@ -47,7 +43,7 @@
 </record>
 
 <record id="hr_timesheet_computation_item_action" model="ir.actions.act_window">
-    <field name="name">Timesheet Computation Item</field>
+    <field name="name">Timesheet Computation Items</field>
     <field name="type">ir.actions.act_window</field>
     <field name="res_model">hr.timesheet_computation_item</field>
     <field name="view_mode">tree,form</field>
@@ -55,7 +51,7 @@
 
 <menuitem
         id="hr_timesheet_computation_item_menu"
-        name="Timesheet Computation Item"
+        name="Timesheet Computation Items"
         parent="menu_hr_timesheet_configuration"
         groups="hr_timesheet_computation_item_group"
         action="hr_timesheet_computation_item_action"

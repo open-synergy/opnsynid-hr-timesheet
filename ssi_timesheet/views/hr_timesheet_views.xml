@@ -62,6 +62,36 @@
               <field name="date_start" />
               <field name="date_end" />
           </xpath>
+          <xpath expr="//page[@name='note']" position="before">
+                <page name="computation" string="Computations">
+                    <button
+                            name="action_reload_timesheet_computation"
+                            string="Reload"
+                            class="oe_highlight"
+                            type="object"
+                            icon="fa-refresh"
+                            style="margin-right:4px"
+                        />
+                    <button
+                            name="action_compute_computation"
+                            string="Compute"
+                            class="oe_highlight"
+                            type="object"
+                            icon="fa-cogs"
+                        />
+                    <group name="computation_1" colspan="4" col="2">
+                        <field name="computation_ids" nolabel="1">
+                            <tree editable="top">
+                                <field name="sequence" widget="handle" />
+                                <field name="code" />
+                                <field name="item_id" />
+                                <field name="amount" />
+                            </tree>
+                        </field>
+                    </group>
+                </page>
+            </xpath>
+
         </data>
     </field>
 </record>

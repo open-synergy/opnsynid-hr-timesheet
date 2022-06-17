@@ -1,10 +1,10 @@
 # Copyright 2022 OpenSynergy Indonesia
 # Copyright 2022 PT. Simetri Sinergi Indonesia
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-# pylint: disable=locally-disabled, manifest-required-author
+
 {
     "name": "Timesheets",
-    "version": "14.0.1.0.0",
+    "version": "14.0.1.1.0",
     "website": "https://simetri-sinergi.id",
     "author": "PT. Simetri Sinergi Indonesia, OpenSynergy Indonesia",
     "license": "LGPL-3",
@@ -31,5 +31,6 @@
         "menu.xml",
         "views/hr_timesheet_computation_item_views.xml",
         "views/hr_timesheet_views.xml",
+        "views/hr_employee_views.xml",
     ],
 }
