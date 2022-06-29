@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_work_log_employee,hr.work_log - employee,model_hr_work_log,base.group_user,1,1,1,1
+access_hr_work_log_all,hr.work_log - all,model_hr_work_log,,1,0,0,0
