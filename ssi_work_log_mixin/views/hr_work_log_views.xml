@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+    <record id="hr_work_log_view_search" model="ir.ui.view">
+        <field name="name">hr.work.log.search</field>
+        <field name="model">hr.work_log</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="model_id" />
+                <field name="employee_id" />
+                <field name="analytic_account_id" />
+                <field name="date" />
+                <group name="group_by">
+                    <filter
+                        name="grp_model"
+                        string="Model"
+                        context="{'group_by':'model_id'}"
+                    />
+                    <filter
+                        name="grp_employee"
+                        string="Employee"
+                        context="{'group_by':'employee_id'}"
+                    />
+                    <filter
+                        name="grp_analytic_account"
+                        string="Analytic Account"
+                        context="{'group_by': 'analytic_account_id'}"
+                    />
+                </group>
+                <searchpanel>
+                    <field
+                        name="model_id"
+                        select="multi"
+                        string="Model"
+                        icon="fa-filter"
+                        color="#875A7B"
+                        enable_counters="1"
+                    />
+                    <field
+                        name="analytic_account_id"
+                        select="multi"
+                        string="Analytic Account"
+                        icon="fa-filter"
+                        color="#875A7B"
+                        enable_counters="1"
+                    />
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <record id="hr_work_log_view_tree" model="ir.ui.view">
+        <field name="name">hr.work.log.tree</field>
+        <field name="model">hr.work_log</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="model_id" />
+                <field name="employee_id" />
+                <field name="analytic_account_id" />
+                <field name="date" />
+                <field name="amount" widget="float_time" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_work_log_view_form" model="ir.ui.view">
+        <field name="name">hr.work.log.form</field>
+        <field name="model">hr.work_log</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group name="left">
+                            <field name="name" />
+                            <field name="model_id" />
+                            <field name="model_name" />
+                            <field name="work_object_id" />
+                            <field
+                                name="allowed_analytic_account_ids"
+                                widget="many2many_tags"
+                                invisible="1"
+                            />
+                            <field
+                                name="analytic_account_id"
+                                domain="[('id', 'in', allowed_analytic_account_ids)]"
+                            />
+                        </group>
+                        <group name="right">
+                            <field name="employee_id" />
+                            <field name="date" />
+                            <field name="sheet_id" />
+                            <field name="amount" widget="float_time" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_work_log_action" model="ir.actions.act_window">
+        <field name="name">Work Logs</field>
+        <field name="res_model">hr.work_log</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="hr_work_log_menu"
+        name="Work Logs"
+        parent="menu_work_log"
+        action="hr_work_log_action"
+        sequence="1"
+    />
+</odoo>

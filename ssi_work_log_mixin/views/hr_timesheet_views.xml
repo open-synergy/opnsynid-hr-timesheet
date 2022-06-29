@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="hr_timesheet_view_form" model="ir.ui.view">
+        <field name="name">hr.timesheet.work.log.form</field>
+        <field name="model">hr.timesheet</field>
+        <field name="inherit_id" ref="ssi_timesheet.hr_timesheet_view_form" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//page[last()]" position="after">
+                    <page name="page_work_log" string="Work Log">
+                        <group name="grp_work_log" colspan="4">
+                            <field name="work_log_ids" nolabel="1" />
+                        </group>
+                    </page>
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>
