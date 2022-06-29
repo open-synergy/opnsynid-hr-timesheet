@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+<record id="test_work_log_view_tree" model="ir.ui.view">
+    <field name="name">test.work.log.mixin.tree</field>
+    <field name="model">test.work_log_mixin</field>
+    <field name="arch" type="xml">
+        <tree>
+            <field name="code" />
+            <field name="name" />
+        </tree>
+    </field>
+</record>
+
+<record id="test_work_log_view_form" model="ir.ui.view">
+    <field name="name">test.work.log.mixin.form</field>
+    <field name="model">test.work_log_mixin</field>
+    <field name="arch" type="xml">
+        <form>
+            <sheet>
+                <group>
+                    <group name="left">
+                        <field name="code" />
+                    </group>
+                    <group name="right">
+                        <field name="name" />
+                    </group>
+                </group>
+                <notebook>
+                    <page name="page_note" string="Notes">
+                        <field name="note" />
+                    </page>
+                </notebook>
+            </sheet>
+        </form>
+    </field>
+</record>
+
+<record id="test_work_log_action" model="ir.actions.act_window">
+    <field name="name">Test Work Log</field>
+    <field name="res_model">test.work_log_mixin</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+<menuitem
+        id="test_work_log_menu"
+        name="Test"
+        parent="ssi_work_log_mixin.menu_work_log"
+        action="test_work_log_action"
+        sequence="100"
+    />
+</odoo>
