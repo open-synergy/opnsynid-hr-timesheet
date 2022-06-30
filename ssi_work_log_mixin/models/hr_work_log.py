@@ -12,7 +12,7 @@ class HRWorkLog(models.Model):
     _description = "HR Work Log"
 
     name = fields.Char(
-        string="Name",
+        string="Description",
         required=True,
     )
 
@@ -27,7 +27,7 @@ class HRWorkLog(models.Model):
         return model
 
     model_id = fields.Many2one(
-        string="Referenced Model",
+        string="Document Type",
         comodel_name="ir.model",
         index=True,
         required=True,
@@ -40,12 +40,33 @@ class HRWorkLog(models.Model):
         store=True,
     )
     work_object_id = fields.Many2oneReference(
-        string="Work Object ID",
+        string="Document ID",
         index=True,
         required=True,
         readonly=True,
         model_field="model_name",
-        ondelete="cascade",
+    )
+
+    @api.model
+    def _selection_target_model(self):
+        return [(model.model, model.name) for model in self.env["ir.model"].search([])]
+
+    @api.depends(
+        "model_id",
+        "work_object_id",
+    )
+    def _compute_work_object_reference(self):
+        for document in self:
+            result = False
+            if document.model_id and document.work_object_id:
+                result = "%s,%s" % (document.model_name, document.work_object_id)
+            document.work_object_reference = result
+
+    work_object_reference = fields.Reference(
+        string="# Document",
+        compute="_compute_work_object_reference",
+        store=True,
+        selection="_selection_target_model",
     )
     date = fields.Date(
         string="Date",
@@ -109,6 +130,8 @@ class HRWorkLog(models.Model):
         comodel_name="hr.timesheet",
         compute="_compute_sheet_id",
         store=True,
+        required=False,
+        ondelete="restrict",
     )
 
     @api.model
