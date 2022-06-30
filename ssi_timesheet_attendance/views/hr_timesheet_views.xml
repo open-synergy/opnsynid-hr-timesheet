@@ -17,7 +17,7 @@
                 <xpath expr="//field[@name='date_end']" position="after">
                     <field name="total_attendance" widget="float_time" />
                 </xpath>
-                <xpath expr="//page[@name='note']" position="before">
+                <xpath expr="//page[@name='computation']" position="before">
                     <page name="page_attendance" string="Attendance">
                         <group name="attendance_left" colspan="1" col="2">
                             <field
