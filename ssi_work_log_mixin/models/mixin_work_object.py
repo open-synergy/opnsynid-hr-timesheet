@@ -68,10 +68,11 @@ class MixinWorkObject(models.AbstractModel):
     def unlink(self):
         work_log_ids = self.mapped("work_log_ids")
         for work_log in work_log_ids:
-            if work_log.sheet_id.state == "done":
+            if work_log.sheet_id.state in ["confirm", "done"]:
                 strWarning = _(
-                    "You cannot delete the work log. Timesheet %s is already 'Done'"
-                ) % (work_log.sheet_id.name)
+                    "You cannot delete the work log!\n"
+                    "Timesheet with number %s is already on '%s' state!"
+                ) % (work_log.sheet_id.name, work_log.sheet_id.state)
                 raise UserError(strWarning)
         work_log_ids.unlink()
         return super(MixinWorkObject, self).unlink()
