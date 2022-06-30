@@ -12,4 +12,5 @@ class HrTimesheet(models.Model):
         string="Work Logs",
         comodel_name="hr.work_log",
         inverse_name="sheet_id",
+        readonly=True,
     )
