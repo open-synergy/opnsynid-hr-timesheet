@@ -14,7 +14,7 @@ class HrTimesheetComputation(models.Model):
         string="# Sheet",
         comodel_name="hr.timesheet",
         required=True,
-        ondelete="restrict",
+        ondelete="cascade",
     )
     sequence = fields.Integer(
         string="Sequence",
