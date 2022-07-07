@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+<!-- sick leave -->
+<record id="leave_type_demo_sl" model="hr.leave_type">
+    <field name="name">Sick Leaves</field>
+    <field name="code">SL</field>
+    <field name="active" eval="1" />
+</record>
+
+</odoo>
