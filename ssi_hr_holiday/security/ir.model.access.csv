@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_leave_type_configurator,hr.leave_type - configurator,model_hr_leave_type,hr_leave_type_group,1,1,1,1
+access_hr_leave_type_all,hr.leave_type - all,model_hr_leave_type,,1,0,0,0
+access_hr_leave_allocation_all,hr.leave_allocation - all,model_hr_leave_allocation,,1,0,0,0
+access_hr_leave_allocation_viewer,hr.leave_allocation - viewer,model_hr_leave_allocation,hr_leave_allocation_viewer_group,1,0,0,0
+access_hr_leave_allocation_user,hr.leave_allocation - user,model_hr_leave_allocation,hr_leave_allocation_user_group,1,1,1,1
+access_hr_leave_all,hr.leave - all,model_hr_leave,,1,0,0,0
+access_hr_leave_viewer,hr.leave - viewer,model_hr_leave,hr_leave_viewer_group,1,0,0,0
+access_hr_leave_user,hr.leave - user,model_hr_leave,hr_leave_user_group,1,1,1,1
