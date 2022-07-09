@@ -29,9 +29,13 @@ class HRLeave(models.Model):
     _automatically_insert_done_button = False
     _automatically_insert_done_policy_fields = False
 
-    # Attributes related to add element on duration_view automatically
+    # Mixin duration attribute
     _date_start_readonly = True
     _date_end_readonly = True
+    _date_start_states_list = ["draft"]
+    _date_start_states_readonly = ["draft"]
+    _date_end_states_list = ["draft"]
+    _date_end_states_readonly = ["draft"]
 
     # Attributes related to add element on form view automatically
     _automatically_insert_multiple_approval_page = True
@@ -71,32 +75,25 @@ class HRLeave(models.Model):
         "date_end",
     )
     def _compute_sheet(self):
-        if self.employee_id and self.date_start and self.date_end:
-            obj_sheet = self.env["hr.timesheet"]
-            for record in self:
-                sheet_id = False
-                # check date_start
+        obj_sheet = self.env["hr.timesheet"]
+        for record in self:
+            sheet_id = False
+            if record.employee_id and record.date_start and record.date_end:
                 criteria = [
                     ("employee_id", "=", record.employee_id.id),
                     ("date_start", "<=", record.date_start),
                     ("date_end", ">=", record.date_end),
-                    ("state", "in", ["draft", "open"]),
                 ]
                 sheet = obj_sheet.search(criteria, limit=1)
                 if len(sheet) > 0:
                     sheet_id = sheet[0].id
-                else:
-                    strWarning = _(
-                        "Sheet Not FOUND or State Is Closed or Cancelled\n"
-                        + "Please Check Timesheet First"
-                    )
-                    raise UserError(strWarning)
-                record.sheet_id = sheet_id
+            record.sheet_id = sheet_id
 
     sheet_id = fields.Many2one(
-        string="Sheet",
+        string="# Timesheet",
         comodel_name="hr.timesheet",
         compute="_compute_sheet",
+        required=True,
         store=True,
         compute_sudo=True,
     )
@@ -107,17 +104,15 @@ class HRLeave(models.Model):
         "employee_id",
     )
     def _compute_schedule_ids(self):
-        if self.date_start and self.date_end and self.employee_id:
-            obj_schedule = self.env["hr.timesheet_attendance_schedule"]
-            for record in self:
-                pass
-                # check date_start
+        AttendanceSchedule = self.env["hr.timesheet_attendance_schedule"]
+        for record in self:
+            if record.date_start and record.date_end and record.employee_id:
                 criteria = [
                     ("employee_id", "=", record.employee_id.id),
                     ("date", "<=", record.date_end),
                     ("date", ">=", record.date_start),
                 ]
-                schedule = obj_schedule.search(criteria)
+                schedule = AttendanceSchedule.search(criteria)
                 record.schedule_ids = schedule.ids
 
     schedule_ids = fields.Many2many(
@@ -146,8 +141,8 @@ class HRLeave(models.Model):
         "date_end",
     )
     def _compute_leave_duration(self):
-        leave_duration = 0
         for record in self:
+            leave_duration = 0
             if record.date_start and record.date_end:
                 leave_duration = (record.date_end - record.date_start).days + 1
             record.leave_duration = leave_duration
@@ -155,21 +150,9 @@ class HRLeave(models.Model):
     leave_duration = fields.Integer(
         string="Duration",
         compute="_compute_leave_duration",
-        default=0,
         store=True,
         compute_sudo=True,
     )
-    date_start = fields.DateCallable(
-        states={
-            "draft": [("readonly", False)],
-        },
-    )
-    date_end = fields.DateCallable(
-        states={
-            "draft": [("readonly", False)],
-        },
-    )
-
     type_id = fields.Many2one(
         string="Leave Type",
         comodel_name="hr.leave_type",
@@ -181,10 +164,31 @@ class HRLeave(models.Model):
         },
     )
 
+    @api.depends(
+        "type_id",
+        "employee_id",
+        "date_start",
+        "date_end",
+    )
+    def _compute_leave_allocation_id(self):
+        for record in self:
+            result = False
+            if (
+                record.type_id
+                and record.employee_id
+                and record.date_start
+                and record.date_end
+            ):
+                result = record._get_leave_allocation()
+            record.leave_allocation_id = result
+
     leave_allocation_id = fields.Many2one(
-        string="Leave Allocation",
+        string="# Leave Allocation",
         comodel_name="hr.leave_allocation",
         ondelete="restrict",
+        compute="_compute_leave_allocation_id",
+        store=True,
+        compute_sudo=True,
         readonly=True,
     )
     state = fields.Selection(
@@ -227,16 +231,12 @@ class HRLeave(models.Model):
 
     def action_confirm(self):
         _super = super(HRLeave, self)
-        _super.action_confirm()
         for record in self.sudo():
             if not record.schedule_ids:
                 record._compute_schedule_ids()
-            # sheet
-            if not record.sheet_id:
-                record._compute_sheet()
-            # allocation
-            if record.type_id.need_allocation:
-                record._get_leave_allocation_id()
+
+            record._compute_leave_allocation_id()
+        _super.action_confirm()
 
     @api.onchange(
         "employee_id",
@@ -258,104 +258,113 @@ class HRLeave(models.Model):
     def onchange_number_of_day(self):
         self.number_of_days = self.leave_duration
 
-    def _get_leave_allocation_id(self):
-        obj_la = self.env["hr.leave_allocation"]
-        for leave in self:
-            leave_allocation_id = False
-            if leave.employee_id and leave.type_id and leave.date_start:
-                criteria = [
-                    "|",
-                    "&",
-                    "&",
-                    "&",
-                    "&",
-                    "&",
-                    ("type_id", "=", leave.type_id.id),
-                    ("employee_id", "=", leave.employee_id.id),
-                    ("date_start", "<=", leave.date_start),
-                    ("date_end", "=", False),
-                    ("state", "=", "open"),
-                    ("num_of_days_available", ">=", leave.number_of_days),
-                    "&",
-                    "&",
-                    "&",
-                    "&",
-                    "&",
-                    ("type_id", "=", leave.type_id.id),
-                    ("employee_id", "=", leave.employee_id.id),
-                    ("date_start", "<=", leave.date_start),
-                    ("date_end", ">=", leave.date_end),
-                    ("state", "=", "open"),
-                    ("num_of_days_available", ">=", leave.number_of_days),
-                ]
-                la = obj_la.search(criteria, order="date_start asc", limit=1)
-                if len(la) > 0:
-                    leave_allocation_id = la[0].id
-                else:
-                    strWarning = _(
-                        "Leave Allocation Not FOUND ..\nPlease Check Leave Allocation"
-                    )
-                    raise UserError(strWarning)
-                leave.leave_allocation_id = leave_allocation_id
+    def _get_leave_allocation(self):
+        self.ensure_one()
+        LeaveAllocation = self.env["hr.leave_allocation"]
+        result = False
+        criteria = [
+            "&",
+            "&",
+            "&",
+            "&",
+            ("type_id", "=", self.type_id.id),
+            ("employee_id", "=", self.employee_id.id),
+            ("state", "=", "open"),
+            ("num_of_days_available", ">=", self.number_of_days),
+            "|",
+            "&",
+            ("date_start", "<=", self.date_start),
+            ("date_end", "=", False),
+            "&",
+            ("date_start", "<=", self.date_start),
+            ("date_end", ">=", self.date_end),
+        ]
+        leave_allocations = LeaveAllocation.search(
+            criteria, order="date_start asc", limit=1
+        )
+        if len(leave_allocations) > 0:
+            result = leave_allocations[0]
+        return result
 
-    @api.constrains("date_start", "date_end")
-    def _check_date_start_end(self):
-        for leave in self:
-            obj_leave = self.env["hr.leave"]
-            # cek date_start
-            str_error = _("Date Start has been used on another request")
-            criteria = [
-                ("employee_id", "=", leave.employee_id.id),
-                ("date_start", "<=", leave.date_start),
-                ("date_end", ">=", leave.date_start),
-                ("state", "not in", ["cancel", "reject"]),
-                ("id", "!=", leave.id),
-            ]
-            if len(obj_leave.search(criteria)) > 0:
-                raise UserError(str_error)
-            # cek date_end
-            str_error = _("Date End has been used on another leave")
-            criteria = [
-                ("employee_id", "=", leave.employee_id.id),
-                ("date_start", "<=", leave.date_end),
-                ("date_end", ">=", leave.date_end),
-                ("state", "not in", ["cancel", "reject"]),
-                ("id", "!=", leave.id),
-            ]
-            if len(obj_leave.search(criteria)) > 0:
-                raise UserError(str_error)
-            # cek date_start date_end
-            str_error = _("Date Start and Date End has been used on another leave")
-            criteria = [
-                ("employee_id", "=", leave.employee_id.id),
-                ("date_start", ">=", leave.date_start),
-                ("date_end", "<=", leave.date_end),
-                ("state", "not in", ["cancel", "reject"]),
-                ("id", "!=", leave.id),
-            ]
-            if len(obj_leave.search(criteria)) > 0:
-                raise UserError(str_error)
+    @api.constrains("date_start", "date_end", "employee_id")
+    def _constrains_overlap(self):
+        for record in self.sudo():
+            if not record._check_overlap():
+                error_message = _(
+                    """
+                Context: Change date start or date end on leave request
+                Database ID: %s
+                Problem: There are other leave(s) that overlap
+                Solution: Change date start and date end
+                """
+                    % (record.id)
+                )
+                raise UserError(error_message)
 
     @api.constrains("type_id", "number_of_days")
-    def _check_limit_request(self):
-        for leave in self:
-            if leave.type_id.apply_limit_per_request:
-                if leave.number_of_days > leave.type_id.limit_per_request:
-                    limit = str(leave.type_id.limit_per_request)
-                    str_error = _("Number of days must <= limit %s days" % (limit))
-                    raise UserError(str_error)
-
-    # Check STATE
-    @api.constrains("state")
-    def _check_state(self):
+    def _constrains_limit_request(self):
         for record in self.sudo():
-            if record.state in ["cancel", "reject"]:
-                # raise UserError("Constraint 1 "+str(record.sheet_id.state))
-                if record.sheet_id.state == "done":
-                    str_error = _("You cannot process ..\nSheet already DONE")
-                    raise UserError(str_error)
-                if record.leave_allocation_id.state in ["done", "terminate"]:
-                    str_error = _(
-                        "You cannot process ..\n" + "Allocation already DONE/Terminate"
-                    )
-                    raise UserError(str_error)
+            limit = record.type_id.limit_per_request
+            if not record._check_limit_per_request():
+                error_message = _(
+                    """
+                Context: Change type or number of days on leave request
+                Database ID: %s
+                Problem: Number of days exceed %s
+                Solution: Reduce number of days so it is less or equal than %s
+                """
+                    % (record.id, limit, limit)
+                )
+                raise UserError(error_message)
+
+    @api.constrains("state")
+    def _constrains_confirm(self):
+        for record in self.sudo():
+            if record.state != "confirm":
+                break
+
+            if not record._check_leave_allocation_available():
+                error_message = """
+                Context: Confirming leave
+                Database ID: %s
+                Problem: Leave need leave request. No available leave request found
+                Solution: Create relevant leave allocation
+                """ % (
+                    record.id
+                )
+                raise UserError(_(error_message))
+
+    def _check_overlap(self):
+        self.ensure_one()
+        result = True
+        Leave = self.env["hr.leave"]
+        criteria = [
+            ("employee_id", "=", self.employee_id.id),
+            ("state", "not in", ["cancel", "reject"]),
+            ("id", "!=", self.id),
+            ("date_start", "<=", self.date_end),
+            ("date_end", ">=", self.date_start),
+        ]
+        num_of_leave = Leave.search_count(criteria)
+        if num_of_leave > 0:
+            result = False
+
+        return result
+
+    def _check_limit_per_request(self):
+        self.ensure_one()
+        result = True
+        if (
+            self.type_id.apply_limit_per_request
+            and self.number_of_days > self.type_id.limit_per_request
+        ):
+            result = False
+        return result
+
+    def _check_leave_allocation_available(self):
+        self.ensure_one()
+        result = True
+        if self.type_id.need_allocation:
+            if not self.leave_allocation_id:
+                result = False
+        return result
