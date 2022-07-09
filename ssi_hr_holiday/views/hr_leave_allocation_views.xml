@@ -11,12 +11,17 @@
     <field name="arch" type="xml">
         <data>
             <xpath expr="//field[@name='company_id']" position="after">
-                <field name="date_start" string="Start Date" />
-                <field name="date_end" string="End date" />
-                <field name="employee_id" string="Employee" />
-                <field name="department_id" string="Employee" />
+                <field name="date_start" />
+                <field name="date_end" />
+                <field name="employee_id" />
+                <field name="department_id" optional="hide" />
+                <field name="manager_id" optional="hide" />
+                <field name="job_id" optional="hide" />
                 <field name="type_id" string="Type" />
-                <field name="number_of_days" string="No Of Days" />
+                <field name="number_of_days" sum="Total Number of Days" />
+                <field name="num_of_days_used" sum="Total Used Days" />
+                <field name="num_of_days_planned" sum="Total Plannned Days" />
+                <field name="num_of_days_available" sum="Total Available Days" />
             </xpath>
         </data>
     </field>
@@ -88,15 +93,7 @@
           <xpath expr="//page[@name='note']" position="before">
                 <page name="leave" string="Leaves">
                     <group name="leave_1" colspan="4" col="2">
-                        <field name="leave_ids" nolabel="1">
-                            <tree>
-                                <field name="date_start" />
-                                <field name="date_end" />
-                                <field name="number_of_days" />
-                                <field name="leave_duration" />
-                                <field name="state" />
-                            </tree>
-                        </field>
+                        <field name="leave_ids" nolabel="1" />
                     </group>
                 </page>
             </xpath>
@@ -106,7 +103,7 @@
 </record>
 
 <record id="hr_leave_allocation_action" model="ir.actions.act_window">
-    <field name="name">Leave Allocation</field>
+    <field name="name">Leave Allocations</field>
     <field name="res_model">hr.leave_allocation</field>
     <field name="type">ir.actions.act_window</field>
     <field name="view_mode">tree,form</field>
@@ -114,8 +111,8 @@
 
 <menuitem
         id="menu_hr_leave_allocation"
-        name="Leave Allocation"
-        parent="hr_leave_menu"
+        name="Leave Allocations"
+        parent="ssi_timesheet.timesheet_menu"
         groups="hr_leave_allocation_viewer_group"
         action="hr_leave_allocation_action"
         sequence="1"

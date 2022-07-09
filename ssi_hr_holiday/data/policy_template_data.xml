@@ -3,11 +3,11 @@
      Copyright 2022 PT. Simetri Sinergi Indonesia
      License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
 <odoo>
-<data noupdate="0">
+<data noupdate="1">
 
 <!-- leave allocation -->
 <record id="policy_template_leave_allocation" model="policy.template">
-    <field name="name">Standard Leave Allocation</field>
+    <field name="name">Standard</field>
     <field name="model_id" ref="ssi_hr_holiday.model_hr_leave_allocation" />
     <field
                 name="state_field_id"
@@ -104,27 +104,6 @@ if not document.approval_template_id:
     result = True</field>
 </record>
 
-<!-- leave allocation  done_ok -->
-<record id="policy_template_leave_allocation_done" model="policy.template_detail">
-    <field name="template_id" ref="policy_template_leave_allocation" />
-    <field
-                name="field_id"
-                search="[('model_id.model','=','hr.leave_allocation'),('name','=','done_ok')]"
-            />
-    <field name="restrict_state" eval="1" />
-    <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','hr.leave_allocation'),('value','=','open')]"
-            />
-    <field name="restrict_user" eval="1" />
-    <field name="computation_method">use_group</field>
-    <field
-                name="group_ids"
-                eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_allocation_validator_group')])]"
-            />
-    <field name="restrict_additional" eval="0" />
-</record>
-
 <!-- leave_allocation: cancel_ok -->
 <record id="policy_template_leave_allocation_cancel" model="policy.template_detail">
     <field name="template_id" ref="policy_template_leave_allocation" />
@@ -214,7 +193,7 @@ if not document.approval_template_id:
 
 <!-- leave -->
 <record id="policy_template_leave" model="policy.template">
-    <field name="name">Standard Leave</field>
+    <field name="name">Standard</field>
     <field name="model_id" ref="ssi_hr_holiday.model_hr_leave" />
     <field
                 name="state_field_id"

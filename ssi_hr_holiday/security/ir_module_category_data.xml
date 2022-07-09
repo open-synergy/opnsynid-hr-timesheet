@@ -11,7 +11,7 @@
 </record>
 <!-- leave -->
 <record id="hr_leave_module_category" model="ir.module.category">
-    <field name="name">Leaves</field>
+    <field name="name">Leave</field>
     <field name="parent_id" ref="ssi_hr.human_resource_module_category" />
 </record>
 
@@ -26,7 +26,7 @@
 </record>
 <!-- leave -->
 <record id="hr_leave_data_ownership_module_category" model="ir.module.category">
-    <field name="name">Leaves</field>
+    <field name="name">Leave</field>
     <field name="parent_id" ref="ssi_hr.human_resource_data_module_category" />
 </record>
 
