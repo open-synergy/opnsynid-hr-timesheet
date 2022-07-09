@@ -79,7 +79,7 @@
           <xpath expr="//group[@name='header_right']" position="inside">
           <field name="date_start" />
               <field name="date_end" />
-              <field name="sheet_id" />
+              <field name="sheet_id" force_save="1" />
               <field name="number_of_days" />
               <field name="leave_duration" />
               <field name="leave_allocation_id" />
@@ -130,7 +130,7 @@
 <menuitem
         id="menu_hr_leave"
         name="Leaves"
-        parent="hr_leave_menu"
+        parent="ssi_timesheet.timesheet_menu"
         groups="hr_leave_viewer_group"
         action="hr_leave_action"
         sequence="2"

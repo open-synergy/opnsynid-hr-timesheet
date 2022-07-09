@@ -14,21 +14,7 @@
                 <xpath expr="//page[@name='computation']" position="before">
                     <page name="page_leave" string="Leaves">
                         <group name="leave_left" colspan="1" col="2">
-                            <field
-                                context="{'default_employee_id': employee_id, 'user_id':user_id}"
-                                name="leave_ids"
-                                nolabel="1"
-                            >
-                                <tree string="Leaves">
-                                    <!-- <field invisible="1" name="create_date" /> -->
-                                    <field name="date_start" />
-                                    <field name="date_end" />
-                                    <field name="type_id" />
-                                    <!-- <field invisible="1" name="valid_check_in" /> -->
-                                    <field name="number_of_days" />
-                                    <field name="state" />
-                                </tree>
-                            </field>
+                            <field name="leave_ids" nolabel="1" />
                         </group>
                     </page>
                 </xpath>

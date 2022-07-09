@@ -32,6 +32,11 @@ class HrLeaveAllocation(models.Model):
     # Attributes related to add element on duration_view automatically
     _date_start_readonly = True
     _date_end_readonly = True
+    _date_end_required = False
+    _date_start_states_list = ["draft"]
+    _date_start_states_readonly = ["draft"]
+    _date_end_states_list = ["draft"]
+    _date_end_states_readonly = ["draft"]
 
     # Attributes related to add element on form view automatically
     _automatically_insert_multiple_approval_page = True
@@ -76,6 +81,7 @@ class HrLeaveAllocation(models.Model):
     ]
 
     @api.depends(
+        "leave_ids",
         "leave_ids.number_of_days",
         "leave_ids.state",
         "leave_ids.type_id",
@@ -84,7 +90,7 @@ class HrLeaveAllocation(models.Model):
     def _compute_num_of_days(self):
         for leave in self:
             num_of_days_used = num_of_days_planned = num_of_days_available = 0.0
-            for record in self.leave_ids:
+            for record in leave.leave_ids:
                 if record.state == "done":
                     num_of_days_used += record.number_of_days
                 if record.state in ["draft", "confirm"]:
@@ -96,21 +102,6 @@ class HrLeaveAllocation(models.Model):
             leave.num_of_days_planned = num_of_days_planned
             leave.num_of_days_available = num_of_days_available
 
-    date_start = fields.DateCallable(
-        states={
-            "draft": [("readonly", False)],
-            "confirm": [("readonly", False)],
-        },
-    )
-    date_end = fields.DateCallable(
-        string="Valid Until",
-        required=False,
-        readonly=True,
-        states={
-            "draft": [("readonly", False)],
-            "confirm": [("readonly", False)],
-        },
-    )
     type_id = fields.Many2one(
         string="Leave Type",
         comodel_name="hr.leave_type",
@@ -119,7 +110,6 @@ class HrLeaveAllocation(models.Model):
         readonly=True,
         states={
             "draft": [("readonly", False)],
-            "confirm": [("readonly", False)],
         },
     )
     number_of_days = fields.Integer(
@@ -128,7 +118,6 @@ class HrLeaveAllocation(models.Model):
         readonly=True,
         states={
             "draft": [("readonly", False)],
-            "confirm": [("readonly", False)],
         },
     )
     leave_ids = fields.One2many(
@@ -201,15 +190,24 @@ class HrLeaveAllocation(models.Model):
         template_id = self._get_template_policy()
         self.policy_template_id = template_id
 
-    # Check STATE
     @api.constrains("state")
-    def _check_state(self):
+    def _constrains_leave(self):
         for record in self.sudo():
-            if record.state in ["cancel", "reject"]:
-                if record.leave_ids:
-                    raise UserError(
-                        _(
-                            "Leave Allocation have Leave Request \n"
-                            + "Data Allocation cannot be cancelled or rejected"
-                        )
-                    )
+            if record.state == "cancel" and not record._check_leave():
+                error_message = _(
+                    """
+                Context: Cancel leave allocation
+                Database ID: %s
+                Problem: Leave already exist for this allocation
+                Solution: Cancel leave request
+                """
+                    % (record.id)
+                )
+                raise UserError(error_message)
+
+    def _check_leave(self):
+        result = True
+        if self.leave_ids:
+            result = False
+
+        return result

@@ -117,6 +117,10 @@
             name="implied_ids"
             eval="[(4, ref('ssi_hr_holiday.leave_allocation_company_child_group'))]"
         />
+    <field
+            name="users"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
 </record>
 <!-- leave -->
 <record id="leave_direct_subordinate_group" model="res.groups">
@@ -163,6 +167,10 @@
     <field
             name="implied_ids"
             eval="[(4, ref('ssi_hr_holiday.leave_company_child_group'))]"
+        />
+    <field
+            name="users"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
         />
 </record>
 
