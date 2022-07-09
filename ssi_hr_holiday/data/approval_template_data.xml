@@ -4,9 +4,10 @@
      License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
 <odoo>
 <data noupdate="1">
+
 <!-- leave_allocation-->
 <record id="approval_template_leave_allocation" model="approval.template">
-    <field name="name">Standard - Leave Allocation</field>
+    <field name="name">Standard</field>
     <field name="model_id" ref="ssi_hr_holiday.model_hr_leave_allocation" />
     <field name="sequence" eval="100" />
     <field name="computation_method">use_python</field>
@@ -21,9 +22,10 @@
                 eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_allocation_validator_group')])]"
             />
 </record>
+
 <!-- leave_-->
 <record id="approval_template_leave" model="approval.template">
-    <field name="name">Standard - Leave</field>
+    <field name="name">Standard</field>
     <field name="model_id" ref="ssi_hr_holiday.model_hr_leave" />
     <field name="sequence" eval="100" />
     <field name="computation_method">use_python</field>

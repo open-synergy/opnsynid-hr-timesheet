@@ -63,7 +63,7 @@
 <menuitem
         id="hr_leave_type_menu"
         name="Leave Type"
-        parent="menu_hr_leave_configuration"
+        parent="ssi_timesheet.menu_hr_timesheet_configuration"
         groups="hr_leave_type_group"
         action="hr_leave_type_action"
         sequence="1"
