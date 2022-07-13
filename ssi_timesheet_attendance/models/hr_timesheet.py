@@ -2,7 +2,12 @@
 # Copyright 2022 PT. Simetri Sinergi Indonesia
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
-from odoo import api, fields, models
+from datetime import datetime
+
+import pytz
+
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 
 class HRTimesheet(models.Model):
@@ -47,7 +52,7 @@ class HRTimesheet(models.Model):
         inverse_name="sheet_id",
         readonly=True,
         states={
-            "drafSt": [
+            "draft": [
                 ("readonly", False),
             ],
             "open": [
@@ -56,6 +61,42 @@ class HRTimesheet(models.Model):
         },
     )
 
+    def _prepare_schedule_data(self, start, stop):
+        self.ensure_one()
+        pytz.timezone(self.env.user.tz)
+        start_conv_dt = fields.Datetime.to_string(start.astimezone(pytz.UTC))
+        stop_conv_dt = fields.Datetime.to_string(stop.astimezone(pytz.UTC))
+        return {
+            "date_start": start_conv_dt,
+            "date_end": stop_conv_dt,
+        }
+
+    def _get_schedule_data(self):
+        self.ensure_one()
+        res = []
+        self.schedule_ids = False
+        obj_public_holiday = self.env["base.public.holiday"]
+        if self.working_schedule_id and self.date_start and self.date_end:
+            start_dt = datetime.combine(self.date_start, datetime.min.time())
+            end_dt = datetime.combine(self.date_end, datetime.max.time())
+            tz = pytz.timezone(self.env.user.tz)
+            if not start_dt.tzinfo:
+                start_dt = start_dt.replace(tzinfo=tz)
+            if not end_dt.tzinfo:
+                end_dt = end_dt.replace(tzinfo=tz)
+            resource = self.employee_id.resource_id
+            schedule_ids = self.working_schedule_id._attendance_intervals_batch(
+                start_dt=start_dt,
+                end_dt=end_dt,
+                resources=resource,
+            )[resource.id]
+            if schedule_ids:
+                for start, stop, _res in schedule_ids:
+                    if not obj_public_holiday.is_public_holiday(start):
+                        schedule_data = self._prepare_schedule_data(start, stop)
+                        res.append((0, 0, schedule_data))
+        return res
+
     @api.onchange(
         "employee_id",
     )
@@ -63,3 +104,46 @@ class HRTimesheet(models.Model):
         self.working_schedule_id = False
         if self.employee_id:
             self.working_schedule_id = self.employee_id.resource_calendar_id
+
+    def action_compute_schedule(self):
+        for document in self.sudo():
+            schedule_ids = document._get_schedule_data()
+            document.schedule_ids = schedule_ids
+            document.attendance_ids._compute_schedule()
+            document.schedule_ids._compute_attendance()
+
+    @api.constrains(
+        "employee_id",
+        "date_start",
+    )
+    def _check_overlap_date_start(self):
+        for record in self:
+            if record.employee_id and record.date_start:
+                criteria = [
+                    ("employee_id", "=", record.employee_id.id),
+                    ("id", "<>", record.id),
+                    ("date_start", "<=", record.date_start),
+                    ("date_end", ">=", record.date_start),
+                ]
+                check = self.search(criteria)
+                if len(check) > 0:
+                    strWarning = _("Date start with the same employee can't overlap")
+                    raise UserError(strWarning)
+
+    @api.constrains(
+        "employee_id",
+        "date_end",
+    )
+    def _check_overlap_date_end(self):
+        for record in self:
+            if record.employee_id and record.date_end:
+                criteria = [
+                    ("employee_id", "=", record.employee_id.id),
+                    ("id", "<>", record.id),
+                    ("date_start", "<=", record.date_end),
+                    ("date_end", ">=", record.date_end),
+                ]
+                check = self.search(criteria)
+                if len(check) > 0:
+                    strWarning = _("Date end with the same employee can't overlap")
+                    raise UserError(strWarning)

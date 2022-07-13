@@ -94,6 +94,17 @@
                         </group>
                     </page>
                     <page name="page_schedule" string="Atendance Schedules">
+                        <header>
+                            <button
+                                name="action_compute_schedule"
+                                string="Compute Schedules"
+                                type="object"
+                                confirm="Compute Schedules. Are you sure?"
+                                order="1"
+                                class="oe_highlight"
+                                attrs="{'invisible':[('state','not in', ['draft','open'])]}"
+                            />
+                        </header>
                         <field
                             context="{'default_employee_id': employee_id, 'user_id':user_id}"
                             name="schedule_ids"
