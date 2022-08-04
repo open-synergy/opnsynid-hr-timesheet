@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_overtime_type_configurator,hr.overtime_type - configurator,model_hr_overtime_type,hr_overtime_type_group,1,1,1,1
+access_hr_overtime_type_all,hr.overtime_type - all,model_hr_overtime_type,,1,0,0,0
+access_hr_overtime_all,hr.overtime - all,model_hr_overtime,,1,0,0,0
+access_hr_overtime_viewer,hr.overtime - viewer,model_hr_overtime,hr_overtime_viewer_group,1,0,0,0
+access_hr_overtime_user,hr.overtime - user,model_hr_overtime,hr_overtime_user_group,1,1,1,1

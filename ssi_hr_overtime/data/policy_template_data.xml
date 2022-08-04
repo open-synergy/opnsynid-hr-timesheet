@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+<data noupdate="1">
+
+<!-- overtime -->
+<record id="policy_template_overtime" model="policy.template">
+    <field name="name">Standard</field>
+    <field name="model_id" ref="ssi_hr_overtime.model_hr_overtime" />
+    <field
+                name="state_field_id"
+                search="[('model_id.model','=','hr.overtime'),('name','=','state')]"
+            />
+    <field name="sequence" eval="100" />
+    <field name="python_code">result=True</field>
+</record>
+
+<!-- overtime confirm_ok -->
+<record id="policy_template_overtime_confirm" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_overtime" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','hr.overtime'),('name','=','confirm_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','hr.overtime'),('value','=','draft')]"
+            />
+    <field name="restrict_user" eval="1" />
+    <field name="computation_method">use_group</field>
+    <field
+                name="group_ids"
+                eval="[(6,0,[ref('ssi_hr_overtime.hr_overtime_user_group')])]"
+            />
+    <field name="restrict_additional" eval="0" />
+</record>
+
+<!-- overtime approve_ok -->
+<record id="policy_template_overtime_approve" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_overtime" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','hr.overtime'),('name','=','approve_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','hr.overtime'),('value','=','confirm')]"
+            />
+    <field name="restrict_user" eval="0" />
+    <field name="restrict_additional" eval="1" />
+    <field name="additional_python_code">result = False
+if env.user.id in document.active_approver_user_ids.ids:
+    result = True</field>
+</record>
+
+<!-- overtime  reject_ok -->
+<record id="policy_template_overtime_reject" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_overtime" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','hr.overtime'),('name','=','reject_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','hr.overtime'),('value','=','confirm')]"
+            />
+    <field name="restrict_user" eval="0" />
+    <field name="restrict_additional" eval="1" />
+    <field name="additional_python_code">result = False
+if env.user.id in document.active_approver_user_ids.ids:
+    result = True</field>
+</record>
+
+<!-- overtime  restart_approval_ok -->
+<record id="policy_template_overtime_restart_approval" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_overtime" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','hr.overtime'),('name','=','restart_approval_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','hr.overtime'),('value','in',['confirm'])]"
+            />
+    <field name="restrict_user" eval="1" />
+    <field name="computation_method">use_group</field>
+    <field
+                name="group_ids"
+                eval="[(6,0,[ref('ssi_hr_overtime.hr_overtime_validator_group')])]"
+            />
+    <field name="restrict_additional" eval="1" />
+    <field name="additional_python_code">result = False
+if not document.approval_template_id:
+    result = True</field>
+</record>
+
+<!-- overtime cancel_ok -->
+<record id="policy_template_overtime_cancel" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_overtime" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','hr.overtime'),('name','=','cancel_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','hr.overtime'),('value','in',['draft','confirm','done'])]"
+            />
+      <field name="restrict_user" eval="1" />
+      <field name="computation_method">use_group</field>
+      <field
+                name="group_ids"
+                eval="[(6,0,[ref('ssi_hr_overtime.hr_overtime_validator_group')])]"
+            />
+    <field name="restrict_additional" eval="0" />
+</record>
+
+<!-- overtime  restart_ok -->
+<record id="policy_template_overtime_restart" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_overtime" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','hr.overtime'),('name','=','restart_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','hr.overtime'),('value','in',['cancel','reject'])]"
+            />
+    <field name="restrict_user" eval="1" />
+    <field name="computation_method">use_group</field>
+    <field
+                name="group_ids"
+                eval="[(6,0,[ref('ssi_hr_overtime.hr_overtime_validator_group')])]"
+            />
+    <field name="restrict_additional" eval="0" />
+</record>
+
+<!-- overtime  manual_number_ok -->
+<record id="policy_template_overtime_manual_number" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_overtime" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','hr.overtime'),('name','=','manual_number_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','hr.overtime'),('value','=','draft')]"
+            />
+    <field name="restrict_user" eval="1" />
+    <field name="computation_method">use_group</field>
+    <field
+                name="group_ids"
+                eval="[(6,0,[ref('ssi_hr_overtime.hr_overtime_validator_group')])]"
+            />
+    <field name="restrict_additional" eval="0" />
+</record>
+
+</data>
+</odoo>
