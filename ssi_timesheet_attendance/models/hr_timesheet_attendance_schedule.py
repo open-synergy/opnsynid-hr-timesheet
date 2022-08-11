@@ -44,13 +44,7 @@ class HRTimesheetAttendanceSchedule(models.Model):
             if len(sheet) > 0:
                 record.sheet_id = sheet[0].id
             else:
-                strWarning = _(
-                    "Sheet Not FOUND .. FOR Start Date "
-                    + fields.Datetime.context_timestamp(
-                        self, record.date_start
-                    ).strftime("%m/%d/%Y, %H:%M:%S")
-                )
-                raise UserError(strWarning)
+                raise UserError(str(record.date))
 
     @api.depends(
         "attendance_ids",
