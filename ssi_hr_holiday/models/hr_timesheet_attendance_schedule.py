@@ -6,6 +6,7 @@ from odoo import fields, models
 
 
 class HRTimesheetAttendanceSchedule(models.Model):
+    _name = "hr.timesheet_attendance_schedule"
     _inherit = "hr.timesheet_attendance_schedule"
 
     leave_ids = fields.Many2many(
