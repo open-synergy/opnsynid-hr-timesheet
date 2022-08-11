@@ -69,6 +69,7 @@ class HRTimesheet(models.Model):
         return {
             "date_start": start_conv_dt,
             "date_end": stop_conv_dt,
+            "employee_id": self.employee_id.id,
         }
 
     def _get_schedule_data(self):
