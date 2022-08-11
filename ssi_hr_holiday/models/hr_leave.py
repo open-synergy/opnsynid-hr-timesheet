@@ -2,6 +2,7 @@
 # Copyright 2022 PT. Simetri Sinergi Indonesia
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
+from dateutil.rrule import DAILY, rrule
 
 from odoo import _, api, fields, models
 from odoo.exceptions import Warning as UserError
@@ -141,10 +142,19 @@ class HRLeave(models.Model):
         "date_end",
     )
     def _compute_leave_duration(self):
+        PublicHoliday = self.env["base.public.holiday"]
         for record in self:
             leave_duration = 0
             if record.date_start and record.date_end:
-                leave_duration = (record.date_end - record.date_start).days + 1
+                leave_duration = len(record.schedule_ids)
+                leave_dates = rrule(
+                    DAILY,
+                    dtstart=record.date_start,
+                    count=leave_duration,
+                )
+                for leave_date in list(leave_dates):
+                    if PublicHoliday.is_public_holiday(leave_date):
+                        leave_duration -= 1
             record.leave_duration = leave_duration
 
     leave_duration = fields.Integer(
@@ -218,15 +228,6 @@ class HRLeave(models.Model):
             "manual_number_ok",
         ]
         res += policy_field
-        return res
-
-    def _prepare_cancel_data(self, cancel_reason=False):
-        self.ensure_one()
-        _super = super(HRLeave, self)
-        res = _super._prepare_cancel_data(cancel_reason)
-        res["sheet_id"] = False
-        res["schedule_ids"] = False
-        res["leave_allocation_id"] = False
         return res
 
     def action_confirm(self):
