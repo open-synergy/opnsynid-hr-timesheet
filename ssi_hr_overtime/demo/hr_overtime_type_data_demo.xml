@@ -9,17 +9,12 @@
     <field name="code">OT01</field>
     <field name="apply_limit_per_day">True</field>
     <field name="limit_per_day">6</field>
-    <field name="default_start">17.0</field>
-    <field name="default_end">19.0</field>
 </record>
 
 <record id="demo_overtime_type2" model="hr.overtime_type">
     <field name="name">Holiday Overtime - (test)</field>
     <field name="code">OT02</field>
     <field name="apply_limit_per_day">False</field>
-    <field name="limit_per_day">6</field>
-    <field name="default_start">8.0</field>
-    <field name="default_end">17.0</field>
 </record>
 
 </odoo>

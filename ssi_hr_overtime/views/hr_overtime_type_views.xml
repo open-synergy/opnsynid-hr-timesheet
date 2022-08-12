@@ -48,7 +48,7 @@
 </record>
 
 <record id="hr_overtime_type_action" model="ir.actions.act_window">
-    <field name="name">Overtime Type</field>
+    <field name="name">Overtime Types</field>
     <field name="type">ir.actions.act_window</field>
     <field name="res_model">hr.overtime_type</field>
     <field name="view_mode">tree,form</field>
@@ -56,7 +56,7 @@
 
 <menuitem
         id="hr_overtime_type_menu"
-        name="Overtime Type"
+        name="Overtime Types"
         parent="ssi_timesheet.menu_hr_timesheet_configuration"
         groups="hr_overtime_type_group"
         action="hr_overtime_type_action"
