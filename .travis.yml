@@ -5,6 +5,7 @@ cache:
     - $HOME/.cache/pre-commit
 
 python:
+  - "2.7"
 dist: trusty
 
 addons:
