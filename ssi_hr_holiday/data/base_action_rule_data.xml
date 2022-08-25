@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<openerp>
+<data>
+
+<record id="leave_allocation_done" model="base.action.rule">
+    <field name="name">Leave Allocation Done</field>
+    <field name="model_id" ref="ssi_hr_holiday.model_hr_leave_allocation" />
+    <field name="kind">on_write</field>
+    <field name="act_user_id" ref="base.user_root" />
+    <field
+                name="server_action_ids"
+                eval="[(6,0,[ref('leave_allocation_action_done')])]"
+            />
+    <field name="filter_pre_id" ref="hr_leave_allocation_pre_filter" />
+    <field name="filter_id" ref="hr_leave_allocation_filter" />
+</record>
+</data>
+</openerp>

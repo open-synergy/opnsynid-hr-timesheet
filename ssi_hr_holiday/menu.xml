@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<openerp>
+    <data>
+        <menuitem
+            id="hr_leave_management_root_menu"
+            name="Leave Managements"
+            sequence="20"
+            parent="hr.menu_hr_root"
+        />
+    </data>
+</openerp>

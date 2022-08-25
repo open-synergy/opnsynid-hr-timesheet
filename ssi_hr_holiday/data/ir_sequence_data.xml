@@ -2,30 +2,23 @@
 <!-- Copyright 2022 OpenSynergy Indonesia
      Copyright 2022 PT. Simetri Sinergi Indonesia
      License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
-<odoo>
-<data noupdate="1">
-<!-- leave allocation -->
-<record id="sequence_leave_allocation" model="ir.sequence">
-    <field name="name">Default Leave Allocation</field>
-    <field name="code">hr.leave_allocation</field>
-    <field name="prefix">LA/%(range_year)s/</field>
-    <field eval="1" name="number_next" />
-    <field eval="1" name="number_increment" />
-    <field name="padding" eval="6" />
-    <field name="use_date_range" eval="1" />
-    <field eval="False" name="company_id" />
-</record>
-<!-- leave  -->
-<record id="sequence_leave" model="ir.sequence">
-    <field name="name">Default Leave</field>
-    <field name="code">hr.leave</field>
-    <field name="prefix">LR/%(range_year)s/</field>
-    <field eval="1" name="number_next" />
-    <field eval="1" name="number_increment" />
-    <field name="padding" eval="6" />
-    <field name="use_date_range" eval="1" />
-    <field eval="False" name="company_id" />
-</record>
-
-</data>
-</odoo>
+<openerp>
+    <data noupdate="1">
+        <!-- leave allocation -->
+        <record id="sequence_leave_allocation" model="ir.sequence">
+            <field name="name">Default Leave Allocation</field>
+            <field name="padding" eval="6" />
+            <field name="prefix">LA/%(year)s/</field>
+            <field eval="1" name="number_increment" />
+            <field name="use_date_range" eval="1" />
+        </record>
+        <!-- leave  -->
+        <record id="sequence_leave" model="ir.sequence">
+            <field name="name">Default Leave</field>
+            <field name="padding" eval="6" />
+            <field name="prefix">LR/%(year)s/</field>
+            <field eval="1" name="number_increment" />
+            <field name="use_date_range" eval="1" />
+        </record>
+    </data>
+</openerp>

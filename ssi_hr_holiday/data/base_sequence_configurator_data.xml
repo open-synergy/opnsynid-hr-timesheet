@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2019 OpenSynergy Indonesia
+     Copyright 2020 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<openerp>
+<data>
+    <!-- LEAVE -->
+    <record id="base_sequence_leave" model="base.sequence_configurator">
+        <field name="model_id" ref="ssi_hr_holiday.model_hr_leave" />
+        <field
+                name="sequence_field_id"
+                search="[('model_id.model','=','hr.leave'),('name','=','name')]"
+            />
+        <field name="fallback_sequence_id" ref="ssi_hr_holiday.sequence_leave" />
+    </record>
+
+    <record id="base_sequence_leave_line" model="base.sequence_configurator_line">
+        <field name="generator_id" ref="base_sequence_leave" />
+        <field name="sequence" eval="1" />
+        <field
+                name="sequence_computation_code"
+            >result = document.type_id.sequence_id</field>
+    </record>
+
+    <!-- LEAVE ALLOCATION-->
+    <record id="base_sequence_leave_allocation" model="base.sequence_configurator">
+        <field name="model_id" ref="ssi_hr_holiday.model_hr_leave_allocation" />
+        <field
+                name="sequence_field_id"
+                search="[('model_id.model','=','hr.leave_allocation'),('name','=','name')]"
+            />
+        <field
+                name="fallback_sequence_id"
+                ref="ssi_hr_holiday.sequence_leave_allocation"
+            />
+    </record>
+
+    <record
+            id="base_sequence_leave_allocation_line"
+            model="base.sequence_configurator_line"
+        >
+        <field name="generator_id" ref="base_sequence_leave_allocation" />
+        <field name="sequence" eval="1" />
+        <field
+                name="sequence_computation_code"
+            >result = document.type_id.sequence_id</field>
+    </record>
+
+</data>
+</openerp>

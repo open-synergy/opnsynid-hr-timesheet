@@ -2,71 +2,151 @@
 <!-- Copyright 2022 OpenSynergy Indonesia
      Copyright 2022 PT. Simetri Sinergi Indonesia
      License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
-<odoo>
-<record id="hr_leave_type_view_search" model="ir.ui.view">
-    <field name="name">hr.leave_type - search</field>
-    <field name="model">hr.leave_type</field>
-    <field
-            name="inherit_id"
-            ref="ssi_master_data_mixin.mixin_master_data_view_search"
+<openerp>
+    <data>
+        <record id="hr_leave_type_view_search" model="ir.ui.view">
+            <field name="name">hr.leave.type.search</field>
+            <field name="model">hr.leave_type</field>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="id" />
+                    <field name="name" />
+                    <field name="code" />
+                </search>
+            </field>
+        </record>
+
+        <record id="hr_leave_type_view_tree" model="ir.ui.view">
+            <field name="name">hr.leave.type.tree</field>
+            <field name="model">hr.leave_type</field>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="code" />
+                    <field name="name" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="hr_leave_type_view_form" model="ir.ui.view">
+            <field name="name">hr.leave.type.form</field>
+            <field name="model">hr.leave_type</field>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header />
+                    <sheet>
+                        <div name="div_smart_buttons" class="oe_right oe_button_box" />
+                        <group name="group_1" colspan="2" col="2">
+                            <group name="group_1_1">
+                                <field name="name" />
+                                <field name="code" />
+                                <field name="sequence_id" />
+                                <field name="active" />
+                            </group>
+                            <group name="group_1_2">
+                                <field name="need_allocation" />
+                                <field name="apply_limit_per_request" />
+                                <field name="limit_per_request" />
+                                <field name="exclude_public_holiday" />
+                                <field name="exclude_rest_day" />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="note" string="Note">
+                                <field name="note" colspan="4" nolabel="1" />
+                            </page>
+                            <page name="page_policy_leave" string="Leave Policy">
+                                <group name="grp_policy_leave" colspan="4" col="2">
+                                    <field
+                                        name="leave_confirm_group_ids"
+                                        widget="many2many_tags"
+                                    />
+                                    <field
+                                        name="leave_cancel_group_ids"
+                                        widget="many2many_tags"
+                                    />
+                                    <field
+                                        name="leave_restart_group_ids"
+                                        widget="many2many_tags"
+                                    />
+                                    <field
+                                        name="leave_approve_group_ids"
+                                        widget="many2many_tags"
+                                    />
+                                    <field
+                                        name="leave_reject_group_ids"
+                                        widget="many2many_tags"
+                                    />
+                                    <field
+                                        name="leave_restart_approval_group_ids"
+                                        widget="many2many_tags"
+                                    />
+                                </group>
+                            </page>
+                            <page
+                                name="page_policy_leave_all"
+                                string="Allocation Policy"
+                            >
+                                <group name="grp_policy_leave_all" colspan="4" col="2">
+                                    <field
+                                        name="leave_all_confirm_group_ids"
+                                        widget="many2many_tags"
+                                    />
+                                    <field
+                                        name="leave_all_done_group_ids"
+                                        widget="many2many_tags"
+                                    />
+                                    <field
+                                        name="leave_all_cancel_group_ids"
+                                        widget="many2many_tags"
+                                    />
+                                    <field
+                                        name="leave_all_terminate_group_ids"
+                                        widget="many2many_tags"
+                                    />
+                                    <field
+                                        name="leave_all_restart_group_ids"
+                                        widget="many2many_tags"
+                                    />
+                                    <field
+                                        name="leave_all_approve_group_ids"
+                                        widget="many2many_tags"
+                                    />
+                                    <field
+                                        name="leave_all_reject_group_ids"
+                                        widget="many2many_tags"
+                                    />
+                                    <field
+                                        name="leave_all_restart_approval_group_ids"
+                                        widget="many2many_tags"
+                                    />
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="hr_leave_type_action" model="ir.actions.act_window">
+            <field name="name">Leave Type</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.leave_type</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem
+            id="hr_leave_type_menu"
+            name="Leaves Types"
+            action="hr_leave_type_action"
+            parent="hr.menu_hr_configuration"
+            sequence="100"
         />
-    <field name="mode">primary</field>
-    <field name="arch" type="xml">
-        <data />
-    </field>
-</record>
-
-<record id="hr_leave_type_view_tree" model="ir.ui.view">
-    <field name="name">hr.leave_type - tree</field>
-    <field name="model">hr.leave_type</field>
-    <field name="inherit_id" ref="ssi_master_data_mixin.mixin_master_data_view_tree" />
-    <field name="mode">primary</field>
-    <field name="arch" type="xml">
-        <data>
-            <xpath expr="//field[@name='name']" position="after">
-                <field name="need_allocation" widget="boolean_toggle" />
-                <field name="apply_limit_per_request" widget="boolean_toggle" />
-                <field name="limit_per_request" />
-                <field name="exclude_public_holiday" widget="boolean_toggle" />
-                <field name="exclude_rest_day" widget="boolean_toggle" />
-            </xpath>
-        </data>
-
-    </field>
-</record>
-
-<record id="hr_leave_type_view_form" model="ir.ui.view">
-    <field name="name">hr.leave_type - form</field>
-    <field name="model">hr.leave_type</field>
-    <field name="inherit_id" ref="ssi_master_data_mixin.mixin_master_data_view_form" />
-    <field name="mode">primary</field>
-    <field name="arch" type="xml">
-        <data>
-            <xpath expr="//field[@name='active']" position="after">
-                <field name="need_allocation" widget="boolean_toggle" />
-                <field name="apply_limit_per_request" widget="boolean_toggle" />
-                <field name="limit_per_request" />
-                <field name="exclude_public_holiday" widget="boolean_toggle" />
-                <field name="exclude_rest_day" widget="boolean_toggle" />
-            </xpath>
-        </data>
-    </field>
-</record>
-
-<record id="hr_leave_type_action" model="ir.actions.act_window">
-    <field name="name">Leave Type</field>
-    <field name="type">ir.actions.act_window</field>
-    <field name="res_model">hr.leave_type</field>
-    <field name="view_mode">tree,form</field>
-</record>
-
-<menuitem
-        id="hr_leave_type_menu"
-        name="Leave Type"
-        parent="ssi_timesheet.menu_hr_timesheet_configuration"
-        groups="hr_leave_type_group"
-        action="hr_leave_type_action"
-        sequence="1"
-    />
-
-</odoo>
+    </data>
+</openerp>
