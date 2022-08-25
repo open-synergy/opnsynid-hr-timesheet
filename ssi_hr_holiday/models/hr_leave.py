@@ -1,74 +1,106 @@
 # Copyright 2022 OpenSynergy Indonesia
 # Copyright 2022 PT. Simetri Sinergi Indonesia
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
+from datetime import datetime
 
 from dateutil.rrule import DAILY, rrule
-
-from odoo import _, api, fields, models
-from odoo.exceptions import Warning as UserError
+from openerp import _, api, fields, models
+from openerp.exceptions import Warning as UserError
 
 
 class HRLeave(models.Model):
     _name = "hr.leave"
     _inherit = [
-        "mixin.transaction_confirm",
-        "mixin.transaction_done",
-        "mixin.transaction_cancel",
-        "mixin.date_duration",
-        "mixin.employee_document",
+        "mail.thread",
+        "tier.validation",
+        "base.sequence_document",
+        "base.workflow_policy_object",
+        "base.cancel.reason_common",
+        "base.terminate.reason_common",
     ]
     _description = "Leaves"
+    _state_from = ["draft", "confirm"]
+    _state_to = ["done"]
 
-    # Multiple Approval Attribute
-    _approval_from_state = "draft"
-    _approval_to_state = "done"
-    _approval_state = "confirm"
-    _after_approved_method = "action_done"
+    name = fields.Char(
+        string="# Document",
+        default="/",
+        required=True,
+        copy=False,
+        readonly=True,
+        states={"draft": [("readonly", False)]},
+    )
 
-    # Attributes related to add element on view automatically
-    _automatically_insert_view_element = True
-    _automatically_insert_done_button = False
-    _automatically_insert_done_policy_fields = False
+    @api.model
+    def _default_company_id(self):
+        return self.env.user.company_id.id
 
-    # Mixin duration attribute
-    _date_start_readonly = True
-    _date_end_readonly = True
-    _date_start_states_list = ["draft"]
-    _date_start_states_readonly = ["draft"]
-    _date_end_states_list = ["draft"]
-    _date_end_states_readonly = ["draft"]
+    company_id = fields.Many2one(
+        string="Company",
+        comodel_name="res.company",
+        required=True,
+        default=lambda self: self._default_company_id(),
+        copy=True,
+    )
 
-    # Attributes related to add element on form view automatically
-    _automatically_insert_multiple_approval_page = True
-    _statusbar_visible_label = "draft,confirm,done,rejected"
-    _policy_field_order = [
-        "confirm_ok",
-        "approve_ok",
-        "reject_ok",
-        "restart_approval_ok",
-        "cancel_ok",
-        "restart_ok",
-        "manual_number_ok",
-    ]
-    _header_button_order = [
-        "action_confirm",
-        "action_approve_approval",
-        "action_reject_approval",
-        "%(ssi_transaction_cancel_mixin.base_select_cancel_reason_action)d",
-        "action_restart",
-    ]
+    @api.model
+    def _default_employee_id(self):
+        employees = self.env.user.employee_ids
+        if len(employees) > 0:
+            return employees[0].id
 
-    # Attributes related to add element on search view automatically
-    _state_filter_order = [
-        "dom_draft",
-        "dom_confirm",
-        "dom_reject",
-        "dom_done",
-        "dom_cancel",
-    ]
+    employee_id = fields.Many2one(
+        string="Employee",
+        comodel_name="hr.employee",
+        default=lambda self: self._default_employee_id(),
+        required=True,
+        readonly=True,
+        states={"draft": [("readonly", False)]},
+    )
+    department_id = fields.Many2one(
+        string="Department",
+        comodel_name="hr.department",
+        readonly=True,
+        states={"draft": [("readonly", False)]},
+    )
+    manager_id = fields.Many2one(
+        string="Manager",
+        comodel_name="hr.employee",
+        readonly=True,
+        states={"draft": [("readonly", False)]},
+    )
+    job_id = fields.Many2one(
+        string="Job Position",
+        comodel_name="hr.job",
+        readonly=True,
+        states={"draft": [("readonly", False)]},
+    )
 
-    # Sequence attribute
-    _create_sequence_state = "done"
+    @api.model
+    def _default_user_id(self):
+        return self.env.user.id
+
+    user_id = fields.Many2one(
+        string="Responsible",
+        comodel_name="res.users",
+        required=True,
+        default=lambda self: self._default_user_id(),
+        copy=False,
+        readonly=True,
+        states={"draft": [("readonly", False)]},
+    )
+
+    date_start = fields.Date(
+        string="Start Date",
+        readonly=True,
+        states={"draft": [("readonly", False)]},
+        default=datetime.now().strftime("%Y-%m-%d"),
+    )
+    date_end = fields.Date(
+        string="End Date",
+        readonly=True,
+        states={"draft": [("readonly", False)]},
+    )
 
     @api.depends(
         "employee_id",
@@ -76,25 +108,27 @@ class HRLeave(models.Model):
         "date_end",
     )
     def _compute_sheet(self):
-        obj_sheet = self.env["hr.timesheet"]
+        obj_sheet = self.env["hr_timesheet_sheet.sheet"]
         for record in self:
             sheet_id = False
             if record.employee_id and record.date_start and record.date_end:
                 criteria = [
                     ("employee_id", "=", record.employee_id.id),
-                    ("date_start", "<=", record.date_start),
-                    ("date_end", ">=", record.date_end),
+                    ("date_from", "<=", record.date_start),
+                    ("date_to", ">=", record.date_end),
                 ]
                 sheet = obj_sheet.search(criteria, limit=1)
                 if len(sheet) > 0:
                     sheet_id = sheet[0].id
+                else:
+                    strWarning = _("No Timesheet Found")
+                    raise UserError(strWarning)
             record.sheet_id = sheet_id
 
     sheet_id = fields.Many2one(
         string="# Timesheet",
-        comodel_name="hr.timesheet",
+        comodel_name="hr_timesheet_sheet.sheet",
         compute="_compute_sheet",
-        required=True,
         store=True,
         compute_sudo=True,
     )
@@ -105,15 +139,19 @@ class HRLeave(models.Model):
         "employee_id",
     )
     def _compute_schedule_ids(self):
-        AttendanceSchedule = self.env["hr.timesheet_attendance_schedule"]
+        obj_att_schedule = self.env["hr.timesheet_attendance_schedule"]
         for record in self:
             if record.date_start and record.date_end and record.employee_id:
+                dt_start = fields.Datetime.from_string(record.date_start)
+                dt_end = fields.Datetime.from_string(record.date_end)
+                str_start = fields.Datetime.to_string(dt_start)
+                str_end = fields.Datetime.to_string(dt_end)
                 criteria = [
                     ("employee_id", "=", record.employee_id.id),
-                    ("date", "<=", record.date_end),
-                    ("date", ">=", record.date_start),
+                    ("date_start", "<=", str_end),
+                    ("date_end", ">=", str_start),
                 ]
-                schedule = AttendanceSchedule.search(criteria)
+                schedule = obj_att_schedule.search(criteria)
                 record.schedule_ids = schedule.ids
 
     schedule_ids = fields.Many2many(
@@ -124,7 +162,6 @@ class HRLeave(models.Model):
         column1="leave_id",
         column2="attendance_schedule_id",
         store=True,
-        compute_sudo=True,
     )
 
     number_of_days = fields.Integer(
@@ -142,18 +179,19 @@ class HRLeave(models.Model):
         "date_end",
     )
     def _compute_leave_duration(self):
-        PublicHoliday = self.env["base.public.holiday"]
+        obj_public_holiday = self.env["base.public.holiday"]
         for record in self:
             leave_duration = 0
             if record.date_start and record.date_end:
                 leave_duration = len(record.schedule_ids)
+                dt_date_start = datetime.strptime(record.date_start, "%Y-%m-%d")
                 leave_dates = rrule(
                     DAILY,
-                    dtstart=record.date_start,
+                    dtstart=dt_date_start,
                     count=leave_duration,
                 )
                 for leave_date in list(leave_dates):
-                    if PublicHoliday.is_public_holiday(leave_date):
+                    if obj_public_holiday.is_public_holiday(leave_date):
                         leave_duration -= 1
             record.leave_duration = leave_duration
 
@@ -174,6 +212,7 @@ class HRLeave(models.Model):
         },
     )
 
+    @api.multi
     @api.depends(
         "type_id",
         "employee_id",
@@ -196,9 +235,6 @@ class HRLeave(models.Model):
         string="# Leave Allocation",
         comodel_name="hr.leave_allocation",
         ondelete="restrict",
-        compute="_compute_leave_allocation_id",
-        store=True,
-        compute_sudo=True,
         readonly=True,
     )
     state = fields.Selection(
@@ -208,60 +244,45 @@ class HRLeave(models.Model):
             ("confirm", "Waiting for Approval"),
             ("done", "Done"),
             ("cancel", "Cancelled"),
-            ("reject", "Rejected"),
         ],
         default="draft",
         copy=False,
     )
-
-    @api.model
-    def _get_policy_field(self):
-        res = super(HRLeave, self)._get_policy_field()
-        policy_field = [
-            "confirm_ok",
-            "approve_ok",
-            "done_ok",
-            "cancel_ok",
-            "reject_ok",
-            "restart_ok",
-            "restart_approval_ok",
-            "manual_number_ok",
-        ]
-        res += policy_field
-        return res
-
-    def action_confirm(self):
-        _super = super(HRLeave, self)
-        for record in self.sudo():
-            if not record.schedule_ids:
-                record._compute_schedule_ids()
-
-            record._compute_leave_allocation_id()
-        _super.action_confirm()
-
-    @api.onchange(
-        "employee_id",
+    note = fields.Text(
+        string="Note",
+        copy=True,
     )
-    def onchange_policy_template_id(self):
-        template_id = self._get_template_policy()
-        self.policy_template_id = template_id
 
-    @api.onchange(
-        "employee_id",
-        "type_id",
+    # Policy Field
+    confirm_ok = fields.Boolean(
+        string="Can Confirm",
+        compute="_compute_policy",
     )
-    def onchange_leave_allocation_id(self):
-        self.leave_allocation_id = False
-
-    @api.onchange(
-        "leave_duration",
+    cancel_ok = fields.Boolean(
+        string="Can Cancel",
+        compute="_compute_policy",
     )
-    def onchange_number_of_day(self):
-        self.number_of_days = self.leave_duration
+    approve_ok = fields.Boolean(
+        string="Can Approve",
+        compute="_compute_policy",
+    )
+    reject_ok = fields.Boolean(
+        string="Can Reject",
+        compute="_compute_policy",
+    )
+    restart_ok = fields.Boolean(
+        string="Can Restart",
+        compute="_compute_policy",
+    )
+    restart_approval_ok = fields.Boolean(
+        string="Can Restart Approval",
+        compute="_compute_policy",
+    )
 
+    @api.multi
     def _get_leave_allocation(self):
         self.ensure_one()
-        LeaveAllocation = self.env["hr.leave_allocation"]
+        obj_hr_leave_all = self.env["hr.leave_allocation"]
         result = False
         criteria = [
             "&",
@@ -280,11 +301,146 @@ class HRLeave(models.Model):
             ("date_start", "<=", self.date_start),
             ("date_end", ">=", self.date_end),
         ]
-        leave_allocations = LeaveAllocation.search(
+        leave_allocations = obj_hr_leave_all.search(
             criteria, order="date_start asc", limit=1
         )
         if len(leave_allocations) > 0:
             result = leave_allocations[0]
+        return result
+
+    @api.multi
+    def _compute_policy(self):
+        _super = super(HRLeave, self)
+        _super._compute_policy()
+
+    @api.multi
+    def action_confirm(self):
+        for record in self:
+            if not record.schedule_ids:
+                record._compute_schedule_ids()
+            record._compute_leave_allocation_id()
+            record.write(record._prepare_confirm_data())
+            record.request_validation()
+
+    @api.multi
+    def action_done(self):
+        for record in self:
+            record.write(record._prepare_done_data())
+
+    @api.multi
+    def action_cancel(self):
+        for record in self:
+            record.write(record._prepare_cancel_data())
+            record.restart_validation()
+
+    @api.multi
+    def action_restart(self):
+        for record in self:
+            record.write(record._prepare_restart_data())
+
+    @api.multi
+    def _prepare_confirm_data(self):
+        self.ensure_one()
+        return {
+            "state": "confirm",
+        }
+
+    @api.multi
+    def _prepare_done_data(self):
+        self.ensure_one()
+        ctx = self.env.context.copy()
+        ctx.update(
+            {
+                "ir_sequence_date": self.date_start,
+            }
+        )
+        sequence = self.with_context(ctx)._create_sequence()
+        return {
+            "state": "done",
+            "name": sequence,
+        }
+
+    @api.multi
+    def _prepare_cancel_data(self):
+        self.ensure_one()
+        return {
+            "state": "cancel",
+        }
+
+    @api.multi
+    def _prepare_restart_data(self):
+        self.ensure_one()
+        return {
+            "state": "draft",
+        }
+
+    @api.multi
+    def validate_tier(self):
+        _super = super(HRLeave, self)
+        _super.validate_tier()
+        for document in self:
+            if document.validated:
+                document.action_done()
+
+    @api.multi
+    def restart_validation(self):
+        _super = super(HRLeave, self)
+        _super.restart_validation()
+        for document in self:
+            document.request_validation()
+
+    @api.onchange(
+        "employee_id",
+        "type_id",
+        "date_start",
+        "date_end",
+    )
+    def onchange_leave_allocation_id(self):
+        self.leave_allocation_id = False
+        if self.type_id and self.employee_id and self.date_start and self.date_end:
+            allocation = self._get_leave_allocation()
+            if allocation:
+                self.leave_allocation_id = allocation
+
+    @api.onchange(
+        "leave_duration",
+    )
+    def onchange_number_of_day(self):
+        self.number_of_days = self.leave_duration
+
+    @api.onchange(
+        "employee_id",
+    )
+    def onchange_department_id(self):
+        self.department_id = False
+        if self.employee_id:
+            self.department_id = self.employee_id.department_id
+
+    @api.onchange(
+        "employee_id",
+    )
+    def onchange_manager_id(self):
+        self.manager_id = False
+        if self.employee_id:
+            self.manager_id = self.employee_id.parent_id
+
+    @api.onchange(
+        "employee_id",
+    )
+    def onchange_job_id(self):
+        self.job_id = False
+        if self.employee_id:
+            self.job_id = self.employee_id.job_id
+
+    @api.multi
+    def name_get(self):
+        result = []
+        for record in self:
+            if record.name == "/":
+                name = "*" + str(record.id)
+            else:
+                name = record.name
+            result.append((record.id, name))
         return result
 
     @api.constrains("date_start", "date_end", "employee_id")
@@ -335,6 +491,7 @@ class HRLeave(models.Model):
                 )
                 raise UserError(_(error_message))
 
+    @api.multi
     def _check_overlap(self):
         self.ensure_one()
         result = True
@@ -352,6 +509,7 @@ class HRLeave(models.Model):
 
         return result
 
+    @api.multi
     def _check_limit_per_request(self):
         self.ensure_one()
         result = True
@@ -362,6 +520,7 @@ class HRLeave(models.Model):
             result = False
         return result
 
+    @api.multi
     def _check_leave_allocation_available(self):
         self.ensure_one()
         result = True
@@ -369,3 +528,11 @@ class HRLeave(models.Model):
             if not self.leave_allocation_id:
                 result = False
         return result
+
+    @api.constrains("date_start", "date_end")
+    def _check_date_start_end(self):
+        for record in self:
+            if record.date_start and record.date_end:
+                strWarning = _("Date end must be greater than date start")
+                if record.date_end < record.date_start:
+                    raise UserError(strWarning)

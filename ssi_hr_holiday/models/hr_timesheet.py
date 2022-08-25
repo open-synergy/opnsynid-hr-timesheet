@@ -2,12 +2,11 @@
 # Copyright 2022 PT. Simetri Sinergi Indonesia
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
-from odoo import fields, models
+from openerp import fields, models
 
 
 class HRTimesheet(models.Model):
-    _name = "hr.timesheet"
-    _inherit = "hr.timesheet"
+    _inherit = "hr_timesheet_sheet.sheet"
 
     leave_ids = fields.One2many(
         string="Leaves",

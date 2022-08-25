@@ -2,19 +2,19 @@
 <!-- Copyright 2022 OpenSynergy Indonesia
      Copyright 2022 PT. Simetri Sinergi Indonesia
      License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
-<odoo>
+<openerp>
 
-<record id="demo_leave_type1" model="hr.leave_type">
-    <field name="name">Annual Leave - (test)</field>
-    <field name="code">X001</field>
-    <field name="need_allocation" eval="1" />
-    <field name="apply_limit_per_request" eval="1" />
-    <field name="limit_per_request">12</field>
-</record>
+    <record id="demo_leave_type1" model="hr.leave_type">
+        <field name="name">Annual Leave - (test)</field>
+        <field name="code">X001</field>
+        <field name="need_allocation" eval="1" />
+        <field name="apply_limit_per_request" eval="1" />
+        <field name="limit_per_request">12</field>
+    </record>
 
-<record id="demo_leave_type2" model="hr.leave_type">
-    <field name="name">Sick Leaves - (test)</field>
-    <field name="code">X002</field>
-</record>
+    <record id="demo_leave_type2" model="hr.leave_type">
+        <field name="name">Sick Leaves - (test)</field>
+        <field name="code">X002</field>
+    </record>
 
-</odoo>
+</openerp>

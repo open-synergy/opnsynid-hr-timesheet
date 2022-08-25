@@ -12,10 +12,10 @@ Installation
 
 To install this module, you need to:
 
-1.  Clone the branch 14.0 of the repository https://github.com/open-synergy/opnsynid-hr-timesheet
+1.  Clone the branch 8.0 of the repository https://github.com/open-synergy/opnsynid-hr-timesheet
 2.  Add the path to this repository in your configuration (addons-path)
 3.  Update the module list
-4.  Go to menu *Apps -> Apps -> Main Apps*
+4.  Go to menu *Setting -> Modules -> Local Modules*
 5.  Search For *Leave Management*
 6.  Install the module
 

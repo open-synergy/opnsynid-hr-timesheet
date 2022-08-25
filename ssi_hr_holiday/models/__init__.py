@@ -6,6 +6,7 @@ from . import (
     hr_leave_type,
     hr_leave_allocation,
     hr_leave,
+    tier_definition,
     hr_timesheet,
     hr_timesheet_attendance_schedule,
 )

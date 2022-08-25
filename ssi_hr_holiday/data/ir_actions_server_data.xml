@@ -1,4 +1,4 @@
-<odoo>
+<openerp>
 <!-- Copyright 2022 OpenSynergy Indonesia
      Copyright 2022 PT. Simetri Sinergi Indonesia
      License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
@@ -8,7 +8,9 @@
     <field name="name">Action Done</field>
     <field name="model_id" ref="ssi_hr_holiday.model_hr_leave_allocation" />
     <field name="state">code</field>
-    <field name="code">records.action_done()</field>
+    <field name="code">ids = env.context.get("active_ids", [])
+leave_allocation = model.browse(ids)
+action = leave_allocation.action_done()</field>
 </record>
 </data>
-</odoo>
+</openerp>
