@@ -1,8 +1,10 @@
 # Copyright 2022 OpenSynergy Indonesia
 # Copyright 2022 PT. Simetri Sinergi Indonesia
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
+
 from datetime import datetime
 
+from dateutil.relativedelta import relativedelta
 from dateutil.rrule import DAILY, rrule
 from openerp import _, api, fields, models
 from openerp.exceptions import Warning as UserError
@@ -141,15 +143,22 @@ class HRLeave(models.Model):
     def _compute_schedule_ids(self):
         obj_att_schedule = self.env["hr.timesheet_attendance_schedule"]
         for record in self:
+
             if record.date_start and record.date_end and record.employee_id:
-                dt_start = fields.Datetime.from_string(record.date_start)
-                dt_end = fields.Datetime.from_string(record.date_end)
+                # TODO
+                dt_start = fields.Datetime.from_string(
+                    record.date_start
+                ) + relativedelta(hours=-7)
+                dt_end = fields.Datetime.from_string(record.date_end) + relativedelta(
+                    hours=16
+                )
+
                 str_start = fields.Datetime.to_string(dt_start)
                 str_end = fields.Datetime.to_string(dt_end)
                 criteria = [
                     ("employee_id", "=", record.employee_id.id),
                     ("date_start", "<=", str_end),
-                    ("date_end", ">=", str_start),
+                    ("date_start", ">=", str_start),
                 ]
                 schedule = obj_att_schedule.search(criteria)
                 record.schedule_ids = schedule.ids
