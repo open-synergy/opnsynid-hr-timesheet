@@ -123,7 +123,9 @@ class HRLeave(models.Model):
                 if len(sheet) > 0:
                     sheet_id = sheet[0].id
                 else:
-                    strWarning = _("No Timesheet Found")
+                    strWarning = _("Timesheet for employee %s not found") % (
+                        record.employee_id.name
+                    )
                     raise UserError(strWarning)
             record.sheet_id = sheet_id
 
@@ -161,6 +163,11 @@ class HRLeave(models.Model):
                     ("date_start", ">=", str_start),
                 ]
                 schedule = obj_att_schedule.search(criteria)
+                if not schedule:
+                    strWarning = _("Schedule for employee %s not found") % (
+                        record.employee_id.name
+                    )
+                    raise UserError(strWarning)
                 record.schedule_ids = schedule.ids
 
     schedule_ids = fields.Many2many(
@@ -460,10 +467,11 @@ class HRLeave(models.Model):
                     """
                 Context: Change date start or date end on leave request
                 Database ID: %s
+                Employee: %s
                 Problem: There are other leave(s) that overlap
                 Solution: Change date start and date end
                 """
-                    % (record.id)
+                    % (record.id, record.employee_id.name)
                 )
                 raise UserError(error_message)
 
@@ -476,10 +484,11 @@ class HRLeave(models.Model):
                     """
                 Context: Change type or number of days on leave request
                 Database ID: %s
+                Employee: %s
                 Problem: Number of days exceed %s
                 Solution: Reduce number of days so it is less or equal than %s
                 """
-                    % (record.id, limit, limit)
+                    % (record.id, record.employee_id.name, limit, limit)
                 )
                 raise UserError(error_message)
 
@@ -492,11 +501,13 @@ class HRLeave(models.Model):
             if not record._check_leave_allocation_available():
                 error_message = """
                 Context: Confirming leave
-                Database ID: %s
+                Database ID: {}
+                Employee: {}
                 Problem: Leave need leave request. No available leave request found
                 Solution: Create relevant leave allocation
-                """ % (
-                    record.id
+                """.format(
+                    record.id,
+                    record.employee_id.name,
                 )
                 raise UserError(_(error_message))
 
