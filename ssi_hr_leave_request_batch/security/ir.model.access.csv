@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+hr_leave_request_batch_employee,hr.leave_request_batch - employee,model_hr_leave_request_batch,base.group_user,1,1,1,1
+hr_leave_request_batch_all,hr.leave_request_batch - all,model_hr_leave_request_batch,,1,0,0,0

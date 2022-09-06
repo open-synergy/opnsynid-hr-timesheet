@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<openerp>
+    <data>
+        <record id="base_workflow_hr_leave_request_batch" model="base.workflow_policy">
+            <field
+                name="model_id"
+                ref="ssi_hr_leave_request_batch.model_hr_leave_request_batch"
+            />
+        </record>
+        <record
+            id="base_workflow_hr_leave_request_batch_confirm"
+            model="base.workflow_policy_line"
+        >
+            <field name="workflow_id" ref="base_workflow_hr_leave_request_batch" />
+            <field
+                name="field_id"
+                search="[('model_id.model','=','hr.leave_request_batch'),('name','=','confirm_ok')]"
+            />
+            <field
+                name="python_code"
+            >result = document.type_id.batch_confirm_group_ids.ids</field>
+        </record>
+        <record
+            id="base_workflow_hr_leave_request_batch_cancel"
+            model="base.workflow_policy_line"
+        >
+            <field name="workflow_id" ref="base_workflow_hr_leave_request_batch" />
+            <field
+                name="field_id"
+                search="[('model_id.model','=','hr.leave_request_batch'),('name','=','cancel_ok')]"
+            />
+            <field
+                name="python_code"
+            >result = document.type_id.batch_cancel_group_ids.ids</field>
+        </record>
+        <record
+            id="base_workflow_hr_leave_request_batch_restart"
+            model="base.workflow_policy_line"
+        >
+            <field name="workflow_id" ref="base_workflow_hr_leave_request_batch" />
+            <field
+                name="field_id"
+                search="[('model_id.model','=','hr.leave_request_batch'),('name','=','restart_ok')]"
+            />
+            <field
+                name="python_code"
+            >result = document.type_id.batch_restart_group_ids.ids</field>
+        </record>
+        <record
+            id="base_workflow_hr_leave_request_batch_approve"
+            model="base.workflow_policy_line"
+        >
+            <field name="workflow_id" ref="base_workflow_hr_leave_request_batch" />
+            <field
+                name="field_id"
+                search="[('model_id.model','=','hr.leave_request_batch'),('name','=','approve_ok')]"
+            />
+            <field
+                name="python_code"
+            >result = document.type_id.batch_approve_group_ids.ids</field>
+        </record>
+        <record
+            id="base_workflow_hr_leave_request_batch_reject"
+            model="base.workflow_policy_line"
+        >
+            <field name="workflow_id" ref="base_workflow_hr_leave_request_batch" />
+            <field
+                name="field_id"
+                search="[('model_id.model','=','hr.leave_request_batch'),('name','=','reject_ok')]"
+            />
+            <field
+                name="python_code"
+            >result = document.type_id.batch_reject_group_ids.ids</field>
+        </record>
+        <record
+            id="base_workflow_hr_leave_request_batch_restart_approval"
+            model="base.workflow_policy_line"
+        >
+            <field name="workflow_id" ref="base_workflow_hr_leave_request_batch" />
+            <field
+                name="field_id"
+                search="[('model_id.model','=','hr.leave_request_batch'),('name','=','restart_approval_ok')]"
+            />
+            <field
+                name="python_code"
+            >result = document.type_id.batch_restart_approval_group_ids.ids</field>
+        </record>
+
+    </data>
+</openerp>

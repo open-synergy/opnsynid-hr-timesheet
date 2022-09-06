@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<openerp>
+    <data>
+        <record
+            id="base_cancel_reason_config_hr_leave_request_batch"
+            model="base.cancel.reason_config"
+        >
+            <field
+                name="name"
+                ref="ssi_hr_leave_request_batch.model_hr_leave_request_batch"
+            />
+            <field name="method_cancel_name">action_cancel</field>
+        </record>
+    </data>
+</openerp>
