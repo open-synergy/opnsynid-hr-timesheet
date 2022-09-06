@@ -63,6 +63,7 @@ class HRLeaveRequestBatch(models.Model):
     date_start = fields.Date(
         string="Start Date",
         readonly=True,
+        required=True,
         states={
             "draft": [("readonly", False)],
         },
@@ -71,6 +72,7 @@ class HRLeaveRequestBatch(models.Model):
     date_end = fields.Date(
         string="End Date",
         readonly=True,
+        required=True,
         states={
             "draft": [("readonly", False)],
         },
@@ -177,7 +179,10 @@ class HRLeaveRequestBatch(models.Model):
         self.ensure_one()
         obj_hr_leave = self.env["hr.leave"]
         for employee in self.employee_ids:
-            if not self.leave_ids:
+            if (
+                len(self.leave_ids.filtered(lambda r: r.employee_id.id == employee.id))
+                == 0
+            ):
                 leave_id = obj_hr_leave.create(self._prepare_leave_data(employee.id))
                 self._trigger_onchange(leave_id)
 
