@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<openerp>
+    <data>
+        <record id="hr_leave_type_view_form" model="ir.ui.view">
+            <field name="name">hr.leave.type.batch.form</field>
+            <field name="model">hr.leave_type</field>
+            <field name="inherit_id" ref="ssi_hr_holiday.hr_leave_type_view_form" />
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='sequence_id']" position="after">
+                        <field name="sequence_batch_id" />
+                    </xpath>
+                    <xpath
+                        expr="//page[@name='page_policy_leave_all']"
+                        position="after"
+                    >
+                        <page
+                            name="page_policy_leave_request_batch"
+                            string="Leave Request Batch Policy"
+                        >
+                            <group
+                                name="grp_policy_leave_request_batch"
+                                colspan="4"
+                                col="2"
+                            >
+                                <field
+                                    name="batch_confirm_group_ids"
+                                    widget="many2many_tags"
+                                />
+                                <field
+                                    name="batch_cancel_group_ids"
+                                    widget="many2many_tags"
+                                />
+                                <field
+                                    name="batch_restart_group_ids"
+                                    widget="many2many_tags"
+                                />
+                                <field
+                                    name="batch_approve_group_ids"
+                                    widget="many2many_tags"
+                                />
+                                <field
+                                    name="batch_reject_group_ids"
+                                    widget="many2many_tags"
+                                />
+                                <field
+                                    name="batch_restart_approval_group_ids"
+                                    widget="many2many_tags"
+                                />
+                            </group>
+                        </page>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+</openerp>
