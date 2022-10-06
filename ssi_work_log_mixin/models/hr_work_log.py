@@ -9,11 +9,64 @@ from odoo.tools.safe_eval import safe_eval
 
 class HRWorkLog(models.Model):
     _name = "hr.work_log"
+    _inherit = [
+        "mixin.transaction_confirm",
+        "mixin.transaction_done",
+        "mixin.transaction_cancel",
+        "mixin.employee_document",
+    ]
     _description = "HR Work Log"
 
-    name = fields.Char(
+    # Multiple Approval Attribute
+    _approval_from_state = "draft"
+    _approval_to_state = "done"
+    _approval_state = "confirm"
+    _after_approved_method = "action_done"
+
+    # Attributes related to add element on view automatically
+    _automatically_insert_view_element = True
+
+    # Attributes related to add element on form view automatically
+    _automatically_insert_multiple_approval_page = True
+    _statusbar_visible_label = "draft,confirm,done,rejected"
+    _policy_field_order = [
+        "confirm_ok",
+        "approve_ok",
+        "reject_ok",
+        "restart_approval_ok",
+        "cancel_ok",
+        "restart_ok",
+        "manual_number_ok",
+    ]
+    _header_button_order = [
+        "action_confirm",
+        "action_approve_approval",
+        "action_reject_approval",
+        "%(ssi_transaction_cancel_mixin.base_select_cancel_reason_action)d",
+        "action_restart",
+    ]
+
+    # Attributes related to add element on search view automatically
+    _state_filter_order = [
+        "dom_draft",
+        "dom_confirm",
+        "dom_reject",
+        "dom_done",
+        "dom_cancel",
+    ]
+
+    # Sequence attribute
+    _create_sequence_state = "done"
+
+    description = fields.Char(
         string="Description",
         required=True,
+        readonly=True,
+        states={
+            "draft": [
+                ("readonly", False),
+            ],
+        },
     )
 
     @api.model
@@ -43,7 +96,7 @@ class HRWorkLog(models.Model):
         string="Document ID",
         index=True,
         required=True,
-        readonly=True,
+        readonly=False,
         model_field="model_name",
     )
 
@@ -63,18 +116,37 @@ class HRWorkLog(models.Model):
             document.work_object_reference = result
 
     work_object_reference = fields.Reference(
-        string="# Document",
+        string="Document Reference",
         compute="_compute_work_object_reference",
         store=True,
         selection="_selection_target_model",
     )
+
+    @api.model
+    def _default_date(self):
+        return fields.Date.today()
+
     date = fields.Date(
         string="Date",
         required=True,
+        default=lambda self: self._default_date(),
+        readonly=True,
+        states={
+            "draft": [
+                ("readonly", False),
+            ],
+        },
     )
     amount = fields.Float(
         string="Amount",
         required=True,
+        default=0.0,
+        readonly=True,
+        states={
+            "draft": [
+                ("readonly", False),
+            ],
+        },
     )
 
     @api.depends(
@@ -104,6 +176,12 @@ class HRWorkLog(models.Model):
         string="Analytic Account",
         comodel_name="account.analytic.account",
         required=True,
+        readonly=True,
+        states={
+            "draft": [
+                ("readonly", False),
+            ],
+        },
     )
 
     @api.depends(
@@ -133,24 +211,34 @@ class HRWorkLog(models.Model):
         required=False,
         ondelete="restrict",
     )
+    state = fields.Selection(
+        string="State",
+        selection=[
+            ("draft", "Draft"),
+            ("confirm", "Waiting for Approval"),
+            ("done", "Done"),
+            ("cancel", "Cancelled"),
+            ("reject", "Rejected"),
+        ],
+        default="draft",
+        copy=False,
+    )
 
     @api.model
-    def _default_employee_id(self):
-        result = False
-        obj_hr_employee = self.env["hr.employee"]
-        user = self.env.user
-        criteria = [("user_id", "=", user.id)]
-        employee = obj_hr_employee.search(criteria)
-        if employee:
-            result = employee.id
-        return result
-
-    employee_id = fields.Many2one(
-        string="Employee",
-        comodel_name="hr.employee",
-        required=True,
-        default=lambda self: self._default_employee_id(),
-    )
+    def _get_policy_field(self):
+        res = super(HRWorkLog, self)._get_policy_field()
+        policy_field = [
+            "confirm_ok",
+            "approve_ok",
+            "done_ok",
+            "cancel_ok",
+            "reject_ok",
+            "restart_ok",
+            "restart_approval_ok",
+            "manual_number_ok",
+        ]
+        res += policy_field
+        return res
 
     def _get_localdict(self):
         self.ensure_one()

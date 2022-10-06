@@ -21,6 +21,7 @@ class MixinWorkObject(models.AbstractModel):
         inverse_name="work_object_id",
         domain=lambda self: [("model_name", "=", self._name)],
         auto_join=True,
+        readonly=False,
     )
 
     @api.model
@@ -66,7 +67,7 @@ class MixinWorkObject(models.AbstractModel):
     )
 
     def unlink(self):
-        work_log_ids = self.mapped("work_log_ids")
+        work_log_ids = self.mapped("all_work_log_ids")
         for work_log in work_log_ids:
             if work_log.sheet_id.state in ["confirm", "done"]:
                 strWarning = _(

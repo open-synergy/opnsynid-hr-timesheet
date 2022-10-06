@@ -6,10 +6,16 @@ from odoo import fields, models
 
 
 class HrTimesheet(models.Model):
-    _inherit = "hr.timesheet"
+    _name = "hr.timesheet"
+    _inherit = [
+        "hr.timesheet",
+        "mixin.work_object",
+    ]
 
-    work_log_ids = fields.One2many(
-        string="Work Logs",
+    _work_log_create_page = True
+
+    all_work_log_ids = fields.One2many(
+        string="All Work Logs",
         comodel_name="hr.work_log",
         inverse_name="sheet_id",
         readonly=True,
