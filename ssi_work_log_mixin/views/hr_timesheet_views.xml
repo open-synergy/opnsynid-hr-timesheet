@@ -10,21 +10,9 @@
         <field name="arch" type="xml">
             <data>
                 <xpath expr="//page[@name='computation']" position="before">
-                    <page name="page_work_log" string="Work Log">
+                    <page name="page_work_log" string="All Work Log(s)">
                         <group name="grp_work_log" colspan="4">
-                            <field name="work_log_ids" nolabel="1">
-                                <tree>
-                                    <field name="model_id" />
-                                    <field name="model_name" invisible="1" />
-                                    <field name="work_object_id" invisible="1" />
-                                    <field name="work_object_reference" />
-                                    <field name="employee_id" invisible="1" />
-                                    <field name="analytic_account_id" />
-                                    <field name="date" />
-                                    <field name="name" />
-                                    <field name="amount" widget="float_time" />
-                                </tree>
-                            </field>
+                            <field name="all_work_log_ids" nolabel="1" />
                         </group>
                     </page>
                 </xpath>
