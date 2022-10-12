@@ -19,11 +19,32 @@
                 </xpath>
                 <xpath expr="//page[@name='computation']" position="before">
                     <page name="page_attendance" string="Attendance">
-                        <group name="attendance_left" colspan="1" col="2">
+                        <group name="attendance_1" colspan="4" col="2">
+                            <button
+                                name="action_sign_in"
+                                string="Sign In"
+                                type="object"
+                                class="oe_highlight"
+                                attrs="{'invisible': ['|', ('state', '!=', 'open'),'&amp;',('state', '=', 'open'),('attendance_status','=','sign_in')]}"
+                                colspan="2"
+                            />
+                            <button
+                                name="action_sign_out"
+                                string="Sign Out"
+                                type="object"
+                                class="oe_highlight"
+                                attrs="{'invisible': ['|', ('state', '!=', 'open'),'&amp;',('state', '=', 'open'),('attendance_status','=','sign_out')]}"
+                                colspan="2"
+                            />
+                        </group>
+                        <group name="attendance_left" colspan="4" col="2">
+                            <field name="latest_attendance_id" />
+                            <field name="attendance_status" />
                             <field
                                 context="{'default_employee_id': employee_id, 'user_id':user_id}"
                                 name="attendance_ids"
                                 nolabel="1"
+                                colspan="2"
                             >
                                 <tree string="Attendances" editable="bottom">
                                     <field invisible="1" name="create_date" />

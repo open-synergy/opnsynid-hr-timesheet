@@ -9,7 +9,7 @@ from odoo.exceptions import Warning as UserError
 class HRTimesheetAttendance(models.Model):
     _name = "hr.timesheet_attendance"
     _description = "Timesheet Attendance"
-    _order = "date,check_in"
+    _order = "date desc,check_in desc"
 
     @api.model
     def _default_employee_id(self):

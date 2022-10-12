@@ -46,6 +46,29 @@ class HRTimesheet(models.Model):
             ],
         },
     )
+
+    @api.depends("attendance_ids")
+    def _compute_latest_attendance_id(self):
+        for record in self:
+            result = False
+            if record.attendance_ids:
+                result = record.attendance_ids[0]
+            record.latest_attendance_id = result
+
+    latest_attendance_id = fields.Many2one(
+        string="Latest Attedance",
+        comodel_name="hr.timesheet_attendance",
+        compute="_compute_latest_attendance_id",
+        store=True,
+    )
+    attendance_status = fields.Selection(
+        string="Attendance Status",
+        selection=[
+            ("sign_in", "Sign In"),
+            ("sign_out", "Sign Out"),
+        ],
+        related="employee_id.attendance_status",
+    )
     schedule_ids = fields.One2many(
         string="Attendance Schedule",
         comodel_name="hr.timesheet_attendance_schedule",
@@ -148,3 +171,51 @@ class HRTimesheet(models.Model):
                 if len(check) > 0:
                     strWarning = _("Date end with the same employee can't overlap")
                     raise UserError(strWarning)
+
+    def action_sign_in(self, reason=False):
+        for record in self.sudo():
+            record._sign_in(reason=reason)
+
+    def action_sign_out(self, reason=False):
+        for record in self.sudo():
+            record._sign_out(reason=reason)
+
+    def _sign_in(self, reason=False):
+        self.ensure_one()
+        Attendance = self.env["hr.timesheet_attendance"]
+        Attendance.create(self._prepare_attendance_data_creation(reason))
+
+    def _prepare_attendance_data_creation(self, reason=False):
+        return {
+            "date": fields.Date.today(),
+            "employee_id": self.employee_id.id,
+            "check_in": fields.Datetime.now(),
+            "reason_check_in_id": reason and reason.id or False,
+            "sheet_id": self.id,
+        }
+
+    def _sign_out(self, reason=False):
+        self.ensure_one()
+        if (
+            self.employee_id.latest_attendance_id
+            and not self.employee_id.latest_attendance_id.check_out
+        ):
+            self.employee_id.latest_attendance_id.write(
+                self._prepare_attendance_data_update(reason=reason)
+            )
+
+    def _prepare_attendance_data_update(self, reason=False):
+        self.ensure_one()
+        return {
+            "check_out": fields.Datetime.now(),
+            "reason_check_out_id": reason and reason.id or False,
+        }
+
+    def _prepare_domain_sign_out(self):
+        self.ensure_one()
+        criteria = [
+            ("sheet_id", "=", self.employee_id.active_timesheet_id.id),
+            ("date", "=", fields.Date.today()),
+            ("check_out", "=", False),
+        ]
+        return criteria
