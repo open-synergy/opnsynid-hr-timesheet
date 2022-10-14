@@ -75,9 +75,9 @@
           <xpath expr="//field[@name='user_id']" position="after">
               <field name="employee_id" />
               <field name="type_id" />
-              <field name="department_id" />
-              <field name="manager_id" />
-              <field name="job_id" />
+              <field name="department_id" readonly="1" force_save="1" />
+              <field name="manager_id" readonly="1" force_save="1" />
+              <field name="job_id" readonly="1" force_save="1" />
           </xpath>
           <xpath expr="//group[@name='header_right']" position="inside">
               <field name="date" />
