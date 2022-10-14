@@ -14,7 +14,18 @@
                 <field name="date" string="Date" />
                 <field name="date_start" string="Start Date" />
                 <field name="date_end" string="End date" />
-                <field name="employee_id" string="Employee" />
+                <field
+                        name="employee_id"
+                        widget="many2one_avatar_employee"
+                        string="Employee"
+                    />
+                <field name="department_id" optional="hide" />
+                <field
+                        name="manager_id"
+                        widget="many2one_avatar_employee"
+                        optional="hide"
+                    />
+                <field name="job_id" optional="hide" />
                 <field name="type_id" string="Type" />
                 <field name="planned_hour" widget="float_time" />
                 <field name="realized_hour" widget="float_time" />
@@ -73,10 +84,15 @@
     <field name="arch" type="xml">
         <data>
           <xpath expr="//field[@name='user_id']" position="after">
-              <field name="employee_id" />
+              <field name="employee_id" widget="many2one_avatar_employee" />
               <field name="type_id" />
               <field name="department_id" readonly="1" force_save="1" />
-              <field name="manager_id" readonly="1" force_save="1" />
+              <field
+                        name="manager_id"
+                        widget="many2one_avatar_employee"
+                        readonly="1"
+                        force_save="1"
+                    />
               <field name="job_id" readonly="1" force_save="1" />
           </xpath>
           <xpath expr="//group[@name='header_right']" position="inside">
