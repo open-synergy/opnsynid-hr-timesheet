@@ -13,7 +13,14 @@
             <xpath expr="//field[@name='company_id']" position="after">
                 <field name="date_start" string="Start Date" />
                 <field name="date_end" string="End date" />
-                <field name="employee_id" string="Employee" />
+                <field name="employee_id" widget="many2one_avatar_employee" />
+                <field name="department_id" optional="hide" />
+                <field
+                        name="manager_id"
+                        widget="many2one_avatar_employee"
+                        optional="hide"
+                    />
+                <field name="job_id" optional="hide" />
                 <field name="type_id" string="Type" />
                 <field name="number_of_days" string="No Of Days" />
             </xpath>
@@ -70,10 +77,15 @@
     <field name="arch" type="xml">
         <data>
           <xpath expr="//field[@name='user_id']" position="after">
-              <field name="employee_id" />
+              <field name="employee_id" widget="many2one_avatar_employee" />
               <field name="type_id" />
               <field name="department_id" readonly="1" force_save="1" />
-              <field name="manager_id" readonly="1" force_save="1" />
+              <field
+                        name="manager_id"
+                        widget="many2one_avatar_employee"
+                        readonly="1"
+                        force_save="1"
+                    />
               <field name="job_id" readonly="1" force_save="1" />
           </xpath>
           <xpath expr="//group[@name='header_right']" position="inside">
@@ -86,21 +98,6 @@
           </xpath>
           <xpath expr="//page[@name='note']" position="before">
                 <page name="schedule" string="Schedules">
-                    <!-- <button
-                            name="action_reload_leave_computation"
-                            string="Reload"
-                            class="oe_highlight"
-                            type="object"
-                            icon="fa-refresh"
-                            style="margin-right:4px"
-                        />
-                    <button
-                            name="action_compute_computation"
-                            string="Compute"
-                            class="oe_highlight"
-                            type="object"
-                            icon="fa-cogs"
-                        /> -->
                     <group name="schedule_1" colspan="4" col="2">
                         <field name="schedule_ids" nolabel="1">
                             <tree editable="top">
