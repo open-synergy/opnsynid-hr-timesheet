@@ -13,7 +13,18 @@
             <xpath expr="//field[@name='company_id']" position="after">
                 <field name="date_start" string="Start Date" />
                 <field name="date_end" string="End date" />
-                <field name="employee_id" string="Employee" />
+                <field
+                        name="employee_id"
+                        string="Employee"
+                        widget="many2one_avatar_employee"
+                    />
+                <field name="department_id" optional="hide" />
+                <field
+                        name="manager_id"
+                        widget="many2one_avatar_employee"
+                        optional="hide"
+                    />
+                <field name="job_id" optional="hide" />
             </xpath>
         </data>
     </field>
@@ -53,9 +64,14 @@
     <field name="arch" type="xml">
         <data>
           <xpath expr="//field[@name='user_id']" position="after">
-              <field name="employee_id" />
+              <field name="employee_id" widget="many2one_avatar_employee" />
               <field name="department_id" readonly="1" force_save="1" />
-              <field name="manager_id" readonly="1" force_save="1" />
+              <field
+                        name="manager_id"
+                        widget="many2one_avatar_employee"
+                        readonly="1"
+                        force_save="1"
+                    />
               <field name="job_id" readonly="1" force_save="1" />
           </xpath>
           <xpath expr="//group[@name='header_right']" position="inside">
@@ -79,16 +95,14 @@
                             type="object"
                             icon="fa-cogs"
                         />
-                    <group name="computation_1" colspan="4" col="2">
-                        <field name="computation_ids" nolabel="1">
-                            <tree editable="top">
-                                <field name="sequence" widget="handle" />
-                                <field name="code" />
-                                <field name="item_id" />
-                                <field name="amount" />
-                            </tree>
-                        </field>
-                    </group>
+                    <field name="computation_ids" nolabel="1" colspan="2">
+                        <tree>
+                            <field name="sequence" invisible="1" />
+                            <field name="code" />
+                            <field name="item_id" />
+                            <field name="amount" />
+                        </tree>
+                    </field>
                 </page>
             </xpath>
 
