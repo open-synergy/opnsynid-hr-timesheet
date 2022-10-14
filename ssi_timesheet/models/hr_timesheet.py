@@ -62,6 +62,14 @@ class HRTimesheet(models.Model):
         "dom_cancel",
     ]
 
+    # Mixin duration attribute
+    _date_start_readonly = True
+    _date_end_readonly = True
+    _date_start_states_list = ["draft"]
+    _date_start_states_readonly = ["draft"]
+    _date_end_states_list = ["draft"]
+    _date_end_states_readonly = ["draft"]
+
     computation_ids = fields.One2many(
         string="Computations",
         comodel_name="hr.timesheet_computation",
