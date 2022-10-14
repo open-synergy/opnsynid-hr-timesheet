@@ -27,8 +27,11 @@ class HRTimesheet(models.Model):
     working_schedule_id = fields.Many2one(
         string="Working Schedule",
         comodel_name="resource.calendar",
-        store=True,
-        compute_sudo=True,
+        required=True,
+        readonly=True,
+        states={
+            "draft": [("readonly", False)],
+        },
     )
     total_attendance = fields.Float(
         string="Total Attendance",
