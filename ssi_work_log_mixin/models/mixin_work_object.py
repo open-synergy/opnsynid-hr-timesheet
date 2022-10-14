@@ -67,7 +67,7 @@ class MixinWorkObject(models.AbstractModel):
     )
 
     def unlink(self):
-        work_log_ids = self.mapped("all_work_log_ids")
+        work_log_ids = self.mapped("work_log_ids")
         for work_log in work_log_ids:
             if work_log.sheet_id.state in ["confirm", "done"]:
                 strWarning = _(
