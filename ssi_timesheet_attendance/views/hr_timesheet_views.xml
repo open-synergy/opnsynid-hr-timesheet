@@ -27,6 +27,7 @@
                                 class="oe_highlight"
                                 attrs="{'invisible': ['|', ('state', '!=', 'open'),'&amp;',('state', '=', 'open'),('attendance_status','=','sign_in')]}"
                                 colspan="2"
+                                icon="fa-sign-in"
                             />
                             <button
                                 name="action_sign_out"
@@ -35,10 +36,14 @@
                                 class="oe_highlight"
                                 attrs="{'invisible': ['|', ('state', '!=', 'open'),'&amp;',('state', '=', 'open'),('attendance_status','=','sign_out')]}"
                                 colspan="2"
+                                icon="fa-sign-out"
                             />
                         </group>
                         <group name="attendance_left" colspan="4" col="2">
-                            <field name="latest_attendance_id" />
+                            <field
+                                name="latest_attendance_id"
+                                groups="base.group_no_one"
+                            />
                             <field name="attendance_status" />
                             <field
                                 context="{'default_employee_id': employee_id, 'user_id':user_id}"
@@ -114,22 +119,24 @@
                             </field>
                         </group>
                     </page>
-                    <page name="page_schedule" string="Atendance Schedules">
-                        <header>
+                    <page name="schedule" string="Atendance Schedules">
+                        <group name="schedule" colspan="4" col="2">
                             <button
                                 name="action_compute_schedule"
-                                string="Compute Schedules"
+                                string="Create Schedules"
                                 type="object"
                                 confirm="Compute Schedules. Are you sure?"
                                 order="1"
                                 class="oe_highlight"
                                 attrs="{'invisible':[('state','not in', ['draft','open'])]}"
+                                colspan="2"
+                                icon="fa-cogs"
                             />
-                        </header>
+                        </group>
                         <field
                             context="{'default_employee_id': employee_id, 'user_id':user_id}"
                             name="schedule_ids"
-                            colspan="4"
+                            colspan="2"
                             nolabel="1"
                         >
                             <tree>
