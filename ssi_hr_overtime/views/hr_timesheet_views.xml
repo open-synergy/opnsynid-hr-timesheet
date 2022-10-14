@@ -13,10 +13,8 @@
         <field name="arch" type="xml">
             <data>
                 <xpath expr="//page[@name='computation']" position="before">
-                    <page name="page_overtime" string="overtimes">
-                        <group name="overtime_left" colspan="1" col="2">
-                            <field name="overtime_ids" nolabel="1" />
-                        </group>
+                    <page name="overtime" string="Overtimes">
+                        <field name="overtime_ids" nolabel="1" />
                     </page>
                 </xpath>
             </data>
