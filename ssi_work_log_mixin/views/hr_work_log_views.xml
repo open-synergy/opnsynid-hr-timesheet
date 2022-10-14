@@ -25,9 +25,13 @@
         <data>
             <xpath expr="//field[@name='company_id']" position="after">
                 <field name="date" />
-                <field name="employee_id" />
+                <field name="employee_id" widget="many2one_avatar_employee" />
                 <field name="department_id" optional="hide" />
-                <field name="manager_id" optional="hide" />
+                <field
+                        name="manager_id"
+                        widget="many2one_avatar_employee"
+                        optional="hide"
+                    />
                 <field name="job_id" optional="hide" />
                 <field name="model_id" optional="hide" />
                 <field name="model_name" invisible="1" />
@@ -51,9 +55,14 @@
         <field name="arch" type="xml">
             <data>
                 <xpath expr="//field[@name='user_id']" position="after">
-                    <field name="employee_id" />
+                    <field name="employee_id" widget="many2one_avatar_employee" />
                     <field name="department_id" readonly="1" force_save="1" />
-                    <field name="manager_id" readonly="1" force_save="1" />
+                    <field
+                        name="manager_id"
+                        widget="many2one_avatar_employee"
+                        readonly="1"
+                        force_save="1"
+                    />
                     <field name="job_id" readonly="1" force_save="1" />
                 </xpath>
                 <xpath expr="//group[@name='header_right']" position="inside">
