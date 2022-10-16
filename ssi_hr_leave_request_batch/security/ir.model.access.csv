@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_leave_request_batch_all,{model_name} - all,model_hr_leave_request_batch,,1,0,0,0
+access_hr_leave_request_batch_viewer,{model_name} - viewer,model_hr_leave_request_batch,hr_leave_request_batch_viewer_group,1,0,0,0
+access_hr_leave_request_batch_user,{model_name} - user,model_hr_leave_request_batch,hr_leave_request_batch_user_group,1,1,1,1

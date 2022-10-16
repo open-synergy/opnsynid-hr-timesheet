@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+    <data noupdate="1">
+        <record id="sequence_template_hr_leave_request_batch" model="sequence.template">
+            <field name="name">Standard</field>
+            <field
+                name="model_id"
+                ref="ssi_hr_leave_request_batch.model_hr_leave_request_batch"
+            />
+            <field name="sequence" eval="100" />
+            <field name="initial_string">/</field>
+            <field
+                name="sequence_field_id"
+                search="[('model_id.model','=','hr.leave_request_batch'),('name','=','name')]"
+            />
+            <field
+                name="date_field_id"
+                search="[('model_id.model','=','hr.leave_request_batch'),('name','=','date_start')]"
+            />
+            <field name="computation_method">use_python</field>
+            <field name="python_code">result=True</field>
+            <field name="sequence_id" ref="sequence_hr_leave_request_batch" />
+            <field name="sequence_selection_method">use_sequence</field>
+            <field name="add_custom_prefix" eval="0" />
+            <field name="add_custom_suffix" eval="0" />
+        </record>
+    </data>
+</odoo>
