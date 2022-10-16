@@ -1,13 +1,12 @@
 # Copyright 2022 OpenSynergy Indonesia
 # Copyright 2022 PT. Simetri Sinergi Indonesia
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
-# pylint: disable=locally-disabled, manifest-required-author
 {
     "name": "Leave Request Batch",
     "version": "14.0.1.0.0",
     "category": "Human Resource",
     "website": "https://simetri-sinergi.id",
-    "author": "OpenSynergy Indonesia",
+    "author": "PT. Simetri Sinergi Indonesia, OpenSynergy Indonesia",
     "license": "AGPL-3",
     "installable": True,
     "depends": [
@@ -24,7 +23,7 @@
         "data/policy_template_data.xml",
         "data/approval_template_data.xml",
         "views/hr_leave_request_batch_view.xml",
-        # "{view/wizard/template}",
+        "views/hr_leave_views.xml",
     ],
     "demo": [],
     "images": [],

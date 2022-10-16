@@ -90,7 +90,10 @@ class HrLeaveRequestBatch(models.Model):
     )
 
     type_id = fields.Many2one(
-        comodel_name="hr.leave_type", string="Type", required=True, ondelete="restrict"
+        string="Type",
+        comodel_name="hr.leave_type",
+        required=True,
+        ondelete="restrict",
     )
 
     employee_ids = fields.Many2many(
@@ -102,25 +105,21 @@ class HrLeaveRequestBatch(models.Model):
     )
 
     leave_request_ids = fields.One2many(
+        string="Time Off",
         comodel_name="hr.leave",
         inverse_name="batch_id",
-        string="Time Off",
     )
 
     def _create_leave_request(self, employee_ids):
         for employee_id in employee_ids:
             leave_request = self.env["hr.leave"].search(
-                [("employee_id", "=", employee_id.id)]
-            )
-            timesheet = self.env["hr.timesheet"].search(
                 [
                     ("employee_id", "=", employee_id.id),
                     ("date_start", "<=", self.date_start),
                     ("date_end", ">=", self.date_end),
                 ],
-                limit=1,
             )
-            if not leave_request and timesheet:
+            if not leave_request:
                 leave_request.create(
                     {
                         "date_start": self.date_start,
@@ -128,7 +127,6 @@ class HrLeaveRequestBatch(models.Model):
                         "batch_id": self.id,
                         "employee_id": employee_id.id,
                         "type_id": self.type_id.id,
-                        "sheet_id": timesheet.id,
                     }
                 )
 
