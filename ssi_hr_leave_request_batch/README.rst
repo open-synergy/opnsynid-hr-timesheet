@@ -27,7 +27,7 @@ Bug Tracker
 ===========
 
 Bugs are tracked on `GitHub Issues
-<https://github.com/open-synergy/opnsynid-hr-timesheet/tree/14.0>`_.
+<https://github.com/open-synergy/opnsynid-hr-timesheet>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us smashing it by providing a detailed
 and welcomed feedback.
@@ -39,7 +39,8 @@ Credits
 Contributors
 ------------
 
-* {Legian Wahyu Prananta}<legianwp@gmail.com>
+* Legian Wahyu Prananta<legianwp@gmail.com>
+* Michael Viriyananda<viriyananda.michael@gmail.com>
 
 Maintainer
 ----------
