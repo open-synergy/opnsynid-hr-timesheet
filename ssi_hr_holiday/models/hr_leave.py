@@ -94,7 +94,6 @@ class HRLeave(models.Model):
         string="# Timesheet",
         comodel_name="hr.timesheet",
         compute="_compute_sheet",
-        required=True,
         store=True,
         compute_sudo=True,
     )
