@@ -111,16 +111,17 @@ class HrLeaveRequestBatch(models.Model):
     )
 
     def _create_leave_request(self, employee_ids):
+        obj_leave_request = self.env["hr.leave"]
         for employee_id in employee_ids:
-            leave_request = self.env["hr.leave"].search(
+            leave_request_ids = obj_leave_request.search(
                 [
                     ("employee_id", "=", employee_id.id),
                     ("date_start", "<=", self.date_start),
                     ("date_end", ">=", self.date_end),
                 ],
             )
-            if not leave_request:
-                leave_request.create(
+            if not leave_request_ids:
+                leave_id = obj_leave_request.create(
                     {
                         "date_start": self.date_start,
                         "date_end": self.date_end,
@@ -129,6 +130,15 @@ class HrLeaveRequestBatch(models.Model):
                         "type_id": self.type_id.id,
                     }
                 )
+                self._trigger_onchange(leave_id)
+
+    def _trigger_onchange(self, leave):
+        self.ensure_one()
+        leave.onchange_leave_allocation_id()
+        leave.onchange_number_of_day()
+        leave.onchange_department_id()
+        leave.onchange_manager_id()
+        leave.onchange_job_id()
 
     def _confirm_leave_request(self, leave_request_ids):
         for leave_request in leave_request_ids:
