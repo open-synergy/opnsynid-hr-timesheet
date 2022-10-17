@@ -93,12 +93,14 @@ class HrLeaveAllocation(models.Model):
 
     date_start = fields.Date(
         string="Start Date",
+        required=True,
         readonly=True,
         states={"draft": [("readonly", False)]},
         default=datetime.now().strftime("%Y-%m-%d"),
     )
     date_end = fields.Date(
         string="End Date",
+        required=False,
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
@@ -255,10 +257,23 @@ class HrLeaveAllocation(models.Model):
             record.write(record._prepare_terminate_data())
 
     @api.multi
+    def action_restart(self):
+        for record in self:
+            record.write(record._prepare_restart_data())
+
+    @api.multi
     def _prepare_confirm_data(self):
         self.ensure_one()
         return {
             "state": "confirm",
+        }
+
+    @api.multi
+    def _prepare_restart_data(self):
+        self.ensure_one()
+        return {
+            "state": "draft",
+            "cancel_reason_id": False,
         }
 
     @api.multi

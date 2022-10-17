@@ -97,11 +97,13 @@ class HRLeave(models.Model):
         readonly=True,
         states={"draft": [("readonly", False)]},
         default=datetime.now().strftime("%Y-%m-%d"),
+        required=True,
     )
     date_end = fields.Date(
         string="End Date",
         readonly=True,
         states={"draft": [("readonly", False)]},
+        required=True,
     )
 
     @api.depends(
