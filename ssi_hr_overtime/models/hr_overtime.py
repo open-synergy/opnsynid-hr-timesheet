@@ -115,7 +115,6 @@ class HROvertime(models.Model):
         string="# Timesheet",
         comodel_name="hr.timesheet",
         compute="_compute_sheet",
-        required=True,
         store=True,
         compute_sudo=True,
     )
@@ -263,6 +262,21 @@ class HROvertime(models.Model):
     def onchange_policy_template_id(self):
         template_id = self._get_template_policy()
         self.policy_template_id = template_id
+
+    @api.constrains("sheet_id")
+    def _constrains_sheet_id(self):
+        for record in self.sudo():
+            if not record.sheet_id:
+                error_message = _(
+                    """
+                Context: Create Overtime
+                Database ID: %s
+                Problem: Timesheet not found for employee %s
+                Solution: Create Timesheet
+                """
+                    % (record.id, record.employee_id.name)
+                )
+                raise UserError(error_message)
 
     @api.constrains("date_start", "date_end", "employee_id")
     def _constrains_overlap(self):
