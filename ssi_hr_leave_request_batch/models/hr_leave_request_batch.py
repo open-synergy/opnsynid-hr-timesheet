@@ -137,12 +137,12 @@ class HrLeaveRequestBatch(models.Model):
     # BUTTON CONFIRM
     def action_confirm(self):
         _super = super(HrLeaveRequestBatch, self)
+        _super.action_confirm()
         for record in self.sudo():
             if record.employee_ids:
                 record._create_leave_request(record.employee_ids)
             if record.leave_request_ids:
                 record._confirm_leave_request(record.leave_request_ids)
-        _super.action_confirm()
 
     def _approve_leave_request(self, leave_request_ids):
         for leave_request in leave_request_ids:
@@ -151,10 +151,10 @@ class HrLeaveRequestBatch(models.Model):
     # BUTTON APPROVAL
     def action_approve_approval(self):
         _super = super(HrLeaveRequestBatch, self)
+        _super.action_approve_approval()
         for record in self.sudo():
             if record.leave_request_ids:
                 record._approve_leave_request(record.leave_request_ids)
-        _super.action_approve_approval()
 
     def _reject_leave_request(self, leave_request_ids):
         for leave_request in leave_request_ids:
@@ -163,10 +163,10 @@ class HrLeaveRequestBatch(models.Model):
     # BUTTON REJECT
     def action_reject_approval(self):
         _super = super(HrLeaveRequestBatch, self)
+        _super.action_reject_approval()
         for record in self.sudo():
             if record.leave_request_ids:
                 record._reject_leave_request(record.leave_request_ids)
-        _super.action_reject_approval()
 
     def _restart_leave_request(self, leave_request_ids):
         for leave_request in leave_request_ids:
@@ -175,10 +175,10 @@ class HrLeaveRequestBatch(models.Model):
     # BUTTON RESTART
     def action_restart(self):
         _super = super(HrLeaveRequestBatch, self)
+        _super.action_restart()
         for record in self.sudo():
             if record.leave_request_ids:
                 record._restart_leave_request(record.leave_request_ids)
-        _super.action_restart()
 
     def _cancel_leave_request(self, leave_request_ids, cancel_reason):
         for leave_request in leave_request_ids:
@@ -187,7 +187,7 @@ class HrLeaveRequestBatch(models.Model):
     # BUTTON CANCEL
     def action_cancel(self, cancel_reason=False):
         _super = super(HrLeaveRequestBatch, self)
+        _super.action_cancel()
         for record in self.sudo():
             if record.leave_request_ids:
                 record._cancel_leave_request(record.leave_request_ids, cancel_reason)
-        _super.action_cancel()
