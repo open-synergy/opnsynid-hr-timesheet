@@ -286,6 +286,21 @@ class HRLeave(models.Model):
             result = leave_allocations[0]
         return result
 
+    @api.constrains("sheet_id")
+    def _constrains_sheet_id(self):
+        for record in self.sudo():
+            if not record.sheet_id:
+                error_message = _(
+                    """
+                Context: Create Leave Request
+                Database ID: %s
+                Problem: Timesheet not found for employee %s
+                Solution: Create Timesheet
+                """
+                    % (record.id, record.employee_id.name)
+                )
+                raise UserError(error_message)
+
     @api.constrains("date_start", "date_end", "employee_id")
     def _constrains_overlap(self):
         for record in self.sudo():
