@@ -15,7 +15,7 @@
         model="ir.module.category"
     >
     <field name="name">Leave Request Batch</field>
-    <field name="parent_id" ref="ssi_hr.human_resource_module_category" />
+    <field name="parent_id" ref="ssi_hr.human_resource_data_module_category" />
 </record>
 
 </odoo>
