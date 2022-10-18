@@ -7,3 +7,9 @@ access_hr_timesheet_attendance_schedule_viewer,hr.timesheet_attendance_schedule 
 access_hr_timesheet_attendance_schedule_user,hr.timesheet_attendance_schedule - user,model_hr_timesheet_attendance_schedule,ssi_timesheet.hr_timesheet_user_group,1,1,1,1
 access_hr_attendance_reason_configurator,hr.attendance_reason - configurator,model_hr_attendance_reason,hr_attendance_reason_group,1,1,1,1
 access_hr_attendance_reason_all,hr.attendance_reason - all,model_hr_attendance_reason,,1,0,0,0
+access_resource_calendar_configurator,resource.calendar - configurator,resource.model_resource_calendar,working_schedule_group,1,1,1,1
+access_resource_calendar_all,resource.calendar - all,resource.model_resource_calendar,,1,0,0,0
+access_resource_calendar_attendance_configurator,resource.calendar.attendance - configurator,resource.model_resource_calendar_attendance,working_schedule_group,1,1,1,1
+access_resource_calendar_attendance_all,resource.calendar.attendance - all,resource.model_resource_calendar_attendance,,1,0,0,0
+access_resource_calendar_leaves_configurator,resource.calendar.leaves - configurator,resource.model_resource_calendar_leaves,working_schedule_group,1,1,1,1
+access_resource_calendar_leaves_all,resource.calendar.leaves - all,resource.model_resource_calendar_leaves,,1,0,0,0
