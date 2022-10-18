@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+<record id="resource_calendar_action" model="ir.actions.act_window">
+    <field name="name">Working Schedule</field>
+    <field name="res_model">resource.calendar</field>
+    <field name="view_mode">tree,form</field>
+    <field name="view_id" eval="False" />
+    <field name="search_view_id" ref="resource.view_resource_calendar_search" />
+    <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+        Define working hours and time table that could be scheduled to your project members
+        </p>
+    </field>
+</record>
+
+<menuitem
+        id="resource_calendar_menu"
+        name="Working Schedule"
+        parent="menu_hr_attendance_configuration"
+        action="resource_calendar_action"
+        groups="working_schedule_group"
+        sequence="2"
+    />
+
+</odoo>
