@@ -101,7 +101,6 @@ class HRTimesheet(models.Model):
     def _get_schedule_data(self):
         self.ensure_one()
         res = []
-        self.schedule_ids = False
         obj_public_holiday = self.env["base.public.holiday"]
         if self.working_schedule_id and self.date_start and self.date_end:
             start_dt = datetime.combine(self.date_start, datetime.min.time())
@@ -134,8 +133,10 @@ class HRTimesheet(models.Model):
 
     def action_compute_schedule(self):
         for document in self.sudo():
-            schedule_ids = document._get_schedule_data()
-            document.schedule_ids = schedule_ids
+            data = []
+            document.schedule_ids.unlink()
+            data = document._get_schedule_data()
+            document.write({"schedule_ids": data})
             document.attendance_ids._compute_schedule()
             document.schedule_ids._compute_attendance()
 
