@@ -2,7 +2,8 @@
 # Copyright 2022 PT. Simetri Sinergi Indonesia
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class HrEmployeeBase(models.AbstractModel):
@@ -84,3 +85,41 @@ class HrEmployeeBase(models.AbstractModel):
         compute="_compute_attendance_status",
         store=False,
     )
+
+    def action_sign_in(self):
+        for record in self.sudo():
+            record._sign_in()
+
+    def action_sign_out(self):
+        for record in self.sudo():
+            record._sign_out()
+
+    def _sign_in(self):
+        self.ensure_one()
+        if not self.active_timesheet_id:
+            error_message = _(
+                """
+            Context: Sign in from employee data
+            Database ID: %s
+            Problem: No active timesheet
+            Solution: Create timesheet
+            """
+                % (self.id)
+            )
+            raise ValidationError(error_message)
+        self.active_timesheet_id.action_sign_in()
+
+    def _sign_out(self):
+        self.ensure_one()
+        if not self.active_timesheet_id:
+            error_message = _(
+                """
+            Context: Sign out from employee data
+            Database ID: %s
+            Problem: No active timesheet
+            Solution: Create timesheet
+            """
+                % (self.id)
+            )
+            raise ValidationError(error_message)
+        self.active_timesheet_id.action_sign_out()
