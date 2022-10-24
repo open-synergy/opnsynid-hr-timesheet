@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+<record id="hr_work_log_tag_view_search" model="ir.ui.view">
+    <field name="name">hr.work.log.tag.search</field>
+    <field name="model">hr.work_log_tag</field>
+    <field
+            name="inherit_id"
+            ref="ssi_master_data_mixin.mixin_master_data_view_search"
+        />
+    <field name="mode">primary</field>
+    <field name="arch" type="xml">
+        <data />
+    </field>
+</record>
+
+<record id="hr_work_log_tag_view_tree" model="ir.ui.view">
+    <field name="name">hr.work.log.tag.tree</field>
+    <field name="model">hr.work_log_tag</field>
+    <field name="inherit_id" ref="ssi_master_data_mixin.mixin_master_data_view_tree" />
+    <field name="mode">primary</field>
+    <field name="arch" type="xml">
+        <data />
+    </field>
+</record>
+
+<record id="hr_work_log_tag_view_form" model="ir.ui.view">
+    <field name="name">hr.work.log.tag.form</field>
+    <field name="model">hr.work_log_tag</field>
+    <field name="inherit_id" ref="ssi_master_data_mixin.mixin_master_data_view_form" />
+    <field name="mode">primary</field>
+    <field name="arch" type="xml">
+        <data />
+    </field>
+</record>
+
+<record id="hr_work_log_tag_action" model="ir.actions.act_window">
+    <field name="name">Work Log Tags</field>
+    <field name="res_model">hr.work_log_tag</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+<menuitem
+        id="hr_work_log_tag_menu"
+        name="Work Log Tags"
+        parent="ssi_timesheet.menu_hr_timesheet_configuration"
+        action="hr_work_log_tag_action"
+        sequence="1"
+    />
+
+</odoo>

@@ -211,6 +211,13 @@ class HRWorkLog(models.Model):
         required=False,
         ondelete="restrict",
     )
+    tag_ids = fields.Many2many(
+        string="Work Log Tags",
+        comodel_name="hr.work_log_tag",
+        relation="rel_work_log_2_work_log_tag",
+        column1="work_log_id",
+        column2="tag_id",
+    )
     state = fields.Selection(
         string="State",
         selection=[
