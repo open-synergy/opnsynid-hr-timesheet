@@ -3,6 +3,19 @@
      Copyright 2022 PT. Simetri Sinergi Indonesia
      License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
 <odoo>
+<!-- Configurator -->
+<record id="hr_work_log_tag_group" model="res.groups">
+    <field name="name">Work Log Tasg</field>
+    <field
+            name="category_id"
+            ref="ssi_hr.human_resource_configurator_module_category"
+        />
+    <field
+            name="users"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
+</record>
+
 <!-- Workflow -->
 <record id="hr_work_log_viewer_group" model="res.groups">
     <field name="name">Viewer</field>

@@ -86,6 +86,7 @@ class HRWorkLog(models.Model):
         required=True,
         ondelete="cascade",
         default=lambda self: self._default_model_id(),
+        readonly=True,
     )
     model_name = fields.Char(
         related="model_id.model",
@@ -212,11 +213,17 @@ class HRWorkLog(models.Model):
         ondelete="restrict",
     )
     tag_ids = fields.Many2many(
-        string="Work Log Tags",
+        string="Tags",
         comodel_name="hr.work_log_tag",
         relation="rel_work_log_2_work_log_tag",
         column1="work_log_id",
         column2="tag_id",
+        readonly=True,
+        states={
+            "draft": [
+                ("readonly", False),
+            ],
+        },
     )
     state = fields.Selection(
         string="State",
