@@ -10,6 +10,7 @@
     "license": "LGPL-3",
     "installable": True,
     "depends": [
+        "analytic",
         "ssi_timesheet",
     ],
     "data": [
