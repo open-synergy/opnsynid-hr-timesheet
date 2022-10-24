@@ -47,6 +47,7 @@
         name="Work Log Tags"
         parent="ssi_timesheet.menu_hr_timesheet_configuration"
         action="hr_work_log_tag_action"
+        groups="hr_work_log_tag_group"
         sequence="1"
     />
 
