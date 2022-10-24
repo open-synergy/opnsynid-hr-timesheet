@@ -54,6 +54,18 @@
         />
         <field name="arch" type="xml">
             <data>
+                <xpath expr="//field[@name='user_id']" position="before">
+                    <field name="tag_ids" widget="many2many_tags" />
+                    <field
+                        name="allowed_analytic_account_ids"
+                        widget="many2many_tags"
+                        invisible="1"
+                    />
+                    <field
+                        name="analytic_account_id"
+                        domain="[('id', 'in', allowed_analytic_account_ids)]"
+                    />
+                </xpath>
                 <xpath expr="//field[@name='user_id']" position="after">
                     <field name="employee_id" widget="many2one_avatar_employee" />
                     <field name="department_id" readonly="1" force_save="1" />
@@ -72,17 +84,12 @@
                     <field name="model_name" invisible="1" />
                     <field name="work_object_id" invisible="1" />
                     <field name="work_object_reference" />
-                    <field
-                        name="allowed_analytic_account_ids"
-                        widget="many2many_tags"
-                        invisible="1"
-                    />
-                    <field
-                        name="analytic_account_id"
-                        domain="[('id', 'in', allowed_analytic_account_ids)]"
-                    />
-                    <field name="description" />
                     <field name="amount" widget="float_time" />
+                </xpath>
+                <xpath expr="//group[@name='header']" position="before">
+                    <group name="grp_description" colspan="4" col="2">
+                        <field name="description" />
+                    </group>
                 </xpath>
             </data>
         </field>

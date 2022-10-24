@@ -4,7 +4,7 @@
 
 {
     "name": "Work Log Mixin",
-    "version": "14.0.1.3.0",
+    "version": "14.0.1.4.0",
     "website": "https://simetri-sinergi.id",
     "author": "PT. Simetri Sinergi Indonesia, OpenSynergy Indonesia",
     "license": "LGPL-3",
@@ -24,7 +24,9 @@
         "data/policy_template_data.xml",
         "templates/work_log_mixin_templates.xml",
         "views/ir_model_views.xml",
+        "views/hr_work_log_tag_views.xml",
         "views/hr_work_log_views.xml",
         "views/hr_timesheet_views.xml",
+        "views/account_analytic_account_views.xml",
     ],
 }
