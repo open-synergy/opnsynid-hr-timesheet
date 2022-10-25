@@ -4,7 +4,7 @@
 
 {
     "name": "Timesheets",
-    "version": "14.0.1.4.0",
+    "version": "14.0.1.5.0",
     "website": "https://simetri-sinergi.id",
     "author": "PT. Simetri Sinergi Indonesia, OpenSynergy Indonesia",
     "license": "LGPL-3",
@@ -32,5 +32,6 @@
         "views/hr_timesheet_computation_item_views.xml",
         "views/hr_timesheet_views.xml",
         "views/hr_employee_views.xml",
+        "wizards/generate_timesheet.xml",
     ],
 }

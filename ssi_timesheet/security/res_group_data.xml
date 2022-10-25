@@ -15,6 +15,17 @@
             eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
         />
 </record>
+<record id="hr_timesheet_generate_timesheet_group" model="res.groups">
+    <field name="name">Generate Timesheet</field>
+    <field
+            name="category_id"
+            ref="ssi_hr.human_resource_configurator_module_category"
+        />
+    <field
+            name="users"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
+</record>
 
 <!-- Workflow -->
 <record id="hr_timesheet_viewer_group" model="res.groups">
