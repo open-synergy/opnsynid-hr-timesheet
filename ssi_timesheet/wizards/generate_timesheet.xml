@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl-3.0-standalone.html). -->
+<odoo>
+
+<record id="generate_timesheet_view_form" model="ir.ui.view">
+    <field name="name">Generate Timesheet</field>
+    <field name="model">hr.generate_timesheet</field>
+    <field name="arch" type="xml">
+        <form>
+            <group name="group_1" colspan="4" col="2">
+               <field name="date_start" />
+               <field name="date_end" />
+               <field name="employee_ids" options="{'no_create': True}" />
+            </group>
+            <footer>
+                <button
+                        name="action_generate"
+                        type="object"
+                        string="Generate"
+                        class="oe_highlight"
+                    />
+                or
+                <button special="cancel" string="Cancel" />
+            </footer>
+        </form>
+    </field>
+</record>
+
+<record id="generate_timesheet_action" model="ir.actions.act_window">
+    <field name="name">Generate Timesheet</field>
+    <field name="res_model">hr.generate_timesheet</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+</record>
+
+<menuitem
+        id="menu_generate_timesheet"
+        name="Generate Timesheet"
+        parent="timesheet_menu"
+        groups="hr_timesheet_generate_timesheet_group"
+        action="generate_timesheet_action"
+        sequence="1"
+    />
+
+</odoo>
