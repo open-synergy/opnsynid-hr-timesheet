@@ -12,3 +12,5 @@ class HRTimesheet(models.Model):
         "mixin.state_change_constrain",
         "mixin.status_check",
     ]
+
+    _status_check_create_page = True
