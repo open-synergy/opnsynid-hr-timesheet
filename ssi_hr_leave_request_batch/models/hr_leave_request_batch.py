@@ -97,11 +97,11 @@ class HrLeaveRequestBatch(models.Model):
     )
 
     employee_ids = fields.Many2many(
-        string="Level Matang",
+        string="Employee(s)",
         comodel_name="hr.employee",
         relation="rel_leave_request_batch_2_employee",
         column1="leave_request_batch_id",
-        column2="emplyee_id",
+        column2="employee_id",
     )
 
     leave_request_ids = fields.One2many(
@@ -111,14 +111,11 @@ class HrLeaveRequestBatch(models.Model):
     )
 
     def _create_leave_request(self, employee_ids):
+        self.ensure_one()
         obj_leave_request = self.env["hr.leave"]
         for employee_id in employee_ids:
-            leave_request_ids = obj_leave_request.search(
-                [
-                    ("employee_id", "=", employee_id.id),
-                    ("date_start", "<=", self.date_start),
-                    ("date_end", ">=", self.date_end),
-                ],
+            leave_request_ids = self.leave_request_ids.filtered(
+                lambda x: x.employee_id.id == employee_id.id
             )
             if not leave_request_ids:
                 leave_id = obj_leave_request.create(
@@ -141,6 +138,7 @@ class HrLeaveRequestBatch(models.Model):
         leave.onchange_job_id()
 
     def _confirm_leave_request(self, leave_request_ids):
+        self.ensure_one()
         for leave_request in leave_request_ids:
             leave_request.action_confirm()
 
@@ -155,6 +153,7 @@ class HrLeaveRequestBatch(models.Model):
                 record._confirm_leave_request(record.leave_request_ids)
 
     def _approve_leave_request(self, leave_request_ids):
+        self.ensure_one()
         for leave_request in leave_request_ids:
             leave_request.action_approve_approval()
 
@@ -167,6 +166,7 @@ class HrLeaveRequestBatch(models.Model):
                 record._approve_leave_request(record.leave_request_ids)
 
     def _reject_leave_request(self, leave_request_ids):
+        self.ensure_one()
         for leave_request in leave_request_ids:
             leave_request.action_reject_approval()
 
@@ -179,6 +179,7 @@ class HrLeaveRequestBatch(models.Model):
                 record._reject_leave_request(record.leave_request_ids)
 
     def _restart_leave_request(self, leave_request_ids):
+        self.ensure_one()
         for leave_request in leave_request_ids:
             leave_request.action_restart()
 
@@ -191,6 +192,7 @@ class HrLeaveRequestBatch(models.Model):
                 record._restart_leave_request(record.leave_request_ids)
 
     def _cancel_leave_request(self, leave_request_ids, cancel_reason):
+        self.ensure_one()
         for leave_request in leave_request_ids:
             leave_request.action_cancel(cancel_reason)
 
