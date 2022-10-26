@@ -139,7 +139,7 @@ class HRWorkLog(models.Model):
         },
     )
     amount = fields.Float(
-        string="Amount",
+        string="Duration",
         required=True,
         default=0.0,
         readonly=True,
