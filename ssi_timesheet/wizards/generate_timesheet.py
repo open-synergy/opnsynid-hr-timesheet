@@ -21,14 +21,23 @@ class GenerateTimesheet(models.TransientModel):
         column2="employee_id",
         required=True,
     )
+    working_schedule_id = fields.Many2one(
+        string="Working Schedule",
+        comodel_name="resource.calendar",
+    )
 
     def _prepare_data_timesheet(self, employee):
         self.ensure_one()
         data = {}
         if self._check_data(employee):
+            working_schedule_id = (
+                self.working_schedule_id
+                and self.working_schedule_id.id
+                or employee.resource_calendar_id.id
+            )
             data = {
                 "employee_id": employee.id,
-                "working_schedule_id": employee.resource_calendar_id.id,
+                "working_schedule_id": working_schedule_id,
                 "date_start": self.date_start,
                 "date_end": self.date_end,
             }

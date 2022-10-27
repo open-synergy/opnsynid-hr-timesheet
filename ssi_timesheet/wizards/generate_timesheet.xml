@@ -12,6 +12,7 @@
             <group name="group_1" colspan="4" col="2">
                <field name="date_start" />
                <field name="date_end" />
+               <field name="working_schedule_id" />
                <field name="employee_ids" options="{'no_create': True}" />
             </group>
             <footer>
@@ -32,6 +33,7 @@
     <field name="name">Generate Timesheet</field>
     <field name="res_model">hr.generate_timesheet</field>
     <field name="view_mode">form</field>
+    <field name="view_id" ref="generate_timesheet_view_form" />
     <field name="target">new</field>
 </record>
 
