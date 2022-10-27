@@ -5,3 +5,4 @@ ssi-mixin https://github.com/open-synergy/ssi-mixin.git 14.0
 opnsynid-hr https://github.com/open-synergy/opnsynid-hr.git 14.0
 opnsynid-hr-employee-directory https://github.com/open-synergy/opnsynid-hr-employee-directory.git 14.0
 opnsynid-server-tools https://github.com/open-synergy/opnsynid-server-tools.git 14.0
+ssi-financial-accounting https://github.com/open-synergy/ssi-financial-accounting.git 14.0
