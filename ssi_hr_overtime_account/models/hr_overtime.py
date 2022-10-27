@@ -13,4 +13,8 @@ class HROvertime(models.Model):
         comodel_name="account.analytic.account",
         required=False,
         ondelete="restrict",
+        readonly=True,
+        states={
+            "draft": [("readonly", False)],
+        },
     )
