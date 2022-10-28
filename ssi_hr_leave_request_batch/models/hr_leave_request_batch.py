@@ -28,7 +28,7 @@ class HrLeaveRequestBatch(models.Model):
 
     # Attributes related to add element on form view automatically
     _automatically_insert_multiple_approval_page = True
-    _statusbar_visible_label = "draft,confirm,done,reject"
+    _statusbar_visible_label = "draft,confirm,done"
     _policy_field_order = [
         "confirm_ok",
         "approve_ok",
@@ -54,6 +54,14 @@ class HrLeaveRequestBatch(models.Model):
         "dom_done",
         "dom_cancel",
     ]
+
+    # Mixin duration attribute
+    _date_start_readonly = True
+    _date_end_readonly = True
+    _date_start_states_list = ["draft"]
+    _date_start_states_readonly = ["draft"]
+    _date_end_states_list = ["draft"]
+    _date_end_states_readonly = ["draft"]
 
     # Sequence attribute
     _auto_fill_sequence = True
@@ -94,6 +102,10 @@ class HrLeaveRequestBatch(models.Model):
         comodel_name="hr.leave_type",
         required=True,
         ondelete="restrict",
+        readonly=True,
+        states={
+            "draft": [("readonly", False)],
+        },
     )
 
     employee_ids = fields.Many2many(
@@ -102,12 +114,17 @@ class HrLeaveRequestBatch(models.Model):
         relation="rel_leave_request_batch_2_employee",
         column1="leave_request_batch_id",
         column2="employee_id",
+        readonly=True,
+        states={
+            "draft": [("readonly", False)],
+        },
     )
 
     leave_request_ids = fields.One2many(
         string="Time Off",
         comodel_name="hr.leave",
         inverse_name="batch_id",
+        readonly=True,
     )
 
     def _create_leave_request(self, employee_ids):
