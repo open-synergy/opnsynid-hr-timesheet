@@ -223,3 +223,10 @@ class HRTimesheet(models.Model):
             ("check_out", "=", False),
         ]
         return criteria
+
+    def unlink(self):
+        _super = super(HRTimesheet, self)
+        schedule_ids = self.mapped("schedule_ids")
+        if schedule_ids:
+            schedule_ids.unlink()
+        return _super.unlink()
