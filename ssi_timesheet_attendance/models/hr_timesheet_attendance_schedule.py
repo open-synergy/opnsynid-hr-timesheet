@@ -164,13 +164,11 @@ class HRTimesheetAttendanceSchedule(models.Model):
         store=True,
         compute_sudo=True,
     )
-
     sheet_id = fields.Many2one(
-        string="Sheet",
+        string="# Timesheet",
         comodel_name="hr.timesheet",
-        ondelete="cascade",
-        required=True,
         compute="_compute_sheet",
+        store=True,
         compute_sudo=True,
     )
     employee_id = fields.Many2one(
