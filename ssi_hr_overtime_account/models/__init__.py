@@ -4,4 +4,5 @@
 
 from . import (
     hr_overtime,
+    hr_overtime_type,
 )

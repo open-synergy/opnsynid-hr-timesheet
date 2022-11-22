@@ -43,7 +43,15 @@
     <field name="arch" type="xml">
         <data>
           <xpath expr="//field[@name='type_id']" position="after">
-              <field name="analytic_account_id" />
+              <field
+                        name="allowed_analytic_account_ids"
+                        widget="many2many_tags"
+                        invisible="1"
+                    />
+              <field
+                        name="analytic_account_id"
+                        domain="[('id', 'in', allowed_analytic_account_ids)]"
+                    />
           </xpath>
         </data>
     </field>
