@@ -132,7 +132,7 @@ class HrLeaveAllocation(models.Model):
     @api.multi
     @api.depends(
         "leave_ids",
-        "leave_ids.number_of_days",
+        "leave_ids.leave_duration",
         "leave_ids.state",
         "leave_ids.type_id",
         "number_of_days",
@@ -142,9 +142,9 @@ class HrLeaveAllocation(models.Model):
             num_of_days_used = num_of_days_planned = num_of_days_available = 0.0
             for record in leave.leave_ids:
                 if record.state == "done":
-                    num_of_days_used += record.number_of_days
+                    num_of_days_used += record.leave_duration
                 if record.state in ["draft", "confirm"]:
-                    num_of_days_planned += record.number_of_days
+                    num_of_days_planned += record.leave_duration
             num_of_days_available = (
                 leave.number_of_days - num_of_days_used - num_of_days_planned
             )
