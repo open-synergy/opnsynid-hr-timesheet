@@ -9,4 +9,5 @@ from . import (
     tier_definition,
     hr_timesheet,
     hr_timesheet_attendance_schedule,
+    hr_employee,
 )

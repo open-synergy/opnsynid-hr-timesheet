@@ -36,6 +36,7 @@
                     <field name="company_id" groups="base.group_multi_company" />
                     <field name="user_id" />
                     <field name="state" />
+                    <field name="employee_id" />
                     <!-- Filter -->
                     <filter
                         name="dom_my_data"

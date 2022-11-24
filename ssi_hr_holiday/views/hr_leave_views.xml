@@ -16,7 +16,7 @@
                     <field name="date_end" string="End date" />
                     <field name="employee_id" string="Employee" />
                     <field name="type_id" string="Type" />
-                    <field name="number_of_days" string="No Of Days" />
+                    <field name="number_of_days" string="No Of Days" invisible="1" />
                     <field name="user_id" />
                     <field name="state" />
                 </tree>
@@ -34,6 +34,7 @@
                     <field name="company_id" groups="base.group_multi_company" />
                     <field name="user_id" />
                     <field name="state" />
+                    <field name="employee_id" />
                     <!-- Filter -->
                     <filter
                         name="dom_my_data"
@@ -246,7 +247,11 @@
                                 <field name="date_start" />
                                 <field name="date_end" />
                                 <field name="sheet_id" />
-                                <field name="number_of_days" />
+                                <field
+                                    name="number_of_days"
+                                    string="No Of Days"
+                                    invisible="1"
+                                />
                                 <field name="leave_duration" />
                                 <field name="leave_allocation_id" />
                             </group>

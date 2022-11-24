@@ -5,7 +5,6 @@
 from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
-from dateutil.rrule import DAILY, rrule
 from openerp import _, api, fields, models
 from openerp.exceptions import Warning as UserError
 
@@ -197,20 +196,10 @@ class HRLeave(models.Model):
         "date_end",
     )
     def _compute_leave_duration(self):
-        obj_public_holiday = self.env["base.public.holiday"]
         for record in self:
             leave_duration = 0
             if record.date_start and record.date_end:
                 leave_duration = len(record.schedule_ids)
-                dt_date_start = datetime.strptime(record.date_start, "%Y-%m-%d")
-                leave_dates = rrule(
-                    DAILY,
-                    dtstart=dt_date_start,
-                    count=leave_duration,
-                )
-                for leave_date in list(leave_dates):
-                    if obj_public_holiday.is_public_holiday(leave_date):
-                        leave_duration -= 1
             record.leave_duration = leave_duration
 
     leave_duration = fields.Integer(
@@ -310,7 +299,7 @@ class HRLeave(models.Model):
             ("type_id", "=", self.type_id.id),
             ("employee_id", "=", self.employee_id.id),
             ("state", "=", "open"),
-            ("num_of_days_available", ">=", self.number_of_days),
+            ("num_of_days_available", ">=", self.leave_duration),
             "|",
             "&",
             ("date_start", "<=", self.date_start),
@@ -477,7 +466,7 @@ class HRLeave(models.Model):
                 )
                 raise UserError(error_message)
 
-    @api.constrains("type_id", "number_of_days")
+    @api.constrains("type_id", "leave_duration")
     def _constrains_limit_request(self):
         for record in self.sudo():
             limit = record.type_id.limit_per_request
@@ -537,7 +526,7 @@ class HRLeave(models.Model):
         result = True
         if (
             self.type_id.apply_limit_per_request
-            and self.number_of_days > self.type_id.limit_per_request
+            and self.leave_duration > self.type_id.limit_per_request
         ):
             result = False
         return result
