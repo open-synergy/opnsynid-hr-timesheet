@@ -23,7 +23,7 @@ class HROvertime(models.Model):
                     if type.analytic_account_ids:
                         result = type.analytic_account_ids.ids
                 elif type.analytic_account_method == "python":
-                    analytic_account_ids = self._evaluate_analytic_account(type)
+                    analytic_account_ids = document._evaluate_analytic_account()
                     if analytic_account_ids:
                         result = analytic_account_ids
             document.allowed_analytic_account_ids = result
@@ -52,12 +52,12 @@ class HROvertime(models.Model):
             "document": self,
         }
 
-    def _evaluate_analytic_account(self, type):
+    def _evaluate_analytic_account(self):
         self.ensure_one()
         res = False
         localdict = self._get_localdict()
         try:
-            safe_eval(type.python_code, localdict, mode="exec", nocopy=True)
+            safe_eval(self.type_id.python_code, localdict, mode="exec", nocopy=True)
             if "result" in localdict:
                 res = localdict["result"]
         except Exception as error:

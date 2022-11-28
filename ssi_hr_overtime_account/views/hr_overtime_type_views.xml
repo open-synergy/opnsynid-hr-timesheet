@@ -17,6 +17,7 @@
                       <field
                                 name="analytic_account_ids"
                                 attrs="{'invisible': [('analytic_account_method','=','python')]}"
+                                widget="many2many_tags"
                             />
                       <field
                                 name="python_code"
