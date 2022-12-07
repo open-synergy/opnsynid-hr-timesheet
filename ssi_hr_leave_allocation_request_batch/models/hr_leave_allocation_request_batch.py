@@ -126,6 +126,7 @@ class HrLeaveAllocationRequestBatch(models.Model):
                         "batch_id": self.id,
                         "employee_id": employee_id.id,
                         "type_id": self.type_id.id,
+                        "number_of_days":self.number_of_days
                     }
                 )
 
@@ -198,12 +199,13 @@ class HrLeaveAllocationRequestBatch(models.Model):
         for leave_allocation_request in leave_allocation_request_ids:
             leave_allocation_request.action_cancel(cancel_reason)
 
+    #DIHAPUS
     # BUTTON CANCEL
-    def action_cancel(self, cancel_reason=False):
-        _super = super(HrLeaveAllocationRequestBatch, self)
-        _super.action_cancel()
-        for record in self.sudo():
-            if record.leave_allocation_request_ids:
-                record._cancel_leave_allocation_request(
-                    record.leave_allocation_request_ids, cancel_reason
-                )
+    # def action_cancel(self, cancel_reason=False):
+    #     _super = super(HrLeaveAllocationRequestBatch, self)
+    #     _super.action_cancel()
+    #     for record in self.sudo():
+    #         if record.leave_allocation_request_ids:
+    #             record._cancel_leave_allocation_request(
+    #                 record.leave_allocation_request_ids, cancel_reason
+    #             )

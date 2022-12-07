@@ -1,10 +1,10 @@
-.. image:: https://img.shields.io/badge/licence-AGPL--3-blue.svg
-   :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
-   :alt: License: AGPL-3
+.. image:: https://img.shields.io/badge/licence-LGPL--3-blue.svg
+   :target: http://www.gnu.org/licenses/lgpl-3.0-standalone.html
+   :alt: License: LGPL-3
 
-===================
-Leave Allocation
-===================
+==============================
+Leave Allocation Request Batch
+==============================
 
 
 Installation
@@ -12,7 +12,7 @@ Installation
 
 To install this module, you need to:
 
-1.  Clone the branch 11.0 of the repository <https://github.com/open-synergy/opnsynid-hr-timesheet/tree/14.0>
+1.  Clone the branch 14.0 of the repository <https://github.com/open-synergy/opnsynid-hr-timesheet/tree/14.0>
 2.  Add the path to this repository in your configuration (addons-path)
 3.  Update the module list
 4.  Go to menu *Apps -> Apps*

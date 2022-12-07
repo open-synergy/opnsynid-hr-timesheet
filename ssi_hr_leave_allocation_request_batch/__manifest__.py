@@ -1,6 +1,6 @@
 # Copyright 2022 OpenSynergy Indonesia
 # Copyright 2022 PT. Simetri Sinergi Indonesia
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 # pylint: disable=locally-disabled, manifest-required-author
 {
     "name": "Leave Allocation Request Batch",
@@ -8,7 +8,7 @@
     "category": "Human Resource",
     "website": "https://simetri-sinergi.id",
     "author": "OpenSynergy Indonesia",
-    "license": "AGPL-3",
+    "license": "LGPL-3",
     "installable": True,
     "depends": ["ssi_hr_holiday"],
     "data": [
