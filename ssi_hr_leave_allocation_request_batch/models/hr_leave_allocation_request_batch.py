@@ -126,7 +126,7 @@ class HrLeaveAllocationRequestBatch(models.Model):
                         "batch_id": self.id,
                         "employee_id": employee_id.id,
                         "type_id": self.type_id.id,
-                        "number_of_days":self.number_of_days
+                        "number_of_days": self.number_of_days,
                     }
                 )
 
@@ -135,62 +135,20 @@ class HrLeaveAllocationRequestBatch(models.Model):
         for leave_allocation_request in leave_allocation_request_ids:
             leave_allocation_request.action_confirm()
 
-    # BUTTON CONFIRM
-    def action_confirm(self):
-        _super = super(HrLeaveAllocationRequestBatch, self)
-        _super.action_confirm()
-        for record in self.sudo():
-            if record.employee_ids:
-                record._create_leave_allocation_request(record.employee_ids)
-            if record.leave_allocation_request_ids:
-                record._confirm_leave_allocation_request(
-                    record.leave_allocation_request_ids
-                )
-
     def _approve_leave_allocation_request(self, leave_allocation_request_ids):
         self.ensure_one()
         for leave_allocation_request in leave_allocation_request_ids:
             leave_allocation_request.action_approve_approval()
-
-    # BUTTON APPROVAL
-    def action_approve_approval(self):
-        _super = super(HrLeaveAllocationRequestBatch, self)
-        _super.action_approve_approval()
-        for record in self.sudo():
-            if record.leave_allocation_request_ids:
-                record._approve_leave_allocation_request(
-                    record.leave_allocation_request_ids
-                )
 
     def _reject_leave_allocation_request(self, leave_allocation_request_ids):
         self.ensure_one()
         for leave_allocation_request in leave_allocation_request_ids:
             leave_allocation_request.action_reject_approval()
 
-    # BUTTON REJECT
-    def action_reject_approval(self):
-        _super = super(HrLeaveAllocationRequestBatch, self)
-        _super.action_reject_approval()
-        for record in self.sudo():
-            if record.leave_allocation_request_ids:
-                record._reject_leave_allocation_request(
-                    record.leave_allocation_request_ids
-                )
-
     def _restart_leave_allocation_request(self, leave_allocation_request_ids):
         self.ensure_one()
         for leave_allocation_request in leave_allocation_request_ids:
             leave_allocation_request.action_restart()
-
-    # BUTTON RESTART
-    def action_restart(self):
-        _super = super(HrLeaveAllocationRequestBatch, self)
-        _super.action_restart()
-        for record in self.sudo():
-            if record.leave_allocation_request_ids:
-                record._restart_leave_allocation_request(
-                    record.leave_allocation_request_ids
-                )
 
     def _cancel_leave_allocation_request(
         self, leave_allocation_request_ids, cancel_reason
@@ -198,14 +156,3 @@ class HrLeaveAllocationRequestBatch(models.Model):
         self.ensure_one()
         for leave_allocation_request in leave_allocation_request_ids:
             leave_allocation_request.action_cancel(cancel_reason)
-
-    #DIHAPUS
-    # BUTTON CANCEL
-    # def action_cancel(self, cancel_reason=False):
-    #     _super = super(HrLeaveAllocationRequestBatch, self)
-    #     _super.action_cancel()
-    #     for record in self.sudo():
-    #         if record.leave_allocation_request_ids:
-    #             record._cancel_leave_allocation_request(
-    #                 record.leave_allocation_request_ids, cancel_reason
-    #             )
