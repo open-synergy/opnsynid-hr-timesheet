@@ -1,5 +1,7 @@
 # Copyright 2022 OpenSynergy Indonesia
 # Copyright 2022 PT. Simetri Sinergi Indonesia
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
-from . import hr_leave_allocation_request_batch
-from . import hr_leave_allocation
+from . import (
+    hr_leave_allocation_request_batch,
+    hr_leave_allocation,
+)
