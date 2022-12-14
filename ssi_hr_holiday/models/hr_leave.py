@@ -325,6 +325,18 @@ class HRLeave(models.Model):
         for record in self:
             if not record.schedule_ids:
                 record._compute_schedule_ids()
+            if not record._check_leave_allocation_available():
+                error_message = """
+                Context: Confirming leave
+                Database ID: {}
+                Employee: {}
+                Problem: Leave need leave request. No available leave request found
+                Solution: Create relevant leave allocation
+                """.format(
+                    record.id,
+                    record.employee_id.name,
+                )
+                raise UserError(_(error_message))
             record._compute_leave_allocation_id()
             record.write(record._prepare_confirm_data())
             record.request_validation()
@@ -482,25 +494,6 @@ class HRLeave(models.Model):
                     % (record.id, record.employee_id.name, limit, limit)
                 )
                 raise UserError(error_message)
-
-    @api.constrains("state")
-    def _constrains_confirm(self):
-        for record in self.sudo():
-            if record.state != "confirm":
-                break
-
-            if not record._check_leave_allocation_available():
-                error_message = """
-                Context: Confirming leave
-                Database ID: {}
-                Employee: {}
-                Problem: Leave need leave request. No available leave request found
-                Solution: Create relevant leave allocation
-                """.format(
-                    record.id,
-                    record.employee_id.name,
-                )
-                raise UserError(_(error_message))
 
     @api.multi
     def _check_overlap(self):
