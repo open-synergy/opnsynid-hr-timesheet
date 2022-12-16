@@ -163,10 +163,10 @@ class HrLeaveAllocationRequestBatch(models.Model):
                     leave_allocation_request.action()
 
     @ssi_decorator.post_restart_action()
-    def _restart_leave_allocation_request(self, leave_allocation_request_ids):
+    def _restart_leave_allocation_request(self):
         for record in self:
             if record.leave_allocation_request_ids:
-                for leave_allocation_request in leave_allocation_request_ids:
+                for leave_allocation_request in record.leave_allocation_request_ids:
                     leave_allocation_request.action()
 
     @ssi_decorator.post_cancel_action()
