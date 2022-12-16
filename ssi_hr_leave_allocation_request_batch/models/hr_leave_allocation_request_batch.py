@@ -4,6 +4,8 @@
 
 from odoo import api, fields, models
 
+from odoo.addons.ssi_decorator import ssi_decorator
+
 
 class HrLeaveAllocationRequestBatch(models.Model):
     _name = "hr.leave_allocation_request_batch"
@@ -111,101 +113,65 @@ class HrLeaveAllocationRequestBatch(models.Model):
         string="Leave Allocation Request",
     )
 
-    def _create_leave_allocation_request(self, employee_ids):
-        self.ensure_one()
-        obj_leave_allocation_request = self.env["hr.leave_allocation"]
-        for employee_id in employee_ids:
-            leave_allocation_request_ids = self.leave_allocation_request_ids.filtered(
-                lambda x: x.employee_id.id == employee_id.id
-            )
-            if not leave_allocation_request_ids:
-                obj_leave_allocation_request.create(
-                    {
-                        "date_start": self.date_start,
-                        "date_end": self.date_end,
-                        "batch_id": self.id,
-                        "employee_id": employee_id.id,
-                        "type_id": self.type_id.id,
-                        "number_of_days":self.number_of_days
-                    }
-                )
-
-    def _confirm_leave_allocation_request(self, leave_allocation_request_ids):
-        self.ensure_one()
-        for leave_allocation_request in leave_allocation_request_ids:
-            leave_allocation_request.action_confirm()
-
-    # BUTTON CONFIRM
-    def action_confirm(self):
-        _super = super(HrLeaveAllocationRequestBatch, self)
-        _super.action_confirm()
-        for record in self.sudo():
+    @ssi_decorator.pre_confirm_check()
+    def _check_employee_ids(self):
+        for record in self:
             if record.employee_ids:
-                record._create_leave_allocation_request(record.employee_ids)
-            if record.leave_allocation_request_ids:
-                record._confirm_leave_allocation_request(
-                    record.leave_allocation_request_ids
+                return True
+
+    @ssi_decorator.post_confirm_action()
+    def _create_leave_allocation_request(self):
+        for record in self:
+            obj_leave_allocation_request = self.env["hr.leave_allocation"]
+            for employee_id in record.employee_ids:
+                leave_allocation_request_ids = (
+                    self.leave_allocation_request_ids.filtered(
+                        lambda x: x.employee_id.id == employee_id.id
+                    )
                 )
+                if not leave_allocation_request_ids:
+                    obj_leave_allocation_request.create(
+                        {
+                            "date_start": self.date_start,
+                            "date_end": self.date_end,
+                            "batch_id": self.id,
+                            "employee_id": employee_id.id,
+                            "type_id": self.type_id.id,
+                            "number_of_days": self.number_of_days,
+                        }
+                    )
 
-    def _approve_leave_allocation_request(self, leave_allocation_request_ids):
-        self.ensure_one()
-        for leave_allocation_request in leave_allocation_request_ids:
-            leave_allocation_request.action_approve_approval()
-
-    # BUTTON APPROVAL
-    def action_approve_approval(self):
-        _super = super(HrLeaveAllocationRequestBatch, self)
-        _super.action_approve_approval()
-        for record in self.sudo():
+    @ssi_decorator.post_confirm_action()
+    def _confirm_leave_allocation_request(self):
+        for record in self:
             if record.leave_allocation_request_ids:
-                record._approve_leave_allocation_request(
-                    record.leave_allocation_request_ids
-                )
+                for leave_allocation_request in record.leave_allocation_request_ids:
+                    leave_allocation_request.action()
 
-    def _reject_leave_allocation_request(self, leave_allocation_request_ids):
-        self.ensure_one()
-        for leave_allocation_request in leave_allocation_request_ids:
-            leave_allocation_request.action_reject_approval()
-
-    # BUTTON REJECT
-    def action_reject_approval(self):
-        _super = super(HrLeaveAllocationRequestBatch, self)
-        _super.action_reject_approval()
-        for record in self.sudo():
+    @ssi_decorator.post_approve_action()
+    def _approve_leave_allocation_request(self):
+        for record in self:
             if record.leave_allocation_request_ids:
-                record._reject_leave_allocation_request(
-                    record.leave_allocation_request_ids
-                )
+                for leave_allocation_request in record.leave_allocation_request_ids:
+                    leave_allocation_request.action()
 
+    @ssi_decorator.post_reject_action()
+    def _reject_leave_allocation_request(self):
+        for record in self:
+            if record.leave_allocation_request_ids:
+                for leave_allocation_request in record.leave_allocation_request_ids:
+                    leave_allocation_request.action()
+
+    @ssi_decorator.post_restart_action()
     def _restart_leave_allocation_request(self, leave_allocation_request_ids):
-        self.ensure_one()
-        for leave_allocation_request in leave_allocation_request_ids:
-            leave_allocation_request.action_restart()
-
-    # BUTTON RESTART
-    def action_restart(self):
-        _super = super(HrLeaveAllocationRequestBatch, self)
-        _super.action_restart()
-        for record in self.sudo():
+        for record in self:
             if record.leave_allocation_request_ids:
-                record._restart_leave_allocation_request(
-                    record.leave_allocation_request_ids
-                )
+                for leave_allocation_request in leave_allocation_request_ids:
+                    leave_allocation_request.action()
 
-    def _cancel_leave_allocation_request(
-        self, leave_allocation_request_ids, cancel_reason
-    ):
-        self.ensure_one()
-        for leave_allocation_request in leave_allocation_request_ids:
-            leave_allocation_request.action_cancel(cancel_reason)
-
-    #DIHAPUS
-    # BUTTON CANCEL
-    # def action_cancel(self, cancel_reason=False):
-    #     _super = super(HrLeaveAllocationRequestBatch, self)
-    #     _super.action_cancel()
-    #     for record in self.sudo():
-    #         if record.leave_allocation_request_ids:
-    #             record._cancel_leave_allocation_request(
-    #                 record.leave_allocation_request_ids, cancel_reason
-    #             )
+    @ssi_decorator.post_cancel_action()
+    def _cancel_leave_allocation_request(self):
+        for record in self:
+            if record.leave_allocation_request_ids:
+                for leave_allocation_request in record.leave_allocation_request_ids:
+                    leave_allocation_request.action()
