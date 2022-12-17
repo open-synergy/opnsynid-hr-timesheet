@@ -17,7 +17,7 @@ class IrModel(models.Model):
             ("python", "Python Code"),
         ],
         default="fixed",
-        required=True,
+        required=False,
     )
     work_log_product_ids = fields.Many2many(
         string="Allowed Work Log Products",
@@ -56,7 +56,7 @@ result = []""",
             ("python", "Python Code"),
         ],
         default="fixed",
-        required=True,
+        required=False,
     )
     work_log_pricelist_ids = fields.Many2many(
         string="Allowed Work Log Pricelists",
