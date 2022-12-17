@@ -16,7 +16,7 @@ class IrModel(models.Model):
             ("python", "Python Code"),
         ],
         default="fixed",
-        required=True,
+        required=False,
     )
     work_log_aa_ids = fields.Many2many(
         string="Analytic Accounts",
