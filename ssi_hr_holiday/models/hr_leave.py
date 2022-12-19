@@ -325,6 +325,7 @@ class HRLeave(models.Model):
         for record in self:
             if not record.schedule_ids:
                 record._compute_schedule_ids()
+            record._compute_leave_allocation_id()
             if not record._check_leave_allocation_available():
                 error_message = """
                 Context: Confirming leave
@@ -337,7 +338,6 @@ class HRLeave(models.Model):
                     record.employee_id.name,
                 )
                 raise UserError(_(error_message))
-            record._compute_leave_allocation_id()
             record.write(record._prepare_confirm_data())
             record.request_validation()
 
