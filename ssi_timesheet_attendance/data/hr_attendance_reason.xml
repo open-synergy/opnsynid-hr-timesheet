@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo noupdate="1">
-    <record id="hr_attendance_reason_check_in" model="hr.attendance_reason">
+    <record id="hr_attendance_reason_system_check_in" model="hr.attendance_reason">
         <field name="name">[SYSTEM] Automatic check in due to inactivity</field>
         <field name="code">SYS-IN</field>
         <field name="by_system">True</field>
     </record>
-    <record id="hr_attendance_reason_check_out" model="hr.attendance_reason">
+    <record id="hr_attendance_reason_system_check_out" model="hr.attendance_reason">
         <field name="name">[SYSTEM] Automatic check out due to inactivity</field>
         <field name="code">SYS-OUT</field>
         <field name="by_system">True</field>

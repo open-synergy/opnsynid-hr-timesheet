@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record id="base.main_company" model="res.company">
+        <field name="check_out_reason_id" ref="hr_attendance_reason_system_check_out" />
+        <field name="check_in_reason_id" ref="hr_attendance_reason_system_check_in" />
+    </record>
+</odoo>
