@@ -16,6 +16,7 @@
     ],
     "data": [
         "data/hr_attendance_reason.xml",
+        "data/res_company.xml",
         "security/res_group_data.xml",
         "security/ir.model.access.csv",
         "menu.xml",

@@ -21,7 +21,8 @@ class HrAttendanceReason(models.Model):
 
     def unlink(self):
         for record in self:
-            if record.by_system:
+            user = self.env.user
+            if record.by_system and not user.has_group("base.group_erp_manager"):
                 error_message = "Cannot delete this data"
                 raise UserError(_(error_message))
         _super = super(HrAttendanceReason, self)
