@@ -61,16 +61,12 @@ class HRTimesheetAttendanceSchedule(models.Model):
             criteria = [
                 ("schedule_id", "=", schedule.id),
             ]
-            attendances = obj_attendance.search(criteria)
-            urut = 0
-            if len(attendances) > 0:
+            attendances = obj_attendance.search(criteria, order="check_in")
+            if attendances:
+                real_date_start = attendances[0].check_in
                 for record in attendances:
-                    if urut < 1:
-                        real_date_start = record.check_in
+                    if record.check_out:
                         real_date_end = record.check_out
-                    if urut > 0:
-                        real_date_end = record.check_out
-                    urut += 1
                     if record.check_in and record.check_out:
                         real_work_hour += record.total_hour
                         real_valid_hour += record.total_valid_hour

@@ -4,7 +4,7 @@
 # pylint: disable=locally-disabled, manifest-required-author
 {
     "name": "Timesheet Attendance",
-    "version": "14.0.1.6.1",
+    "version": "14.0.1.7.0",
     "website": "https://simetri-sinergi.id",
     "author": "PT. Simetri Sinergi Indonesia, OpenSynergy Indonesia",
     "license": "LGPL-3",
@@ -15,11 +15,14 @@
         "base_public_holiday",
     ],
     "data": [
+        "data/hr_attendance_reason.xml",
         "security/res_group_data.xml",
         "security/ir.model.access.csv",
         "menu.xml",
+        "views/res_config_settings_view.xml",
         "views/hr_attendance_reason_views.xml",
         "views/hr_timesheet_views.xml",
+        "views/hr_timesheet_attendance_views.xml",
         "views/hr_employee_views.xml",
         "views/resource_calendar_views.xml",
     ],

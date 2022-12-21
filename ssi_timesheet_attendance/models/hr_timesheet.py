@@ -8,6 +8,7 @@ import pytz
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
+from odoo.tools import format_datetime
 
 
 class HRTimesheet(models.Model):
@@ -190,23 +191,69 @@ class HRTimesheet(models.Model):
         Attendance.create(self._prepare_attendance_data_creation(reason))
 
     def _prepare_attendance_data_creation(self, reason=False):
-        return {
-            "date": fields.Date.today(),
+        conv_dt = format_datetime(
+            self.env, fields.Datetime.now(), dt_format="yyyy-MM-dd"
+        )
+        value = {
+            "date": conv_dt,
             "employee_id": self.employee_id.id,
             "check_in": fields.Datetime.now(),
             "reason_check_in_id": reason and reason.id or False,
             "sheet_id": self.id,
         }
+        return value
+
+    def _get_system_reason_out(self):
+        self.ensure_one()
+        if self.env.company.check_out_reason_id:
+            return self.env.company.check_out_reason_id.id
+        else:
+            return self.env.ref(
+                "ssi_timesheet_attendance.hr_attendance_reason_check_out"
+            ).id
+
+    def _get_system_reason_in(self):
+        self.ensure_one()
+        if self.env.company.check_in_reason_id:
+            return self.env.company.check_in_reason_id.id
+        else:
+            return self.env.ref(
+                "ssi_timesheet_attendance.hr_attendance_reason_check_in"
+            ).id
+
+    def _prepare_attendance_data_uncommon(self):
+        self.ensure_one()
+        conv_dt = format_datetime(
+            self.env, fields.Datetime.now(), dt_format="yyyy-MM-dd"
+        )
+        value = {
+            "date": conv_dt,
+            "employee_id": self.employee_id.id,
+            "check_in": fields.Datetime.now(),
+            "check_out": fields.Datetime.now(),
+            "reason_check_in_id": self._get_system_reason_in(),
+            "reason_check_out_id": self._get_system_reason_out(),
+            "sheet_id": self.id,
+        }
+        return value
 
     def _sign_out(self, reason=False):
         self.ensure_one()
-        if (
-            self.employee_id.latest_attendance_id
-            and not self.employee_id.latest_attendance_id.check_out
-        ):
-            self.employee_id.latest_attendance_id.write(
-                self._prepare_attendance_data_update(reason=reason)
-            )
+        Attendance = self.env["hr.timesheet_attendance"]
+        latest_attendance_id = self.employee_id.latest_attendance_id
+        if latest_attendance_id:
+            check_out = fields.Datetime.now()
+            schedule = latest_attendance_id.schedule_id
+            schedule_check_out = schedule.date_end
+            _check = (check_out - schedule_check_out).total_seconds() / 3600.0
+            company = self.env.company
+            checkout_buffer = company.checkout_buffer
+            if _check > checkout_buffer:
+                Attendance.create(self._prepare_attendance_data_uncommon())
+            else:
+                self.employee_id.latest_attendance_id.write(
+                    self._prepare_attendance_data_update(reason=reason)
+                )
 
     def _prepare_attendance_data_update(self, reason=False):
         self.ensure_one()

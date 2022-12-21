@@ -26,6 +26,21 @@
     </field>
 </record>
 
+<record id="hr_attendance_reason_view_admin_tree" model="ir.ui.view">
+    <field name="name">hr.attendance_reason - admin tree</field>
+    <field name="model">hr.attendance_reason</field>
+    <field name="inherit_id" ref="hr_attendance_reason_view_tree" />
+    <field name="groups_id" eval="[(4,ref('base.group_erp_manager'))]" />
+    <field name="mode">extension</field>
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="by_system" />
+            </xpath>
+        </data>
+    </field>
+</record>
+
 <record id="hr_attendance_reason_view_form" model="ir.ui.view">
     <field name="name">hr.attendance_reason - form</field>
     <field name="model">hr.attendance_reason</field>
@@ -33,6 +48,21 @@
     <field name="mode">primary</field>
     <field name="arch" type="xml">
         <data />
+    </field>
+</record>
+
+<record id="hr_attendance_reason_view_admin_form" model="ir.ui.view">
+    <field name="name">hr.attendance_reason - admin form</field>
+    <field name="model">hr.attendance_reason</field>
+    <field name="inherit_id" ref="hr_attendance_reason_view_form" />
+    <field name="groups_id" eval="[(4,ref('base.group_erp_manager'))]" />
+    <field name="mode">extension</field>
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//field[@name='active']" position="after">
+                <field name="by_system" widget="boolean_toggle" />
+            </xpath>
+        </data>
     </field>
 </record>
 

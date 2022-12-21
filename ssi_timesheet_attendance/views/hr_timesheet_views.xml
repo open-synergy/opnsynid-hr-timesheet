@@ -55,10 +55,16 @@
                                     <field invisible="1" name="create_date" />
                                     <field name="date" />
                                     <field name="check_in" />
-                                    <field name="reason_check_in_id" />
+                                    <field
+                                        name="reason_check_in_id"
+                                        domain="[('by_system', '=', False)]"
+                                    />
                                     <field invisible="1" name="valid_check_in" />
                                     <field name="check_out" />
-                                    <field name="reason_check_out_id" />
+                                    <field
+                                        name="reason_check_out_id"
+                                        domain="[('by_system', '=', False)]"
+                                    />
                                     <field invisible="1" name="valid_check_out" />
                                     <field invisible="1" name="employee_id" />
                                     <field invisible="1" name="schedule_id" />
