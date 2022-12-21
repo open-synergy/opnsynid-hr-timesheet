@@ -2,8 +2,11 @@
 # Copyright 2022 PT. Simetri Sinergi Indonesia
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
+from datetime import datetime
+
 from odoo import _, api, fields, models
 from odoo.exceptions import Warning as UserError
+from odoo.tools import format_datetime
 
 
 class HRTimesheetAttendance(models.Model):
@@ -133,6 +136,29 @@ class HRTimesheetAttendance(models.Model):
         string="Reason Out",
         comodel_name="hr.attendance_reason",
         ondelete="restrict",
+    )
+
+    @api.depends(
+        "date",
+        "check_in",
+    )
+    def _compute_check_date(self):
+        for record in self:
+            result = False
+            if record.check_in and record.date:
+                conv_dt = format_datetime(
+                    self.env, record.check_in, dt_format="yyyy-MM-dd"
+                )
+                date_check_in = datetime.strptime(conv_dt, "%Y-%m-%d").date()
+                if record.date != date_check_in:
+                    result = True
+            record.check_date = result
+
+    check_date = fields.Boolean(
+        string="Check Date",
+        compute="_compute_check_date",
+        help="Date is not the same as check in",
+        store=True,
     )
 
     @api.depends(

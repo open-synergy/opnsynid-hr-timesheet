@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+<record id="hr_timesheet_attendance_view_search" model="ir.ui.view">
+    <field name="name">hr.timesheet_attendance - search</field>
+    <field name="model">hr.timesheet_attendance</field>
+    <field name="mode">primary</field>
+    <field name="arch" type="xml">
+        <search>
+            <filter
+                    string="Today"
+                    name="attendance_today"
+                    domain="[('date', '=', context_today().strftime('%Y-%m-%d'))]"
+                />
+            <filter
+                    string="No Check Out"
+                    name="attendance_no_checkout"
+                    domain="[('check_out', '=', False)]"
+                />
+            <filter
+                    string="Date &lt;&gt; Check In"
+                    name="date_not_check_in"
+                    domain="[('check_date', '&lt;&gt;', False)]"
+                />
+            <filter
+                    string="Total Hour &gt; 16h"
+                    name="total_hour_less_hour"
+                    domain="[('total_hour', '&gt;', 16.0)]"
+                />
+        </search>
+    </field>
+</record>
+
+<record id="hr_timesheet_attendance_view_tree" model="ir.ui.view">
+    <field name="name">hr.timesheet_attendance - tree</field>
+    <field name="model">hr.timesheet_attendance</field>
+    <field name="mode">primary</field>
+    <field name="arch" type="xml">
+        <tree>
+            <field name="date" />
+            <field name="employee_id" />
+            <field name="check_in" />
+            <field name="reason_check_in_id" />
+            <field name="check_out" />
+            <field name="reason_check_out_id" />
+            <field name="check_date" invisible="1" />
+            <field name="total_hour" widget="float_time" />
+            <field name="total_valid_hour" widget="float_time" />
+            <field name="state" />
+        </tree>
+    </field>
+</record>
+
+<record id="hr_timesheet_attendance_view_form" model="ir.ui.view">
+    <field name="name">hr.timesheet_attendance - form</field>
+    <field name="model">hr.timesheet_attendance</field>
+    <field name="mode">primary</field>
+    <field name="arch" type="xml">
+        <form>
+            <header>
+                <field name="state" widget="statusbar" />
+            </header>
+            <sheet>
+                <div
+                        class="oe_right oe_button_box"
+                        style="width: 300px;"
+                        name="buttons"
+                    >
+                </div>
+                <group name="attendance_1" colspan="4" col="2">
+                    <group name="attendance_1_1" colspan="1" col="2">
+                        <field name="date" />
+                        <field name="check_in" />
+                        <field name="reason_check_in_id" />
+                        <field name="check_out" />
+                        <field name="reason_check_out_id" />
+                        <field invisible="0" name="valid_check_in" />
+                        <field invisible="0" name="valid_check_out" />
+                    </group>
+                    <group name="attendance_1_2" colspan="1" col="2">
+                        <field invisible="1" name="employee_id" />
+                        <field invisible="0" name="sheet_id" />
+                        <field invisible="0" name="schedule_id" />
+                        <field name="total_hour" widget="float_time" />
+                        <field name="total_valid_hour" widget="float_time" />
+                    </group>
+                </group>
+            </sheet>
+        </form>
+    </field>
+</record>
+
+<record id="hr_timesheet_attendance_action" model="ir.actions.act_window">
+    <field name="name">Attendances</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">hr.timesheet_attendance</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+<menuitem
+        id="hr_timesheet_attendance_menu"
+        name="Attendances"
+        parent="ssi_timesheet.timesheet_menu"
+        groups="hr_timesheet_attendance_group"
+        action="hr_timesheet_attendance_action"
+        sequence="100"
+    />
+
+</odoo>
