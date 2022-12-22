@@ -113,65 +113,60 @@ class HrLeaveAllocationRequestBatch(models.Model):
         string="Leave Allocation Request",
     )
 
-    @ssi_decorator.pre_confirm_check()
-    def _check_employee_ids(self):
-        for record in self:
-            if record.employee_ids:
-                return True
-
     @ssi_decorator.post_confirm_action()
     def _create_leave_allocation_request(self):
         for record in self:
             obj_leave_allocation_request = self.env["hr.leave_allocation"]
-            for employee_id in record.employee_ids:
-                leave_allocation_request_ids = (
-                    self.leave_allocation_request_ids.filtered(
-                        lambda x: x.employee_id.id == employee_id.id
+            if record.employee_ids:
+                for employee_id in record.employee_ids:
+                    leave_allocation_request_ids = (
+                        self.leave_allocation_request_ids.filtered(
+                            lambda x: x.employee_id.id == employee_id.id
+                        )
                     )
-                )
-                if not leave_allocation_request_ids:
-                    obj_leave_allocation_request.create(
-                        {
-                            "date_start": self.date_start,
-                            "date_end": self.date_end,
-                            "batch_id": self.id,
-                            "employee_id": employee_id.id,
-                            "type_id": self.type_id.id,
-                            "number_of_days": self.number_of_days,
-                        }
-                    )
+                    if not leave_allocation_request_ids:
+                        obj_leave_allocation_request.create(
+                            {
+                                "date_start": self.date_start,
+                                "date_end": self.date_end,
+                                "batch_id": self.id,
+                                "employee_id": employee_id.id,
+                                "type_id": self.type_id.id,
+                                "number_of_days": self.number_of_days,
+                            }
+                        )
 
     @ssi_decorator.post_confirm_action()
     def _confirm_leave_allocation_request(self):
         for record in self:
             if record.leave_allocation_request_ids:
                 for leave_allocation_request in record.leave_allocation_request_ids:
-                    leave_allocation_request.action()
+                    leave_allocation_request.action_confirm()
 
     @ssi_decorator.post_approve_action()
     def _approve_leave_allocation_request(self):
         for record in self:
             if record.leave_allocation_request_ids:
                 for leave_allocation_request in record.leave_allocation_request_ids:
-                    leave_allocation_request.action()
+                    leave_allocation_request.action_approve()
 
     @ssi_decorator.post_reject_action()
     def _reject_leave_allocation_request(self):
         for record in self:
             if record.leave_allocation_request_ids:
                 for leave_allocation_request in record.leave_allocation_request_ids:
-                    leave_allocation_request.action()
+                    leave_allocation_request.action_reject()
 
     @ssi_decorator.post_restart_action()
     def _restart_leave_allocation_request(self):
         for record in self:
             if record.leave_allocation_request_ids:
                 for leave_allocation_request in record.leave_allocation_request_ids:
-                    leave_allocation_request.action()
+                    leave_allocation_request.action_restart()
 
     @ssi_decorator.post_cancel_action()
     def _cancel_leave_allocation_request(self):
         for record in self:
             if record.leave_allocation_request_ids:
                 for leave_allocation_request in record.leave_allocation_request_ids:
-                    leave_allocation_request.action()
+                    leave_allocation_request.action_cancel()
