@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+    <record id="hr_work_log_view_form" model="ir.ui.view">
+        <field name="name">hr.work.log.form</field>
+        <field name="model">hr.work_log</field>
+        <field name="mode">extension</field>
+        <field name="inherit_id" ref="ssi_work_log_mixin.hr_work_log_view_form" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='analytic_account_id']" position="after">
+                    <field
+                        name="allowed_worklog_product_ids"
+                        widget="many2many_tags"
+                        invisible="1"
+                    />
+                    <field
+                        name="product_id"
+                        domain="[('id','in',allowed_worklog_product_ids)]"
+                    />
+                </xpath>
+                <xpath expr="//page[1]" position="before">
+                    <page
+                        name="cost"
+                        string="Cost"
+                        attrs="{'invisible':[('show_cost_setting_ok','=',False)]}"
+                    >
+                        <group name="cost_1" colspan="4" col="2">
+                            <group name="cost_1_1" colspan="1" col="2">
+                                <field name="usage_id" />
+                                <field name="account_id" />
+                            </group>
+                            <group name="cost_1_2" colspan="1" col="2">
+                                <field
+                                    name="allowed_uom_ids"
+                                    widget="many2many_tags"
+                                    invisible="1"
+                                />
+                                <label for="uom_quantity" string="Quantity" />
+                                <div>
+                                    <field name="uom_quantity" class="oe_inline" />
+                                    <field
+                                        name="uom_id"
+                                        domain="[('id','in',allowed_uom_ids)]"
+                                        attrs="{'required':[('product_id','!=',False)]}"
+                                        class="oe_inline"
+                                    />
+                                </div>
+                                <field name="quantity" invisible="1" />
+                                <field name="currency_id" force_save="1" />
+                                <field
+                                    name="allowed_worklog_pricelist_ids"
+                                    widget="many2many_tags"
+                                    invisible="1"
+                                />
+                                <field
+                                    name="pricelist_id"
+                                    force_save="1"
+                                    domain="[('id','in',allowed_worklog_pricelist_ids)]"
+                                />
+                                <field name="price_unit" />
+                                <field name="price_subtotal" />
+                                <field name="tax_ids" widget="many2many_tags" />
+                                <field name="price_tax" />
+                                <field name="price_total" />
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+                <xpath expr="//group[@name='policy_2']" position="inside">
+                    <field name="show_cost_setting_ok" />
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

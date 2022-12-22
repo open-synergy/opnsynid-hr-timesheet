@@ -15,6 +15,10 @@ class MixinWorkObject(models.AbstractModel):
     _work_log_create_page = False
     _work_log_page_xpath = "//page[last()]"
 
+    work_estimation = fields.Float(
+        string="Work Estimation",
+    )
+
     work_log_ids = fields.One2many(
         string="Work Logs",
         comodel_name="hr.work_log",
@@ -22,6 +26,41 @@ class MixinWorkObject(models.AbstractModel):
         domain=lambda self: [("model_name", "=", self._name)],
         auto_join=True,
         readonly=False,
+    )
+
+    @api.depends(
+        "work_estimation",
+        "work_log_ids",
+        "work_log_ids.amount",
+    )
+    def _compute_work_realization(self):
+        for record in self:
+            total_work = remaining_work = excess_work = 0.0
+            for work in record.work_log_ids:
+                total_work += work.amount
+
+            remaining_work = record.work_estimation - total_work
+            if remaining_work < 0.0:
+                excess_work = remaining_work
+                remaining_work = 0.0
+            record.total_work = total_work
+            record.remaining_work = remaining_work
+            record.excess_work = excess_work
+
+    total_work = fields.Float(
+        string="Total Work",
+        compute="_compute_work_realization",
+        store=True,
+    )
+    remaining_work = fields.Float(
+        string="Remaining Work",
+        compute="_compute_work_realization",
+        store=True,
+    )
+    excess_work = fields.Float(
+        string="Excess Work",
+        compute="_compute_work_realization",
+        store=True,
     )
 
     @api.model

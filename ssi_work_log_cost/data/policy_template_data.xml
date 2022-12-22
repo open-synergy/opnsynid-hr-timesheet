@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+<data noupdate="1">
+
+<!-- overtime confirm_ok -->
+<record id="policy_template_show_cost_setting" model="policy.template_detail">
+    <field name="template_id" ref="ssi_work_log_mixin.policy_template" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','hr.work_log'),('name','=','show_cost_setting_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','hr.work_log'),('value','=','draft')]"
+            />
+    <field name="restrict_user" eval="1" />
+    <field name="computation_method">use_group</field>
+    <field
+                name="group_ids"
+                eval="[(6,0,[ref('ssi_work_log_mixin.hr_work_log_user_group')])]"
+            />
+    <field name="restrict_additional" eval="0" />
+</record>
+</data>
+</odoo>

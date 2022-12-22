@@ -12,16 +12,26 @@
         <data>
             <xpath expr="//notebook" position="inside">
                 <page name="page_work_log" string="Work Log">
-                    <group name="grp_work_log" colspan="4">
-                        <field name="work_log_aa_selection_method" />
+                    <group
+                            name="grp_work_log"
+                            colspan="4"
+                            col="2"
+                            string="Analytic Account"
+                        >
+                        <field
+                                name="work_log_aa_selection_method"
+                                string="Selection Method"
+                            />
                         <field
                                 name="work_log_aa_ids"
+                                string="Allowed Analytic Accounts"
                                 attrs="{'invisible': [('work_log_aa_selection_method','=','python')]}"
                             />
                         <field
                                 name="python_code"
                                 widget="ace"
                                 options="{'mode': 'python'}"
+                                string="Python Code"
                                 attrs="{'invisible': [('work_log_aa_selection_method', '=', 'fixed')]}"
                             />
                     </group>

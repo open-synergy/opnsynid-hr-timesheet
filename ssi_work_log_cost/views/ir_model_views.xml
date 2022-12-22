@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+
+<record id="ir_model_form" model="ir.ui.view">
+    <field name="name">ir.model.work.log.form</field>
+    <field name="model">ir.model</field>
+    <field name="inherit_id" ref="ssi_work_log_mixin.ir_model_form" />
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//group[@name='grp_work_log']" position="after">
+                <group name="worklog_product" colspan="4" col="2" string="Product">
+                    <field
+                            name="work_log_product_selection_method"
+                            string="Selection Method"
+                        />
+                    <field
+                            name="work_log_product_categ_ids"
+                            string="Allowed Product Categories"
+                            attrs="{'invisible': [('work_log_product_selection_method','=','python')]}"
+                        />
+                    <field
+                            name="work_log_product_ids"
+                            string="Allowed Products"
+                            attrs="{'invisible': [('work_log_product_selection_method','=','python')]}"
+                        />
+                    <field
+                            name="work_log_product_python_code"
+                            widget="ace"
+                            options="{'mode': 'python'}"
+                            string="Python Code"
+                            attrs="{'invisible': [('work_log_product_selection_method', '=', 'fixed')]}"
+                        />
+                    <field name="default_worklog_usage_id" string="Default Usage" />
+                </group>
+                <group name="worklog_pricelist" colspan="4" col="2" string="Pricelist">
+                    <field
+                            name="work_log_pricelist_selection_method"
+                            string="Selection Method"
+                        />
+                    <field
+                            name="work_log_pricelist_ids"
+                            string="Allowed Pricelists"
+                            attrs="{'invisible': [('work_log_pricelist_selection_method','=','python')]}"
+                        />
+                    <field
+                            name="work_log_pricelist_python_code"
+                            widget="ace"
+                            options="{'mode': 'python'}"
+                            string="Python Code"
+                            attrs="{'invisible': [('work_log_pricelist_selection_method', '=', 'fixed')]}"
+                        />
+                </group>
+            </xpath>
+        </data>
+    </field>
+</record>
+
+</odoo>

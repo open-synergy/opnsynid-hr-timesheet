@@ -6,12 +6,17 @@
 <template id="work_log_page">
     <page name="page_work_log" string="Work Log">
         <group name="grp_work_log" colspan="2">
-            <field
-                    name="work_log_ids"
-                    nolabel="1"
-                    context="{'work_log_model': active_model}"
-                />
+            <field name="work_estimation" widget="float_time" string="Estimation" />
+            <field name="total_work" widget="float_time" string="Total" />
+            <field name="remaining_work" widget="float_time" string="Remaining" />
+            <field name="excess_work" widget="float_time" string="Excess" />
+
         </group>
+        <field
+                name="work_log_ids"
+                nolabel="1"
+                context="{'work_log_model': active_model}"
+            />
     </page>
 </template>
 </odoo>
