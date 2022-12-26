@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+<!-- Workflow -->
+<record
+        id="hr_leave_allocation_request_batch_module_category"
+        model="ir.module.category"
+    >
+    <field name="name">Leave Allocation Request Batch   </field>
+    <field name="parent_id" ref="ssi_hr.human_resource_module_category" />
+</record>
+
+<!-- Data Ownership -->
+<record
+        id="hr_leave_allocation_request_batch_data_ownership_module_category"
+        model="ir.module.category"
+    >
+    <field name="name">Leave Allocation Request Batch   </field>
+    <field name="parent_id" ref="ssi_hr.human_resource_module_category" />
+</record>
+
+</odoo>
