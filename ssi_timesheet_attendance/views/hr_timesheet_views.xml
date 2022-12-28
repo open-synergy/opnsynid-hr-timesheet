@@ -45,85 +45,36 @@
                                 groups="base.group_no_one"
                             />
                             <field name="attendance_status" />
-                            <field
-                                context="{'default_employee_id': employee_id, 'user_id':user_id}"
-                                name="attendance_ids"
-                                nolabel="1"
-                                colspan="2"
-                            >
-                                <tree string="Attendances" editable="bottom">
-                                    <field invisible="1" name="create_date" />
-                                    <field name="date" />
-                                    <field name="check_in" />
-                                    <field
-                                        name="reason_check_in_id"
-                                        domain="[('by_system', '=', False)]"
-                                    />
-                                    <field invisible="1" name="valid_check_in" />
-                                    <field name="check_out" />
-                                    <field
-                                        name="reason_check_out_id"
-                                        domain="[('by_system', '=', False)]"
-                                    />
-                                    <field invisible="1" name="valid_check_out" />
-                                    <field invisible="1" name="employee_id" />
-                                    <field invisible="1" name="schedule_id" />
-                                    <field name="total_hour" widget="float_time" />
-                                    <field
-                                        name="total_valid_hour"
-                                        widget="float_time"
-                                    />
-                                    <field name="state" />
-                                </tree>
-                                <form>
-                                    <header>
-                                        <field name="state" widget="statusbar" />
-                                    </header>
-                                    <group name="attendance_1" colspan="4" col="2">
-                                        <group
-                                            name="attendance_1_1"
-                                            colspan="1"
-                                            col="2"
-                                        >
-                                            <field name="create_date" />
-                                            <field name="date" />
-                                            <field name="check_in" />
-                                            <field name="reason_check_in_id" />
-                                            <field name="check_out" />
-                                            <field name="reason_check_out_id" />
-                                            <field
-                                                invisible="0"
-                                                name="valid_check_in"
-                                            />
-                                            <field
-                                                invisible="0"
-                                                name="valid_check_out"
-                                            />
-                                        </group>
-                                        <group
-                                            name="attendance_1_2"
-                                            colspan="1"
-                                            col="2"
-                                        >
-                                            <field invisible="1" name="employee_id" />
-                                            <field invisible="0" name="sheet_id" />
-                                            <field invisible="0" name="schedule_id" />
-                                            <field
-                                                name="total_hour"
-                                                widget="float_time"
-                                            />
-                                            <field
-                                                name="total_valid_hour"
-                                                widget="float_time"
-                                            />
-
-                                        </group>
-                                    </group>
-                                </form>
-
-
-                            </field>
                         </group>
+                        <field
+                            context="{'default_employee_id': employee_id, 'user_id':user_id}"
+                            name="attendance_ids"
+                            nolabel="1"
+                            colspan="2"
+                            mode="tree"
+                        >
+                            <tree string="Attendances" editable="bottom">
+                                <field invisible="1" name="create_date" />
+                                <field name="date" />
+                                <field name="check_in" />
+                                <field
+                                    name="reason_check_in_id"
+                                    domain="[('by_system', '=', False)]"
+                                />
+                                <field invisible="1" name="valid_check_in" />
+                                <field name="check_out" />
+                                <field
+                                    name="reason_check_out_id"
+                                    domain="[('by_system', '=', False)]"
+                                />
+                                <field invisible="1" name="valid_check_out" />
+                                <field invisible="1" name="employee_id" />
+                                <field invisible="1" name="schedule_id" />
+                                <field name="total_hour" widget="float_time" />
+                                <field name="total_valid_hour" widget="float_time" />
+                                <field name="state" />
+                            </tree>
+                        </field>
                     </page>
                     <page name="schedule" string="Atendance Schedules">
                         <group name="schedule" colspan="4" col="2">

@@ -241,13 +241,20 @@ class HRTimesheet(models.Model):
         self.ensure_one()
         Attendance = self.env["hr.timesheet_attendance"]
         latest_attendance_id = self.employee_id.latest_attendance_id
+        _check = 0.0
+        checkout_buffer = 0.0
         if latest_attendance_id:
             check_out = fields.Datetime.now()
-            schedule = latest_attendance_id.schedule_id
-            schedule_check_out = schedule.date_end
-            _check = (check_out - schedule_check_out).total_seconds() / 3600.0
-            company = self.env.company
-            checkout_buffer = company.checkout_buffer
+            conv_dt = format_datetime(self.env, check_out, dt_format="yyyy-MM-dd")
+            date_check_out = datetime.strptime(conv_dt, "%Y-%m-%d").date()
+
+            if latest_attendance_id.date != date_check_out:
+                schedule = latest_attendance_id.schedule_id
+                schedule_check_out = schedule.date_end
+                _check = (check_out - schedule_check_out).total_seconds() / 3600.0
+                company = self.env.company
+                checkout_buffer = company.checkout_buffer
+
             if _check > checkout_buffer:
                 Attendance.create(self._prepare_attendance_data_uncommon())
             else:
