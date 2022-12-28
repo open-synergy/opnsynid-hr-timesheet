@@ -65,8 +65,7 @@ class HRTimesheetAttendanceSchedule(models.Model):
             if attendances:
                 real_date_start = attendances[0].check_in
                 for record in attendances:
-                    if record.check_out:
-                        real_date_end = record.check_out
+                    real_date_end = record.check_out
                     if record.check_in and record.check_out:
                         real_work_hour += record.total_hour
                         real_valid_hour += record.total_valid_hour
