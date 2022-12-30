@@ -205,9 +205,43 @@ class HrLeaveAllocation(models.Model):
                 )
                 raise UserError(error_message)
 
+    @api.constrains(
+        "date_start",
+        "date_end",
+        "employee_id",
+    )
+    def _constrains_overlap(self):
+        for record in self.sudo():
+            if not record._check_overlap():
+                error_message = _(
+                    """
+                Context: Change date start or date end on leave request
+                Database ID: %s
+                Problem: There are other leave(s) allocation that overlap
+                Solution: Change date start and date end
+                """
+                    % (record.id)
+                )
+                raise UserError(error_message)
+
     def _check_leave(self):
         result = True
         if self.leave_ids:
+            result = False
+        return result
+
+    def _check_overlap(self):
+        self.ensure_one()
+        result = True
+        criteria = [
+            ("employee_id", "=", self.employee_id.id),
+            ("state", "not in", ["cancel", "reject"]),
+            ("id", "!=", self.id),
+            ("date_start", "<=", self.date_end),
+            ("date_end", ">=", self.date_start),
+        ]
+        overlap = self.search_count(criteria)
+        if overlap > 0:
             result = False
 
         return result
