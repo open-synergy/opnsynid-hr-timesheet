@@ -11,9 +11,7 @@
             <data>
                 <xpath expr="//page[@name='computation']" position="before">
                     <page name="page_work_log" string="All Work Log(s)">
-                        <group name="grp_work_log" colspan="4">
-                            <field name="all_work_log_ids" nolabel="1" />
-                        </group>
+                        <field name="all_work_log_ids" nolabel="1" />
                     </page>
                 </xpath>
             </data>
