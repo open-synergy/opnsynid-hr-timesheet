@@ -116,6 +116,15 @@ class HRWorkLog(models.Model):
             self.pricelist_id = self.allowed_worklog_pricelist_ids[0]._origin.id
 
     @api.onchange(
+        "allowed_worklog_product_ids",
+        "model_id",
+    )
+    def onchange_product_id(self):
+        self.product_id = False
+        if self.allowed_worklog_product_ids:
+            self.product_id = self.allowed_worklog_product_ids[0]._origin.id
+
+    @api.onchange(
         "model_id",
     )
     def onchange_usage_id(self):
