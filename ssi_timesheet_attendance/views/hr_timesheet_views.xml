@@ -3,24 +3,36 @@
      Copyright 2022 PT. Simetri Sinergi Indonesia
      License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
 <odoo>
+<record id="hr_timesheet_view_tree" model="ir.ui.view">
+    <field name="name">hr.timesheet tree</field>
+    <field name="model">hr.timesheet</field>
+    <field name="inherit_id" ref="ssi_timesheet.hr_timesheet_view_tree" />
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//field[@name='job_id']" position="after">
+                <field name="total_attendance" widget="float_time" />
+            </xpath>
+        </data>
+    </field>
+</record>
 
-    <record id="hr_timesheet_view_attendance_form" model="ir.ui.view">
-        <field name="name">hr.timesheet_attendance form</field>
-        <field name="model">hr.timesheet</field>
-        <field name="mode">extension</field>
-        <field name="inherit_id" ref="ssi_timesheet.hr_timesheet_view_form" />
-        <field name="arch" type="xml">
-            <data>
-                <xpath expr="//field[@name='job_id']" position="after">
-                    <field name="working_schedule_id" />
-                </xpath>
-                <xpath expr="//field[@name='date_end']" position="after">
-                    <field name="total_attendance" widget="float_time" />
-                </xpath>
-                <xpath expr="//page[@name='computation']" position="before">
-                    <page name="page_attendance" string="Attendance">
-                        <group name="attendance_1" colspan="4" col="2">
-                            <button
+<record id="hr_timesheet_view_attendance_form" model="ir.ui.view">
+    <field name="name">hr.timesheet_attendance form</field>
+    <field name="model">hr.timesheet</field>
+    <field name="mode">extension</field>
+    <field name="inherit_id" ref="ssi_timesheet.hr_timesheet_view_form" />
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//field[@name='job_id']" position="after">
+                <field name="working_schedule_id" />
+            </xpath>
+            <xpath expr="//field[@name='date_end']" position="after">
+                <field name="total_attendance" widget="float_time" />
+            </xpath>
+            <xpath expr="//page[@name='computation']" position="before">
+                <page name="page_attendance" string="Attendance">
+                    <group name="attendance_1" colspan="4" col="2">
+                        <button
                                 name="action_sign_in"
                                 string="Sign In"
                                 type="object"
@@ -29,7 +41,7 @@
                                 colspan="2"
                                 icon="fa-sign-in"
                             />
-                            <button
+                        <button
                                 name="action_sign_out"
                                 string="Sign Out"
                                 type="object"
@@ -38,47 +50,44 @@
                                 colspan="2"
                                 icon="fa-sign-out"
                             />
-                        </group>
-                        <group name="attendance_left" colspan="4" col="2">
-                            <field
-                                name="latest_attendance_id"
-                                groups="base.group_no_one"
-                            />
-                            <field name="attendance_status" />
-                        </group>
-                        <field
+                    </group>
+                    <group name="attendance_left" colspan="4" col="2">
+                        <field name="latest_attendance_id" groups="base.group_no_one" />
+                        <field name="attendance_status" />
+                    </group>
+                    <field
                             context="{'default_employee_id': employee_id, 'user_id':user_id}"
                             name="attendance_ids"
                             nolabel="1"
                             colspan="2"
                             mode="tree"
                         >
-                            <tree string="Attendances" editable="bottom">
-                                <field invisible="1" name="create_date" />
-                                <field name="date" />
-                                <field name="check_in" />
-                                <field
+                        <tree string="Attendances" editable="bottom">
+                            <field invisible="1" name="create_date" />
+                            <field name="date" />
+                            <field name="check_in" />
+                            <field
                                     name="reason_check_in_id"
                                     domain="[('by_system', '=', False)]"
                                 />
-                                <field invisible="1" name="valid_check_in" />
-                                <field name="check_out" />
-                                <field
+                            <field invisible="1" name="valid_check_in" />
+                            <field name="check_out" />
+                            <field
                                     name="reason_check_out_id"
                                     domain="[('by_system', '=', False)]"
                                 />
-                                <field invisible="1" name="valid_check_out" />
-                                <field invisible="1" name="employee_id" />
-                                <field invisible="1" name="schedule_id" />
-                                <field name="total_hour" widget="float_time" />
-                                <field name="total_valid_hour" widget="float_time" />
-                                <field name="state" />
-                            </tree>
-                        </field>
-                    </page>
-                    <page name="schedule" string="Atendance Schedules">
-                        <group name="schedule" colspan="4" col="2">
-                            <button
+                            <field invisible="1" name="valid_check_out" />
+                            <field invisible="1" name="employee_id" />
+                            <field invisible="1" name="schedule_id" />
+                            <field name="total_hour" widget="float_time" />
+                            <field name="total_valid_hour" widget="float_time" />
+                            <field name="state" />
+                        </tree>
+                    </field>
+                </page>
+                <page name="schedule" string="Atendance Schedules">
+                    <group name="schedule" colspan="4" col="2">
+                        <button
                                 name="action_compute_schedule"
                                 string="Create Schedules"
                                 type="object"
@@ -89,102 +98,93 @@
                                 colspan="2"
                                 icon="fa-cogs"
                             />
-                        </group>
-                        <field
+                    </group>
+                    <field
                             context="{'default_employee_id': employee_id, 'user_id':user_id}"
                             name="schedule_ids"
                             colspan="2"
                             nolabel="1"
                         >
-                            <tree>
-                                <field invisible="1" name="sheet_id" />
-                                <field invisible="1" name="employee_id" />
-                                <field name="date" />
-                                <field name="date_start" />
-                                <field name="date_end" />
-                                <field name="real_date_start" />
-                                <field name="real_date_end" />
-                                <field name="schedule_work_hour" widget="float_time" />
-                                <field name="real_work_hour" widget="float_time" />
-                                <field name="real_valid_hour" widget="float_time" />
-                                <field
+                        <tree>
+                            <field invisible="1" name="sheet_id" />
+                            <field invisible="1" name="employee_id" />
+                            <field name="date" />
+                            <field name="date_start" />
+                            <field name="date_end" />
+                            <field name="real_date_start" />
+                            <field name="real_date_end" />
+                            <field name="schedule_work_hour" widget="float_time" />
+                            <field name="real_work_hour" widget="float_time" />
+                            <field name="real_valid_hour" widget="float_time" />
+                            <field
                                     invisible="1"
                                     name="early_start_hour"
                                     widget="float_time"
                                 />
-                                <field
+                            <field
                                     invisible="1"
                                     name="late_start_hour"
                                     widget="float_time"
                                 />
-                                <field
+                            <field
                                     invisible="1"
                                     name="finish_early_hour"
                                     widget="float_time"
                                 />
-                                <field
+                            <field
                                     invisible="1"
                                     name="finish_late_hour"
                                     widget="float_time"
                                 />
-                                <field name="early_start_hour" widget="float_time" />
-                                <field name="late_start_hour" widget="float_time" />
-                                <field name="finish_early_hour" widget="float_time" />
-                                <field name="finish_late_hour" widget="float_time" />
-                                <field name="state" />
-                            </tree>
-                            <form>
-                                <header>
-                                    <field name="state" widget="statusbar" />
-                                </header>
-                                <group name="schedule_1" colspan="4" col="2">
-                                    <group name="schedule_1_1" colspan="1" col="2">
-                                        <field invisible="0" name="id" />
-                                        <field invisible="1" name="sheet_id" />
-                                        <field invisible="1" name="employee_id" />
-                                        <field invisible="0" name="date" />
-                                        <field name="date_start" />
-                                        <field name="date_end" />
-                                        <field name="real_date_start" />
-                                        <field name="real_date_end" />
-                                    </group>
-                                    <group name="schedule_1_2" colspan="1" col="2">
-                                        <field
+                            <field name="early_start_hour" widget="float_time" />
+                            <field name="late_start_hour" widget="float_time" />
+                            <field name="finish_early_hour" widget="float_time" />
+                            <field name="finish_late_hour" widget="float_time" />
+                            <field name="state" />
+                        </tree>
+                        <form>
+                            <header>
+                                <field name="state" widget="statusbar" />
+                            </header>
+                            <group name="schedule_1" colspan="4" col="2">
+                                <group name="schedule_1_1" colspan="1" col="2">
+                                    <field invisible="0" name="id" />
+                                    <field invisible="1" name="sheet_id" />
+                                    <field invisible="1" name="employee_id" />
+                                    <field invisible="0" name="date" />
+                                    <field name="date_start" />
+                                    <field name="date_end" />
+                                    <field name="real_date_start" />
+                                    <field name="real_date_end" />
+                                </group>
+                                <group name="schedule_1_2" colspan="1" col="2">
+                                    <field
                                             name="schedule_work_hour"
                                             widget="float_time"
                                         />
-                                        <field
-                                            name="real_work_hour"
-                                            widget="float_time"
-                                        />
-                                        <field
-                                            name="real_valid_hour"
-                                            widget="float_time"
-                                        />
-                                        <field
+                                    <field name="real_work_hour" widget="float_time" />
+                                    <field name="real_valid_hour" widget="float_time" />
+                                    <field
                                             name="early_start_hour"
                                             widget="float_time"
                                         />
-                                        <field
-                                            name="late_start_hour"
-                                            widget="float_time"
-                                        />
-                                        <field
+                                    <field name="late_start_hour" widget="float_time" />
+                                    <field
                                             name="finish_early_hour"
                                             widget="float_time"
                                         />
-                                        <field
+                                    <field
                                             name="finish_late_hour"
                                             widget="float_time"
                                         />
-                                    </group>
                                 </group>
-                            </form>
-                        </field>
-                    </page>
-                </xpath>
-            </data>
-        </field>
-    </record>
+                            </group>
+                        </form>
+                    </field>
+                </page>
+            </xpath>
+        </data>
+    </field>
+</record>
 
 </odoo>
