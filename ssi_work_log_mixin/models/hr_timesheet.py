@@ -34,7 +34,7 @@ class HrTimesheet(models.Model):
         for record in self:
             result = 0.0
             for work in record.all_work_log_ids:
-                result += work.result
+                result += work.amount
             record.total_work_log = result
 
     def _confirm_work_log(self):
