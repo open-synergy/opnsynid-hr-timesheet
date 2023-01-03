@@ -4,7 +4,7 @@
 
 {
     "name": "Work Log Mixin",
-    "version": "14.0.1.12.0",
+    "version": "14.0.1.11.0",
     "website": "https://simetri-sinergi.id",
     "author": "PT. Simetri Sinergi Indonesia, OpenSynergy Indonesia",
     "license": "LGPL-3",
