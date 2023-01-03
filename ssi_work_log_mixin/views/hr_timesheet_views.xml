@@ -3,21 +3,34 @@
      Copyright 2022 PT. Simetri Sinergi Indonesia
      License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
 <odoo>
-    <record id="hr_timesheet_view_form" model="ir.ui.view">
-        <field name="name">hr.timesheet.work.log.form</field>
-        <field name="model">hr.timesheet</field>
-        <field name="inherit_id" ref="ssi_timesheet.hr_timesheet_view_form" />
-        <field name="arch" type="xml">
-            <data>
-                <xpath expr="//page[@name='computation']" position="before">
-                    <page name="page_work_log" string="All Work Log(s)">
-                        <field name="all_work_log_ids" nolabel="1" />
-                    </page>
-                </xpath>
-                <xpath expr="//field[@name='date_end']" position="after">
-                    <field name="total_work_log" widget="float_time" />
-                </xpath>
-            </data>
-        </field>
-    </record>
+<record id="hr_timesheet_view_tree" model="ir.ui.view">
+    <field name="name">hr.timesheet tree</field>
+    <field name="model">hr.timesheet</field>
+    <field name="inherit_id" ref="ssi_timesheet.hr_timesheet_view_tree" />
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//field[@name='job_id']" position="after">
+                <field name="total_work_log" widget="float_time" />
+            </xpath>
+        </data>
+    </field>
+</record>
+
+<record id="hr_timesheet_view_form" model="ir.ui.view">
+    <field name="name">hr.timesheet.work.log.form</field>
+    <field name="model">hr.timesheet</field>
+    <field name="inherit_id" ref="ssi_timesheet.hr_timesheet_view_form" />
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//page[@name='computation']" position="before">
+                <page name="page_work_log" string="All Work Log(s)">
+                    <field name="all_work_log_ids" nolabel="1" />
+                </page>
+            </xpath>
+            <xpath expr="//field[@name='date_end']" position="after">
+                <field name="total_work_log" widget="float_time" />
+            </xpath>
+        </data>
+    </field>
+</record>
 </odoo>
