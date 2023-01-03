@@ -2,7 +2,7 @@
 # Copyright 2022 PT. Simetri Sinergi Indonesia
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
-from odoo import fields, models
+from odoo import api, fields, models
 
 
 class HrTimesheet(models.Model):
@@ -20,6 +20,22 @@ class HrTimesheet(models.Model):
         inverse_name="sheet_id",
         readonly=True,
     )
+    total_work_log = fields.Float(
+        string="Total Work Log",
+        compute="_compute_total_work_log",
+        store=True,
+    )
+
+    @api.depends(
+        "all_work_log_ids",
+        "all_work_log_ids.amount",
+    )
+    def _compute_total_work_log(self):
+        for record in self:
+            result = 0.0
+            for work in record.all_work_log_ids:
+                result += work.result
+            record.total_work_log = result
 
     def _confirm_work_log(self):
         self.ensure_one()
