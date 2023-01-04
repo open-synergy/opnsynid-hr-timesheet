@@ -28,6 +28,7 @@
             </xpath>
             <xpath expr="//field[@name='date_end']" position="after">
                 <field name="total_attendance" widget="float_time" />
+                <field name="running_attendance" widget="float_time" />
             </xpath>
             <xpath expr="//page[@name='computation']" position="before">
                 <page name="page_attendance" string="Attendance">
@@ -54,6 +55,7 @@
                     <group name="attendance_left" colspan="4" col="2">
                         <field name="latest_attendance_id" groups="base.group_no_one" />
                         <field name="attendance_status" />
+
                     </group>
                     <field
                             context="{'default_employee_id': employee_id, 'user_id':user_id}"
