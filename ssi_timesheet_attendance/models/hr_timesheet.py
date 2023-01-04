@@ -73,6 +73,11 @@ class HRTimesheet(models.Model):
         ],
         related="employee_id.attendance_status",
     )
+    running_attendance = fields.Float(
+        string="Running Attendance Hour",
+        compute="_compute_running_attendance",
+        store=False,
+    )
     schedule_ids = fields.One2many(
         string="Attendance Schedule",
         comodel_name="hr.timesheet_attendance_schedule",
@@ -87,6 +92,15 @@ class HRTimesheet(models.Model):
             ],
         },
     )
+
+    def _compute_running_attendance(self):
+        for record in self:
+            result = 0.0
+            if record.attendance_status == "sign_in":
+                result = (
+                    fields.Datetime.now() - record.latest_attendance_id.check_in
+                ).seconds / 3600.0
+            record.running_attendance = result
 
     def _prepare_schedule_data(self, start, stop):
         self.ensure_one()
