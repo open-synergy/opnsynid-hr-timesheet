@@ -74,7 +74,7 @@ class HRTimesheet(models.Model):
         related="employee_id.attendance_status",
     )
     running_attendance = fields.Float(
-        string="Running Attendance Hour",
+        string="Running Attendance",
         compute="_compute_running_attendance",
         store=False,
     )
