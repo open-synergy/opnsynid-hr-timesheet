@@ -96,7 +96,7 @@ class HRTimesheet(models.Model):
     def _compute_running_attendance(self):
         for record in self:
             result = 0.0
-            if record.attendance_status == "sign_in":
+            if record.attendance_status == "sign_in" and record.latest_attendance_id:
                 result = (
                     fields.Datetime.now() - record.latest_attendance_id.check_in
                 ).seconds / 3600.0
