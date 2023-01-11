@@ -4,4 +4,5 @@
 
 from . import (
     hr_timesheet,
+    hr_work_log,
 )
