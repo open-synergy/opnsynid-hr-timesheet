@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+<!-- Workflow -->
+<record id="work_log_rate_viewer_group" model="res.groups">
+    <field name="name">Viewer</field>
+    <field name="category_id" ref="work_log_rate_module_category" />
+</record>
+
+<record id="work_log_rate_user_group" model="res.groups">
+    <field name="name">User</field>
+    <field name="category_id" ref="work_log_rate_module_category" />
+    <field name="implied_ids" eval="[(4, ref('work_log_rate_viewer_group'))]" />
+</record>
+
+<record id="work_log_rate_validator_group" model="res.groups">
+    <field name="name">Validator</field>
+    <field name="category_id" ref="work_log_rate_module_category" />
+    <field name="implied_ids" eval="[(4, ref('work_log_rate_user_group'))]" />
+    <field
+            name="users"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
+</record>
+
+<!-- Data Ownership -->
+<record id="work_log_rate_direct_subordinate_group" model="res.groups">
+    <field name="name">Direct Subordinate</field>
+    <field name="category_id" ref="work_log_rate_data_ownership_module_category" />
+</record>
+
+<record id="work_log_rate_direct_all_subordinate_group" model="res.groups">
+    <field name="name">All Subordinate</field>
+    <field name="category_id" ref="work_log_rate_data_ownership_module_category" />
+    <field
+            name="implied_ids"
+            eval="[(4, ref('work_log_rate_direct_subordinate_group'))]"
+        />
+</record>
+
+<record id="work_log_rate_company_group" model="res.groups">
+    <field name="name">Company</field>
+    <field name="category_id" ref="work_log_rate_data_ownership_module_category" />
+    <field
+            name="implied_ids"
+            eval="[(4, ref('work_log_rate_direct_all_subordinate_group'))]"
+        />
+</record>
+
+<record id="work_log_rate_company_child_group" model="res.groups">
+    <field name="name">Company and All Child Companies</field>
+    <field name="category_id" ref="work_log_rate_data_ownership_module_category" />
+    <field name="implied_ids" eval="[(4, ref('work_log_rate_company_group'))]" />
+</record>
+
+<record id="work_log_rate_all_group" model="res.groups">
+    <field name="name">All</field>
+    <field name="category_id" ref="work_log_rate_data_ownership_module_category" />
+    <field name="implied_ids" eval="[(4, ref('work_log_rate_company_child_group'))]" />
+    <field
+            name="users"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
+</record>
+
+</odoo>

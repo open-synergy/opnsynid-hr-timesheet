@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_work_log_rate_all,work_log_rate - user,model_work_log_rate,,1,0,0,0
+access_work_log_rate_viewer,work_log_rate - viewer,model_work_log_rate,work_log_rate_viewer_group,1,0,0,0
+access_work_log_rate_user,work_log_rate - all,model_work_log_rate,work_log_rate_user_group,1,1,1,1
+access_work_log_rate_general_rate_all,work_log_rate_general_rate - user,model_work_log_rate_general_rate,,1,0,0,0
+access_work_log_rate_general_rate_viewer,work_log_rate_general_rate - viewer,model_work_log_rate_general_rate,work_log_rate_viewer_group,1,0,0,0
+access_work_log_rate_general_rate_user,work_log_rate_general_rate - all,model_work_log_rate_general_rate,work_log_rate_user_group,1,1,1,1
