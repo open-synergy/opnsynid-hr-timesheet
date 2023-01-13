@@ -268,6 +268,7 @@ class HRWorkLog(models.Model):
         return {
             "env": self.env,
             "document": document,
+            "work_log": self,
         }
 
     def _evaluate_analytic_account(self, model):
