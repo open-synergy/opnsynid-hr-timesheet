@@ -61,6 +61,9 @@ class HRWorkLog(models.Model):
     @api.depends(
         "model_id",
         "currency_id",
+        "employee_id",
+        "date",
+        "product_id",
     )
     def _compute_allowed_worklog_pricelist_ids(self):
         Pricelist = self.env["product.pricelist"]

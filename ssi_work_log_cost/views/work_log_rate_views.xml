@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2021 OpenSynergy Indonesia
+     Copyright 2021 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+<record id="work_log_rate_view_tree" model="ir.ui.view">
+    <field name="name">work_log_rate tree</field>
+    <field name="model">work_log_rate</field>
+    <field name="mode">primary</field>
+    <field name="inherit_id" ref="ssi_transaction_mixin.mixin_transaction_view_tree" />
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field
+                        name="employee_id"
+                        string="Employee"
+                        widget="many2one_avatar_employee"
+                    />
+                <field name="department_id" optional="hide" />
+                <field
+                        name="manager_id"
+                        widget="many2one_avatar_employee"
+                        optional="hide"
+                    />
+                <field name="job_id" optional="hide" />
+                <field name="date" />
+                <field name="date_start" />
+                <field name="date_end" />
+            </xpath>
+        </data>
+    </field>
+</record>
+
+<record id="work_log_rate_view_search" model="ir.ui.view">
+    <field name="name">work_log_rate search</field>
+    <field name="model">work_log_rate</field>
+    <field name="mode">primary</field>
+    <field
+            name="inherit_id"
+            ref="ssi_transaction_mixin.mixin_transaction_view_search"
+        />
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//group[@name='group_by']" position="inside">
+                <filter
+                        name="grp_date_start"
+                        string="Date Start"
+                        context="{'group_by':'date_start'}"
+                    />
+                <filter
+                        name="grp_date_end"
+                        string="Date End"
+                        context="{'group_by':'date_end'}"
+                    />
+            </xpath>
+        </data>
+    </field>
+</record>
+
+<record id="work_log_rate_view_form" model="ir.ui.view">
+    <field name="name">work_log_rate form</field>
+    <field name="model">work_log_rate</field>
+    <field name="mode">primary</field>
+    <field name="inherit_id" ref="ssi_transaction_mixin.mixin_transaction_view_form" />
+    <field name="arch" type="xml">
+        <data>
+          <xpath expr="//field[@name='user_id']" position="after">
+              <field name="employee_id" widget="many2one_avatar_employee" />
+              <field name="department_id" readonly="1" force_save="1" />
+              <field
+                        name="manager_id"
+                        widget="many2one_avatar_employee"
+                        readonly="1"
+                        force_save="1"
+                    />
+              <field name="job_id" readonly="1" force_save="1" />
+          </xpath>
+          <xpath expr="//group[@name='header_right']" position="inside">
+                <field name="date_start" />
+                <field name="date_end" />
+                <field name="date" />
+          </xpath>
+          <xpath expr="//page[1]" position="before">
+            <page name="general" string="General Rates">
+                <field name="general_rate_ids">
+                    <tree editable="top">
+                        <field name="product_id" />
+                        <field name="pricelist_id" />
+                    </tree>
+                </field>
+            </page>
+          </xpath>
+        </data>
+    </field>
+</record>
+
+<record id="work_log_rate_action" model="ir.actions.act_window">
+    <field name="name">Work Log Rates</field>
+    <field name="res_model">work_log_rate</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+<menuitem
+        id="menu_work_log_rate"
+        name="Work Log Rates"
+        parent="ssi_timesheet.timesheet_menu"
+        groups="work_log_rate_viewer_group"
+        action="work_log_rate_action"
+        sequence="1"
+    />
+
+</odoo>
