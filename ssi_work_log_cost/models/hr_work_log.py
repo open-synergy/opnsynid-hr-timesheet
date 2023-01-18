@@ -14,6 +14,10 @@ class HRWorkLog(models.Model):
         "mixin.product_line_account",
     ]
 
+    uom_quantity = fields.Float(
+        compute="_compute_uom_quantity",
+        store=True,
+    )
     account_id = fields.Many2one(
         required=False,
     )
@@ -103,11 +107,12 @@ class HRWorkLog(models.Model):
     def onchange_name(self):
         pass
 
-    @api.onchange(
+    @api.depends(
         "amount",
     )
-    def onchange_uom_quantity(self):
-        self.uom_quantity = self.amount
+    def _compute_uom_quantity(self):
+        for record in self:
+            record.uom_quantity = record.amount
 
     @api.onchange(
         "allowed_worklog_pricelist_ids",
