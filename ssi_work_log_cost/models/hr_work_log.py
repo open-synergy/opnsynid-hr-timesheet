@@ -75,7 +75,7 @@ class HRWorkLog(models.Model):
                     if model.work_log_pricelist_ids:
                         result += model.work_log_pricelist_ids.ids
                 elif model.work_log_pricelist_selection_method == "python":
-                    pricelist_ids = self._evaluate_worklog_pricelist(model)
+                    pricelist_ids = document._evaluate_worklog_pricelist(model)
                     if pricelist_ids:
                         result = pricelist_ids
                 if len(result) > 0:
