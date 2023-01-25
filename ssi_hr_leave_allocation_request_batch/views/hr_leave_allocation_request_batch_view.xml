@@ -103,6 +103,7 @@
         name="Leave Allocation Request Batch"
         parent="ssi_timesheet.timesheet_menu"
         action="hr_leave_allocation_request_batch_action"
+        groups="hr_leave_allocation_request_batch_viewer_group"
         sequence="3"
     />
 
