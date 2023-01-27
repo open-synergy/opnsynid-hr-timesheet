@@ -249,7 +249,7 @@ class HRTimesheetAttendanceSchedule(models.Model):
 
     @api.constrains("schedule_work_hour")
     def _check_schedule_work_hour(self):
-        for record in self:
+        for record in self.sudo():
             if record.schedule_work_hour:
                 strWarning = _("Schedule Hours Cannot Greater Than 24 Hours")
                 if record.schedule_work_hour > 23.99:
@@ -257,7 +257,7 @@ class HRTimesheetAttendanceSchedule(models.Model):
 
     @api.constrains("date_start")
     def _check_sheet(self):
-        for record in self:
+        for record in self.sudo():
             if record.date_start:
                 strWarning = _(
                     "Date Start on Attendance Schedule MUST be in TIME SHEET range ..."
