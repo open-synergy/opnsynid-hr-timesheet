@@ -10,6 +10,8 @@ from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 from odoo.tools import format_datetime
 
+from odoo.addons.ssi_decorator import ssi_decorator
+
 
 class HRTimesheet(models.Model):
     _inherit = "hr.timesheet"
@@ -160,7 +162,7 @@ class HRTimesheet(models.Model):
         "date_start",
     )
     def _check_overlap_date_start(self):
-        for record in self:
+        for record in self.sudo():
             if record.employee_id and record.date_start:
                 criteria = [
                     ("employee_id", "=", record.employee_id.id),
@@ -168,7 +170,7 @@ class HRTimesheet(models.Model):
                     ("date_start", "<=", record.date_start),
                     ("date_end", ">=", record.date_start),
                 ]
-                check = self.search(criteria)
+                check = record.search(criteria)
                 if len(check) > 0:
                     strWarning = _("Date start with the same employee can't overlap")
                     raise UserError(strWarning)
@@ -178,7 +180,7 @@ class HRTimesheet(models.Model):
         "date_end",
     )
     def _check_overlap_date_end(self):
-        for record in self:
+        for record in self.sudo():
             if record.employee_id and record.date_end:
                 criteria = [
                     ("employee_id", "=", record.employee_id.id),
@@ -186,7 +188,7 @@ class HRTimesheet(models.Model):
                     ("date_start", "<=", record.date_end),
                     ("date_end", ">=", record.date_end),
                 ]
-                check = self.search(criteria)
+                check = record.search(criteria)
                 if len(check) > 0:
                     strWarning = _("Date end with the same employee can't overlap")
                     raise UserError(strWarning)
@@ -298,3 +300,8 @@ class HRTimesheet(models.Model):
         if schedule_ids:
             schedule_ids.unlink()
         return _super.unlink()
+
+    @ssi_decorator.post_open_action()
+    def _create_schedules(self):
+        self.ensure_one()
+        self.action_compute_schedule()
