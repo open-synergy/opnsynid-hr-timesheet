@@ -2,7 +2,8 @@
 # Copyright 2022 PT. Simetri Sinergi Indonesia
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import Warning as UserError
 
 
 class HRTimesheet(models.Model):
@@ -162,3 +163,39 @@ class HRTimesheet(models.Model):
         for computation in self.employee_id.timesheet_computation_ids:
             result.append((0, 0, {"item_id": computation.id}))
         self.write({"computation_ids": result})
+
+    @api.constrains(
+        "employee_id",
+        "date_start",
+    )
+    def _check_overlap_date_start(self):
+        for record in self.sudo():
+            if record.employee_id and record.date_start:
+                criteria = [
+                    ("employee_id", "=", record.employee_id.id),
+                    ("id", "<>", record.id),
+                    ("date_start", "<=", record.date_start),
+                    ("date_end", ">=", record.date_start),
+                ]
+                check = record.search(criteria)
+                if len(check) > 0:
+                    strWarning = _("Date start with the same employee can't overlap")
+                    raise UserError(strWarning)
+
+    @api.constrains(
+        "employee_id",
+        "date_end",
+    )
+    def _check_overlap_date_end(self):
+        for record in self.sudo():
+            if record.employee_id and record.date_end:
+                criteria = [
+                    ("employee_id", "=", record.employee_id.id),
+                    ("id", "<>", record.id),
+                    ("date_start", "<=", record.date_end),
+                    ("date_end", ">=", record.date_end),
+                ]
+                check = record.search(criteria)
+                if len(check) > 0:
+                    strWarning = _("Date end with the same employee can't overlap")
+                    raise UserError(strWarning)
