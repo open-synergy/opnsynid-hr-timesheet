@@ -6,8 +6,7 @@ from datetime import datetime
 
 import pytz
 
-from odoo import _, api, fields, models
-from odoo.exceptions import UserError
+from odoo import api, fields, models
 from odoo.tools import format_datetime
 
 from odoo.addons.ssi_decorator import ssi_decorator
@@ -156,42 +155,6 @@ class HRTimesheet(models.Model):
             document.write({"schedule_ids": data})
             document.attendance_ids._compute_schedule()
             document.schedule_ids._compute_attendance()
-
-    @api.constrains(
-        "employee_id",
-        "date_start",
-    )
-    def _check_overlap_date_start(self):
-        for record in self.sudo():
-            if record.employee_id and record.date_start:
-                criteria = [
-                    ("employee_id", "=", record.employee_id.id),
-                    ("id", "<>", record.id),
-                    ("date_start", "<=", record.date_start),
-                    ("date_end", ">=", record.date_start),
-                ]
-                check = record.search(criteria)
-                if len(check) > 0:
-                    strWarning = _("Date start with the same employee can't overlap")
-                    raise UserError(strWarning)
-
-    @api.constrains(
-        "employee_id",
-        "date_end",
-    )
-    def _check_overlap_date_end(self):
-        for record in self.sudo():
-            if record.employee_id and record.date_end:
-                criteria = [
-                    ("employee_id", "=", record.employee_id.id),
-                    ("id", "<>", record.id),
-                    ("date_start", "<=", record.date_end),
-                    ("date_end", ">=", record.date_end),
-                ]
-                check = record.search(criteria)
-                if len(check) > 0:
-                    strWarning = _("Date end with the same employee can't overlap")
-                    raise UserError(strWarning)
 
     def action_sign_in(self, reason=False):
         for record in self.sudo():
