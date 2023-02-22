@@ -1,5 +1,5 @@
 # Do NOT update manually; changes here will be overwritten by Copier
-_commit: edb24fc
+_commit: 9bee604
 _src_path: gh:open-synergy/ssi-addons-repo-template
 dependency_installation_mode: OCA
 generate_requirements_txt: true
@@ -7,7 +7,7 @@ include_aeroo_report: false
 include_wkhtmltopdf: false
 odoo_version: 14.0
 rebel_module_groups: []
-repo_description: null
+repo_description: opnsynid-hr-timesheet
 repo_name: opnsynid-hr-timesheet
 repo_slug: opnsynid-hr-timesheet
 travis_apt_packages: []
