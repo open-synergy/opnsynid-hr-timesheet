@@ -13,6 +13,13 @@
     />
 
     <menuitem
+        id="reporting_menu"
+        name="Reportings"
+        parent="ssi_hr.menu_root_human_resource"
+        sequence="5"
+    />
+
+    <menuitem
         id="menu_hr_timesheet_configuration"
         name="Timesheets"
         parent="ssi_hr.menu_human_resource_configuration"
