@@ -11,7 +11,7 @@
 
 <!-- Data Ownership -->
 <record id="hr_timesheet_data_ownership_module_category" model="ir.module.category">
-    <field name="name">Timseheets</field>
+    <field name="name">Timesheets</field>
     <field name="parent_id" ref="ssi_hr.human_resource_data_module_category" />
 </record>
 

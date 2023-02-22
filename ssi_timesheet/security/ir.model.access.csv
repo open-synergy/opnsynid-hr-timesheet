@@ -9,3 +9,4 @@ access_hr_timesheet_computation_viewer,hr.timesheet_computation - viewer,model_h
 access_hr_timesheet_computation_user,hr.timesheet_computation - user,model_hr_timesheet_computation,hr_timesheet_user_group,1,1,1,1
 access_hr_generate_timesheet_configurator,hr.generate_timesheet - configurator,model_hr_generate_timesheet,hr_timesheet_generate_timesheet_group,1,1,1,1
 access_hr_generate_timesheet_all,hr.generate_timesheet - all,model_hr_generate_timesheet,,1,0,0,0
+access_hr_timesheet_computation_analysis_report,hr.timesheet_computation_analysis – report,model_hr_timesheet_computation_analysis,hr_timesheet_computation_analysis_group,1,1,1,1

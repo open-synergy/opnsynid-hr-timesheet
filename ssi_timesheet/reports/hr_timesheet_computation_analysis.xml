@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 OpenSynergy Indonesia
+     Copyright 2023 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+<data>
+
+<record id="hr_timesheet_computation_analysis_view_search" model="ir.ui.view">
+    <field name="name">hr.timesheet_computation_analysis search</field>
+    <field name="model">hr.timesheet_computation_analysis</field>
+    <field name="arch" type="xml">
+        <search>
+            <field name="timesheet_id" />
+            <field name="employee_id" />
+            <field name="department_id" />
+            <field name="job_id" />
+            <field name="parent_id" />
+            <field name="item_id" />
+            <filter name="dom_empty" string="Empty" domain="[('id','=',0)]" />
+            <separator />
+             <group name="filter_date_start" string="Date Start">
+                <filter
+                            string="Date Start: 01"
+                            domain="[('date_start','&gt;=', datetime.date(context_today().year,1,1).strftime('%Y-%m-%d')), ('date_start','&lt;=', datetime.date(context_today().year,1,31).strftime('%Y-%m-%d'))]"
+                        />
+                <filter
+                            string="Date Start: 02"
+                            domain="[('date_start','&gt;=', datetime.date(context_today().year,2,1).strftime('%Y-%m-%d')), ('date_start','&lt;=', (datetime.date(context_today().year,2,1) + relativedelta(months=1) + relativedelta(days=-1)).strftime('%Y-%m-%d'))]"
+                        />
+                <filter
+                            string="Date Start: 03"
+                            domain="[('date_start','&gt;=', datetime.date(context_today().year,3,1).strftime('%Y-%m-%d')), ('date_start','&lt;=', datetime.date(context_today().year,3,31).strftime('%Y-%m-%d'))]"
+                        />
+                <filter
+                            string="Date Start: 04"
+                            domain="[('date_start','&gt;=', datetime.date(context_today().year,4,1).strftime('%Y-%m-%d')), ('date_start','&lt;=', datetime.date(context_today().year,4,30).strftime('%Y-%m-%d'))]"
+                        />
+                <filter
+                            string="Date Start: 05"
+                            domain="[('date_start','&gt;=', datetime.date(context_today().year,5,1).strftime('%Y-%m-%d')), ('date_start','&lt;=', datetime.date(context_today().year,5,31).strftime('%Y-%m-%d'))]"
+                        />
+                <filter
+                            string="Date Start: 06"
+                            domain="[('date_start','&gt;=', datetime.date(context_today().year,6,1).strftime('%Y-%m-%d')), ('date_start','&lt;=', datetime.date(context_today().year,6,30).strftime('%Y-%m-%d'))]"
+                        />
+                <filter
+                            string="Date Start: 07"
+                            domain="[('date_start','&gt;=', datetime.date(context_today().year,7,1).strftime('%Y-%m-%d')), ('date_start','&lt;=', datetime.date(context_today().year,7,31).strftime('%Y-%m-%d'))]"
+                        />
+                <filter
+                            string="Date Start: 08"
+                            domain="[('date_start','&gt;=', datetime.date(context_today().year,8,1).strftime('%Y-%m-%d')), ('date_start','&lt;=', datetime.date(context_today().year,8,31).strftime('%Y-%m-%d'))]"
+                        />
+                <filter
+                            string="Date Start: 09"
+                            domain="[('date_start','&gt;=', datetime.date(context_today().year,9,1).strftime('%Y-%m-%d')), ('date_start','&lt;=', datetime.date(context_today().year,9,30).strftime('%Y-%m-%d'))]"
+                        />
+                <filter
+                            string="Date Start: 10"
+                            domain="[('date_start','&gt;=', datetime.date(context_today().year,10,1).strftime('%Y-%m-%d')), ('date_start','&lt;=', datetime.date(context_today().year,10,31).strftime('%Y-%m-%d'))]"
+                        />
+                <filter
+                            string="Date Start: 11"
+                            domain="[('date_start','&gt;=', datetime.date(context_today().year,11,1).strftime('%Y-%m-%d')), ('date_start','&lt;=', datetime.date(context_today().year,11,30).strftime('%Y-%m-%d'))]"
+                        />
+                <filter
+                            string="Date Start: 12"
+                            domain="[('date_start','&gt;=', datetime.date(context_today().year,12,1).strftime('%Y-%m-%d')), ('date_start','&lt;=', datetime.date(context_today().year,12,31).strftime('%Y-%m-%d'))]"
+                        />
+            </group>
+            <separator />
+            <group name="filter_date_end" string="Date End">
+                <filter
+                            string="Date End: 01"
+                            domain="[('date_end','&gt;=', datetime.date(context_today().year,1,1).strftime('%Y-%m-%d')), ('date_end','&lt;=', datetime.date(context_today().year,1,31).strftime('%Y-%m-%d'))]"
+                        />
+                <filter
+                            string="Date End: 02"
+                            domain="[('date_end','&gt;=', datetime.date(context_today().year,2,1).strftime('%Y-%m-%d')), ('date_end','&lt;=', (datetime.date(context_today().year,2,1) + relativedelta(months=1) + relativedelta(days=-1)).strftime('%Y-%m-%d'))]"
+                        />
+                <filter
+                            string="Date End: 03"
+                            domain="[('date_end','&gt;=', datetime.date(context_today().year,3,1).strftime('%Y-%m-%d')), ('date_end','&lt;=', datetime.date(context_today().year,3,31).strftime('%Y-%m-%d'))]"
+                        />
+                <filter
+                            string="Date End: 04"
+                            domain="[('date_end','&gt;=', datetime.date(context_today().year,4,1).strftime('%Y-%m-%d')), ('date_end','&lt;=', datetime.date(context_today().year,4,30).strftime('%Y-%m-%d'))]"
+                        />
+                <filter
+                            string="Date End: 05"
+                            domain="[('date_end','&gt;=', datetime.date(context_today().year,5,1).strftime('%Y-%m-%d')), ('date_end','&lt;=', datetime.date(context_today().year,5,31).strftime('%Y-%m-%d'))]"
+                        />
+                <filter
+                            string="Date End: 06"
+                            domain="[('date_end','&gt;=', datetime.date(context_today().year,6,1).strftime('%Y-%m-%d')), ('date_end','&lt;=', datetime.date(context_today().year,6,30).strftime('%Y-%m-%d'))]"
+                        />
+                <filter
+                            string="Date End: 07"
+                            domain="[('date_end','&gt;=', datetime.date(context_today().year,7,1).strftime('%Y-%m-%d')), ('date_end','&lt;=', datetime.date(context_today().year,7,31).strftime('%Y-%m-%d'))]"
+                        />
+                <filter
+                            string="Date End: 08"
+                            domain="[('date_end','&gt;=', datetime.date(context_today().year,8,1).strftime('%Y-%m-%d')), ('date_end','&lt;=', datetime.date(context_today().year,8,31).strftime('%Y-%m-%d'))]"
+                        />
+                <filter
+                            string="Date End: 09"
+                            domain="[('date_end','&gt;=', datetime.date(context_today().year,9,1).strftime('%Y-%m-%d')), ('date_end','&lt;=', datetime.date(context_today().year,9,30).strftime('%Y-%m-%d'))]"
+                        />
+                <filter
+                            string="Date End: 10"
+                            domain="[('date_end','&gt;=', datetime.date(context_today().year,10,1).strftime('%Y-%m-%d')), ('date_end','&lt;=', datetime.date(context_today().year,10,31).strftime('%Y-%m-%d'))]"
+                        />
+                <filter
+                            string="Date End: 11"
+                            domain="[('date_end','&gt;=', datetime.date(context_today().year,11,1).strftime('%Y-%m-%d')), ('date_end','&lt;=', datetime.date(context_today().year,11,30).strftime('%Y-%m-%d'))]"
+                        />
+                <filter
+                            string="Date End: 12"
+                            domain="[('date_end','&gt;=', datetime.date(context_today().year,12,1).strftime('%Y-%m-%d')), ('date_end','&lt;=', datetime.date(context_today().year,12,31).strftime('%Y-%m-%d'))]"
+                        />
+            </group>
+            <group name="row_grp" string="Row Grouping">
+                <filter
+                            name="row_grp_timesheet"
+                            string="Timesheet"
+                            context="{'group_by':'timesheet_id'}"
+                        />
+                <filter
+                            name="row_grp_employee"
+                            string="Employee"
+                            context="{'group_by':'employee_id'}"
+                        />
+                <filter
+                            name="row_grp_department"
+                            string="Department"
+                            context="{'group_by':'department_id'}"
+                        />
+                <filter
+                            name="row_grp_job"
+                            string="Job Title"
+                            context="{'group_by':'job_id'}"
+                        />
+                <filter
+                            name="row_grp_manager"
+                            string="Manager"
+                            context="{'group_by':'parent_id'}"
+                        />
+                <filter
+                            name="row_grp_item"
+                            string="Timesheet Computation Item"
+                            context="{'group_by':'item_id'}"
+                        />
+                <filter
+                            string="Date Start"
+                            name="date_start"
+                            context="{'group_by':'date_start'}"
+                        />
+                <filter
+                            string="Date End"
+                            name="date_end"
+                            context="{'group_by':'date_end'}"
+                        />
+            </group>
+        </search>
+    </field>
+</record>
+
+<record id="hr_timesheet_computation_analysis_view_pivot" model="ir.ui.view">
+    <field name="name">hr.timesheet_computation_analysis.pivot</field>
+    <field name="model">hr.timesheet_computation_analysis</field>
+    <field name="arch" type="xml">
+         <pivot>
+             <field name="amount" type="measure" />
+        </pivot>
+    </field>
+</record>
+
+<record id="hr_timesheet_computation_analysis_action" model="ir.actions.act_window">
+    <field name="name">Timesheet Computation Analysis</field>
+    <field name="res_model">hr.timesheet_computation_analysis</field>
+    <field name="view_mode">pivot</field>
+    <field name="context">{'search_default_dom_empty':1}</field>
+    <field name="view_id" ref="hr_timesheet_computation_analysis_view_pivot" />
+    <field name="search_view_id" ref="hr_timesheet_computation_analysis_view_search" />
+</record>
+
+
+<menuitem
+            id="hr_timesheet_computation_analysis_menu"
+            name="Timesheet Computation Analysis"
+            parent="reporting_menu"
+            action="hr_timesheet_computation_analysis_action"
+            sequence="1"
+            groups="hr_timesheet_computation_analysis_group"
+        />
+
+</data>
+</odoo>
