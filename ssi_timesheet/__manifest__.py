@@ -33,6 +33,6 @@
         "views/hr_timesheet_views.xml",
         "views/hr_employee_views.xml",
         "wizards/generate_timesheet.xml",
-        #"reports/hr_timesheet_computation_analysis.xml",
+        "reports/hr_timesheet_computation_analysis.xml",
     ],
 }
