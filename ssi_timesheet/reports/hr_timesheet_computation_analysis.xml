@@ -20,50 +20,62 @@
             <separator />
              <group name="filter_date_start" string="Date Start">
                 <filter
+                            name="date_start_1"
                             string="Date Start: 01"
                             domain="[('date_start','&gt;=', datetime.date(context_today().year,1,1).strftime('%Y-%m-%d')), ('date_start','&lt;=', datetime.date(context_today().year,1,31).strftime('%Y-%m-%d'))]"
                         />
                 <filter
+                            name="date_start_2"
                             string="Date Start: 02"
                             domain="[('date_start','&gt;=', datetime.date(context_today().year,2,1).strftime('%Y-%m-%d')), ('date_start','&lt;=', (datetime.date(context_today().year,2,1) + relativedelta(months=1) + relativedelta(days=-1)).strftime('%Y-%m-%d'))]"
                         />
                 <filter
+                            name="date_start_3"
                             string="Date Start: 03"
                             domain="[('date_start','&gt;=', datetime.date(context_today().year,3,1).strftime('%Y-%m-%d')), ('date_start','&lt;=', datetime.date(context_today().year,3,31).strftime('%Y-%m-%d'))]"
                         />
                 <filter
+                            name="date_start_4"
                             string="Date Start: 04"
                             domain="[('date_start','&gt;=', datetime.date(context_today().year,4,1).strftime('%Y-%m-%d')), ('date_start','&lt;=', datetime.date(context_today().year,4,30).strftime('%Y-%m-%d'))]"
                         />
                 <filter
+                            name="date_start_5"
                             string="Date Start: 05"
                             domain="[('date_start','&gt;=', datetime.date(context_today().year,5,1).strftime('%Y-%m-%d')), ('date_start','&lt;=', datetime.date(context_today().year,5,31).strftime('%Y-%m-%d'))]"
                         />
                 <filter
+                            name="date_start_6"
                             string="Date Start: 06"
                             domain="[('date_start','&gt;=', datetime.date(context_today().year,6,1).strftime('%Y-%m-%d')), ('date_start','&lt;=', datetime.date(context_today().year,6,30).strftime('%Y-%m-%d'))]"
                         />
                 <filter
+                            name="date_start_7"
                             string="Date Start: 07"
                             domain="[('date_start','&gt;=', datetime.date(context_today().year,7,1).strftime('%Y-%m-%d')), ('date_start','&lt;=', datetime.date(context_today().year,7,31).strftime('%Y-%m-%d'))]"
                         />
                 <filter
+                            name="date_start_8"
                             string="Date Start: 08"
                             domain="[('date_start','&gt;=', datetime.date(context_today().year,8,1).strftime('%Y-%m-%d')), ('date_start','&lt;=', datetime.date(context_today().year,8,31).strftime('%Y-%m-%d'))]"
                         />
                 <filter
+                            name="date_start_9"
                             string="Date Start: 09"
                             domain="[('date_start','&gt;=', datetime.date(context_today().year,9,1).strftime('%Y-%m-%d')), ('date_start','&lt;=', datetime.date(context_today().year,9,30).strftime('%Y-%m-%d'))]"
                         />
                 <filter
+                            name="date_start_10"
                             string="Date Start: 10"
                             domain="[('date_start','&gt;=', datetime.date(context_today().year,10,1).strftime('%Y-%m-%d')), ('date_start','&lt;=', datetime.date(context_today().year,10,31).strftime('%Y-%m-%d'))]"
                         />
                 <filter
+                            name="date_start_11"
                             string="Date Start: 11"
                             domain="[('date_start','&gt;=', datetime.date(context_today().year,11,1).strftime('%Y-%m-%d')), ('date_start','&lt;=', datetime.date(context_today().year,11,30).strftime('%Y-%m-%d'))]"
                         />
                 <filter
+                            name="date_start_12"
                             string="Date Start: 12"
                             domain="[('date_start','&gt;=', datetime.date(context_today().year,12,1).strftime('%Y-%m-%d')), ('date_start','&lt;=', datetime.date(context_today().year,12,31).strftime('%Y-%m-%d'))]"
                         />
@@ -71,50 +83,62 @@
             <separator />
             <group name="filter_date_end" string="Date End">
                 <filter
+                            name="date_end_1"
                             string="Date End: 01"
                             domain="[('date_end','&gt;=', datetime.date(context_today().year,1,1).strftime('%Y-%m-%d')), ('date_end','&lt;=', datetime.date(context_today().year,1,31).strftime('%Y-%m-%d'))]"
                         />
                 <filter
+                            name="date_end_2"
                             string="Date End: 02"
                             domain="[('date_end','&gt;=', datetime.date(context_today().year,2,1).strftime('%Y-%m-%d')), ('date_end','&lt;=', (datetime.date(context_today().year,2,1) + relativedelta(months=1) + relativedelta(days=-1)).strftime('%Y-%m-%d'))]"
                         />
                 <filter
+                            name="date_end_3"
                             string="Date End: 03"
                             domain="[('date_end','&gt;=', datetime.date(context_today().year,3,1).strftime('%Y-%m-%d')), ('date_end','&lt;=', datetime.date(context_today().year,3,31).strftime('%Y-%m-%d'))]"
                         />
                 <filter
+                            name="date_end_4"
                             string="Date End: 04"
                             domain="[('date_end','&gt;=', datetime.date(context_today().year,4,1).strftime('%Y-%m-%d')), ('date_end','&lt;=', datetime.date(context_today().year,4,30).strftime('%Y-%m-%d'))]"
                         />
                 <filter
+                            name="date_end_5"
                             string="Date End: 05"
                             domain="[('date_end','&gt;=', datetime.date(context_today().year,5,1).strftime('%Y-%m-%d')), ('date_end','&lt;=', datetime.date(context_today().year,5,31).strftime('%Y-%m-%d'))]"
                         />
                 <filter
+                            name="date_end_6"
                             string="Date End: 06"
                             domain="[('date_end','&gt;=', datetime.date(context_today().year,6,1).strftime('%Y-%m-%d')), ('date_end','&lt;=', datetime.date(context_today().year,6,30).strftime('%Y-%m-%d'))]"
                         />
                 <filter
+                            name="date_end_7"
                             string="Date End: 07"
                             domain="[('date_end','&gt;=', datetime.date(context_today().year,7,1).strftime('%Y-%m-%d')), ('date_end','&lt;=', datetime.date(context_today().year,7,31).strftime('%Y-%m-%d'))]"
                         />
                 <filter
+                            name="date_end_8"
                             string="Date End: 08"
                             domain="[('date_end','&gt;=', datetime.date(context_today().year,8,1).strftime('%Y-%m-%d')), ('date_end','&lt;=', datetime.date(context_today().year,8,31).strftime('%Y-%m-%d'))]"
                         />
                 <filter
+                            name="date_end_9"
                             string="Date End: 09"
                             domain="[('date_end','&gt;=', datetime.date(context_today().year,9,1).strftime('%Y-%m-%d')), ('date_end','&lt;=', datetime.date(context_today().year,9,30).strftime('%Y-%m-%d'))]"
                         />
                 <filter
+                            name="date_end_10"
                             string="Date End: 10"
                             domain="[('date_end','&gt;=', datetime.date(context_today().year,10,1).strftime('%Y-%m-%d')), ('date_end','&lt;=', datetime.date(context_today().year,10,31).strftime('%Y-%m-%d'))]"
                         />
                 <filter
+                            name="date_end_11"
                             string="Date End: 11"
                             domain="[('date_end','&gt;=', datetime.date(context_today().year,11,1).strftime('%Y-%m-%d')), ('date_end','&lt;=', datetime.date(context_today().year,11,30).strftime('%Y-%m-%d'))]"
                         />
                 <filter
+                            name="date_end_12"
                             string="Date End: 12"
                             domain="[('date_end','&gt;=', datetime.date(context_today().year,12,1).strftime('%Y-%m-%d')), ('date_end','&lt;=', datetime.date(context_today().year,12,31).strftime('%Y-%m-%d'))]"
                         />
