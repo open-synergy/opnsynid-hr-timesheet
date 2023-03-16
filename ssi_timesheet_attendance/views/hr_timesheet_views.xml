@@ -63,7 +63,7 @@
                             colspan="2"
                             mode="tree"
                         >
-                        <tree string="Attendances" editable="bottom">
+                        <tree string="Attendances" editable="top">
                             <field invisible="1" name="create_date" />
                             <field name="date" />
                             <field name="check_in" />
