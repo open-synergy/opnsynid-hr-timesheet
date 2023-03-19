@@ -10,4 +10,7 @@ from . import (
     hr_timesheet_attendance_schedule,
     hr_timesheet_attendance,
     hr_employee,
+    hr_attendance_machine,
+    hr_attendance_machine_csv_detail,
+    hr_attendance_machine_employee_code,
 )
