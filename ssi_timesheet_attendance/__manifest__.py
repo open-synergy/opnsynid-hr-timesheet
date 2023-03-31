@@ -4,12 +4,13 @@
 # pylint: disable=locally-disabled, manifest-required-author
 {
     "name": "Timesheet Attendance",
-    "version": "14.0.1.11.2",
+    "version": "14.0.1.13.0",
     "website": "https://simetri-sinergi.id",
     "author": "PT. Simetri Sinergi Indonesia, OpenSynergy Indonesia",
     "license": "LGPL-3",
     "installable": True,
     "depends": [
+        "hr_attendance",
         "ssi_timesheet",
         "ssi_duration_mixin",
         "base_public_holiday",
@@ -26,5 +27,7 @@
         "views/hr_timesheet_attendance_views.xml",
         "views/hr_employee_views.xml",
         "views/resource_calendar_views.xml",
+        "views/hr_attendance_machine_views.xml",
+        "wizard/hr_attendance_import.xml",
     ],
 }

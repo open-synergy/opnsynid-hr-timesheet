@@ -13,3 +13,7 @@ access_resource_calendar_attendance_configurator,resource.calendar.attendance - 
 access_resource_calendar_attendance_all,resource.calendar.attendance - all,resource.model_resource_calendar_attendance,,1,0,0,0
 access_resource_calendar_leaves_configurator,resource.calendar.leaves - configurator,resource.model_resource_calendar_leaves,working_schedule_group,1,1,1,1
 access_resource_calendar_leaves_all,resource.calendar.leaves - all,resource.model_resource_calendar_leaves,,1,0,0,0
+access_hr_attendance_machine_user,hr.attendance_machine,model_hr_attendance_machine,base.group_user,1,1,1,1
+access_hr_attendance_machine_csv_detail_user,hr.attendance_machine_csv_detail,model_hr_attendance_machine_csv_detail,base.group_user,1,1,1,1
+access_hr_attendance_machine_employee_code_user,hr.attendance_machine_employee_code,model_hr_attendance_machine_employee_code,base.group_user,1,1,1,1
+access_hr_attendance_import_user,hr.attendance_import,model_hr_attendance_import,base.group_user,1,1,1,1
