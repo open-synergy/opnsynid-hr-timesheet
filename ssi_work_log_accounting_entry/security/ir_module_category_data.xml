@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 OpenSynergy Indonesia
+     Copyright 2023 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+    <record id="work_log_accounting_entry_module_category" model="ir.module.category">
+        <field name="name">Work Log Accounting Entry</field>
+    </record>
+
+    <!-- Workflow -->
+    <record
+        id="work_log_accounting_entry_workflow_module_category"
+        model="ir.module.category"
+    >
+        <field name="name">Work Log Accounting Entry - Workflow</field>
+        <field name="parent_id" ref="work_log_accounting_entry_module_category" />
+    </record>
+
+    <!-- Configurator -->
+    <record
+        id="work_log_accounting_entry_configurator_module_category"
+        model="ir.module.category"
+    >
+        <field name="name">Work Log Accounting Entry - Configurator</field>
+        <field name="parent_id" ref="work_log_accounting_entry_module_category" />
+    </record>
+
+    <!-- Data Ownership -->
+    <record
+        id="work_log_accounting_entry_data_ownership_module_category"
+        model="ir.module.category"
+    >
+        <field name="name">Work Log Accounting Entry - Data Ownership</field>
+        <field name="parent_id" ref="work_log_accounting_entry_module_category" />
+    </record>
+
+</odoo>

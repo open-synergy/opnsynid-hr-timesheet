@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 OpenSynergy Indonesia
+     Copyright 2023 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+    <record id="work_log_accounting_entry_view_tree" model="ir.ui.view">
+        <field name="name">work_log_accounting_entry - Tree</field>
+        <field name="model">work_log_accounting_entry</field>
+        <field name="mode">primary</field>
+        <field
+            name="inherit_id"
+            ref="ssi_transaction_mixin.mixin_transaction_view_tree"
+        />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="employee_id" widget="many2one_avatar_employee" />
+                    <field
+                        name="manager_id"
+                        widget="many2one_avatar_employee"
+                        optional="hide"
+                    />
+                    <field name="job_id" optional="hide" />
+                    <field name="department_id" optional="hide" />
+                    <field name="type_id" />
+                    <field name="date_start" />
+                    <field name="date_end" />
+                    <field name="date" />
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+    <record id="work_log_accounting_entry_view_search" model="ir.ui.view">
+        <field name="name">work_log_accounting_entry - Search</field>
+        <field name="model">work_log_accounting_entry</field>
+        <field name="mode">primary</field>
+        <field
+            name="inherit_id"
+            ref="ssi_transaction_mixin.mixin_transaction_view_search"
+        />
+        <field name="arch" type="xml">
+            <data />
+        </field>
+    </record>
+
+    <record id="work_log_accounting_entry_view_form" model="ir.ui.view">
+        <field name="name">work_log_accounting_entry - Form</field>
+        <field name="model">work_log_accounting_entry</field>
+        <field name="mode">primary</field>
+        <field
+            name="inherit_id"
+            ref="ssi_transaction_mixin.mixin_transaction_view_form"
+        />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='user_id']" position="after">
+                    <field name="employee_id" widget="many2one_avatar_employee" />
+                    <field
+                        name="manager_id"
+                        widget="many2one_avatar_employee"
+                        readonly="1"
+                        force_save="1"
+                    />
+                    <field name="job_id" readonly="1" force_save="1" />
+                    <field name="department_id" readonly="1" force_save="1" />
+                </xpath>
+                <xpath expr="//group[@name='header_right']" position="inside">
+                    <field name="type_id" />
+                    <field name="date_start" />
+                    <field name="date_end" />
+                    <field name="date" />
+                </xpath>
+                <xpath expr="//page[1]" position="before">
+                    <page name="detail" string="Details">
+                        <group>
+                            <button
+                                name="action_populate"
+                                string="Populate"
+                                type="object"
+                                class="oe_highlight"
+                                icon="fa-refresh"
+                            />
+                        </group>
+                        <field name="detail_ids" />
+                    </page>
+                    <page name="summary" string="Summary">
+                        <field name="summary_ids">
+                            <tree>
+                                <field name="account_id" />
+                                <field name="product_id" />
+                                <field name="debit" />
+                                <field name="credit" />
+                            </tree>
+                        </field>
+                    </page>
+                    <page name="accounting" string="Accounting">
+                        <group name="accounting_1" colspan="4" col="2">
+                            <field name="type_id">
+                                <tree>
+                                    <field name="accrue_account_id" />
+                                    <field name="journal_id" />
+<!--                                    <field name="move_id"/>-->
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+    <record id="work_log_accounting_entry_action" model="ir.actions.act_window">
+        <field name="name">Work Log to Acc. Entries</field>
+        <field name="res_model">work_log_accounting_entry</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="work_log_accounting_entry_menu"
+        name="Work Log to Acc. Entries"
+        parent="ssi_timesheet.timesheet_menu"
+        action="work_log_accounting_entry_action"
+        groups="work_log_accounting_entry_viewer_group"
+    />
+</odoo>
