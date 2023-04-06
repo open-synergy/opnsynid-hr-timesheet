@@ -9,8 +9,6 @@ import pytz
 from odoo import api, fields, models
 from odoo.tools import format_datetime
 
-from odoo.addons.ssi_decorator import ssi_decorator
-
 
 class HRTimesheet(models.Model):
     _inherit = "hr.timesheet"
@@ -263,8 +261,3 @@ class HRTimesheet(models.Model):
         if schedule_ids:
             schedule_ids.unlink()
         return _super.unlink()
-
-    @ssi_decorator.post_open_action()
-    def _create_schedules(self):
-        self.ensure_one()
-        self.action_compute_schedule()
