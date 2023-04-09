@@ -14,5 +14,9 @@
     <field name="name">Work log</field>
     <field name="parent_id" ref="ssi_hr.human_resource_data_module_category" />
 </record>
+<record id="hr_work_log_analysis_data_ownership_module_category" model="ir.module.category">
+    <field name="name">Worklog Analysis</field>
+    <field name="parent_id" ref="ssi_hr.human_resource_data_module_category" />
+</record>
 
 </odoo>

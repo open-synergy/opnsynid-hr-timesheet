@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2023 OpenSynergy Indonesia
+     Copyright 2023 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+
+        <record id="view_hr_work_log_analysis_pivot" model="ir.ui.view">
+            <field name="name">hr.work_log_analysis.pivot</field>
+            <field name="model">hr.work_log_analysis</field>
+            <field name="arch" type="xml">
+                <pivot string="Worklog Analysis" display_quantity="true" disable_linking="True" sample="1">
+                    <field name="department_id" type="row"/>
+                    <field name="employee_id" type="row"/>
+                    <field name="amount" type="measure" widget="float_time"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="view_hr_work_log_analysis_graph" model="ir.ui.view">
+            <field name="name">hr.work_log_analysis.graph</field>
+            <field name="model">hr.work_log_analysis</field>
+            <field name="arch" type="xml">
+                <graph string="Worklog Analysis" type="bar" sample="1" disable_linking="1">
+                    <field name="department_id" type="row"/>
+                    <field name="employee_id" type="row"/>
+                    <field name="amount" type="measure" widget="float_time"/>
+                 </graph>
+             </field>
+        </record>
+
+        <record id="view_hr_work_log_analysis_search" model="ir.ui.view">
+            <field name="name">hr.work_log_analysis.search</field>
+            <field name="model">hr.work_log_analysis</field>
+            <field name="arch" type="xml">
+                <search string="Worklog Analysis">
+                    <field name="department_id" />
+                    <field name="employee_id"/>
+                    <field name="manager_id"/>
+                    <field name="job_id"/>
+                    <field name="analytic_account_id"/>
+                    <field name="sheet_id"/>
+                    <field name="date_start"/>
+                    <field name="date_end"/>
+                    <field name="amount"/>
+                    <separator/>
+                    <filter name="filter_date_start" date="date_start"/>
+                    <filter name="filter_date_end" date="date_end"/>
+                    <group expand="1" string="Group By">
+                        <filter string="Department" name="department" context="{'group_by': 'department_id'}"/>
+                        <filter string="Employee" name="employee" context="{'group_by': 'employee_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+       <record id="action_hr_work_log_analysis" model="ir.actions.act_window">
+            <field name="name">Worklog Analysis</field>
+            <field name="res_model">hr.work_log_analysis</field>
+            <field name="view_mode">pivot,graph</field>
+            <field name="search_view_id" ref="view_hr_work_log_analysis_search"/>
+            <field name="context">{}</field>
+       </record>
+
+        <!-- This Menu Item must have a parent and an action -->
+        <menuitem id="menu_hr_work_log_analysis" parent="ssi_timesheet.reporting_menu" action="action_hr_work_log_analysis" sequence="5" groups="hr_work_log_analysis_group"/>
+
+</odoo>
