@@ -4,7 +4,7 @@
 
 {
     "name": "Work Log Mixin",
-    "version": "14.0.1.11.1",
+    "version": "14.0.1.0.0",
     "website": "https://simetri-sinergi.id",
     "author": "PT. Simetri Sinergi Indonesia, OpenSynergy Indonesia",
     "license": "LGPL-3",
@@ -12,6 +12,7 @@
     "depends": [
         "analytic",
         "ssi_timesheet",
+        "ssi_hr",
     ],
     "data": [
         "menu.xml",
@@ -29,5 +30,6 @@
         "views/hr_work_log_views.xml",
         "views/hr_timesheet_views.xml",
         "views/account_analytic_account_views.xml",
+        "report/hr_work_log_analysis.xml",
     ],
 }
