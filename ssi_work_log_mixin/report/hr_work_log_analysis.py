@@ -46,14 +46,6 @@ class HrWorkLogAnalysis(models.Model):
         string="Date",
         readonly=True,
     )
-    date_start = fields.Date(
-        string="Date Start",
-        readonly=True,
-    )
-    date_end = fields.Date(
-        string="Date End",
-        readonly=True,
-    )
     amount = fields.Float(
         string="Duration",
         readonly=True,
@@ -75,10 +67,9 @@ class HrWorkLogAnalysis(models.Model):
 
     @property
     def _table_query(self):
-        return "%s %s %s %s" % (
+        return "%s %s %s" % (
             self._select(),
             self._from(),
-            self._join(),
             self._group_by(),
         )
 
@@ -95,8 +86,6 @@ class HrWorkLogAnalysis(models.Model):
             l.analytic_account_id as analytic_account_id,
             l.sheet_id as sheet_id,
             l.date as date,
-            t.date_start as date_start,
-            t.date_end as date_end,
             l.amount as amount,
             l.state as state
         """
@@ -110,13 +99,6 @@ class HrWorkLogAnalysis(models.Model):
         return from_str
 
     @api.model
-    def _join(self):
-        join_str = """
-        LEFT JOIN hr_timesheet t ON t.id = l.sheet_id
-        """
-        return join_str
-
-    @api.model
     def _group_by(self):
         group_by_str = """
         GROUP BY
@@ -128,8 +110,6 @@ class HrWorkLogAnalysis(models.Model):
             l.analytic_account_id,
             l.sheet_id,
             l.date,
-            t.date_start,
-            t.date_end,
             l.amount
         """
         return group_by_str
