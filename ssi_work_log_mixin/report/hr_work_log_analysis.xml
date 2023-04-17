@@ -14,7 +14,7 @@
                 disable_linking="True"
                 sample="1"
             >
-                    <field name="department_id" type="row" />
+                    <field name="analytic_account_id" type="row" />
                     <field name="employee_id" type="row" />
                     <field name="amount" type="measure" widget="float_time" />
                 </pivot>
@@ -31,7 +31,7 @@
                 sample="1"
                 disable_linking="1"
             >
-                    <field name="department_id" type="row" />
+                    <field name="analytic_account_id" type="row" />
                     <field name="employee_id" type="row" />
                     <field name="amount" type="measure" widget="float_time" />
                  </graph>
@@ -50,14 +50,10 @@
                     <field name="analytic_account_id" />
                     <field name="sheet_id" />
                     <field name="date" />
-                    <field name="date_start" />
-                    <field name="date_end" />
                     <field name="amount" />
                     <field name="state" />
                     <separator />
                     <filter name="filter_date" date="date" />
-                    <filter name="filter_date_start" date="date_start" />
-                    <filter name="filter_date_end" date="date_end" />
                     <group expand="1" string="Group By">
                         <filter
                         string="Department"
