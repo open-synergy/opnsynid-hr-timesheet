@@ -3,9 +3,9 @@
      Copyright 2023 PT. Simetri Sinergi Indonesia
      License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
 <odoo>
-    <record id="work_log_accounting_entry_view_tree" model="ir.ui.view">
-        <field name="name">work_log_accounting_entry - Tree</field>
-        <field name="model">work_log_accounting_entry</field>
+    <record id="work_log_expense_view_tree" model="ir.ui.view">
+        <field name="name">work_log_expense - Tree</field>
+        <field name="model">work_log_expense</field>
         <field name="mode">primary</field>
         <field
             name="inherit_id"
@@ -26,14 +26,15 @@
                     <field name="date_start" />
                     <field name="date_end" />
                     <field name="date" />
+                    <field name="amount" sum="Total Amount" />
                 </xpath>
             </data>
         </field>
     </record>
 
-    <record id="work_log_accounting_entry_view_search" model="ir.ui.view">
-        <field name="name">work_log_accounting_entry - Search</field>
-        <field name="model">work_log_accounting_entry</field>
+    <record id="work_log_expense_view_search" model="ir.ui.view">
+        <field name="name">work_log_expense - Search</field>
+        <field name="model">work_log_expense</field>
         <field name="mode">primary</field>
         <field
             name="inherit_id"
@@ -44,9 +45,9 @@
         </field>
     </record>
 
-    <record id="work_log_accounting_entry_view_form" model="ir.ui.view">
-        <field name="name">work_log_accounting_entry - Form</field>
-        <field name="model">work_log_accounting_entry</field>
+    <record id="work_log_expense_view_form" model="ir.ui.view">
+        <field name="name">work_log_expense - Form</field>
+        <field name="model">work_log_expense</field>
         <field name="mode">primary</field>
         <field
             name="inherit_id"
@@ -73,36 +74,43 @@
                 </xpath>
                 <xpath expr="//page[1]" position="before">
                     <page name="detail" string="Details">
-                        <group>
-                            <button
-                                name="action_populate"
-                                string="Populate"
-                                type="object"
-                                class="oe_highlight"
-                                icon="fa-refresh"
-                            />
-                        </group>
+                        <button
+                            name="action_populate"
+                            string="Populate"
+                            type="object"
+                            class="oe_highlight"
+                            icon="fa-refresh"
+                            style="margin-right:4px"
+                            attrs="{'invisible':[('state','!=','draft')]}"
+                        />
+                        <button
+                            name="action_clear"
+                            string="Clear"
+                            type="object"
+                            class="oe_highlight"
+                            icon="fa-eraser"
+                            attrs="{'invisible':[('state','!=','draft')]}"
+                        />
                         <field name="detail_ids" />
+                        <group name="detail1" colspan="4" col="2">
+                            <field name="amount" />
+                        </group>
                     </page>
                     <page name="summary" string="Summary">
                         <field name="summary_ids">
                             <tree>
                                 <field name="account_id" />
+                                <field name="analytic_account_id" />
                                 <field name="product_id" />
-                                <field name="debit" />
-                                <field name="credit" />
+                                <field name="amount" />
                             </tree>
                         </field>
                     </page>
                     <page name="accounting" string="Accounting">
                         <group name="accounting_1" colspan="4" col="2">
-                            <field name="type_id">
-                                <tree>
-                                    <field name="accrue_account_id" />
-                                    <field name="journal_id" />
-<!--                                    <field name="move_id"/>-->
-                                </tree>
-                            </field>
+                            <field name="accrue_account_id" />
+                            <field name="journal_id" />
+                            <field name="move_id" />
                         </group>
                     </page>
                 </xpath>
@@ -110,17 +118,17 @@
         </field>
     </record>
 
-    <record id="work_log_accounting_entry_action" model="ir.actions.act_window">
-        <field name="name">Work Log to Acc. Entries</field>
-        <field name="res_model">work_log_accounting_entry</field>
+    <record id="work_log_expense_action" model="ir.actions.act_window">
+        <field name="name">Work Log Expenses</field>
+        <field name="res_model">work_log_expense</field>
         <field name="view_mode">tree,form</field>
     </record>
 
     <menuitem
-        id="work_log_accounting_entry_menu"
-        name="Work Log to Acc. Entries"
+        id="work_log_expense_menu"
+        name="Work Log Expenses"
         parent="ssi_timesheet.timesheet_menu"
-        action="work_log_accounting_entry_action"
-        groups="work_log_accounting_entry_viewer_group"
+        action="work_log_expense_action"
+        groups="work_log_expense_viewer_group"
     />
 </odoo>

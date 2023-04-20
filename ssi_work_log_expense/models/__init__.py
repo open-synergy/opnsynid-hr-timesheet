@@ -4,7 +4,7 @@
 
 from . import (
     hr_work_log,
-    work_log_accounting_entry,
-    work_log_accounting_entry_summary,
-    work_log_accounting_entry_type,
+    work_log_expense,
+    work_log_expense_summary,
+    work_log_expense_type,
 )

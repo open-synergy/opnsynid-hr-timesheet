@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_work_log_expense_type_configurator,work_log_expense_type - configurator,model_work_log_expense_type,work_log_expense_type_group,1,1,1,1
+access_work_log_expense_type_all,work_log_expense_type - all,model_work_log_expense_type,,1,0,0,0
+access_work_log_expense_all,work_log_expense - all,model_work_log_expense,,1,0,0,0
+access_work_log_expense_viewer,work_log_expense - viewer,model_work_log_expense,work_log_expense_viewer_group,1,0,0,0
+access_work_log_expense_user,work_log_expense - user,model_work_log_expense,work_log_expense_user_group,1,1,1,1
+access_work_log_expense_summary_all,work_log_expense_summary - all,model_work_log_expense_summary,,1,0,0,0
+access_work_log_expense_summary_viewer,work_log_expense_summary - viewer,model_work_log_expense_summary,work_log_expense_viewer_group,1,0,0,0
+access_work_log_expense_summary_user,work_log_expense_summary - user,model_work_log_expense_summary,work_log_expense_user_group,1,1,1,1

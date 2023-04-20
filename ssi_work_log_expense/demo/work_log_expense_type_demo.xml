@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 Simetri Sinergi
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+<record id="demo_work_log_expense_type1" model="work_log_expense_type">
+    <field name="name">Internal - (test)</field>
+    <field name="code">X001</field>
+    <field name="accrue_account_id" ref="demo_account1" />
+    <field name="journal_id" ref="demo_journal1" />
+    <field
+            name="allowed_analytic_group_ids"
+            eval="[(6,0,[ref('analytic.analytic_group_internal')])]"
+        />
+</record>
+</odoo>

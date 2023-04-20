@@ -4,9 +4,9 @@
      License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
 <odoo>
     <data noupdate="1">
-        <record id="sequence_work_log_accounting_entry" model="ir.sequence">
-            <field name="name">Work Log Accounting Entry</field>
-            <field name="code">work_log_accounting_entry</field>
+        <record id="sequence_work_log_expense" model="ir.sequence">
+            <field name="name">Work Log Expense</field>
+            <field name="code">work_log_expense</field>
             <field name="prefix">WLAE/%(range_y)s/</field>
             <field eval="1" name="number_next" />
             <field eval="1" name="number_increment" />

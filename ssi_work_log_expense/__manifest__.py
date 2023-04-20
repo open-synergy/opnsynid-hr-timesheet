@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
-    "name": "Work Log To Accounting Entry",
+    "name": "Work Log Expense",
     "version": "14.0.1.0.0",
     "website": "https://simetri-sinergi.id",
     "author": "PT. Simetri Sinergi Indonesia, OpenSynergy Indonesia",
@@ -26,7 +26,13 @@
         "data/sequence_template_data.xml",
         "data/policy_template_data.xml",
         "data/approval_template_data.xml",
-        "views/work_log_accounting_entry_type_view.xml",
-        "views/work_log_accounting_entry_view.xml",
+        "data/account_journal_data.xml",
+        "views/work_log_expense_type_views.xml",
+        "views/work_log_expense_views.xml",
+    ],
+    "demo": [
+        "demo/account_journal_demo.xml",
+        "demo/account_account_demo.xml",
+        "demo/work_log_expense_type_demo.xml",
     ],
 }
