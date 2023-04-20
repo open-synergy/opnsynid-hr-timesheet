@@ -5,9 +5,9 @@
 from odoo import fields, models
 
 
-class WorkLogAccountingEntryType(models.Model):
-    _name = "work_log_accounting_entry_type"
-    _description = "Work Log To Accounting Entry Type"
+class WorkLogExpenseType(models.Model):
+    _name = "work_log_expense_type"
+    _description = "Work Log To Expense Type"
     _inherit = ["mixin.master_data"]
 
     accrue_account_id = fields.Many2one(
@@ -21,12 +21,6 @@ class WorkLogAccountingEntryType(models.Model):
         string="Journal",
         required=True,
         ondelete="restrict",
-    )
-    direction = fields.Selection(
-        string="Direction",
-        selection=[("income", "Income"), ("expense", "Expense")],
-        default="income",
-        required=True,
     )
     allowed_analytic_group_ids = fields.Many2many(
         comodel_name="account.analytic.group",

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 Simetri Sinergi
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+<data noupdate="1">
+<record id="journal1" model="account.journal">
+    <field name="name">Work Log Expense</field>
+    <field name="code">WLE</field>
+    <field name="type">general</field>
+</record>
+</data>
+</odoo>

@@ -3,9 +3,9 @@
      Copyright 2023 PT. Simetri Sinergi Indonesia
      License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
 <odoo>
-    <record id="work_log_accounting_entry_internal_user_rule" model="ir.rule">
-        <field name="name">Work Log Accounting Entry - Internal Users</field>
-        <field name="model_id" ref="model_work_log_accounting_entry" />
+    <record id="work_log_expense_internal_user_rule" model="ir.rule">
+        <field name="name">Work Log Expense - Internal Users</field>
+        <field name="model_id" ref="model_work_log_expense" />
         <field name="groups" eval="[(4, ref('base.group_user'))]" />
         <field name="domain_force">[('user_id','=',user.id)]</field>
         <field name="perm_unlink" eval="1" />
@@ -14,14 +14,14 @@
         <field name="perm_create" eval="1" />
     </record>
 
-    <record id="work_log_accounting_entry_direct_subordinate_rule" model="ir.rule">
+    <record id="work_log_expense_direct_subordinate_rule" model="ir.rule">
         <field
             name="name"
-        >Work Log Accounting Entry - Responsible to direct subordinate data</field>
-        <field name="model_id" ref="model_work_log_accounting_entry" />
+        >Work Log Expense - Responsible to direct subordinate data</field>
+        <field name="model_id" ref="model_work_log_expense" />
         <field
             name="groups"
-            eval="[(4, ref('work_log_accounting_entry_direct_subordinate_group'))]"
+            eval="[(4, ref('work_log_expense_direct_subordinate_group'))]"
         />
         <field name="domain_force">[('employee_id.parent_id','=',user.employee_id.id)]
         </field>
@@ -31,14 +31,14 @@
         <field name="perm_create" eval="1" />
     </record>
 
-    <record id="work_log_accounting_entry_all_subordinate_rule" model="ir.rule">
+    <record id="work_log_expense_all_subordinate_rule" model="ir.rule">
         <field
             name="name"
-        >Work Log Accounting Entry - Responsible to all subordinate data</field>
-        <field name="model_id" ref="model_work_log_accounting_entry" />
+        >Work Log Expense - Responsible to all subordinate data</field>
+        <field name="model_id" ref="model_work_log_expense" />
         <field
             name="groups"
-            eval="[(4, ref('work_log_accounting_entry_direct_all_subordinate_group'))]"
+            eval="[(4, ref('work_log_expense_direct_all_subordinate_group'))]"
         />
         <field
             name="domain_force"
@@ -49,15 +49,10 @@
         <field name="perm_create" eval="1" />
     </record>
 
-    <record id="work_log_accounting_entry_company_rule" model="ir.rule">
-        <field
-            name="name"
-        >Work Log Accounting Entry - Responsible to company data</field>
-        <field name="model_id" ref="model_work_log_accounting_entry" />
-        <field
-            name="groups"
-            eval="[(4, ref('work_log_accounting_entry_company_group'))]"
-        />
+    <record id="work_log_expense_company_rule" model="ir.rule">
+        <field name="name">Work Log Expense - Responsible to company data</field>
+        <field name="model_id" ref="model_work_log_expense" />
+        <field name="groups" eval="[(4, ref('work_log_expense_company_group'))]" />
         <field name="domain_force">[('company_id','=',user.company_id.id)]</field>
         <field name="perm_unlink" eval="1" />
         <field name="perm_write" eval="1" />
@@ -65,15 +60,15 @@
         <field name="perm_create" eval="1" />
     </record>
 
-    <record id="work_log_accounting_entry_company_child_rule" model="ir.rule">
+    <record id="work_log_expense_company_child_rule" model="ir.rule">
         <field
             name="name"
-        >Work Log Accounting Entry - Responsible to company and all child companies data
+        >Work Log Expense - Responsible to company and all child companies data
         </field>
-        <field name="model_id" ref="model_work_log_accounting_entry" />
+        <field name="model_id" ref="model_work_log_expense" />
         <field
             name="groups"
-            eval="[(4, ref('work_log_accounting_entry_company_child_group'))]"
+            eval="[(4, ref('work_log_expense_company_child_group'))]"
         />
         <field name="domain_force">[('company_id','in',user.company_ids.ids)]</field>
         <field name="perm_unlink" eval="1" />
@@ -82,10 +77,10 @@
         <field name="perm_create" eval="1" />
     </record>
 
-    <record id="work_log_accounting_entry_all_rule" model="ir.rule">
-        <field name="name">Work Log Accounting Entry - Responsible to all data</field>
-        <field name="model_id" ref="model_work_log_accounting_entry" />
-        <field name="groups" eval="[(4, ref('work_log_accounting_entry_all_group'))]" />
+    <record id="work_log_expense_all_rule" model="ir.rule">
+        <field name="name">Work Log Expense - Responsible to all data</field>
+        <field name="model_id" ref="model_work_log_expense" />
+        <field name="groups" eval="[(4, ref('work_log_expense_all_group'))]" />
         <field name="domain_force">[(1,'=',1)]</field>
         <field name="perm_unlink" eval="1" />
         <field name="perm_write" eval="1" />

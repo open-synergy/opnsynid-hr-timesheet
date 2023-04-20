@@ -2,14 +2,14 @@
 # Copyright 2023 PT. Simetri Sinergi Indonesia
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 
 from odoo.addons.ssi_decorator import ssi_decorator
 
 
-class WorkLogAccountingEntry(models.Model):
-    _name = "work_log_accounting_entry"
-    _description = "Work Log To Accounting Entry"
+class WorkLogExpense(models.Model):
+    _name = "work_log_expense"
+    _description = "Work Log Expense"
     _inherit = [
         "mixin.employee_document",
         "mixin.date_duration",
@@ -69,8 +69,8 @@ class WorkLogAccountingEntry(models.Model):
     ]
 
     type_id = fields.Many2one(
-        comodel_name="work_log_accounting_entry_type",
-        string="Employee",
+        comodel_name="work_log_expense_type",
+        string="Type",
         required=True,
         ondelete="restrict",
         readonly=True,
@@ -84,12 +84,38 @@ class WorkLogAccountingEntry(models.Model):
     )
     detail_ids = fields.One2many(
         comodel_name="hr.work_log",
-        inverse_name="accounting_entry_id",
+        inverse_name="expense_id",
         readonly=True,
     )
     summary_ids = fields.One2many(
-        comodel_name="work_log_accounting_entry_summary",
-        inverse_name="accounting_entry_id",
+        comodel_name="work_log_expense_summary",
+        inverse_name="expense_id",
+        readonly=True,
+    )
+    amount = fields.Float(
+        string="Amount Total",
+        compute="_compute_amount",
+        store=True,
+    )
+    accrue_account_id = fields.Many2one(
+        comodel_name="account.account",
+        string="Account",
+        required=True,
+        ondelete="restrict",
+        readonly=True,
+        states={"draft": [("readonly", False)]},
+    )
+    journal_id = fields.Many2one(
+        comodel_name="account.journal",
+        string="Journal",
+        required=True,
+        ondelete="restrict",
+        readonly=True,
+        states={"draft": [("readonly", False)]},
+    )
+    move_id = fields.Many2one(
+        comodel_name="account.move",
+        string="# Accounting Entry",
         readonly=True,
     )
     state = fields.Selection(
@@ -106,9 +132,20 @@ class WorkLogAccountingEntry(models.Model):
         readonly=True,
     )
 
+    @api.depends(
+        "detail_ids",
+        "detail_ids.price_subtotal",
+    )
+    def _compute_amount(self):
+        for record in self:
+            result = 0.0
+            for detail in record.detail_ids:
+                result += detail.price_subtotal
+            record.amount = result
+
     @api.model
     def _get_policy_field(self):
-        res = super(WorkLogAccountingEntry, self)._get_policy_field()
+        res = super(WorkLogExpense, self)._get_policy_field()
         policy_field = [
             "confirm_ok",
             "approve_ok",
@@ -126,7 +163,7 @@ class WorkLogAccountingEntry(models.Model):
     def onchange_accrue_account_id(self):
         self.accrue_account_id = False
         if self.type_id:
-            self.accure_account_id = self.type_id.accrue_account_id
+            self.accrue_account_id = self.type_id.accrue_account_id
 
     @api.onchange("type_id")
     def onchange_journal_id(self):
@@ -138,45 +175,90 @@ class WorkLogAccountingEntry(models.Model):
         for record in self.sudo():
             record._populate()
 
+    def action_clear(self):
+        for record in self.sudo():
+            record._clear_detail()
+
+    def _clear_detail(self):
+        self.ensure_one()
+        if self.detail_ids:
+            self.detail_ids.write(
+                {
+                    "expense_id": False,
+                }
+            )
+
+        self.summary_ids.unlink()
+
     def _populate(self):
         self.ensure_one()
+        self._clear_detail()
         work_logs = self.env["hr.work_log"].search(
             [
                 ("employee_id", "=", self.employee_id.id),
                 ("date", ">=", self.date_start),
                 ("date", "<=", self.date_end),
-                ("accounting_entry_id", "=", False),
+                ("expense_id", "=", False),
                 ("state", "=", "done"),
+                "|",
                 (
-                    "|",
-                    (
-                        "analytic_account_id",
-                        "in",
-                        [self.type_id.allowed_analytic_account_ids.ids],
-                    ),
-                    (
-                        "analytic_account_id.group_id",
-                        "in",
-                        [self.type_id.allowed_analytic_group_ids.ids],
-                    ),
+                    "analytic_account_id",
+                    "in",
+                    self.type_id.allowed_analytic_account_ids.ids,
+                ),
+                (
+                    "analytic_account_id.group_id",
+                    "in",
+                    self.type_id.allowed_analytic_group_ids.ids,
                 ),
             ]
         )
 
-        work_logs.write({"accounting_entry_id": self.id})
+        work_logs.write({"expense_id": self.id})
 
         for detail in self.detail_ids:
-            detail._update_summary(self.type_id)
+            detail._update_summary()
 
     @ssi_decorator.post_done_action()
-    def _10_create_accounting_entry(self):
-        move = self.env["account.move"].create(self._prepare_accounting_entry_creation)
+    def _10_create_expense(self):
+        move = (
+            self.env["account.move"]
+            .with_context(check_move_validity=False)
+            .create(self._prepare_expense_creation())
+        )
         self.write({"move_id": move.id})
-        for summary in self.accounting_summary_ids:
-            summary._create_move_line(move)
+        self._create_debit_aml()
+        for summary in self.summary_ids:
+            summary._create_aml()
+        move.action_post()
 
     @ssi_decorator.post_cancel_action()
-    def _10_cancel_accounting_entry(self):
+    def _10_cancel_expense(self):
         if self.move_id:
             self.move_id.button_cancel()
             self.move_id.with_context(force_delete=True).unlink()
+
+    def _prepare_expense_creation(self):
+        self.ensure_one()
+        return {
+            "name": self.name,
+            "date": self.date,
+            "journal_id": self.journal_id.id,
+        }
+
+    def _create_debit_aml(self):
+        self.env["account.move.line"].with_context(check_move_validity=False).create(
+            self._prepare_debit_aml()
+        )
+
+    def _prepare_debit_aml(self):
+        name = _("Work log expense")
+        return {
+            "move_id": self.move_id.id,
+            "name": name,
+            "account_id": self.accrue_account_id.id,
+            "partner_id": self.employee_id.address_home_id.id,
+            "journal_id": self.journal_id.id,
+            "debit": 0.0,
+            "credit": self.amount,
+        }

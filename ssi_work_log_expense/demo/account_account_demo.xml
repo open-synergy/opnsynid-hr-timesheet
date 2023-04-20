@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+<record id="demo_account1" model="account.account">
+    <field name="name">Work Log Accrue Expense - (test)</field>
+    <field name="code">WLAE01</field>
+    <field name="user_type_id" ref="account.data_account_type_current_liabilities" />
+    <field name="internal_type">other</field>
+    <field name="reconcile" eval="1" />
+</record>
+
+<record id="demo_account2" model="account.account">
+    <field name="name">Work Log Expense - (test)</field>
+    <field name="code">WLAE02</field>
+    <field name="user_type_id" ref="account.data_account_type_expenses" />
+    <field name="internal_type">other</field>
+</record>
+
+</odoo>
