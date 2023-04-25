@@ -38,6 +38,7 @@ class WorkLogExpenseSummary(models.Model):
     )
     move_line_id = fields.Many2one(
         string="Move Line",
+        comodel_name="account.move.line",
         readonly=True,
     )
 
