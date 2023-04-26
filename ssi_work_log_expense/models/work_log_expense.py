@@ -76,6 +76,19 @@ class WorkLogExpense(models.Model):
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
+    allowed_analytic_account_ids = fields.Many2many(
+        string="Allowed Analytic Accounts",
+        comodel_name="account.analytic.account",
+        compute="_compute_allowed_analytic_account_ids",
+        store=False,
+    )
+    analytic_account_id = fields.Many2one(
+        comodel_name="account.analytic.account",
+        string="Analytic Account",
+        ondelete="restrict",
+        readonly=True,
+        states={"draft": [("readonly", False)]},
+    )
     date = fields.Date(
         string="Date",
         required=True,
@@ -143,6 +156,23 @@ class WorkLogExpense(models.Model):
                 result += detail.price_subtotal
             record.amount = result
 
+    @api.depends(
+        "type_id",
+    )
+    def _compute_allowed_analytic_account_ids(self):
+        AA = self.env["account.analytic.account"]
+        for record in self:
+            result = []
+            if record.type_id and record.type_id.allowed_analytic_account_ids:
+                result += record.type_id.allowed_analytic_account_ids.ids
+
+            if record.type_id and record.type_id.allowed_analytic_group_ids:
+                criteria = [
+                    ("group_id", "in", record.type_id.allowed_analytic_group_ids.ids)
+                ]
+                result += AA.search(criteria).ids
+            record.allowed_analytic_account_ids = result
+
     @api.model
     def _get_policy_field(self):
         res = super(WorkLogExpense, self)._get_policy_field()
@@ -171,6 +201,12 @@ class WorkLogExpense(models.Model):
         if self.type_id:
             self.journal_id = self.type_id.journal_id
 
+    @api.onchange(
+        "type_id",
+    )
+    def onchange_analytic_account_id(self):
+        self.analytic_account_id = False
+
     def action_populate(self):
         for record in self.sudo():
             record._populate()
@@ -190,16 +226,19 @@ class WorkLogExpense(models.Model):
 
         self.summary_ids.unlink()
 
-    def _populate(self):
+    def _prepare_populate_domain(self):
         self.ensure_one()
-        self._clear_detail()
-        work_logs = self.env["hr.work_log"].search(
-            [
-                ("employee_id", "=", self.employee_id.id),
-                ("date", ">=", self.date_start),
-                ("date", "<=", self.date_end),
-                ("expense_id", "=", False),
-                ("state", "=", "done"),
+        result = [
+            ("employee_id", "=", self.employee_id.id),
+            ("date", ">=", self.date_start),
+            ("date", "<=", self.date_end),
+            ("expense_id", "=", False),
+            ("state", "=", "done"),
+        ]
+        if self.analytic_account_id:
+            result += [("analytic_account_id", "=", self.analytic_account_id.id)]
+        else:
+            result += [
                 "|",
                 (
                     "analytic_account_id",
@@ -212,8 +251,13 @@ class WorkLogExpense(models.Model):
                     self.type_id.allowed_analytic_group_ids.ids,
                 ),
             ]
-        )
+        return result
 
+    def _populate(self):
+        self.ensure_one()
+        self._clear_detail()
+        criteria = self._prepare_populate_domain()
+        work_logs = self.env["hr.work_log"].search(criteria)
         work_logs.write({"expense_id": self.id})
 
         for detail in self.detail_ids:
