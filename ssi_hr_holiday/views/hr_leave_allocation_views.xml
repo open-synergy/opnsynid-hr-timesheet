@@ -94,6 +94,8 @@
           <xpath expr="//group[@name='header_right']" position="inside">
               <field name="date_start" />
               <field name="date_end" />
+              <field name="can_be_extended" />
+              <field name="date_extended" />
               <field name="number_of_days" />
               <field name="num_of_days_used" />
               <field name="num_of_days_planned" />
