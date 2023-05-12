@@ -32,7 +32,7 @@ class HrLeaveAllocation(models.Model):
     # Attributes related to add element on duration_view automatically
     _date_start_readonly = True
     _date_end_readonly = True
-    _date_end_required = False
+    _date_end_required = True
     _date_start_states_list = ["draft"]
     _date_start_states_readonly = ["draft"]
     _date_end_states_list = ["draft"]
@@ -93,7 +93,7 @@ class HrLeaveAllocation(models.Model):
             for record in leave.leave_ids:
                 if record.state == "done":
                     num_of_days_used += record.number_of_days
-                if record.state in ["draft", "confirm"]:
+                if record.state == "confirm":
                     num_of_days_planned += record.number_of_days
             num_of_days_available = (
                 leave.number_of_days - num_of_days_used - num_of_days_planned
@@ -158,6 +158,22 @@ class HrLeaveAllocation(models.Model):
         ],
         default="draft",
         copy=False,
+    )
+    can_be_extended = fields.Boolean(
+        string='Can be Extended',
+        default=False,
+        readonly=True,
+        states={
+            "draft": [("readonly", False)],
+        },
+    )
+    date_extended = fields.Date(
+        string='Date Extended',
+        default=False,
+        readonly=True,
+        states={
+            "draft": [("readonly", False)],
+        },
     )
 
     @api.depends("policy_template_id")
@@ -245,3 +261,18 @@ class HrLeaveAllocation(models.Model):
             result = False
 
         return result
+
+    @api.onchange(
+        'date_end',
+        'can_be_extended',
+        'date_extended',
+    )
+    def onchange_date_extended(self):
+        if not self.date_extended or not self.can_be_extended:
+            self.date_extended = self.date_end
+        if self.date_end and self.date_extended < self.date_end:
+            self.date_extended = self.date_end
+            return {'warning': {
+                'title': 'Wrong value',
+                'message': 'Date extended can not be less than date end.',
+            }}
