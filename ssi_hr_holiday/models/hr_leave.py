@@ -246,13 +246,6 @@ class HRLeave(models.Model):
         self.policy_template_id = template_id
 
     @api.onchange(
-        "employee_id",
-        "type_id",
-    )
-    def onchange_leave_allocation_id(self):
-        self.leave_allocation_id = False
-
-    @api.onchange(
         "leave_duration",
     )
     def onchange_number_of_day(self):
@@ -261,30 +254,18 @@ class HRLeave(models.Model):
     def _get_leave_allocation(self):
         self.ensure_one()
         LeaveAllocation = self.env["hr.leave_allocation"]
-        result = False
         criteria = [
-            "&",
-            "&",
-            "&",
-            "&",
             ("type_id", "=", self.type_id.id),
             ("employee_id", "=", self.employee_id.id),
             ("state", "=", "open"),
             ("num_of_days_available", ">=", self.number_of_days),
-            "|",
-            "&",
             ("date_start", "<=", self.date_start),
-            ("date_end", "=", False),
-            "&",
-            ("date_start", "<=", self.date_start),
-            ("date_end", ">=", self.date_end),
+            ("date_extended", ">=", self.date_end),
         ]
-        leave_allocations = LeaveAllocation.search(
+        leave_allocation_id = LeaveAllocation.search(
             criteria, order="date_start asc", limit=1
         )
-        if len(leave_allocations) > 0:
-            result = leave_allocations[0]
-        return result
+        return leave_allocation_id
 
     @api.constrains("sheet_id")
     def _constrains_sheet_id(self):

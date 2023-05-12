@@ -4,6 +4,7 @@
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
+from odoo.tools import pytz
 
 
 class HrLeaveAllocation(models.Model):
@@ -89,7 +90,7 @@ class HrLeaveAllocation(models.Model):
     )
     def _compute_num_of_days(self):
         for leave in self:
-            num_of_days_used = num_of_days_planned = num_of_days_available = 0.0
+            num_of_days_used = num_of_days_planned = 0.0
             for record in leave.leave_ids:
                 if record.state == "done":
                     num_of_days_used += record.number_of_days
@@ -144,7 +145,6 @@ class HrLeaveAllocation(models.Model):
         store=True,
         compute_sudo=True,
     )
-
     state = fields.Selection(
         string="State",
         selection=[
@@ -169,6 +169,7 @@ class HrLeaveAllocation(models.Model):
     )
     date_extended = fields.Date(
         string='Date Extended',
+        required=True,
         default=False,
         readonly=True,
         states={
@@ -242,7 +243,7 @@ class HrLeaveAllocation(models.Model):
 
     def _check_leave(self):
         result = True
-        if self.leave_ids:
+        if self.leave_ids.filtered(lambda leave: leave.state not in ('cancel', 'reject')):
             result = False
         return result
 
@@ -276,3 +277,19 @@ class HrLeaveAllocation(models.Model):
                 'title': 'Wrong value',
                 'message': 'Date extended can not be less than date end.',
             }}
+
+    def _cron_terminate(self, terminate_reason_code=False):
+        try:
+            user_id = self.env.ref('base.user_admin')
+        except Exception:
+            user_id = self.env.user
+        tz = pytz.timezone(user_id.tz or 'Asia/Jakarta')
+        current_datetime = pytz.utc.localize(fields.Datetime.now()).astimezone(tz)
+        allocation_ids = self.search([
+            ('date_extended', '>', current_datetime.date()),
+            ('state', '=', 'open'),
+        ])
+        terminate_reason__id = self.env['base.terminate_reason'].search([
+            ('code', '=', terminate_reason_code),
+        ], limit=1)
+        allocation_ids.action_terminate(terminate_reason=terminate_reason__id)

@@ -25,6 +25,7 @@
         "data/approval_template_data.xml",
         "data/ir_actions_server_data.xml",
         "data/base_automation_data.xml",
+        "data/ir_cron.xml",
         "views/hr_leave_type_views.xml",
         "views/hr_leave_allocation_views.xml",
         "views/hr_leave_views.xml",
