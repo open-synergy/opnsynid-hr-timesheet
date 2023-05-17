@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 OpenSynergy Indonesia
+     Copyright 2023 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+    <!-- Workflow -->
+    <record id="hr_overtime_batch_workflow_module_category" model="ir.module.category">
+        <field name="name">Overtime Batch - Workflow</field>
+        <field name="parent_id" ref="ssi_hr.human_resource_module_category" />
+    </record>
+
+    <!-- Data Ownership -->
+    <record
+        id="hr_overtime_batch_data_ownership_module_category"
+        model="ir.module.category"
+    >
+        <field name="name">Overtime Batch - Data Ownership</field>
+        <field name="parent_id" ref="ssi_hr.human_resource_data_module_category" />
+    </record>
+
+</odoo>
