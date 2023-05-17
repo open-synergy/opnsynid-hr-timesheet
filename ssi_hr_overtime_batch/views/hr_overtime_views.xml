@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 OpenSynergy Indonesia
+     Copyright 2023 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="hr_overtime_view_search" model="ir.ui.view">
+        <field name="name">hr.overtime - Search</field>
+        <field name="model">hr.overtime</field>
+        <field name="inherit_id" ref="ssi_hr_overtime.hr_overtime_view_search" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='user_id']" position="after">
+                    <field name="batch_id" />
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+    <record id="hr_overtime_view_form" model="ir.ui.view">
+        <field name="name">hr.overtime - Form</field>
+        <field name="model">hr.overtime</field>
+        <field name="inherit_id" ref="ssi_hr_overtime.hr_overtime_view_form" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//group[@name='header_right']" position="inside">
+                    <field name="batch_id" />
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>
