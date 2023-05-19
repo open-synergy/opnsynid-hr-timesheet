@@ -30,6 +30,11 @@
                         string="Date End"
                         context="{'group_by':'date_end'}"
                     />
+                    <filter
+                        name="grp_date_eextended"
+                        string="Date Extended"
+                        context="{'group_by':'date_extended'}"
+                    />
                     <field name="type_id" />
                 </xpath>
             </data>
@@ -49,7 +54,7 @@
                 <xpath expr="//field[@name='display_name']" position="after">
                     <field name="type_id" />
                     <field name="date_start" />
-                    <field name="date_end" />
+                    <field name="date_extended" />
                     <field name="number_of_days" />
                 </xpath>
             </data>
@@ -72,6 +77,8 @@
                 <xpath expr="//group[@name='header_right']" position="inside">
                     <field name="date_start" />
                     <field name="date_end" />
+                    <field name="can_be_extended" />
+                    <field name="date_extended" />
                     <field name="number_of_days" />
                 </xpath>
                 <xpath expr="////notebook/page[@name='note']" position="before">
