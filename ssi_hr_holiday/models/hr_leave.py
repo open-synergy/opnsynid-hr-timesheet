@@ -321,11 +321,13 @@ class HRLeave(models.Model):
 
             if not record._check_leave_allocation_available():
                 error_message = """
-                Context: Confirming leave
-                Database ID: %s
-                Problem: Leave need leave request. No available leave request found
-                Solution: Create relevant leave allocation
-                """ % (
+                    Context: Confirming leave
+                    Database ID: %s
+                    Problem: Leave need leave allocation request. No available leave allocation request found
+                             or number of available_days on leave allocation < number of days
+                    Solution: - Create or check relevant leave allocation
+                              - Edit date start or date end on leave request
+                    """ % (
                     record.id
                 )
                 raise UserError(_(error_message))

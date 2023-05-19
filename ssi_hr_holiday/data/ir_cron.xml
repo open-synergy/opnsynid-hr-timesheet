@@ -18,5 +18,18 @@
             <field eval="False" name="doall" />
         </record>
 
+        <record id="ir_cron_recompute_wrong_value" model="ir.cron">
+            <field name="name">Recompute Wrong Value (Date Extended, Planned Days, Available Days)</field>
+            <field name="model_id" ref="model_hr_leave_allocation"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_recompute_wrong_value()</field>
+            <field name="user_id" ref="base.user_root" />
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="nextcall" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d 17:00:00')" />
+            <field eval="False" name="doall" />
+        </record>
+
     </data>
 </odoo>

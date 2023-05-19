@@ -293,3 +293,14 @@ class HrLeaveAllocation(models.Model):
             ('code', '=', terminate_reason_code),
         ], limit=1)
         allocation_ids.action_terminate(terminate_reason=terminate_reason__id)
+
+    def _cron_recompute_wrong_value(self):
+        allocation_ids = self.search([
+            ('date_extended', '=', False)
+        ])
+        for allocation_id in allocation_ids:
+            allocation_id.write({'date_extended': allocation_id.date_end})
+        allocation_ids = self.search([
+            ('state', 'in', ['cancel', 'reject', 'terminate'])
+        ])
+        allocation_ids._compute_num_of_days()
