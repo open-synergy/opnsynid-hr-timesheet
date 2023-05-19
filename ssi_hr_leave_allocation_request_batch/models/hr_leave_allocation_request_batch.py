@@ -48,7 +48,6 @@ class HrLeaveAllocationRequestBatch(models.Model):
         "%(ssi_transaction_cancel_mixin.base_select_cancel_reason_action)d",
         "action_restart",
     ]
-
     # Attributes related to add element on search view automatically
     _state_filter_order = [
         "dom_draft",
@@ -90,19 +89,16 @@ class HrLeaveAllocationRequestBatch(models.Model):
         default="draft",
         copy=False,
     )
-
     type_id = fields.Many2one(
         string="Type",
         comodel_name="hr.leave_type",
         required=True,
         ondelete="restrict",
     )
-
     number_of_days = fields.Integer(
         string="Number Of Days",
         required=True,
     )
-
     employee_ids = fields.Many2many(
         comodel_name="hr.employee",
         relation="rel_leave_allocation_request_batch_2_employee",
@@ -110,11 +106,27 @@ class HrLeaveAllocationRequestBatch(models.Model):
         column2="employee_id",
         string="Employee",
     )
-
     leave_allocation_request_ids = fields.One2many(
         comodel_name="hr.leave_allocation",
         inverse_name="batch_id",
         string="Leave Allocation Request",
+    )
+    can_be_extended = fields.Boolean(
+        string='Can be Extended',
+        default=False,
+        readonly=True,
+        states={
+            "draft": [("readonly", False)],
+        },
+    )
+    date_extended = fields.Date(
+        string='Date Extended',
+        required=True,
+        default=False,
+        readonly=True,
+        states={
+            "draft": [("readonly", False)],
+        },
     )
 
     def check_leave_allocation(self, employee):
@@ -126,10 +138,10 @@ class HrLeaveAllocationRequestBatch(models.Model):
             "|",
             "&",
             ("date_start", "<=", self.date_start),
-            ("date_end", ">=", self.date_start),
+            ("date_extended", ">=", self.date_start),
             "&",
-            ("date_start", "<=", self.date_end),
-            ("date_end", ">=", self.date_end),
+            ("date_start", "<=", self.date_extended),
+            ("date_extended", ">=", self.date_extended),
         ]
         allocation_ids = obj_leave_allocation.search(criteria)
         if allocation_ids:
@@ -151,6 +163,8 @@ class HrLeaveAllocationRequestBatch(models.Model):
                             {
                                 "date_start": self.date_start,
                                 "date_end": self.date_end,
+                                "can_be_extended": self.can_be_extended,
+                                "date_extended": self.date_extended,
                                 "batch_id": self.id,
                                 "employee_id": employee_id.id,
                                 "type_id": self.type_id.id,
@@ -200,3 +214,18 @@ class HrLeaveAllocationRequestBatch(models.Model):
         for record in self:
             if record.leave_allocation_request_ids:
                 record.leave_allocation_request_ids.action_cancel()
+
+    @api.onchange(
+        'date_end',
+        'can_be_extended',
+        'date_extended',
+    )
+    def onchange_date_extended(self):
+        if not self.date_extended or not self.can_be_extended:
+            self.date_extended = self.date_end
+        if self.date_end and self.date_extended < self.date_end:
+            self.date_extended = self.date_end
+            return {'warning': {
+                'title': 'Wrong value',
+                'message': 'Date extended can not be less than date end.',
+            }}

@@ -40,6 +40,7 @@ Contributors
 ------------
 
 * Legian Wahyu Prananta <legianwp@gmail.com>
+* Miftahussalam <miftahussalam08@gmail.com>
 
 Maintainer
 ----------
