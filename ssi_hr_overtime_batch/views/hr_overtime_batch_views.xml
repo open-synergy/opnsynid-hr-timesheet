@@ -75,14 +75,10 @@
                 </xpath>
                 <xpath expr="//page[@name='note']" position="before">
                     <page name="employee" string="Employee">
-                        <group name="employee">
-                            <field name="employee_ids" colspan="4" nolabel="1" />
-                        </group>
+                        <field name="employee_ids" colspan="4" nolabel="1" />
                     </page>
                     <page name="overtime" string="Overtime">
-                        <group name="overtime">
-                            <field name="overtime_ids" colspan="4" nolabel="1" />
-                        </group>
+                        <field name="overtime_ids" colspan="4" nolabel="1" />
                     </page>
                 </xpath>
             </data>
