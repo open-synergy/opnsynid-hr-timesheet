@@ -160,7 +160,7 @@ class HrLeaveAllocation(models.Model):
         copy=False,
     )
     can_be_extended = fields.Boolean(
-        string='Can be Extended',
+        string="Can be Extended",
         default=False,
         readonly=True,
         states={
@@ -168,7 +168,7 @@ class HrLeaveAllocation(models.Model):
         },
     )
     date_extended = fields.Date(
-        string='Date Extended',
+        string="Date Extended",
         required=True,
         default=False,
         readonly=True,
@@ -243,7 +243,9 @@ class HrLeaveAllocation(models.Model):
 
     def _check_leave(self):
         result = True
-        if self.leave_ids.filtered(lambda leave: leave.state not in ('cancel', 'reject')):
+        if self.leave_ids.filtered(
+            lambda leave: leave.state not in ("cancel", "reject")
+        ):
             result = False
         return result
 
@@ -264,43 +266,39 @@ class HrLeaveAllocation(models.Model):
         return result
 
     @api.onchange(
-        'date_end',
-        'can_be_extended',
-        'date_extended',
+        "date_end",
+        "can_be_extended",
+        "date_extended",
     )
     def onchange_date_extended(self):
         if not self.date_extended or not self.can_be_extended:
             self.date_extended = self.date_end
         if self.date_end and self.date_extended < self.date_end:
             self.date_extended = self.date_end
-            return {'warning': {
-                'title': 'Wrong value',
-                'message': 'Date extended can not be less than date end.',
-            }}
+            return {
+                "warning": {
+                    "title": "Wrong value",
+                    "message": "Date extended can not be less than date end.",
+                }
+            }
 
     def _cron_terminate(self, terminate_reason_code=False):
         try:
-            user_id = self.env.ref('base.user_admin')
+            user_id = self.env.ref("base.user_admin")
         except Exception:
             user_id = self.env.user
-        tz = pytz.timezone(user_id.tz or 'Asia/Jakarta')
+        tz = pytz.timezone(user_id.tz or "Asia/Jakarta")
         current_datetime = pytz.utc.localize(fields.Datetime.now()).astimezone(tz)
-        allocation_ids = self.search([
-            ('date_extended', '>', current_datetime.date()),
-            ('state', '=', 'open'),
-        ])
-        terminate_reason__id = self.env['base.terminate_reason'].search([
-            ('code', '=', terminate_reason_code),
-        ], limit=1)
+        allocation_ids = self.search(
+            [
+                ("date_extended", ">", current_datetime.date()),
+                ("state", "=", "open"),
+            ]
+        )
+        terminate_reason__id = self.env["base.terminate_reason"].search(
+            [
+                ("code", "=", terminate_reason_code),
+            ],
+            limit=1,
+        )
         allocation_ids.action_terminate(terminate_reason=terminate_reason__id)
-
-    def _cron_recompute_wrong_value(self):
-        allocation_ids = self.search([
-            ('date_extended', '=', False)
-        ])
-        for allocation_id in allocation_ids:
-            allocation_id.write({'date_extended': allocation_id.date_end})
-        allocation_ids = self.search([
-            ('state', 'in', ['cancel', 'reject', 'terminate'])
-        ])
-        allocation_ids._compute_num_of_days()
