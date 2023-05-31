@@ -165,6 +165,7 @@ class HROvertimeBatch(models.Model):
                     if not rec.check_overtime(employee_id):
                         overtime_id = obj_overtime.create(
                             {
+                                "date": self.date_start.date(),
                                 "date_start": self.date_start,
                                 "date_end": self.date_end,
                                 "batch_id": self.id,
