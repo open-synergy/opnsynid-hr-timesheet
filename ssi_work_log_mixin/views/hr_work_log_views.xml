@@ -38,7 +38,7 @@
                 <field name="work_object_reference" optional="hide" />
                 <field name="analytic_account_id" />
                 <field name="description" />
-                <field name="amount" widget="float_time" />
+                <field name="amount" widget="float_time" sum="Total Time"/>
             </xpath>
         </data>
     </field>
