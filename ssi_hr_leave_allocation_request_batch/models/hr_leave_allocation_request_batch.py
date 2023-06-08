@@ -112,7 +112,7 @@ class HrLeaveAllocationRequestBatch(models.Model):
         string="Leave Allocation Request",
     )
     can_be_extended = fields.Boolean(
-        string='Can be Extended',
+        string="Can be Extended",
         default=False,
         readonly=True,
         states={
@@ -120,7 +120,7 @@ class HrLeaveAllocationRequestBatch(models.Model):
         },
     )
     date_extended = fields.Date(
-        string='Date Extended',
+        string="Date Extended",
         required=True,
         default=False,
         readonly=True,
@@ -133,15 +133,10 @@ class HrLeaveAllocationRequestBatch(models.Model):
         self.ensure_one()
         obj_leave_allocation = self.env["hr.leave_allocation"]
         criteria = [
-            "&",
             ("employee_id", "=", employee.id),
-            "|",
-            "&",
-            ("date_start", "<=", self.date_start),
-            ("date_extended", ">=", self.date_start),
-            "&",
-            ("date_start", "<=", self.date_extended),
-            ("date_extended", ">=", self.date_extended),
+            ("state", "not in", ["cancel", "reject"]),
+            ("date_start", "<=", self.date_end),
+            ("date_end", ">=", self.date_start),
         ]
         allocation_ids = obj_leave_allocation.search(criteria)
         if allocation_ids:
@@ -216,16 +211,18 @@ class HrLeaveAllocationRequestBatch(models.Model):
                 record.leave_allocation_request_ids.action_cancel()
 
     @api.onchange(
-        'date_end',
-        'can_be_extended',
-        'date_extended',
+        "date_end",
+        "can_be_extended",
+        "date_extended",
     )
     def onchange_date_extended(self):
         if not self.date_extended or not self.can_be_extended:
             self.date_extended = self.date_end
         if self.date_end and self.date_extended < self.date_end:
             self.date_extended = self.date_end
-            return {'warning': {
-                'title': 'Wrong value',
-                'message': 'Date extended can not be less than date end.',
-            }}
+            return {
+                "warning": {
+                    "title": "Wrong value",
+                    "message": "Date extended can not be less than date end.",
+                }
+            }
