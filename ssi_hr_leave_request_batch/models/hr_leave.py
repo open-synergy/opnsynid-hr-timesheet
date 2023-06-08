@@ -9,7 +9,7 @@ class HrLeave(models.Model):
     _inherit = "hr.leave"
 
     batch_id = fields.Many2one(
-        string="Batch",
+        string="# Batch",
         comodel_name="hr.leave_request_batch",
         ondelete="restrict",
     )
