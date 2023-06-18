@@ -152,6 +152,7 @@ class HRWorkLog(models.Model):
 
     @api.depends(
         "model_id",
+        "date",
     )
     def _compute_allowed_analytic_account_ids(self):
         for document in self:
