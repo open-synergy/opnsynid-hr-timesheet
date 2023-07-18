@@ -330,21 +330,19 @@ class HROvertime(models.Model):
     def _check_limit(self):
         self.ensure_one()
         result = True
-        overtime = self.env["hr.overtime"]
         criteria = [
             ("employee_id", "=", self.employee_id.id),
             ("state", "not in", ["cancel", "reject"]),
             ("id", "!=", self.id),
             ("date", "=", self.date),
         ]
-        data_ot = overtime.search(criteria)
-        if len(data_ot) > 0:
-            total_ot = 0.0
-            for rec in data_ot:
+        overtime_ids = self.search(criteria)
+        total_ot = 0.0
+        if overtime_ids:
+            for rec in overtime_ids:
                 total_ot += rec.planned_hour
-            if total_ot + self.planned_hour > self.limit_per_day:
-                result = False
-
+        if total_ot + self.planned_hour > self.limit_per_day:
+            result = False
         return result
 
     @api.constrains("date", "date_start")

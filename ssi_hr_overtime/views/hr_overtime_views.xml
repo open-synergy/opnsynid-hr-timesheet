@@ -44,6 +44,11 @@
         />
     <field name="arch" type="xml">
         <data>
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="employee_id" />
+                <field name="type_id" />
+                <field name="department_id" />
+            </xpath>
             <xpath expr="//group[@name='group_by']" position="inside">
                 <filter name="grp_date" string="Date" context="{'group_by':'date'}" />
                 <filter
