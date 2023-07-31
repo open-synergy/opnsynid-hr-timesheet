@@ -4,7 +4,7 @@
 
 {
     "name": "Overtime State Change Constrain",
-    "version": "14.0.1.0.0",
+    "version": "14.0.1.0.1",
     "website": "https://simetri-sinergi.id",
     "author": "PT. Simetri Sinergi Indonesia, OpenSynergy Indonesia",
     "license": "LGPL-3",
