@@ -1,6 +1,6 @@
 # Copyright 2022 OpenSynergy Indonesia
 # Copyright 2022 PT. Simetri Sinergi Indonesia
-# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from dateutil.rrule import DAILY, rrule
 
@@ -323,7 +323,8 @@ class HRLeave(models.Model):
                 error_message = """
                     Context: Confirming leave
                     Database ID: %s
-                    Problem: Leave need leave allocation request. No available leave allocation request found
+                    Problem: Leave need leave allocation request.
+                             No available leave allocation request found
                              or number of available_days on leave allocation < number of days
                     Solution: - Create or check relevant leave allocation
                               - Edit date start or date end on leave request
