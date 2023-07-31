@@ -4,7 +4,7 @@
 
 {
     "name": "Employee Holiday + State Change Constrain Integration",
-    "version": "14.0.1.0.0",
+    "version": "14.0.1.0.1",
     "website": "https://simetri-sinergi.id",
     "author": "OpenSynergy Indonesia, PT. Simetri Sinergi Indonesia",
     "license": "LGPL-3",
