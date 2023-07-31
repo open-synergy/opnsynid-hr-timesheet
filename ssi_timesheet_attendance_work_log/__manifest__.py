@@ -6,8 +6,8 @@
     "name": "Timesheet + Attendance + Work Log",
     "version": "14.0.1.0.2",
     "website": "https://simetri-sinergi.id",
-    "author": "PT. Simetri Sinergi Indonesia, OpenSynergy Indonesia",
-    "license": "LGPL-3",
+    "author": "OpenSynergy Indonesia, PT. Simetri Sinergi Indonesia",
+    "license": "AGPL-3",
     "installable": True,
     "depends": [
         "ssi_timesheet_attendance",
