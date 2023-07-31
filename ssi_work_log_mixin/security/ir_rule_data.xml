@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!-- Copyright 2022 OpenSynergy Indonesia
      Copyright 2022 PT. Simetri Sinergi Indonesia
-     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
 
 <!-- overtime -->
@@ -94,7 +94,10 @@
 <record id="hr_work_log_analysis_direct_subordinate_rule" model="ir.rule">
     <field name="name">Work Log - Responsible to direct subordinate data</field>
     <field name="model_id" ref="model_hr_work_log_analysis" />
-    <field name="groups" eval="[(4, ref('hr_work_log_analysis_direct_subordinate_group'))]" />
+    <field
+            name="groups"
+            eval="[(4, ref('hr_work_log_analysis_direct_subordinate_group'))]"
+        />
     <field
             name="domain_force"
         >[('employee_id.parent_id','=',user.employee_id.id)]</field>
@@ -132,7 +135,10 @@
 <record id="hr_work_log_analysis_company_child_rule" model="ir.rule">
     <field name="name">Work Log - Company and All Child Companies</field>
     <field name="model_id" ref="model_hr_work_log_analysis" />
-    <field name="groups" eval="[(4, ref('hr_work_log_analysis_company_child_group'))]" />
+    <field
+            name="groups"
+            eval="[(4, ref('hr_work_log_analysis_company_child_group'))]"
+        />
     <field name="domain_force">[('company_id','child_of',user.company_id.id)]</field>
     <field name="perm_unlink" eval="1" />
     <field name="perm_write" eval="1" />

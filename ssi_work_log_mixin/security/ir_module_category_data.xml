@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!-- Copyright 2022 OpenSynergy Indonesia
      Copyright 2022 PT. Simetri Sinergi Indonesia
-     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
 <!-- Workflow -->
 <record id="hr_work_log_module_category" model="ir.module.category">
@@ -14,7 +14,10 @@
     <field name="name">Work log</field>
     <field name="parent_id" ref="ssi_hr.human_resource_data_module_category" />
 </record>
-<record id="hr_work_log_analysis_data_ownership_module_category" model="ir.module.category">
+<record
+        id="hr_work_log_analysis_data_ownership_module_category"
+        model="ir.module.category"
+    >
     <field name="name">Worklog Analysis</field>
     <field name="parent_id" ref="ssi_hr.human_resource_data_module_category" />
 </record>
