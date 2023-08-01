@@ -21,7 +21,7 @@ addon | version | maintainers | summary
 [ssi_holiday_state_change_constrain](ssi_holiday_state_change_constrain/) | 14.0.1.0.1 |  | Employee Holiday + State Change Constrain Integration
 [ssi_hr_holiday](ssi_hr_holiday/) | 14.0.1.4.2 |  | Leave Management
 [ssi_hr_leave_allocation_request_batch](ssi_hr_leave_allocation_request_batch/) | 14.0.1.1.1 |  | Leave Allocation Request Batch
-[ssi_hr_leave_request_batch](ssi_hr_leave_request_batch/) | 14.0.1.2.1 |  | Leave Request Batch
+[ssi_hr_leave_request_batch](ssi_hr_leave_request_batch/) | 14.0.1.3.0 |  | Leave Request Batch
 [ssi_hr_overtime](ssi_hr_overtime/) | 14.0.1.4.1 |  | Overtime Management
 [ssi_hr_overtime_account](ssi_hr_overtime_account/) | 14.0.1.1.1 |  | Overtime Account
 [ssi_hr_overtime_batch](ssi_hr_overtime_batch/) | 14.0.1.0.1 |  | Human Resource Overtime Batch
