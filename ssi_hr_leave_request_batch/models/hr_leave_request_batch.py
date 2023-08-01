@@ -148,7 +148,6 @@ class HrLeaveRequestBatch(models.Model):
 
     def _trigger_onchange(self, leave):
         self.ensure_one()
-        leave.onchange_leave_allocation_id()
         leave.onchange_number_of_day()
         leave.onchange_department_id()
         leave.onchange_manager_id()
