@@ -170,28 +170,19 @@ class HRTimesheetAttendance(models.Model):
     )
     def _compute_valid(self):
         for record in self:
-            valid_check_in = valid_check_out = False
-            if record.schedule_id:
-                if record.check_in >= record.schedule_id.date_start:
-                    valid_check_in = record.check_in
-                elif record.check_in < record.schedule_id.date_start:
-                    valid_check_in = record.schedule_id.date_start
-                if record.check_out:
-                    if record.check_out < record.schedule_id.date_end:
-                        if record.check_out < record.schedule_id.date_start:
-                            valid_check_out = record.schedule_id.date_start
-                        else:
-                            valid_check_out = record.check_out
-                    elif record.check_out >= record.schedule_id.date_end:
-                        valid_check_out = record.schedule_id.date_end
-                record.valid_check_in = valid_check_in
-                record.valid_check_out = valid_check_out
-                if record.valid_check_in and record.valid_check_out:
-                    record.total_valid_hour = (
-                        record.valid_check_out - record.valid_check_in
-                    ).total_seconds() / 3600.0
-                else:
-                    record.total_valid_hour = 0.0
+            total_valid_hour = 0
+            if record.schedule_id.date_start and record.schedule_id.date_end and record.check_in and record.check_out:
+                if (
+                    record.check_out > record.schedule_id.date_start
+                    and record.check_in < record.schedule_id.date_end
+                    and record.check_out > record.check_in
+                    and record.schedule_id.date_end > record.schedule_id.date_start
+                ):
+                    date_start = max(record.schedule_id.date_start, record.check_in)
+                    date_end = min(record.schedule_id.date_end, record.check_out)
+                    delta = date_end - date_start
+                    total_valid_hour = delta.total_seconds() / 3600.0
+            record.total_valid_hour = total_valid_hour
 
     @api.depends(
         "check_in",
