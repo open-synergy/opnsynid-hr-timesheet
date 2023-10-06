@@ -215,3 +215,16 @@ class HRTimesheetAttendance(models.Model):
             ]
             schedules = obj_schedule.search(criteria, limit=1)
             attn.schedule_id = schedules[0].id if len(schedules) > 0 else False
+
+    @api.model
+    def create(self, values):
+        res = super(HRTimesheetAttendance, self).create(values)
+        res.sheet_id.generate_daily_summary()
+        return res
+
+    def write(self, values):
+        res = super(HRTimesheetAttendance, self).write(values)
+        for rec in self:
+            if 'date' in values or 'check_in' in values or 'check_out' in values:
+                rec.sheet_id.generate_daily_summary()
+        return res
