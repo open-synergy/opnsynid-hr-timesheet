@@ -5,4 +5,5 @@
 from . import (
     hr_timesheet,
     hr_work_log,
+    hr_timesheet_daily_summary,
 )
