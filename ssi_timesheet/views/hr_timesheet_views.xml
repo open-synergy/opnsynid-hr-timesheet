@@ -79,6 +79,18 @@
               <field name="date_end" />
           </xpath>
           <xpath expr="//page[@name='note']" position="before">
+                <page name="daily_summary" string="Daily Summary" invisible="1">
+                    <field name="daily_summary_ids">
+                        <tree>
+                            <field name="date"/>
+                        </tree>
+                        <form>
+                            <group col="4">
+                                <field name="date"/>
+                            </group>
+                        </form>
+                    </field>
+                </page>
                 <page name="computation" string="Computations">
                     <button
                             name="action_reload_timesheet_computation"

@@ -4,6 +4,7 @@
 
 from odoo import _, api, fields, models
 from odoo.exceptions import Warning as UserError
+from datetime import datetime, timedelta
 
 
 class HRTimesheet(models.Model):
@@ -90,6 +91,11 @@ class HRTimesheet(models.Model):
         default="draft",
         copy=False,
     )
+    daily_summary_ids = fields.One2many(
+        comodel_name='hr.timesheet_daily_summary',
+        inverse_name='sheet_id',
+        string='Daily Summary',
+        readonly=True)
 
     @api.depends("policy_template_id")
     def _compute_policy(self):
@@ -111,6 +117,64 @@ class HRTimesheet(models.Model):
             "manual_number_ok",
         ]
         res += policy_field
+        return res
+
+    def _prepare_daily_summary_values(self):
+        self.ensure_one()
+        daily_summary_values = []
+        if self.state in ('open', 'confirm', 'done'):
+            delta = self.date_end - self.date_start
+            date_ranges = []
+            for i in range(delta.days + 1):
+                day = self.date_start + timedelta(days=i)
+                date_ranges.append(day)
+            for current_date in date_ranges:
+                vals = self.env['hr.timesheet_daily_summary']._prepare_daily_summary_vals(
+                    sheet_id=self,
+                    date=current_date
+                )
+                if self.env['hr.timesheet_daily_summary'].need_to_add(vals=vals):
+                    daily_summary_values.append(vals)
+        return daily_summary_values
+
+    def generate_daily_summary(self):
+        for rec in self:
+            daily_summary_values = self._prepare_daily_summary_values()
+            existing_dates = []
+            obj_daily_summary = self.env['hr.timesheet_daily_summary']
+            for daily_summary_val in daily_summary_values:
+                summary_id = obj_daily_summary.search([
+                    ('sheet_id', '=', rec.id),
+                    ('date', '=', daily_summary_val['date']),
+                ], limit=1)
+                if not summary_id:
+                    obj_daily_summary.create(daily_summary_val)
+                else:
+                    to_write = {}
+                    for key, val in daily_summary_val.items():
+                        if summary_id[key] != val:
+                            to_write[key] = val
+                    if to_write:
+                        summary_id.write(to_write)
+                existing_dates.append(daily_summary_val['date'])
+            to_delete_summary_ids = obj_daily_summary.search([
+                ('sheet_id', '=', rec.id),
+                ('date', 'not in', existing_dates),
+            ])
+            to_delete_summary_ids.unlink()
+
+    def get_trigger_fields_daily_summary(self):
+        return [
+            'state',
+            'date_start',
+            'date_end',
+        ]
+
+    def write(self, values):
+        res = super(HRTimesheet, self).write(values)
+        for rec in self:
+            if any(field in values for field in self.get_trigger_fields_daily_summary()):
+                rec.generate_daily_summary()
         return res
 
     @api.onchange(
