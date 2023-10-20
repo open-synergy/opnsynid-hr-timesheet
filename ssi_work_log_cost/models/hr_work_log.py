@@ -37,6 +37,7 @@ class HRWorkLog(models.Model):
     show_cost_setting_ok = fields.Boolean(
         string="Show Cost Setting",
         compute="_compute_policy",
+        compute_sudo=True,
     )
 
     @api.depends(
