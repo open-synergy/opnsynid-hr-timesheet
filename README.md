@@ -30,7 +30,7 @@ addon | version | maintainers | summary
 [ssi_timesheet_attendance](ssi_timesheet_attendance/) | 14.0.1.11.4 |  | Timesheet Attendance
 [ssi_timesheet_attendance_work_log](ssi_timesheet_attendance_work_log/) | 14.0.1.0.2 |  | Timesheet + Attendance + Work Log
 [ssi_timesheet_state_change_constrain](ssi_timesheet_state_change_constrain/) | 14.0.1.0.2 |  | Timesheet State Change Constrain
-[ssi_work_log_cost](ssi_work_log_cost/) | 14.0.1.5.1 |  | Work Log Cost
+[ssi_work_log_cost](ssi_work_log_cost/) | 14.0.1.6.0 |  | Work Log Cost
 [ssi_work_log_expense](ssi_work_log_expense/) | 14.0.1.2.1 |  | Work Log Expense
 [ssi_work_log_mixin](ssi_work_log_mixin/) | 14.0.1.13.2 |  | Work Log Mixin
 [ssi_work_log_state_change_constrain](ssi_work_log_state_change_constrain/) | 14.0.1.0.2 |  | Work Log State Change Constrain
