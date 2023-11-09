@@ -18,6 +18,19 @@
     <field name="perm_create" eval="1" />
 </record>
 
+<record id="hr_work_log_responsible_rule" model="ir.rule">
+    <field name="name">Work Log - Responsible data</field>
+    <field name="model_id" ref="model_hr_work_log" />
+    <field name="groups" eval="[(4, ref('hr_work_log_responsible_group'))]" />
+    <field
+            name="domain_force"
+        >[('analytic_account_id.allowed_work_log_user_ids','in',user.id)]</field>
+    <field name="perm_unlink" eval="1" />
+    <field name="perm_write" eval="1" />
+    <field name="perm_read" eval="1" />
+    <field name="perm_create" eval="1" />
+</record>
+
 <record id="hr_work_log_direct_subordinate_rule" model="ir.rule">
     <field name="name">Work Log - Responsible to direct subordinate data</field>
     <field name="model_id" ref="model_hr_work_log" />
@@ -85,6 +98,19 @@
     <field name="domain_force">[
       ('employee_id', '=', user.employee_id.id),
     ]</field>
+    <field name="perm_unlink" eval="1" />
+    <field name="perm_write" eval="1" />
+    <field name="perm_read" eval="1" />
+    <field name="perm_create" eval="1" />
+</record>
+
+<record id="hr_work_log_analysis_responsible_rule" model="ir.rule">
+    <field name="name">Work Log - Responsible data</field>
+    <field name="model_id" ref="model_hr_work_log_analysis" />
+    <field name="groups" eval="[(4, ref('hr_work_log_analysis_responsible_group'))]" />
+    <field
+            name="domain_force"
+        >[('analytic_account_id.allowed_work_log_user_ids','in',user.id)]</field>
     <field name="perm_unlink" eval="1" />
     <field name="perm_write" eval="1" />
     <field name="perm_read" eval="1" />

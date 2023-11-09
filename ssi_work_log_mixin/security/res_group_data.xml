@@ -48,9 +48,18 @@
 </record>
 
 <!-- Data Ownership -->
+<record id="hr_work_log_responsible_group" model="res.groups">
+    <field name="name">Responsible</field>
+    <field name="category_id" ref="hr_work_log_data_ownership_module_category" />
+</record>
+
 <record id="hr_work_log_direct_subordinate_group" model="res.groups">
     <field name="name">Direct Subordinate</field>
     <field name="category_id" ref="hr_work_log_data_ownership_module_category" />
+    <field
+            name="implied_ids"
+            eval="[(4, ref('hr_work_log_responsible_group'))]"
+        />
 </record>
 
 <record id="hr_work_log_direct_all_subordinate_group" model="res.groups">
@@ -87,11 +96,23 @@
         />
 </record>
 
+<record id="hr_work_log_analysis_responsible_group" model="res.groups">
+    <field name="name">Responsible</field>
+    <field
+            name="category_id"
+            ref="hr_work_log_analysis_data_ownership_module_category"
+        />
+</record>
+
 <record id="hr_work_log_analysis_direct_subordinate_group" model="res.groups">
     <field name="name">Direct Subordinate</field>
     <field
             name="category_id"
             ref="hr_work_log_analysis_data_ownership_module_category"
+        />
+    <field
+            name="implied_ids"
+            eval="[(4, ref('hr_work_log_analysis_responsible_group'))]"
         />
 </record>
 
