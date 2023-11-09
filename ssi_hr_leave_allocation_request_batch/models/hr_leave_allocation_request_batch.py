@@ -29,6 +29,14 @@ class HrLeaveAllocationRequestBatch(models.Model):
     _automatically_insert_done_button = False
     _automatically_insert_done_policy_fields = False
 
+    # Mixin duration attribute
+    _date_start_readonly = True
+    _date_end_readonly = True
+    _date_start_states_list = ["draft"]
+    _date_start_states_readonly = ["draft"]
+    _date_end_states_list = ["draft"]
+    _date_end_states_readonly = ["draft"]
+
     # Attributes related to add element on form view automatically
     _automatically_insert_multiple_approval_page = True
     _statusbar_visible_label = "draft,confirm,done,reject"
@@ -93,11 +101,15 @@ class HrLeaveAllocationRequestBatch(models.Model):
         string="Type",
         comodel_name="hr.leave_type",
         required=True,
+        readonly=True,
+        states={"draft": [("readonly", False)]},
         ondelete="restrict",
     )
     number_of_days = fields.Integer(
         string="Number Of Days",
         required=True,
+        readonly=True,
+        states={"draft": [("readonly", False)]},
     )
     employee_ids = fields.Many2many(
         comodel_name="hr.employee",
@@ -105,11 +117,15 @@ class HrLeaveAllocationRequestBatch(models.Model):
         column1="leave_allocation_request_batch_id",
         column2="employee_id",
         string="Employee",
+        required=True,
+        readonly=True,
+        states={"draft": [("readonly", False)]},
     )
     leave_allocation_request_ids = fields.One2many(
         comodel_name="hr.leave_allocation",
         inverse_name="batch_id",
         string="Leave Allocation Request",
+        readonly=True,
     )
     can_be_extended = fields.Boolean(
         string="Can be Extended",
@@ -147,7 +163,7 @@ class HrLeaveAllocationRequestBatch(models.Model):
         else:
             return False
 
-    @ssi_decorator.post_confirm_action()
+    @ssi_decorator.post_done_action()
     def _01_create_leave_allocation_request(self):
         obj_leave_allocation_request = self.env["hr.leave_allocation"]
         for record in self:
@@ -174,41 +190,41 @@ class HrLeaveAllocationRequestBatch(models.Model):
         allocation.onchange_manager_id()
         allocation.onchange_job_id()
 
-    @ssi_decorator.post_confirm_action()
-    def _02_confirm_leave_allocation_request(self):
-        for record in self:
-            if record.leave_allocation_request_ids:
-                record.leave_allocation_request_ids.action_approve_approval()
-
-    @ssi_decorator.post_approve_action()
-    def _approve_leave_allocation_request(self):
-        for record in self:
-            if record.leave_allocation_request_ids:
-                record.leave_allocation_request_ids.action_approve_approval()
-
-    @ssi_decorator.post_reject_action()
-    def _reject_leave_allocation_request(self):
-        for record in self:
-            if record.leave_allocation_request_ids:
-                record.leave_allocation_request_ids.action_reject()
-
-    @ssi_decorator.post_done_action()
-    def _done_leave_allocation_request(self):
-        for record in self:
-            if record.leave_allocation_request_ids:
-                record.leave_allocation_request_ids.action_done()
-
-    @ssi_decorator.post_restart_action()
-    def _restart_leave_allocation_request(self):
-        for record in self:
-            if record.leave_allocation_request_ids:
-                record.leave_allocation_request_ids.action_restart()
-
+    # @ssi_decorator.post_confirm_action()
+    # def _02_confirm_leave_allocation_request(self):
+    #     for record in self:
+    #         if record.leave_allocation_request_ids:
+    #             record.leave_allocation_request_ids.action_approve_approval()
+    #
+    # @ssi_decorator.post_approve_action()
+    # def _approve_leave_allocation_request(self):
+    #     for record in self:
+    #         if record.leave_allocation_request_ids:
+    #             record.leave_allocation_request_ids.action_approve_approval()
+    #
+    # @ssi_decorator.post_reject_action()
+    # def _reject_leave_allocation_request(self):
+    #     for record in self:
+    #         if record.leave_allocation_request_ids:
+    #             record.leave_allocation_request_ids.action_reject()
+    #
+    # @ssi_decorator.post_done_action()
+    # def _done_leave_allocation_request(self):
+    #     for record in self:
+    #         if record.leave_allocation_request_ids:
+    #             record.leave_allocation_request_ids.action_done()
+    #
+    # @ssi_decorator.post_restart_action()
+    # def _restart_leave_allocation_request(self):
+    #     for record in self:
+    #         if record.leave_allocation_request_ids:
+    #             record.leave_allocation_request_ids.action_restart()
+    #
     @ssi_decorator.post_cancel_action()
     def _cancel_leave_allocation_request(self):
         for record in self:
             if record.leave_allocation_request_ids:
-                record.leave_allocation_request_ids.action_cancel()
+                record.leave_allocation_request_ids.unlink()
 
     @api.onchange(
         "date_end",
