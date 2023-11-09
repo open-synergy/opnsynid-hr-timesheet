@@ -91,7 +91,11 @@
                         string="Leave Allocation Request"
                         name="leave_allocation_request"
                     >
-                        <field name="leave_allocation_request_ids" nolabel="1" />
+                        <field
+                            name="leave_allocation_request_ids"
+                            nolabel="1"
+                            force_save="1"
+                        />
                     </page>
                 </xpath>
             </data>
