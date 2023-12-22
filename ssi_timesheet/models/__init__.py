@@ -7,4 +7,5 @@ from . import (
     hr_timesheet,
     hr_timesheet_computation,
     hr_employee,
+    hr_timesheet_daily_summary,
 )

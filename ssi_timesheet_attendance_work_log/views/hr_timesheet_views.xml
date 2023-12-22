@@ -31,4 +31,24 @@
     </field>
 </record>
 
+<record id="hr_timesheet_view_attendance_work_log_form" model="ir.ui.view">
+    <field name="name">hr.timesheet_attendance_work_log form</field>
+    <field name="model">hr.timesheet</field>
+    <field name="mode">extension</field>
+    <field name="inherit_id" ref="ssi_timesheet.hr_timesheet_view_form" />
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//page[@name='daily_summary']" position="attributes">
+                <attribute name="invisible">0</attribute>
+            </xpath>
+            <xpath expr="//field[@name='daily_summary_ids']/tree/field[@name='date']" position="after">
+                <field name="total_work_log" widget="float_time"/>
+            </xpath>
+            <xpath expr="//field[@name='daily_summary_ids']/form/group/field[@name='date']" position="after">
+                <field name="total_work_log" widget="float_time"/>
+            </xpath>
+        </data>
+    </field>
+</record>
+
 </odoo>

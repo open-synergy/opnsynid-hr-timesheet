@@ -30,6 +30,17 @@
                 <field name="total_attendance" widget="float_time" />
                 <field name="running_attendance" widget="float_time" />
             </xpath>
+            <xpath expr="//page[@name='daily_summary']" position="attributes">
+                <attribute name="invisible">0</attribute>
+            </xpath>
+            <xpath expr="//field[@name='daily_summary_ids']/tree/field[@name='date']" position="after">
+                <field name="total_attendance" widget="float_time"/>
+                <field name="total_valid_attendance" widget="float_time"/>
+            </xpath>
+            <xpath expr="//field[@name='daily_summary_ids']/form/group/field[@name='date']" position="after">
+                <field name="total_attendance" widget="float_time"/>
+                <field name="total_valid_attendance" widget="float_time"/>
+            </xpath>
             <xpath expr="//page[@name='computation']" position="before">
                 <page name="page_attendance" string="Attendance">
                     <group name="attendance_1" colspan="4" col="2">
