@@ -367,3 +367,11 @@ class HRLeave(models.Model):
             if not self.leave_allocation_id:
                 result = False
         return result
+
+    def action_cancel(self, cancel_reason=False):
+        _super = super(HRLeave, self)
+        res = _super.action_cancel(cancel_reason=cancel_reason)
+        leave_allocation_ids = self.mapped('leave_allocation_id').filtered(
+            lambda allocation: allocation.state == 'done')
+        leave_allocation_ids.write({'state': 'open'})
+        return res
