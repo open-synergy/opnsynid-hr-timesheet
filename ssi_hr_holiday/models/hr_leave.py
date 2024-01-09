@@ -7,6 +7,8 @@ from dateutil.rrule import DAILY, rrule
 from odoo import _, api, fields, models
 from odoo.exceptions import Warning as UserError
 
+from odoo.addons.ssi_decorator import ssi_decorator
+
 
 class HRLeave(models.Model):
     _name = "hr.leave"
@@ -229,15 +231,6 @@ class HRLeave(models.Model):
         res += policy_field
         return res
 
-    def action_confirm(self):
-        _super = super(HRLeave, self)
-        for record in self.sudo():
-            if not record.schedule_ids:
-                record._compute_schedule_ids()
-
-            record._compute_leave_allocation_id()
-        _super.action_confirm()
-
     @api.onchange(
         "employee_id",
     )
@@ -368,12 +361,18 @@ class HRLeave(models.Model):
                 result = False
         return result
 
-    def action_cancel(self, cancel_reason=False):
-        _super = super(HRLeave, self)
-        for record in self.sudo():
-            leave_allocation_ids = record.mapped("leave_allocation_id").filtered(
-                lambda allocation: allocation.state == "done"
-            )
-            if leave_allocation_ids:
-                leave_allocation_ids.write({"state": "open"})
-        _super.action_cancel(cancel_reason=cancel_reason)
+    @ssi_decorator.pre_confirm_action()
+    def _compute_schedule_leave_allocation(self):
+        self.ensure_one()
+        if not self.schedule_ids:
+            self._compute_schedule_ids()
+        self._compute_leave_allocation_id()
+
+    @ssi_decorator.pre_cancel_action()
+    def _reopen_leave_allocation(self):
+        self.ensure_one()
+        leave_allocation_ids = self.mapped("leave_allocation_id").filtered(
+            lambda allocation: allocation.state == "done"
+        )
+        if leave_allocation_ids:
+            leave_allocation_ids.action_open()
