@@ -291,7 +291,7 @@ class HrLeaveAllocation(models.Model):
         current_datetime = pytz.utc.localize(fields.Datetime.now()).astimezone(tz)
         allocation_ids = self.search(
             [
-                ("date_extended", ">", current_datetime.date()),
+                ("date_extended", "<", current_datetime.date()),
                 ("state", "=", "open"),
             ]
         )
