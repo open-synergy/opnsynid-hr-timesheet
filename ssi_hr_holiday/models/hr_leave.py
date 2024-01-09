@@ -370,8 +370,10 @@ class HRLeave(models.Model):
 
     def action_cancel(self, cancel_reason=False):
         _super = super(HRLeave, self)
-        res = _super.action_cancel(cancel_reason=cancel_reason)
-        leave_allocation_ids = self.mapped('leave_allocation_id').filtered(
-            lambda allocation: allocation.state == 'done')
-        leave_allocation_ids.write({'state': 'open'})
-        return res
+        for record in self.sudo():
+            leave_allocation_ids = record.mapped("leave_allocation_id").filtered(
+                lambda allocation: allocation.state == "done"
+            )
+            if leave_allocation_ids:
+                leave_allocation_ids.write({"state": "open"})
+        _super.action_cancel(cancel_reason=cancel_reason)
