@@ -133,8 +133,7 @@ class HRTimesheet(models.Model):
                     sheet_id=self,
                     date=current_date
                 )
-                if self.env['hr.timesheet_daily_summary'].need_to_add(vals=vals):
-                    daily_summary_values.append(vals)
+                daily_summary_values.append(vals)
         return daily_summary_values
 
     def generate_daily_summary(self):
