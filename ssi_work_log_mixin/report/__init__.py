@@ -4,4 +4,5 @@
 
 from . import (
     hr_work_log_analysis,
+    hr_project_work_log_analysis,
 )

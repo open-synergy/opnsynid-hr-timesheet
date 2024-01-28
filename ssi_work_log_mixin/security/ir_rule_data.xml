@@ -157,4 +157,83 @@
     <field name="perm_create" eval="1" />
 </record>
 
+<record id="hr_project_work_log_analysis_internal_user_rule" model="ir.rule">
+    <field name="name">Project Work Log - Internal Users</field>
+    <field name="model_id" ref="model_hr_project_work_log_analysis" />
+    <field name="groups" eval="[(4, ref('base.group_user'))]" />
+    <field name="domain_force">[
+      ('employee_id', '=', user.employee_id.id),
+    ]</field>
+    <field name="perm_unlink" eval="1" />
+    <field name="perm_write" eval="1" />
+    <field name="perm_read" eval="1" />
+    <field name="perm_create" eval="1" />
+</record>
+
+<record id="hr_project_work_log_analysis_direct_subordinate_rule" model="ir.rule">
+    <field name="name">Project Work Log - Responsible to direct subordinate data</field>
+    <field name="model_id" ref="model_hr_project_work_log_analysis" />
+    <field
+            name="groups"
+            eval="[(4, ref('hr_project_work_log_analysis_direct_subordinate_group'))]"
+        />
+    <field
+            name="domain_force"
+        >[('manager_id.employee_id','=',user.employee_id.id)]</field>
+    <field name="perm_unlink" eval="1" />
+    <field name="perm_write" eval="1" />
+    <field name="perm_read" eval="1" />
+    <field name="perm_create" eval="1" />
+</record>
+
+<record id="hr_project_work_log_analysis_all_subordinate_rule" model="ir.rule">
+    <field name="name">Project Work Log - Responsible to all subordinate data</field>
+    <field name="model_id" ref="model_hr_project_work_log_analysis" />
+    <field
+            name="groups"
+            eval="[(4, ref('hr_project_work_log_analysis_direct_all_subordinate_group'))]"
+        />
+    <field name="domain_force">[('manager_id.employee_id','child_of',user.employee_id.id)]</field>
+    <field name="perm_unlink" eval="1" />
+    <field name="perm_write" eval="1" />
+    <field name="perm_read" eval="1" />
+    <field name="perm_create" eval="1" />
+</record>
+
+<record id="hr_project_work_log_analysis_company_rule" model="ir.rule">
+    <field name="name">Project Work Log - Responsible to company data</field>
+    <field name="model_id" ref="model_hr_project_work_log_analysis" />
+    <field name="groups" eval="[(4, ref('hr_project_work_log_analysis_company_group'))]" />
+    <field name="domain_force">[('company_id','=',user.company_id.id)]</field>
+    <field name="perm_unlink" eval="1" />
+    <field name="perm_write" eval="1" />
+    <field name="perm_read" eval="1" />
+    <field name="perm_create" eval="1" />
+</record>
+
+<record id="hr_project_work_log_analysis_company_child_rule" model="ir.rule">
+    <field name="name">Project Work Log - Company and All Child Companies</field>
+    <field name="model_id" ref="model_hr_project_work_log_analysis" />
+    <field
+            name="groups"
+            eval="[(4, ref('hr_project_work_log_analysis_company_child_group'))]"
+        />
+    <field name="domain_force">[('company_id','child_of',user.company_id.id)]</field>
+    <field name="perm_unlink" eval="1" />
+    <field name="perm_write" eval="1" />
+    <field name="perm_read" eval="1" />
+    <field name="perm_create" eval="1" />
+</record>
+
+<record id="hr_project_work_log_analysis_all_rule" model="ir.rule">
+    <field name="name">Project Work Log - All</field>
+    <field name="model_id" ref="model_hr_project_work_log_analysis" />
+    <field name="groups" eval="[(4, ref('hr_project_work_log_analysis_all_group'))]" />
+    <field name="domain_force">[(1,'=',1)]</field>
+    <field name="perm_unlink" eval="1" />
+    <field name="perm_write" eval="1" />
+    <field name="perm_read" eval="1" />
+    <field name="perm_create" eval="1" />
+</record>
+
 </odoo>
