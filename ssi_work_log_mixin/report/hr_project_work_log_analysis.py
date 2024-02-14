@@ -42,6 +42,14 @@ class HrProjectWorkLogAnalysis(models.Model):
         comodel_name="hr.timesheet",
         readonly=True,
     )
+    date_start = fields.Date(
+        string="Date Start",
+        readonly=True,
+    )
+    date_end = fields.Date(
+        string="Date End",
+        readonly=True,
+    )
     date = fields.Date(
         string="Date",
         readonly=True,
@@ -86,6 +94,8 @@ class HrProjectWorkLogAnalysis(models.Model):
             l.job_id as job_id,
             l.analytic_account_id as analytic_account_id,
             l.sheet_id as sheet_id,
+            ts.date_start,
+            ts.date_end,
             l.date as date,
             l.amount as amount,
             l.state as state
@@ -99,6 +109,7 @@ class HrProjectWorkLogAnalysis(models.Model):
         LEFT JOIN project_task t ON t.project_id = p.id
         LEFT JOIN hr_work_log l ON (l.work_object_id = t.id AND l.model_name = 'project.task')
         LEFT JOIN ir_model m ON m.id = l.model_id
+        LEFT JOIN hr_timesheet ts ON ts.id = l.sheet_id
         """
         return from_str
 
@@ -120,6 +131,8 @@ class HrProjectWorkLogAnalysis(models.Model):
             l.job_id,
             l.analytic_account_id,
             l.sheet_id,
+            ts.date_start,
+            ts.date_end,
             l.date,
             l.amount,
             l.state
