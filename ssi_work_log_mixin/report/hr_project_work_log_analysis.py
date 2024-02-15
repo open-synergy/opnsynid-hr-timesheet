@@ -87,10 +87,13 @@ class HrProjectWorkLogAnalysis(models.Model):
         select_str = """
         SELECT
             (select 1 ) AS nbr,
-            p.id as id,
+            l.id as id,
             l.employee_id as employee_id,
             l.department_id as department_id,
-            p.user_id as manager_id,
+            CASE
+                WHEN p.user_id IS NOT NULL THEN p.user_id
+                ELSE e2.user_id
+            END AS manager_id,
             l.job_id as job_id,
             l.analytic_account_id as analytic_account_id,
             l.sheet_id as sheet_id,
@@ -105,11 +108,11 @@ class HrProjectWorkLogAnalysis(models.Model):
     @api.model
     def _from(self):
         from_str = """
-        FROM project_project p
-        LEFT JOIN project_task t ON t.project_id = p.id
-        LEFT JOIN hr_work_log l ON (l.work_object_id = t.id AND l.model_name = 'project.task')
-        LEFT JOIN ir_model m ON m.id = l.model_id
+        FROM hr_work_log l
         LEFT JOIN hr_timesheet ts ON ts.id = l.sheet_id
+        LEFT JOIN project_project p ON p.analytic_account_id = l.analytic_account_id
+        LEFT JOIN hr_employee e ON e.id = l.employee_id
+        LEFT JOIN hr_employee e2 ON e2.id = e.parent_id
         """
         return from_str
 
@@ -124,10 +127,11 @@ class HrProjectWorkLogAnalysis(models.Model):
     def _group_by(self):
         group_by_str = """
         GROUP BY
-            p.id,
+            l.id,
             l.employee_id,
             l.department_id,
             p.user_id,
+            e2.user_id,
             l.job_id,
             l.analytic_account_id,
             l.sheet_id,
