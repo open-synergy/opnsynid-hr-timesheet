@@ -14,6 +14,7 @@
                 disable_linking="True"
                 sample="1"
             >
+                    <field name="analytic_account_id" type="row" />
                     <field name="manager_id" type="row" />
                     <field name="employee_id" type="row" />
                     <field name="amount" type="measure" widget="float_time" />
@@ -31,6 +32,7 @@
                 sample="1"
                 disable_linking="1"
             >
+                    <field name="analytic_account_id" type="row" />
                     <field name="manager_id" type="row" />
                     <field name="employee_id" type="row" />
                     <field name="amount" type="measure" widget="float_time" />
@@ -43,11 +45,11 @@
             <field name="model">hr.project_work_log_analysis</field>
             <field name="arch" type="xml">
                 <search string="Project Worklog Analysis">
+                    <field name="analytic_account_id" />
                     <field name="manager_id" />
                     <field name="department_id" />
                     <field name="employee_id" />
                     <field name="job_id" />
-                    <field name="analytic_account_id" />
                     <field name="sheet_id" />
                     <field name="date" />
                     <field name="amount" />
@@ -55,6 +57,11 @@
                     <separator />
                     <filter name="filter_date" date="date" />
                     <group expand="1" string="Group By">
+                        <filter
+                        string="Analytic Account"
+                        name="analytic"
+                        context="{'group_by': 'analytic_account_id'}"
+                    />
                         <filter
                         string="Manager"
                         name="manager"
