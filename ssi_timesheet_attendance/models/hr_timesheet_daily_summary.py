@@ -34,9 +34,3 @@ class HrTimesheetDailySummary(models.Model):
             'total_valid_attendance': total_valid_attendance,
         })
         return vals
-
-    def need_to_add(self, vals):
-        need_to_add = super(HrTimesheetDailySummary, self).need_to_add(vals=vals)
-        if vals.get('total_attendance') or vals.get('total_valid_attendance'):
-            need_to_add = True
-        return need_to_add

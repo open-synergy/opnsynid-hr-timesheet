@@ -125,6 +125,17 @@
     </field>
 </record>
 
+<record id="hr_timesheet_server_action_batch_daily_summary" model="ir.actions.server">
+    <field name="name">Compute Daily Summary</field>
+    <field name="model_id" ref="ssi_timesheet.model_hr_timesheet"/>
+    <field name="binding_model_id" ref="ssi_timesheet.model_hr_timesheet"/>
+    <field name="state">code</field>
+    <field name="code">
+        if records:
+            action = records.generate_daily_summary()
+    </field>
+</record>
+
 <record id="hr_timesheet_action" model="ir.actions.act_window">
     <field name="name">Timesheets</field>
     <field name="res_model">hr.timesheet</field>

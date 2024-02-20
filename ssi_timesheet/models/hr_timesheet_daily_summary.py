@@ -29,8 +29,3 @@ class HrTimesheetDailySummary(models.Model):
             'date': date,
         }
         return vals
-
-    def need_to_add(self, vals):
-        # untuk diinherit di modul lain
-        need_to_add = False
-        return need_to_add
