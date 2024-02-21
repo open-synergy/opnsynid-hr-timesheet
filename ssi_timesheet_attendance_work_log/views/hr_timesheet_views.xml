@@ -41,11 +41,17 @@
             <xpath expr="//page[@name='daily_summary']" position="attributes">
                 <attribute name="invisible">0</attribute>
             </xpath>
-            <xpath expr="//field[@name='daily_summary_ids']/tree/field[@name='date']" position="after">
-                <field name="total_work_log" widget="float_time"/>
+            <xpath
+                    expr="//field[@name='daily_summary_ids']/tree/field[@name='date']"
+                    position="after"
+                >
+                <field name="total_work_log" widget="float_time" />
             </xpath>
-            <xpath expr="//field[@name='daily_summary_ids']/form/group/field[@name='date']" position="after">
-                <field name="total_work_log" widget="float_time"/>
+            <xpath
+                    expr="//field[@name='daily_summary_ids']/form/group/field[@name='date']"
+                    position="after"
+                >
+                <field name="total_work_log" widget="float_time" />
             </xpath>
         </data>
     </field>

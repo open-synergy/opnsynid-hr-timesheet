@@ -31,5 +31,6 @@
         "views/hr_timesheet_views.xml",
         "views/account_analytic_account_views.xml",
         "report/hr_work_log_analysis.xml",
+        "report/hr_project_work_log_analysis.xml",
     ],
 }

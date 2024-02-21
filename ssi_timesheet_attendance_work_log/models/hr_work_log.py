@@ -25,6 +25,6 @@ class HRWorkLog(models.Model):
     def write(self, values):
         res = super(HRWorkLog, self).write(values)
         for rec in self:
-            if 'date' in values or 'amount' in values:
+            if "date" in values or "amount" in values:
                 rec.sheet_id.generate_daily_summary()
         return res
