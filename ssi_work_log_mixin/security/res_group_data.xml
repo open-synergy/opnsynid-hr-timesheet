@@ -160,7 +160,10 @@
         />
 </record>
 
-<record id="hr_project_work_log_analysis_direct_all_subordinate_group" model="res.groups">
+<record
+        id="hr_project_work_log_analysis_direct_all_subordinate_group"
+        model="res.groups"
+    >
     <field name="name">All Subordinate</field>
     <field
             name="category_id"
@@ -190,7 +193,10 @@
             name="category_id"
             ref="hr_project_work_log_analysis_data_ownership_module_category"
         />
-    <field name="implied_ids" eval="[(4, ref('hr_project_work_log_analysis_company_group'))]" />
+    <field
+            name="implied_ids"
+            eval="[(4, ref('hr_project_work_log_analysis_company_group'))]"
+        />
 </record>
 
 <record id="hr_project_work_log_analysis_all_group" model="res.groups">

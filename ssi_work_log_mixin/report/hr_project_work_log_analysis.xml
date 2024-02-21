@@ -91,7 +91,10 @@
             <field name="name">Project Worklog Analysis</field>
             <field name="res_model">hr.project_work_log_analysis</field>
             <field name="view_mode">pivot,graph</field>
-            <field name="search_view_id" ref="view_hr_project_work_log_analysis_search" />
+            <field
+            name="search_view_id"
+            ref="view_hr_project_work_log_analysis_search"
+        />
             <field name="context">{}</field>
        </record>
 
