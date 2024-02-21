@@ -2,9 +2,10 @@
 # Copyright 2022 PT. Simetri Sinergi Indonesia
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from datetime import timedelta
+
 from odoo import _, api, fields, models
 from odoo.exceptions import Warning as UserError
-from datetime import datetime, timedelta
 
 
 class HRTimesheet(models.Model):
@@ -92,10 +93,11 @@ class HRTimesheet(models.Model):
         copy=False,
     )
     daily_summary_ids = fields.One2many(
-        comodel_name='hr.timesheet_daily_summary',
-        inverse_name='sheet_id',
-        string='Daily Summary',
-        readonly=True)
+        comodel_name="hr.timesheet_daily_summary",
+        inverse_name="sheet_id",
+        string="Daily Summary",
+        readonly=True,
+    )
 
     @api.depends("policy_template_id")
     def _compute_policy(self):
@@ -122,30 +124,32 @@ class HRTimesheet(models.Model):
     def _prepare_daily_summary_values(self):
         self.ensure_one()
         daily_summary_values = []
-        if self.state in ('open', 'confirm', 'done'):
+        if self.state in ("open", "confirm", "done"):
             delta = self.date_end - self.date_start
             date_ranges = []
             for i in range(delta.days + 1):
                 day = self.date_start + timedelta(days=i)
                 date_ranges.append(day)
             for current_date in date_ranges:
-                vals = self.env['hr.timesheet_daily_summary']._prepare_daily_summary_vals(
-                    sheet_id=self,
-                    date=current_date
-                )
+                vals = self.env[
+                    "hr.timesheet_daily_summary"
+                ]._prepare_daily_summary_vals(sheet_id=self, date=current_date)
                 daily_summary_values.append(vals)
         return daily_summary_values
 
     def generate_daily_summary(self):
-        for rec in self.filtered(lambda r: r.state in ['open', 'confirm', 'done']):
+        for rec in self.filtered(lambda r: r.state in ["open", "confirm", "done"]):
             daily_summary_values = rec._prepare_daily_summary_values()
             existing_dates = []
-            obj_daily_summary = self.env['hr.timesheet_daily_summary']
+            obj_daily_summary = self.env["hr.timesheet_daily_summary"]
             for daily_summary_val in daily_summary_values:
-                summary_id = obj_daily_summary.search([
-                    ('sheet_id', '=', rec.id),
-                    ('date', '=', daily_summary_val['date']),
-                ], limit=1)
+                summary_id = obj_daily_summary.search(
+                    [
+                        ("sheet_id", "=", rec.id),
+                        ("date", "=", daily_summary_val["date"]),
+                    ],
+                    limit=1,
+                )
                 if not summary_id:
                     obj_daily_summary.create(daily_summary_val)
                 else:
@@ -155,24 +159,28 @@ class HRTimesheet(models.Model):
                             to_write[key] = val
                     if to_write:
                         summary_id.write(to_write)
-                existing_dates.append(daily_summary_val['date'])
-            to_delete_summary_ids = obj_daily_summary.search([
-                ('sheet_id', '=', rec.id),
-                ('date', 'not in', existing_dates),
-            ])
+                existing_dates.append(daily_summary_val["date"])
+            to_delete_summary_ids = obj_daily_summary.search(
+                [
+                    ("sheet_id", "=", rec.id),
+                    ("date", "not in", existing_dates),
+                ]
+            )
             to_delete_summary_ids.unlink()
 
     def get_trigger_fields_daily_summary(self):
         return [
-            'state',
-            'date_start',
-            'date_end',
+            "state",
+            "date_start",
+            "date_end",
         ]
 
     def write(self, values):
         res = super(HRTimesheet, self).write(values)
         for rec in self:
-            if any(field in values for field in self.get_trigger_fields_daily_summary()):
+            if any(
+                field in values for field in self.get_trigger_fields_daily_summary()
+            ):
                 rec.generate_daily_summary()
         return res
 
