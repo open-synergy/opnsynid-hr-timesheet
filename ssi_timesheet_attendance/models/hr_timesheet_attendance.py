@@ -171,7 +171,12 @@ class HRTimesheetAttendance(models.Model):
     def _compute_valid(self):
         for record in self:
             total_valid_hour = 0
-            if record.schedule_id.date_start and record.schedule_id.date_end and record.check_in and record.check_out:
+            if (
+                record.schedule_id.date_start
+                and record.schedule_id.date_end
+                and record.check_in
+                and record.check_out
+            ):
                 if (
                     record.check_out > record.schedule_id.date_start
                     and record.check_in < record.schedule_id.date_end
@@ -216,6 +221,6 @@ class HRTimesheetAttendance(models.Model):
     def write(self, values):
         res = super(HRTimesheetAttendance, self).write(values)
         for rec in self:
-            if 'date' in values or 'check_in' in values or 'check_out' in values:
+            if "date" in values or "check_in" in values or "check_out" in values:
                 rec.sheet_id.generate_daily_summary()
         return res
