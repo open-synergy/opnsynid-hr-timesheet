@@ -132,7 +132,9 @@ class HRTimesheet(models.Model):
             )[resource.id]
             if schedule_ids:
                 for start, stop, _res in schedule_ids:
-                    if not obj_public_holiday.is_public_holiday(start):
+                    if not obj_public_holiday.is_public_holiday(
+                        start, self.employee_id.id
+                    ):
                         schedule_data = self._prepare_schedule_data(start, stop)
                         res.append((0, 0, schedule_data))
         return res
