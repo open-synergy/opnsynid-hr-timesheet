@@ -185,6 +185,11 @@ class HRWorkLog(models.Model):
             ],
         },
     )
+    analytic_partner_id = fields.Many2one(
+        string="Analytic Partner",
+        related="analytic_account_id.partner_id",
+        store=True,
+    )
 
     @api.depends(
         "employee_id",
