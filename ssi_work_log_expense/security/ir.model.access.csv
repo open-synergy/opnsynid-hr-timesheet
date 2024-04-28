@@ -7,3 +7,4 @@ access_work_log_expense_user,work_log_expense - user,model_work_log_expense,work
 access_work_log_expense_summary_all,work_log_expense_summary - all,model_work_log_expense_summary,,1,0,0,0
 access_work_log_expense_summary_viewer,work_log_expense_summary - viewer,model_work_log_expense_summary,work_log_expense_viewer_group,1,0,0,0
 access_work_log_expense_summary_user,work_log_expense_summary - user,model_work_log_expense_summary,work_log_expense_user_group,1,1,1,1
+access_generate_work_log_expense_all,generate_work_log_expense - all,model_generate_work_log_expense,,1,1,1,1
