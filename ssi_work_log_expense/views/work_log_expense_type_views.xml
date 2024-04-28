@@ -39,6 +39,15 @@
         <field name="mode">primary</field>
         <field name="arch" type="xml">
             <data>
+                <xpath expr="//header" position="inside">
+                    <button
+                        name="%(generate_work_log_expense_action)d"
+                        string="Generate"
+                        type="action"
+                        icon="fa-gear"
+                        class="oe_highlight"
+                    />
+                </xpath>
                 <xpath expr="//field[@name='active']" position="after">
                     <field name="journal_id" />
                     <field name="accrue_account_id" />

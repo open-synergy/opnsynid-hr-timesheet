@@ -27,6 +27,7 @@
         "data/policy_template_data.xml",
         "data/approval_template_data.xml",
         "data/account_journal_data.xml",
+        "wizards/generate_work_log_expense_views.xml",
         "views/work_log_expense_type_views.xml",
         "views/work_log_expense_views.xml",
     ],
