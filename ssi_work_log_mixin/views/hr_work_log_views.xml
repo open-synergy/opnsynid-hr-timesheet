@@ -12,7 +12,36 @@
             ref="ssi_transaction_mixin.mixin_transaction_view_search"
         />
     <field name="arch" type="xml">
-        <data />
+        <data>
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="analytic_account_id" />
+                <field name="analytic_partner_id" />
+                <field name="analytic_group_id" />
+                <field name="description" />
+                <field name="date" />
+                <field name="sheet_id" />
+                <field name="model_id" />
+                <field name="tag_ids" />
+            </xpath>
+            <xpath expr="//group[@name='group_by']" position="inside">
+                <filter name="grp_date" string="Date" context="{'group_by':'date'}" />
+                <filter
+                        name="grp_analytic_account"
+                        string="Analytic Account"
+                        context="{'group_by':'analytic_account_id'}"
+                    />
+                <filter
+                        name="grp_analytic_partner"
+                        string="Analytic Partner"
+                        context="{'group_by':'analytic_partner_id'}"
+                    />
+                <filter
+                        name="grp_analytic_group"
+                        string="Analytic Group"
+                        context="{'group_by':'analytic_group_id'}"
+                    />
+            </xpath>
+        </data>
     </field>
 </record>
 
@@ -37,7 +66,8 @@
                 <field name="model_name" invisible="1" />
                 <field name="work_object_reference" optional="hide" />
                 <field name="analytic_account_id" />
-                <field name="analytic_partner_id" />
+                <field name="analytic_partner_id" optional="hide" />
+                <field name="analytic_group_id" optional="hide" />
                 <field name="description" />
                 <field name="amount" widget="float_time" sum="Total Time" />
             </xpath>
@@ -85,6 +115,7 @@
                         domain="[('id', 'in', allowed_analytic_account_ids)]"
                     />
                     <field name="analytic_partner_id" />
+                    <field name="analytic_group_id" />
                     <field name="description" />
                     <field name="tag_ids" widget="many2many_tags" />
                     <field name="amount" widget="float_time" />
