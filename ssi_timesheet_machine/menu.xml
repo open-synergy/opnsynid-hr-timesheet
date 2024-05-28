@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2024 OpenSynergy Indonesia
+     Copyright 2024 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <menuitem
+        id="menu_hr_machine_configuration"
+        name="Data Machine"
+        parent="ssi_hr.menu_human_resource_configuration"
+        sequence="5"
+    />
+
+</odoo>
