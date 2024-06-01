@@ -1,2 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_hr_machine_all,hr.machine - all,model_hr_machine,ssi_timesheet_machine.hr_attendance_machine_group,1,1,1,1
+access_hr_data_machine_all,hr.data.machine - all,model_hr_data_machine,ssi_timesheet_machine.hr_attendance_machine_group,1,1,1,1
+access_hr_machine_user_all,hr.machine.user - all,model_hr_machine_user,ssi_timesheet_machine.hr_attendance_machine_group,1,1,1,1
+access_hr_attendance_machine_all,hr.attendance.machine - all,model_hr_attendance_machine,ssi_timesheet_machine.hr_attendance_machine_group,1,1,1,1
+access_hr_attendance_machine_wizard_import_wizard_all,hr.attendance.machine.import.wizard - all,model_hr_attendance_machine_import_wizard,ssi_timesheet_machine.hr_attendance_machine_group,1,1,1,1

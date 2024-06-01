@@ -8,6 +8,14 @@
         id="menu_hr_machine_configuration"
         name="Data Machine"
         parent="ssi_hr.menu_human_resource_configuration"
+        groups="hr_attendance_machine_group"
+        sequence="5"
+    />
+    <menuitem
+        id="menu_hr_machine_transaction"
+        name="Machine Transaction"
+        groups="hr_attendance_machine_group"
+        parent="ssi_timesheet.timesheet_menu"
         sequence="5"
     />
 

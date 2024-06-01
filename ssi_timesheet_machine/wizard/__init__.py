@@ -3,7 +3,5 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from . import (
-    hr_data_machine,
-    hr_machine_user,
-    hr_attendance_machine,
+    hr_attendance_machine_import_wizard,
 )
