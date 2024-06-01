@@ -67,6 +67,6 @@
         name="Attendance Machine"
         parent="menu_hr_machine_transaction"
         action="hr_attendance_machine_action"
-        sequence="1"
+        sequence="20"
     />
 </odoo>

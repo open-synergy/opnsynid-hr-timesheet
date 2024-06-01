@@ -83,6 +83,6 @@
         name="Data Machine"
         parent="menu_hr_machine_configuration"
         action="hr_data_machine_action"
-        sequence="20"
+        sequence="10"
     />
 </odoo>
