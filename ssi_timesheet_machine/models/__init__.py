@@ -6,4 +6,6 @@ from . import (
     hr_data_machine,
     hr_machine_user,
     hr_attendance_machine,
+    res_company,
+    res_config_settings,
 )

@@ -15,9 +15,11 @@
     "data": [
         "security/res_group_data.xml",
         "security/ir.model.access.csv",
+        "data/ir_cron.xml",
         "menu.xml",
         "views/hr_data_machine_views.xml",
         "views/hr_attendance_machine_views.xml",
+        "views/res_config_settings_view.xml",
         "wizard/hr_attendance_machine_import_wizard_views.xml",
     ],
 }
