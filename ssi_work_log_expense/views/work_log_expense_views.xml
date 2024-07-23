@@ -24,6 +24,8 @@
                     <field name="department_id" optional="hide" />
                     <field name="type_id" />
                     <field name="analytic_account_id" />
+                    <field name="analytic_partner_id" optional="hide" />
+                    <field name="analytic_group_id" optional="hide" />
                     <field name="date_start" />
                     <field name="date_end" />
                     <field name="date" />
@@ -42,7 +44,35 @@
             ref="ssi_transaction_mixin.mixin_transaction_view_search"
         />
         <field name="arch" type="xml">
-            <data />
+            <data>
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="analytic_account_id" />
+                    <field name="analytic_partner_id" />
+                    <field name="analytic_group_id" />
+                </xpath>
+                <xpath expr="//group[@name='group_by']" position="inside">
+                    <filter
+                        name="grp_date"
+                        string="Date"
+                        context="{'group_by':'date'}"
+                    />
+                    <filter
+                        name="grp_analytic_account"
+                        string="Analytic Account"
+                        context="{'group_by':'analytic_account_id'}"
+                    />
+                    <filter
+                        name="grp_analytic_partner"
+                        string="Analytic Partner"
+                        context="{'group_by':'analytic_partner_id'}"
+                    />
+                    <filter
+                        name="grp_analytic_group"
+                        string="Analytic Group"
+                        context="{'group_by':'analytic_group_id'}"
+                    />
+                </xpath>
+            </data>
         </field>
     </record>
 
@@ -78,6 +108,8 @@
                         name="analytic_account_id"
                         domain="[('id','in',allowed_analytic_account_ids)]"
                     />
+                    <field name="analytic_partner_id" />
+                    <field name="analytic_group_id" />
                     <field name="date_start" />
                     <field name="date_end" />
                     <field name="date" />

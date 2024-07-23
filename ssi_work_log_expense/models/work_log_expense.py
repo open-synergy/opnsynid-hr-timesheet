@@ -89,6 +89,16 @@ class WorkLogExpense(models.Model):
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
+    analytic_partner_id = fields.Many2one(
+        string="Analytic Partner",
+        related="analytic_account_id.partner_id",
+        store=True,
+    )
+    analytic_group_id = fields.Many2one(
+        string="Analytic Group",
+        related="analytic_account_id.group_id",
+        store=True,
+    )
     date = fields.Date(
         string="Date",
         required=True,
