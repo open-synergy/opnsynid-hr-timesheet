@@ -1,0 +1,15 @@
+odoo14-addon-ssi-hr
+odoo14-addon-ssi-financial-accounting
+odoo14-addon-ssi-master-data-mixin
+odoo14-addon-ssi-transaction-open-mixin
+odoo14-addon-ssi-transaction-cancel-mixin
+odoo14-addon-ssi-transaction-confirm-mixin
+odoo14-addon-ssi-transaction-done-mixin
+odoo14-addon-ssi-transaction-terminate-mixin
+odoo14-addon-ssi-transaction-ready-mixin
+odoo14-addon-ssi-product-line-account-mixin
+odoo14-addon-ssi-duration-mixin
+odoo14-addon-ssi-employee-document-mixin
+odoo14-addon-ssi-decorator
+odoo14-addon-ssi-state-change-constrain-mixin
+odoo14-addon-base-public-holiday
