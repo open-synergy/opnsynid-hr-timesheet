@@ -7,6 +7,8 @@ from datetime import timedelta
 from odoo import _, api, fields, models
 from odoo.exceptions import Warning as UserError
 
+from odoo.addons.ssi_decorator import ssi_decorator
+
 
 class HRTimesheet(models.Model):
     _name = "hr.timesheet"
@@ -200,18 +202,15 @@ class HRTimesheet(models.Model):
             record._reload_timesheet_computation()
             record._compute_computation()
 
-    def action_open(self):
-        _super = super(HRTimesheet, self)
-        _super.action_open()
-        for record in self.sudo():
-            record._reload_timesheet_computation()
-            record._compute_computation()
+    @ssi_decorator.pre_open_action()
+    def _get_timesheet_computation_pre_open(self):
+        self.ensure_one()
+        self.action_reload_timesheet_computation()
 
-    def action_confirm(self):
-        _super = super(HRTimesheet, self)
-        _super.action_confirm()
-        for record in self.sudo():
-            record._compute_computation()
+    @ssi_decorator.pre_confirm_action()
+    def _get_timesheet_computation_pre_confirm(self):
+        self.ensure_one()
+        self.action_reload_timesheet_computation()
 
     def _get_computation_localdict(self):
         self.ensure_one()
