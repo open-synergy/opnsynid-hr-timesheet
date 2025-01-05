@@ -22,6 +22,7 @@ setuptools.setup(
         'odoo14-addon-ssi_timesheet_state_change_constrain',
         'odoo14-addon-ssi_work_log_cost',
         'odoo14-addon-ssi_work_log_expense',
+        'odoo14-addon-ssi_work_log_expense_work_log',
         'odoo14-addon-ssi_work_log_mixin',
         'odoo14-addon-ssi_work_log_state_change_constrain',
         'odoo14-addon-test_ssi_work_log_mixin',
