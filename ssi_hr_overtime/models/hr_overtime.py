@@ -122,7 +122,7 @@ class HROvertime(models.Model):
     date = fields.Date(
         string="Date",
         required=True,
-        default=fields.Date.today(),
+        default=lambda self: fields.Date.today(),
         readonly=True,
         states={
             "draft": [
@@ -133,6 +133,7 @@ class HROvertime(models.Model):
     date_start = fields.Datetime(
         required=True,
         readonly=True,
+        default=lambda self: fields.Datetime.now(),
         states={
             "draft": [
                 ("readonly", False),
@@ -142,6 +143,7 @@ class HROvertime(models.Model):
     date_end = fields.Datetime(
         required=True,
         readonly=True,
+        default=lambda self: fields.Datetime.now(),
         states={
             "draft": [
                 ("readonly", False),
@@ -335,6 +337,7 @@ class HROvertime(models.Model):
             ("state", "not in", ["cancel", "reject"]),
             ("id", "!=", self.id),
             ("date", "=", self.date),
+            ("type_id", "=", self.type_id.id),
         ]
         overtime_ids = self.search(criteria)
         total_ot = 0.0
