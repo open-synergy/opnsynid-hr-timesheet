@@ -12,9 +12,9 @@ from odoo.addons.ssi_decorator import ssi_decorator
 class HRWorkLog(models.Model):
     _name = "hr.work_log"
     _inherit = [
-        "mixin.transaction_confirm",
-        "mixin.transaction_done",
         "mixin.transaction_cancel",
+        "mixin.transaction_done",
+        "mixin.transaction_confirm",
         "mixin.employee_document",
     ]
     _description = "HR Work Log"
