@@ -6,13 +6,15 @@ from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 from odoo.tools.safe_eval import safe_eval
 
+from odoo.addons.ssi_decorator import ssi_decorator
+
 
 class HRWorkLog(models.Model):
     _name = "hr.work_log"
     _inherit = [
-        "mixin.transaction_confirm",
-        "mixin.transaction_done",
         "mixin.transaction_cancel",
+        "mixin.transaction_done",
+        "mixin.transaction_confirm",
         "mixin.employee_document",
     ]
     _description = "HR Work Log"
@@ -57,6 +59,9 @@ class HRWorkLog(models.Model):
 
     # Sequence attribute
     _create_sequence_state = "done"
+
+    # Attribute related to employee document mixin
+    _search_by_employee = True
 
     description = fields.Char(
         string="Description",
@@ -236,18 +241,6 @@ class HRWorkLog(models.Model):
             ],
         },
     )
-    state = fields.Selection(
-        string="State",
-        selection=[
-            ("draft", "Draft"),
-            ("confirm", "Waiting for Approval"),
-            ("done", "Done"),
-            ("cancel", "Cancelled"),
-            ("reject", "Rejected"),
-        ],
-        default="draft",
-        copy=False,
-    )
 
     @api.model
     def _get_policy_field(self):
@@ -304,3 +297,9 @@ class HRWorkLog(models.Model):
                     document.date,
                 )
                 raise UserError(strWarning)
+
+    @ssi_decorator.insert_on_form_view()
+    def _insert_form_element(self, view_arch):
+        if self._automatically_insert_view_element:
+            view_arch = self._reconfigure_statusbar_visible(view_arch)
+        return view_arch
