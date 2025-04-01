@@ -60,6 +60,9 @@ class HRWorkLog(models.Model):
     # Sequence attribute
     _create_sequence_state = "done"
 
+    # Attribute related to employee document mixin
+    _search_by_employee = True
+
     description = fields.Char(
         string="Description",
         required=True,
