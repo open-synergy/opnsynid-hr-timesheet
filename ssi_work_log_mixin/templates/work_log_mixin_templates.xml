@@ -5,12 +5,14 @@
 <odoo>
 <template id="work_log_page">
     <page name="page_work_log" string="Work Log">
-        <group name="grp_work_log" colspan="2">
+        <group name="grp_work_log_1" colspan="2">
             <field name="work_estimation" widget="float_time" string="Estimation" />
             <field name="total_work" widget="float_time" string="Total" />
             <field name="remaining_work" widget="float_time" string="Remaining" />
             <field name="excess_work" widget="float_time" string="Excess" />
-
+        </group>
+        <group name="grp_work_log_2" colspan="2">
+            <field name="work_log_analytic_account_id" />
         </group>
         <field
                 name="work_log_ids"
