@@ -18,6 +18,10 @@ class MixinWorkObject(models.AbstractModel):
     work_estimation = fields.Float(
         string="Work Estimation",
     )
+    work_log_analytic_account_id = fields.Many2one(
+        string="Work Log Analytic Account",
+        comodel_name="account.analytic.account",
+    )
 
     work_log_ids = fields.One2many(
         string="Work Logs",
