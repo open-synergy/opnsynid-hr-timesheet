@@ -93,11 +93,13 @@ class WorkLogExpense(models.Model):
         string="Analytic Partner",
         related="analytic_account_id.partner_id",
         store=True,
+        compute_sudo=True,
     )
     analytic_group_id = fields.Many2one(
         string="Analytic Group",
         related="analytic_account_id.group_id",
         store=True,
+        compute_sudo=True,
     )
     date = fields.Date(
         string="Date",
@@ -119,6 +121,7 @@ class WorkLogExpense(models.Model):
         string="Amount Total",
         compute="_compute_amount",
         store=True,
+        compute_sudo=True,
     )
     accrue_account_id = fields.Many2one(
         comodel_name="account.account",
