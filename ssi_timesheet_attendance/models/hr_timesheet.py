@@ -37,6 +37,7 @@ class HRTimesheet(models.Model):
         string="Total Attendance",
         compute="_compute_total_attendance",
         store=True,
+        compute_sudo=True,
     )
     attendance_ids = fields.One2many(
         string="Attendances",
