@@ -97,6 +97,7 @@ class HRWorkLog(models.Model):
         related="model_id.model",
         index=True,
         store=True,
+        compute_sudo=True,
     )
     work_object_id = fields.Many2oneReference(
         string="Document ID",
@@ -125,6 +126,7 @@ class HRWorkLog(models.Model):
         string="Document Reference",
         compute="_compute_work_object_reference",
         store=True,
+        compute_sudo=True,
         selection="_selection_target_model",
     )
 
@@ -194,11 +196,13 @@ class HRWorkLog(models.Model):
         string="Analytic Partner",
         related="analytic_account_id.partner_id",
         store=True,
+        compute_sudo=True,
     )
     analytic_group_id = fields.Many2one(
         string="Analytic Group",
         related="analytic_account_id.group_id",
         store=True,
+        compute_sudo=True,
     )
 
     @api.depends(
@@ -225,6 +229,7 @@ class HRWorkLog(models.Model):
         comodel_name="hr.timesheet",
         compute="_compute_sheet_id",
         store=True,
+        compute_sudo=True,
         required=False,
         ondelete="restrict",
     )

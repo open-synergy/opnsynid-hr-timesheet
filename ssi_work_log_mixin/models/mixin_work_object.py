@@ -55,16 +55,19 @@ class MixinWorkObject(models.AbstractModel):
         string="Total Work",
         compute="_compute_work_realization",
         store=True,
+        compute_sudo=True,
     )
     remaining_work = fields.Float(
         string="Remaining Work",
         compute="_compute_work_realization",
         store=True,
+        compute_sudo=True,
     )
     excess_work = fields.Float(
         string="Excess Work",
         compute="_compute_work_realization",
         store=True,
+        compute_sudo=True,
     )
 
     @api.model

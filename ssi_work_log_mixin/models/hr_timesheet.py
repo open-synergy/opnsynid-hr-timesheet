@@ -24,6 +24,7 @@ class HrTimesheet(models.Model):
         string="Total Work Log",
         compute="_compute_total_work_log",
         store=True,
+        compute_sudo=True,
     )
 
     @api.depends(
