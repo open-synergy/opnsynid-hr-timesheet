@@ -26,14 +26,14 @@ addon | version | maintainers | summary
 [ssi_hr_overtime_account](ssi_hr_overtime_account/) | 14.0.1.1.1 |  | Overtime Account
 [ssi_hr_overtime_batch](ssi_hr_overtime_batch/) | 14.0.1.0.1 |  | Human Resource Overtime Batch
 [ssi_hr_overtime_state_change_constrain](ssi_hr_overtime_state_change_constrain/) | 14.0.1.0.1 |  | Overtime State Change Constrain
-[ssi_timesheet](ssi_timesheet/) | 14.0.2.0.0 |  | Timesheets
-[ssi_timesheet_attendance](ssi_timesheet_attendance/) | 14.0.1.14.1 |  | Timesheet Attendance
+[ssi_timesheet](ssi_timesheet/) | 14.0.2.1.0 |  | Timesheets
+[ssi_timesheet_attendance](ssi_timesheet_attendance/) | 14.0.1.15.0 |  | Timesheet Attendance
 [ssi_timesheet_attendance_work_log](ssi_timesheet_attendance_work_log/) | 14.0.1.3.0 |  | Timesheet + Attendance + Work Log
 [ssi_timesheet_state_change_constrain](ssi_timesheet_state_change_constrain/) | 14.0.1.0.2 |  | Timesheet State Change Constrain
 [ssi_work_log_cost](ssi_work_log_cost/) | 14.0.1.6.0 |  | Work Log Cost
-[ssi_work_log_expense](ssi_work_log_expense/) | 14.0.1.4.0 |  | Work Log Expense
+[ssi_work_log_expense](ssi_work_log_expense/) | 14.0.1.5.0 |  | Work Log Expense
 [ssi_work_log_expense_work_log](ssi_work_log_expense_work_log/) | 14.0.1.0.0 |  | Worklog Expense - Work Log Integration
-[ssi_work_log_mixin](ssi_work_log_mixin/) | 14.0.1.18.0 |  | Work Log Mixin
+[ssi_work_log_mixin](ssi_work_log_mixin/) | 14.0.1.19.0 |  | Work Log Mixin
 [ssi_work_log_state_change_constrain](ssi_work_log_state_change_constrain/) | 14.0.1.0.2 |  | Work Log State Change Constrain
 [test_ssi_work_log_mixin](test_ssi_work_log_mixin/) | 14.0.1.0.1 |  | Test Module - Work Log Mixin
 
