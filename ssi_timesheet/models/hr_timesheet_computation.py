@@ -26,6 +26,7 @@ class HrTimesheetComputation(models.Model):
         related="item_id.code",
         store=True,
         readonly=True,
+        compute_sudo=True,
     )
     item_id = fields.Many2one(
         string="Item",
