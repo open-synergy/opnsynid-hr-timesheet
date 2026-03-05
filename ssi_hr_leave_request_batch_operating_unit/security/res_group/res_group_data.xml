@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+<!-- Data Ownership -->
+<record id="hr_leave_request_batch_ou_group" model="res.groups">
+    <field name="name">Operating Unit</field>
+    <field
+            name="category_id"
+            ref="ssi_hr_leave_request_batch.hr_leave_request_batch_data_ownership_module_category"
+        />
+</record>
+
+<record
+        id="ssi_hr_leave_request_batch.hr_leave_request_batch_company_group"
+        model="res.groups"
+    >
+    <field name="name">Company</field>
+    <field
+            name="category_id"
+            ref="ssi_hr_leave_request_batch.hr_leave_request_batch_data_ownership_module_category"
+        />
+    <field name="implied_ids" eval="[(4, ref('hr_leave_request_batch_ou_group'))]" />
+    <field
+            name="users"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
+</record>
+</odoo>
