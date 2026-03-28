@@ -26,5 +26,9 @@
         "views/hr_timesheet_attendance_views.xml",
         "views/hr_employee_views.xml",
         "views/resource_calendar_views.xml",
+        "views/ssi_timesheet_attendance_assets.xml",
+    ],
+    "qweb": [
+        "static/src/xml/attendance_systray.xml",
     ],
 }
