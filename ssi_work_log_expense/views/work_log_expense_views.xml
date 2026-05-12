@@ -12,13 +12,14 @@
             ref="ssi_transaction_mixin.mixin_transaction_view_tree"
         />
         <field name="arch" type="xml">
+            <data>
                 <xpath expr="//field[@name='company_id']" position="after">
                     <field name="employee_id" widget="many2one_avatar_employee" />
                     <field
-                    name="manager_id"
-                    widget="many2one_avatar_employee"
-                    optional="hide"
-                />
+                        name="manager_id"
+                        widget="many2one_avatar_employee"
+                        optional="hide"
+                    />
                     <field name="job_id" optional="hide" />
                     <field name="department_id" optional="hide" />
                     <field name="type_id" />
@@ -30,6 +31,7 @@
                     <field name="date" />
                     <field name="amount" sum="Total Amount" />
                 </xpath>
+            </data>
         </field>
     </record>
 
@@ -42,6 +44,7 @@
             ref="ssi_transaction_mixin.mixin_transaction_view_search"
         />
         <field name="arch" type="xml">
+            <data>
                 <xpath expr="//field[@name='company_id']" position="after">
                     <field name="analytic_account_id" />
                     <field name="analytic_partner_id" />
@@ -49,26 +52,27 @@
                 </xpath>
                 <xpath expr="//group[@name='group_by']" position="inside">
                     <filter
-                    name="grp_date"
-                    string="Date"
-                    context="{'group_by':'date'}"
-                />
+                        name="grp_date"
+                        string="Date"
+                        context="{'group_by':'date'}"
+                    />
                     <filter
-                    name="grp_analytic_account"
-                    string="Analytic Account"
-                    context="{'group_by':'analytic_account_id'}"
-                />
+                        name="grp_analytic_account"
+                        string="Analytic Account"
+                        context="{'group_by':'analytic_account_id'}"
+                    />
                     <filter
-                    name="grp_analytic_partner"
-                    string="Analytic Partner"
-                    context="{'group_by':'analytic_partner_id'}"
-                />
+                        name="grp_analytic_partner"
+                        string="Analytic Partner"
+                        context="{'group_by':'analytic_partner_id'}"
+                    />
                     <filter
-                    name="grp_analytic_group"
-                    string="Analytic Group"
-                    context="{'group_by':'analytic_group_id'}"
-                />
+                        name="grp_analytic_group"
+                        string="Analytic Group"
+                        context="{'group_by':'analytic_group_id'}"
+                    />
                 </xpath>
+            </data>
         </field>
     </record>
 
@@ -81,28 +85,29 @@
             ref="ssi_transaction_mixin.mixin_transaction_view_form"
         />
         <field name="arch" type="xml">
+            <data>
                 <xpath expr="//field[@name='user_id']" position="after">
                     <field name="employee_id" widget="many2one_avatar_employee" />
                     <field
-                    name="manager_id"
-                    widget="many2one_avatar_employee"
-                    readonly="1"
-                    force_save="1"
-                />
+                        name="manager_id"
+                        widget="many2one_avatar_employee"
+                        readonly="1"
+                        force_save="1"
+                    />
                     <field name="job_id" readonly="1" force_save="1" />
                     <field name="department_id" readonly="1" force_save="1" />
                 </xpath>
                 <xpath expr="//group[@name='header_right']" position="inside">
                     <field name="type_id" />
                     <field
-                    name="allowed_analytic_account_ids"
-                    widget="many2many_tags"
-                    invisible="1"
-                />
+                        name="allowed_analytic_account_ids"
+                        widget="many2many_tags"
+                        invisible="1"
+                    />
                     <field
-                    name="analytic_account_id"
-                    domain="[('id','in',allowed_analytic_account_ids)]"
-                />
+                        name="analytic_account_id"
+                        domain="[('id','in',allowed_analytic_account_ids)]"
+                    />
                     <field name="analytic_partner_id" />
                     <field name="analytic_group_id" />
                     <field name="date_start" />
@@ -112,22 +117,22 @@
                 <xpath expr="//page[1]" position="before">
                     <page name="detail" string="Details">
                         <button
-                        name="action_populate"
-                        string="Populate"
-                        type="object"
-                        class="oe_highlight"
-                        icon="fa-refresh"
-                        style="margin-right:4px"
-                        attrs="{'invisible':[('state','!=','draft')]}"
-                    />
+                            name="action_populate"
+                            string="Populate"
+                            type="object"
+                            class="oe_highlight"
+                            icon="fa-refresh"
+                            style="margin-right:4px"
+                            attrs="{'invisible':[('state','!=','draft')]}"
+                        />
                         <button
-                        name="action_clear"
-                        string="Clear"
-                        type="object"
-                        class="oe_highlight"
-                        icon="fa-eraser"
-                        attrs="{'invisible':[('state','!=','draft')]}"
-                    />
+                            name="action_clear"
+                            string="Clear"
+                            type="object"
+                            class="oe_highlight"
+                            icon="fa-eraser"
+                            attrs="{'invisible':[('state','!=','draft')]}"
+                        />
                         <field name="detail_ids" />
                         <group name="detail1" colspan="4" col="2">
                             <field name="amount" />
@@ -151,6 +156,7 @@
                         </group>
                     </page>
                 </xpath>
+            </data>
         </field>
     </record>
 
