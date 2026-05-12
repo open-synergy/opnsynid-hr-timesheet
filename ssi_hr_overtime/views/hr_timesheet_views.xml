@@ -11,13 +11,11 @@
         <field name="mode">extension</field>
         <field name="inherit_id" ref="ssi_timesheet.hr_timesheet_view_form" />
         <field name="arch" type="xml">
-            <data>
                 <xpath expr="//page[@name='computation']" position="before">
                     <page name="overtime" string="Overtimes">
                         <field name="overtime_ids" nolabel="1" />
                     </page>
                 </xpath>
-            </data>
         </field>
     </record>
 

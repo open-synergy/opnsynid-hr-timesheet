@@ -2,8 +2,7 @@
 <!-- Copyright 2022 OpenSynergy Indonesia
      Copyright 2022 PT. Simetri Sinergi Indonesia
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
-<odoo>
-<data noupdate="1">
+<odoo noupdate="1">
 
 <!-- overtime_-->
 <record id="approval_template_overtime" model="approval.template">
@@ -18,10 +17,9 @@
     <field name="template_id" ref="approval_template_overtime" />
     <field name="approver_selection_method">use_group</field>
     <field
-                name="approver_group_ids"
-                eval="[(6,0,[ref('ssi_hr_overtime.hr_overtime_validator_group')])]"
-            />
+            name="approver_group_ids"
+            eval="[(6,0,[ref('ssi_hr_overtime.hr_overtime_validator_group')])]"
+        />
 </record>
 
-</data>
 </odoo>

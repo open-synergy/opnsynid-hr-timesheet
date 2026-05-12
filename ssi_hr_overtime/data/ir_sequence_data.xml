@@ -2,8 +2,7 @@
 <!-- Copyright 2022 OpenSynergy Indonesia
      Copyright 2022 PT. Simetri Sinergi Indonesia
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
-<odoo>
-<data noupdate="1">
+<odoo noupdate="1">
 <!-- overtime  -->
 <record id="sequence_overtime" model="ir.sequence">
     <field name="name">Default overtime</field>
@@ -16,5 +15,4 @@
     <field eval="False" name="company_id" />
 </record>
 
-</data>
 </odoo>

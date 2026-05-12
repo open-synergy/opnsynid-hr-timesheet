@@ -12,7 +12,6 @@
         />
     <field name="mode">primary</field>
     <field name="arch" type="xml">
-        <data />
     </field>
 </record>
 
@@ -22,12 +21,10 @@
     <field name="inherit_id" ref="ssi_master_data_mixin.mixin_master_data_view_tree" />
     <field name="mode">primary</field>
     <field name="arch" type="xml">
-        <data>
             <xpath expr="//field[@name='name']" position="after">
                 <field name="apply_limit_per_day" widget="boolean_toggle" />
                 <field name="limit_per_day" />
             </xpath>
-        </data>
 
     </field>
 </record>
@@ -38,12 +35,10 @@
     <field name="inherit_id" ref="ssi_master_data_mixin.mixin_master_data_view_form" />
     <field name="mode">primary</field>
     <field name="arch" type="xml">
-        <data>
             <xpath expr="//field[@name='active']" position="after">
                 <field name="apply_limit_per_day" widget="boolean_toggle" />
                 <field name="limit_per_day" />
             </xpath>
-        </data>
     </field>
 </record>
 
