@@ -9,23 +9,25 @@
     <field name="mode">primary</field>
     <field name="inherit_id" ref="ssi_transaction_mixin.mixin_transaction_view_tree" />
     <field name="arch" type="xml">
+        <data>
             <xpath expr="//field[@name='company_id']" position="after">
                 <field
-                    name="employee_id"
-                    string="Employee"
-                    widget="many2one_avatar_employee"
-                />
+                        name="employee_id"
+                        string="Employee"
+                        widget="many2one_avatar_employee"
+                    />
                 <field name="department_id" optional="hide" />
                 <field
-                    name="manager_id"
-                    widget="many2one_avatar_employee"
-                    optional="hide"
-                />
+                        name="manager_id"
+                        widget="many2one_avatar_employee"
+                        optional="hide"
+                    />
                 <field name="job_id" optional="hide" />
                 <field name="date" />
                 <field name="date_start" />
                 <field name="date_end" />
             </xpath>
+        </data>
     </field>
 </record>
 
@@ -38,18 +40,20 @@
             ref="ssi_transaction_mixin.mixin_transaction_view_search"
         />
     <field name="arch" type="xml">
+        <data>
             <xpath expr="//group[@name='group_by']" position="inside">
                 <filter
-                    name="grp_date_start"
-                    string="Date Start"
-                    context="{'group_by':'date_start'}"
-                />
+                        name="grp_date_start"
+                        string="Date Start"
+                        context="{'group_by':'date_start'}"
+                    />
                 <filter
-                    name="grp_date_end"
-                    string="Date End"
-                    context="{'group_by':'date_end'}"
-                />
+                        name="grp_date_end"
+                        string="Date End"
+                        context="{'group_by':'date_end'}"
+                    />
             </xpath>
+        </data>
     </field>
 </record>
 
@@ -59,15 +63,16 @@
     <field name="mode">primary</field>
     <field name="inherit_id" ref="ssi_transaction_mixin.mixin_transaction_view_form" />
     <field name="arch" type="xml">
+        <data>
           <xpath expr="//field[@name='user_id']" position="after">
               <field name="employee_id" widget="many2one_avatar_employee" />
               <field name="department_id" readonly="1" force_save="1" />
               <field
-                    name="manager_id"
-                    widget="many2one_avatar_employee"
-                    readonly="1"
-                    force_save="1"
-                />
+                        name="manager_id"
+                        widget="many2one_avatar_employee"
+                        readonly="1"
+                        force_save="1"
+                    />
               <field name="job_id" readonly="1" force_save="1" />
           </xpath>
           <xpath expr="//group[@name='header_right']" position="inside">
@@ -85,6 +90,7 @@
                 </field>
             </page>
           </xpath>
+        </data>
     </field>
 </record>
 
