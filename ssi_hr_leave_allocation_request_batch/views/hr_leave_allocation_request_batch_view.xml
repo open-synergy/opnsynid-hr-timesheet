@@ -13,29 +13,31 @@
             ref="ssi_transaction_mixin.mixin_transaction_view_search"
         />
         <field name="arch" type="xml">
+            <data>
                 <xpath expr="//group[@name='group_by']" position="inside">
                     <filter
-                    name="grp_type_id"
-                    string="Type"
-                    context="{'group_by':'type_id'}"
-                />
+                        name="grp_type_id"
+                        string="Type"
+                        context="{'group_by':'type_id'}"
+                    />
                     <filter
-                    name="grp_date_start"
-                    string="Date Start"
-                    context="{'group_by':'date_start'}"
-                />
+                        name="grp_date_start"
+                        string="Date Start"
+                        context="{'group_by':'date_start'}"
+                    />
                     <filter
-                    name="grp_date_end"
-                    string="Date End"
-                    context="{'group_by':'date_end'}"
-                />
+                        name="grp_date_end"
+                        string="Date End"
+                        context="{'group_by':'date_end'}"
+                    />
                     <filter
-                    name="grp_date_eextended"
-                    string="Date Extended"
-                    context="{'group_by':'date_extended'}"
-                />
+                        name="grp_date_eextended"
+                        string="Date Extended"
+                        context="{'group_by':'date_extended'}"
+                    />
                     <field name="type_id" />
                 </xpath>
+            </data>
         </field>
     </record>
 
@@ -48,12 +50,14 @@
             ref="ssi_transaction_mixin.mixin_transaction_view_tree"
         />
         <field name="arch" type="xml">
+            <data>
                 <xpath expr="//field[@name='display_name']" position="after">
                     <field name="type_id" />
                     <field name="date_start" />
                     <field name="date_extended" />
                     <field name="number_of_days" />
                 </xpath>
+            </data>
         </field>
     </record>
 
@@ -66,6 +70,7 @@
             ref="ssi_transaction_mixin.mixin_transaction_view_form"
         />
         <field name="arch" type="xml">
+            <data>
                 <xpath expr="//field[@name='user_id']" position="after">
                     <field name="type_id" domain="[('need_allocation', '=', True)]" />
                 </xpath>
@@ -83,16 +88,17 @@
                         </group>
                     </page>
                     <page
-                    string="Leave Allocation Request"
-                    name="leave_allocation_request"
-                >
+                        string="Leave Allocation Request"
+                        name="leave_allocation_request"
+                    >
                         <field
-                        name="leave_allocation_request_ids"
-                        nolabel="1"
-                        force_save="1"
-                    />
+                            name="leave_allocation_request_ids"
+                            nolabel="1"
+                            force_save="1"
+                        />
                     </page>
                 </xpath>
+            </data>
         </field>
     </record>
 
