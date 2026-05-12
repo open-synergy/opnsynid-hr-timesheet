@@ -4,7 +4,7 @@
 # pylint: disable=locally-disabled, manifest-required-author
 {
     "name": "Leave Allocation Request Batch",
-    "version": "14.0.1.1.1",
+    "version": "14.0.2.0.0",
     "category": "Human Resource",
     "website": "https://simetri-sinergi.id",
     "author": "OpenSynergy Indonesia, PT. Simetri Sinergi Indonesia",
