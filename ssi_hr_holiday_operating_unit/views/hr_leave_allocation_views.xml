@@ -9,21 +9,23 @@
     <field name="inherit_id" ref="ssi_hr_holiday.hr_leave_allocation_view_search" />
     <field name="priority" eval="30" />
     <field name="arch" type="xml">
+        <data>
             <xpath expr="//field[@name='employee_id']" position="after">
                 <field
-                    name="operating_unit_id"
-                    groups="operating_unit.group_multi_operating_unit"
-                    optional="hide"
-                />
+                        name="operating_unit_id"
+                        groups="operating_unit.group_multi_operating_unit"
+                        optional="hide"
+                    />
             </xpath>
             <xpath expr="//group[@name='group_by']" position="inside">
                 <filter
-                    name="grp_ou"
-                    string="Operating Unit"
-                    context="{'group_by':'operating_unit_id'}"
-                    groups="operating_unit.group_multi_operating_unit"
-                />
+                        name="grp_ou"
+                        string="Operating Unit"
+                        context="{'group_by':'operating_unit_id'}"
+                        groups="operating_unit.group_multi_operating_unit"
+                    />
             </xpath>
+        </data>
     </field>
 </record>
 
@@ -33,13 +35,15 @@
     <field name="inherit_id" ref="ssi_hr_holiday.hr_leave_allocation_view_tree" />
     <field name="priority" eval="30" />
     <field name="arch" type="xml">
+        <data>
             <xpath expr="//field[@name='employee_id']" position="after">
                 <field
-                    name="operating_unit_id"
-                    groups="operating_unit.group_multi_operating_unit"
-                    optional="hide"
-                />
+                        name="operating_unit_id"
+                        groups="operating_unit.group_multi_operating_unit"
+                        optional="hide"
+                    />
             </xpath>
+        </data>
     </field>
 </record>
 
@@ -49,13 +53,15 @@
     <field name="inherit_id" ref="ssi_hr_holiday.hr_leave_allocation_view_form" />
     <field name="priority" eval="30" />
     <field name="arch" type="xml">
+        <data>
             <xpath expr="//field[@name='company_id']" position="after">
                 <field
-                    name="operating_unit_id"
-                    groups="operating_unit.group_multi_operating_unit"
-                    optional="hide"
-                />
+                        name="operating_unit_id"
+                        groups="operating_unit.group_multi_operating_unit"
+                        optional="hide"
+                    />
             </xpath>
+        </data>
     </field>
 </record>
 </odoo>
