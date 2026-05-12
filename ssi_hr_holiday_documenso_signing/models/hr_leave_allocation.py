@@ -9,7 +9,7 @@ class HrLeaveAllocation(models.Model):
     _name = "hr.leave_allocation"
     _inherit = [
         "hr.leave_allocation",
-        "mixin.documenso_signing",
+        "mixin.documenso_signing_approval",
     ]
 
     _documenso_signing_create_page = True

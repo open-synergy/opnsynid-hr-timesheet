@@ -9,7 +9,7 @@ class HrOvertime(models.Model):
     _name = "hr.overtime"
     _inherit = [
         "hr.overtime",
-        "mixin.documenso_signing",
+        "mixin.documenso_signing_approval",
     ]
 
     _documenso_signing_create_page = True

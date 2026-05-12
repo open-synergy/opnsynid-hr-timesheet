@@ -2,17 +2,16 @@
 <!-- Copyright 2022 OpenSynergy Indonesia
      Copyright 2022 PT. Simetri Sinergi Indonesia
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
-<odoo>
-<data noupdate="1">
+<odoo noupdate="1">
 
 <!-- leave allocation -->
 <record id="policy_template_leave_allocation" model="policy.template">
     <field name="name">Standard</field>
     <field name="model_id" ref="ssi_hr_holiday.model_hr_leave_allocation" />
     <field
-                name="state_field_id"
-                search="[('model_id.model','=','hr.leave_allocation'),('name','=','state')]"
-            />
+            name="state_field_id"
+            search="[('model_id.model','=','hr.leave_allocation'),('name','=','state')]"
+        />
     <field name="sequence" eval="100" />
     <field name="python_code">result=True</field>
 </record>
@@ -21,20 +20,20 @@
 <record id="policy_template_leave_allocation_confirm" model="policy.template_detail">
     <field name="template_id" ref="policy_template_leave_allocation" />
     <field
-                name="field_id"
-                search="[('model_id.model','=','hr.leave_allocation'),('name','=','confirm_ok')]"
-            />
+            name="field_id"
+            search="[('model_id.model','=','hr.leave_allocation'),('name','=','confirm_ok')]"
+        />
     <field name="restrict_state" eval="1" />
     <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','hr.leave_allocation'),('value','=','draft')]"
-            />
+            name="state_ids"
+            search="[('field_id.model_id.model','=','hr.leave_allocation'),('value','=','draft')]"
+        />
     <field name="restrict_user" eval="1" />
     <field name="computation_method">use_group</field>
     <field
-                name="group_ids"
-                eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_allocation_user_group')])]"
-            />
+            name="group_ids"
+            eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_allocation_user_group')])]"
+        />
     <field name="restrict_additional" eval="0" />
 </record>
 
@@ -42,14 +41,14 @@
 <record id="policy_template_leave_allocation_approve" model="policy.template_detail">
     <field name="template_id" ref="policy_template_leave_allocation" />
     <field
-                name="field_id"
-                search="[('model_id.model','=','hr.leave_allocation'),('name','=','approve_ok')]"
-            />
+            name="field_id"
+            search="[('model_id.model','=','hr.leave_allocation'),('name','=','approve_ok')]"
+        />
     <field name="restrict_state" eval="1" />
     <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','hr.leave_allocation'),('value','=','confirm')]"
-            />
+            name="state_ids"
+            search="[('field_id.model_id.model','=','hr.leave_allocation'),('value','=','confirm')]"
+        />
     <field name="restrict_user" eval="0" />
     <field name="restrict_additional" eval="1" />
     <field name="additional_python_code">result = False
@@ -61,14 +60,14 @@ if env.user.id in document.active_approver_user_ids.ids:
 <record id="policy_template_leave_allocation_reject" model="policy.template_detail">
     <field name="template_id" ref="policy_template_leave_allocation" />
     <field
-                name="field_id"
-                search="[('model_id.model','=','hr.leave_allocation'),('name','=','reject_ok')]"
-            />
+            name="field_id"
+            search="[('model_id.model','=','hr.leave_allocation'),('name','=','reject_ok')]"
+        />
     <field name="restrict_state" eval="1" />
     <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','hr.leave_allocation'),('value','=','confirm')]"
-            />
+            name="state_ids"
+            search="[('field_id.model_id.model','=','hr.leave_allocation'),('value','=','confirm')]"
+        />
     <field name="restrict_user" eval="0" />
     <field name="restrict_additional" eval="1" />
     <field name="additional_python_code">result = False
@@ -79,25 +78,25 @@ if env.user.id in document.active_approver_user_ids.ids:
 
 <!-- leave_allocation: restart_approval_ok -->
 <record
-            id="policy_template_leave_allocation_restart_approval"
-            model="policy.template_detail"
-        >
+        id="policy_template_leave_allocation_restart_approval"
+        model="policy.template_detail"
+    >
     <field name="template_id" ref="policy_template_leave_allocation" />
     <field
-                name="field_id"
-                search="[('model_id.model','=','hr.leave_allocation'),('name','=','restart_approval_ok')]"
-            />
+            name="field_id"
+            search="[('model_id.model','=','hr.leave_allocation'),('name','=','restart_approval_ok')]"
+        />
     <field name="restrict_state" eval="1" />
     <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','hr.leave_allocation'),('value','in',['confirm','reject'])]"
-            />
+            name="state_ids"
+            search="[('field_id.model_id.model','=','hr.leave_allocation'),('value','in',['confirm','reject'])]"
+        />
     <field name="restrict_user" eval="1" />
     <field name="computation_method">use_group</field>
     <field
-                name="group_ids"
-                eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_allocation_validator_group')])]"
-            />
+            name="group_ids"
+            eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_allocation_validator_group')])]"
+        />
     <field name="restrict_additional" eval="1" />
     <field name="additional_python_code">result = False
 if not document.approval_template_id:
@@ -108,20 +107,20 @@ if not document.approval_template_id:
 <record id="policy_template_leave_allocation_cancel" model="policy.template_detail">
     <field name="template_id" ref="policy_template_leave_allocation" />
     <field
-                name="field_id"
-                search="[('model_id.model','=','hr.leave_allocation'),('name','=','cancel_ok')]"
-            />
+            name="field_id"
+            search="[('model_id.model','=','hr.leave_allocation'),('name','=','cancel_ok')]"
+        />
     <field name="restrict_state" eval="1" />
     <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','hr.leave_allocation'),('value','in',['draft','confirm','open','done','reject'])]"
-            />
+            name="state_ids"
+            search="[('field_id.model_id.model','=','hr.leave_allocation'),('value','in',['draft','confirm','open','done','reject'])]"
+        />
       <field name="restrict_user" eval="1" />
       <field name="computation_method">use_group</field>
       <field
-                name="group_ids"
-                eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_allocation_validator_group')])]"
-            />
+            name="group_ids"
+            eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_allocation_validator_group')])]"
+        />
     <field name="restrict_additional" eval="0" />
 </record>
 
@@ -129,20 +128,20 @@ if not document.approval_template_id:
 <record id="policy_template_leave_allocation_restart" model="policy.template_detail">
     <field name="template_id" ref="policy_template_leave_allocation" />
     <field
-                name="field_id"
-                search="[('model_id.model','=','hr.leave_allocation'),('name','=','restart_ok')]"
-            />
+            name="field_id"
+            search="[('model_id.model','=','hr.leave_allocation'),('name','=','restart_ok')]"
+        />
     <field name="restrict_state" eval="1" />
     <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','hr.leave_allocation'),('value','in',['cancel'])]"
-            />
+            name="state_ids"
+            search="[('field_id.model_id.model','=','hr.leave_allocation'),('value','in',['cancel'])]"
+        />
     <field name="restrict_user" eval="1" />
     <field name="computation_method">use_group</field>
     <field
-                name="group_ids"
-                eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_allocation_validator_group')])]"
-            />
+            name="group_ids"
+            eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_allocation_validator_group')])]"
+        />
     <field name="restrict_additional" eval="0" />
 </record>
 
@@ -150,44 +149,44 @@ if not document.approval_template_id:
 <record id="policy_template_leave_allocation_terminate" model="policy.template_detail">
     <field name="template_id" ref="policy_template_leave_allocation" />
     <field
-                name="field_id"
-                search="[('model_id.model','=','hr.leave_allocation'),('name','=','terminate_ok')]"
-            />
+            name="field_id"
+            search="[('model_id.model','=','hr.leave_allocation'),('name','=','terminate_ok')]"
+        />
     <field name="restrict_state" eval="1" />
     <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','hr.leave_allocation'),('value','in',['done'])]"
-            />
+            name="state_ids"
+            search="[('field_id.model_id.model','=','hr.leave_allocation'),('value','in',['done'])]"
+        />
     <field name="restrict_user" eval="1" />
     <field name="computation_method">use_group</field>
     <field
-                name="group_ids"
-                eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_allocation_validator_group')])]"
-            />
+            name="group_ids"
+            eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_allocation_validator_group')])]"
+        />
     <field name="restrict_additional" eval="0" />
 </record>
 
 <!-- Leave Allocation: manual_number_ok -->
 <record
-            id="policy_template_leave_allocation_manual_number"
-            model="policy.template_detail"
-        >
+        id="policy_template_leave_allocation_manual_number"
+        model="policy.template_detail"
+    >
     <field name="template_id" ref="policy_template_leave_allocation" />
     <field
-                name="field_id"
-                search="[('model_id.model','=','hr.leave_allocation'),('name','=','manual_number_ok')]"
-            />
+            name="field_id"
+            search="[('model_id.model','=','hr.leave_allocation'),('name','=','manual_number_ok')]"
+        />
     <field name="restrict_state" eval="1" />
     <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','hr.leave_allocation'),('value','=','draft')]"
-            />
+            name="state_ids"
+            search="[('field_id.model_id.model','=','hr.leave_allocation'),('value','=','draft')]"
+        />
     <field name="restrict_user" eval="1" />
     <field name="computation_method">use_group</field>
     <field
-                name="group_ids"
-                eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_allocation_validator_group')])]"
-            />
+            name="group_ids"
+            eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_allocation_validator_group')])]"
+        />
     <field name="restrict_additional" eval="0" />
 </record>
 
@@ -196,9 +195,9 @@ if not document.approval_template_id:
     <field name="name">Standard</field>
     <field name="model_id" ref="ssi_hr_holiday.model_hr_leave" />
     <field
-                name="state_field_id"
-                search="[('model_id.model','=','hr.leave'),('name','=','state')]"
-            />
+            name="state_field_id"
+            search="[('model_id.model','=','hr.leave'),('name','=','state')]"
+        />
     <field name="sequence" eval="100" />
     <field name="python_code">result=True</field>
 </record>
@@ -207,20 +206,20 @@ if not document.approval_template_id:
 <record id="policy_template_leave_confirm" model="policy.template_detail">
     <field name="template_id" ref="policy_template_leave" />
     <field
-                name="field_id"
-                search="[('model_id.model','=','hr.leave'),('name','=','confirm_ok')]"
-            />
+            name="field_id"
+            search="[('model_id.model','=','hr.leave'),('name','=','confirm_ok')]"
+        />
     <field name="restrict_state" eval="1" />
     <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','hr.leave'),('value','=','draft')]"
-            />
+            name="state_ids"
+            search="[('field_id.model_id.model','=','hr.leave'),('value','=','draft')]"
+        />
     <field name="restrict_user" eval="1" />
     <field name="computation_method">use_group</field>
     <field
-                name="group_ids"
-                eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_user_group')])]"
-            />
+            name="group_ids"
+            eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_user_group')])]"
+        />
     <field name="restrict_additional" eval="0" />
 </record>
 
@@ -228,14 +227,14 @@ if not document.approval_template_id:
 <record id="policy_template_leave_approve" model="policy.template_detail">
     <field name="template_id" ref="policy_template_leave" />
     <field
-                name="field_id"
-                search="[('model_id.model','=','hr.leave'),('name','=','approve_ok')]"
-            />
+            name="field_id"
+            search="[('model_id.model','=','hr.leave'),('name','=','approve_ok')]"
+        />
     <field name="restrict_state" eval="1" />
     <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','hr.leave'),('value','=','confirm')]"
-            />
+            name="state_ids"
+            search="[('field_id.model_id.model','=','hr.leave'),('value','=','confirm')]"
+        />
     <field name="restrict_user" eval="0" />
     <field name="restrict_additional" eval="1" />
     <field name="additional_python_code">result = False
@@ -247,14 +246,14 @@ if env.user.id in document.active_approver_user_ids.ids:
 <record id="policy_template_leave_reject" model="policy.template_detail">
     <field name="template_id" ref="policy_template_leave" />
     <field
-                name="field_id"
-                search="[('model_id.model','=','hr.leave'),('name','=','reject_ok')]"
-            />
+            name="field_id"
+            search="[('model_id.model','=','hr.leave'),('name','=','reject_ok')]"
+        />
     <field name="restrict_state" eval="1" />
     <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','hr.leave'),('value','=','confirm')]"
-            />
+            name="state_ids"
+            search="[('field_id.model_id.model','=','hr.leave'),('value','=','confirm')]"
+        />
     <field name="restrict_user" eval="0" />
     <field name="restrict_additional" eval="1" />
     <field name="additional_python_code">result = False
@@ -266,20 +265,20 @@ if env.user.id in document.active_approver_user_ids.ids:
 <record id="policy_template_leave_restart_approval" model="policy.template_detail">
     <field name="template_id" ref="policy_template_leave" />
     <field
-                name="field_id"
-                search="[('model_id.model','=','hr.leave'),('name','=','restart_approval_ok')]"
-            />
+            name="field_id"
+            search="[('model_id.model','=','hr.leave'),('name','=','restart_approval_ok')]"
+        />
     <field name="restrict_state" eval="1" />
     <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','hr.leave'),('value','in',['confirm'])]"
-            />
+            name="state_ids"
+            search="[('field_id.model_id.model','=','hr.leave'),('value','in',['confirm'])]"
+        />
     <field name="restrict_user" eval="1" />
     <field name="computation_method">use_group</field>
     <field
-                name="group_ids"
-                eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_validator_group')])]"
-            />
+            name="group_ids"
+            eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_validator_group')])]"
+        />
     <field name="restrict_additional" eval="1" />
     <field name="additional_python_code">result = False
 if not document.approval_template_id:
@@ -290,20 +289,20 @@ if not document.approval_template_id:
 <record id="policy_template_leave_cancel" model="policy.template_detail">
     <field name="template_id" ref="policy_template_leave" />
     <field
-                name="field_id"
-                search="[('model_id.model','=','hr.leave'),('name','=','cancel_ok')]"
-            />
+            name="field_id"
+            search="[('model_id.model','=','hr.leave'),('name','=','cancel_ok')]"
+        />
     <field name="restrict_state" eval="1" />
     <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','hr.leave'),('value','in',['draft','confirm','done'])]"
-            />
+            name="state_ids"
+            search="[('field_id.model_id.model','=','hr.leave'),('value','in',['draft','confirm','done'])]"
+        />
       <field name="restrict_user" eval="1" />
       <field name="computation_method">use_group</field>
       <field
-                name="group_ids"
-                eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_validator_group')])]"
-            />
+            name="group_ids"
+            eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_validator_group')])]"
+        />
     <field name="restrict_additional" eval="0" />
 </record>
 
@@ -311,20 +310,20 @@ if not document.approval_template_id:
 <record id="policy_template_leave_restart" model="policy.template_detail">
     <field name="template_id" ref="policy_template_leave" />
     <field
-                name="field_id"
-                search="[('model_id.model','=','hr.leave'),('name','=','restart_ok')]"
-            />
+            name="field_id"
+            search="[('model_id.model','=','hr.leave'),('name','=','restart_ok')]"
+        />
     <field name="restrict_state" eval="1" />
     <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','hr.leave'),('value','in',['cancel','reject'])]"
-            />
+            name="state_ids"
+            search="[('field_id.model_id.model','=','hr.leave'),('value','in',['cancel','reject'])]"
+        />
     <field name="restrict_user" eval="1" />
     <field name="computation_method">use_group</field>
     <field
-                name="group_ids"
-                eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_validator_group')])]"
-            />
+            name="group_ids"
+            eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_validator_group')])]"
+        />
     <field name="restrict_additional" eval="0" />
 </record>
 
@@ -332,22 +331,21 @@ if not document.approval_template_id:
 <record id="policy_template_leave_manual_number" model="policy.template_detail">
     <field name="template_id" ref="policy_template_leave" />
     <field
-                name="field_id"
-                search="[('model_id.model','=','hr.leave'),('name','=','manual_number_ok')]"
-            />
+            name="field_id"
+            search="[('model_id.model','=','hr.leave'),('name','=','manual_number_ok')]"
+        />
     <field name="restrict_state" eval="1" />
     <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','hr.leave'),('value','=','draft')]"
-            />
+            name="state_ids"
+            search="[('field_id.model_id.model','=','hr.leave'),('value','=','draft')]"
+        />
     <field name="restrict_user" eval="1" />
     <field name="computation_method">use_group</field>
     <field
-                name="group_ids"
-                eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_validator_group')])]"
-            />
+            name="group_ids"
+            eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_validator_group')])]"
+        />
     <field name="restrict_additional" eval="0" />
 </record>
 
-</data>
 </odoo>

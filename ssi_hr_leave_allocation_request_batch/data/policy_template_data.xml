@@ -2,61 +2,60 @@
 <!-- Copyright 2022 OpenSynergy Indonesia
      Copyright 2022 PT. Simetri Sinergi Indonesia
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
-<odoo>
-<data noupdate="1">
+<odoo noupdate="1">
 <record id="policy_template_hr_leave_allocation_request_batch" model="policy.template">
     <field name="name">Standard</field>
     <field
-                name="model_id"
-                ref="ssi_hr_leave_allocation_request_batch.model_hr_leave_allocation_request_batch"
-            />
+            name="model_id"
+            ref="ssi_hr_leave_allocation_request_batch.model_hr_leave_allocation_request_batch"
+        />
     <field
-                name="state_field_id"
-                search="[('model_id.model','=','hr.leave_allocation_request_batch'),('name','=','state')]"
-            />
+            name="state_field_id"
+            search="[('model_id.model','=','hr.leave_allocation_request_batch'),('name','=','state')]"
+        />
     <field name="sequence" eval="100" />
     <field name="python_code">result=True</field>
 </record>
 
 <!-- confirm_ok -->
 <record
-            id="policy_template_hr_leave_allocation_request_batch_confirm"
-            model="policy.template_detail"
-        >
+        id="policy_template_hr_leave_allocation_request_batch_confirm"
+        model="policy.template_detail"
+    >
     <field name="template_id" ref="policy_template_hr_leave_allocation_request_batch" />
     <field
-                name="field_id"
-                search="[('model_id.model','=','hr.leave_allocation_request_batch'),('name','=','confirm_ok')]"
-            />
+            name="field_id"
+            search="[('model_id.model','=','hr.leave_allocation_request_batch'),('name','=','confirm_ok')]"
+        />
     <field name="restrict_state" eval="1" />
     <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','hr.leave_allocation_request_batch'),('value','=','draft')]"
-            />
+            name="state_ids"
+            search="[('field_id.model_id.model','=','hr.leave_allocation_request_batch'),('value','=','draft')]"
+        />
     <field name="restrict_user" eval="1" />
     <field name="computation_method">use_group</field>
     <field
-                name="group_ids"
-                eval="[(6,0,[ref('hr_leave_allocation_request_batch_user_group')])]"
-            />
+            name="group_ids"
+            eval="[(6,0,[ref('hr_leave_allocation_request_batch_user_group')])]"
+        />
     <field name="restrict_additional" eval="0" />
 </record>
 
 <!-- approve_ok -->
 <record
-            id="policy_template_hr_leave_allocation_request_batch_approve"
-            model="policy.template_detail"
-        >
+        id="policy_template_hr_leave_allocation_request_batch_approve"
+        model="policy.template_detail"
+    >
     <field name="template_id" ref="policy_template_hr_leave_allocation_request_batch" />
     <field
-                name="field_id"
-                search="[('model_id.model','=','hr.leave_allocation_request_batch'),('name','=','approve_ok')]"
-            />
+            name="field_id"
+            search="[('model_id.model','=','hr.leave_allocation_request_batch'),('name','=','approve_ok')]"
+        />
     <field name="restrict_state" eval="1" />
     <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','hr.leave_allocation_request_batch'),('value','=','confirm')]"
-            />
+            name="state_ids"
+            search="[('field_id.model_id.model','=','hr.leave_allocation_request_batch'),('value','=','confirm')]"
+        />
     <field name="restrict_user" eval="0" />
     <field name="restrict_additional" eval="1" />
     <field name="additional_python_code">result = False
@@ -66,19 +65,19 @@ if env.user.id in document.active_approver_user_ids.ids:
 
 <!-- reject_ok -->
 <record
-            id="policy_template_hr_leave_allocation_request_batch_reject"
-            model="policy.template_detail"
-        >
+        id="policy_template_hr_leave_allocation_request_batch_reject"
+        model="policy.template_detail"
+    >
     <field name="template_id" ref="policy_template_hr_leave_allocation_request_batch" />
     <field
-                name="field_id"
-                search="[('model_id.model','=','hr.leave_allocation_request_batch'),('name','=','reject_ok')]"
-            />
+            name="field_id"
+            search="[('model_id.model','=','hr.leave_allocation_request_batch'),('name','=','reject_ok')]"
+        />
     <field name="restrict_state" eval="1" />
     <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','hr.leave_allocation_request_batch'),('value','=','confirm')]"
-            />
+            name="state_ids"
+            search="[('field_id.model_id.model','=','hr.leave_allocation_request_batch'),('value','=','confirm')]"
+        />
     <field name="restrict_user" eval="0" />
     <field name="restrict_additional" eval="1" />
     <field name="additional_python_code">result = False
@@ -88,25 +87,25 @@ if env.user.id in document.active_approver_user_ids.ids:
 
 <!-- restart_approval_ok -->
 <record
-            id="policy_template_hr_leave_allocation_request_batch_restart_approval"
-            model="policy.template_detail"
-        >
+        id="policy_template_hr_leave_allocation_request_batch_restart_approval"
+        model="policy.template_detail"
+    >
     <field name="template_id" ref="policy_template_hr_leave_allocation_request_batch" />
     <field
-                name="field_id"
-                search="[('model_id.model','=','hr.leave_allocation_request_batch'),('name','=','restart_approval_ok')]"
-            />
+            name="field_id"
+            search="[('model_id.model','=','hr.leave_allocation_request_batch'),('name','=','restart_approval_ok')]"
+        />
     <field name="restrict_state" eval="1" />
     <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','hr.leave_allocation_request_batch'),('value','in',['confirm','reject'])]"
-            />
+            name="state_ids"
+            search="[('field_id.model_id.model','=','hr.leave_allocation_request_batch'),('value','in',['confirm','reject'])]"
+        />
     <field name="restrict_user" eval="1" />
     <field name="computation_method">use_group</field>
     <field
-                name="group_ids"
-                eval="[(6,0,[ref('hr_leave_allocation_request_batch_validator_group')])]"
-            />
+            name="group_ids"
+            eval="[(6,0,[ref('hr_leave_allocation_request_batch_validator_group')])]"
+        />
     <field name="restrict_additional" eval="1" />
     <field name="additional_python_code">result = False
 if not document.approval_template_id:
@@ -115,74 +114,73 @@ if not document.approval_template_id:
 
 <!-- cancel_ok -->
 <record
-            id="policy_template_hr_leave_allocation_request_batch_cancel"
-            model="policy.template_detail"
-        >
+        id="policy_template_hr_leave_allocation_request_batch_cancel"
+        model="policy.template_detail"
+    >
     <field name="template_id" ref="policy_template_hr_leave_allocation_request_batch" />
     <field
-                name="field_id"
-                search="[('model_id.model','=','hr.leave_allocation_request_batch'),('name','=','cancel_ok')]"
-            />
+            name="field_id"
+            search="[('model_id.model','=','hr.leave_allocation_request_batch'),('name','=','cancel_ok')]"
+        />
     <field name="restrict_state" eval="1" />
     <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','hr.leave_allocation_request_batch'),('value','in',['draft','confirm','open','done','reject'])]"
-            />
+            name="state_ids"
+            search="[('field_id.model_id.model','=','hr.leave_allocation_request_batch'),('value','in',['draft','confirm','open','done','reject'])]"
+        />
     <field name="restrict_user" eval="1" />
     <field name="computation_method">use_group</field>
     <field
-                name="group_ids"
-                eval="[(6,0,[ref('hr_leave_allocation_request_batch_validator_group')])]"
-            />
+            name="group_ids"
+            eval="[(6,0,[ref('hr_leave_allocation_request_batch_validator_group')])]"
+        />
     <field name="restrict_additional" eval="0" />
 </record>
 
 <!-- restart_ok -->
 <record
-            id="policy_template_hr_leave_allocation_request_batch_restart"
-            model="policy.template_detail"
-        >
+        id="policy_template_hr_leave_allocation_request_batch_restart"
+        model="policy.template_detail"
+    >
     <field name="template_id" ref="policy_template_hr_leave_allocation_request_batch" />
     <field
-                name="field_id"
-                search="[('model_id.model','=','hr.leave_allocation_request_batch'),('name','=','restart_ok')]"
-            />
+            name="field_id"
+            search="[('model_id.model','=','hr.leave_allocation_request_batch'),('name','=','restart_ok')]"
+        />
     <field name="restrict_state" eval="1" />
     <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','hr.leave_allocation_request_batch'),('value','in',['cancel'])]"
-            />
+            name="state_ids"
+            search="[('field_id.model_id.model','=','hr.leave_allocation_request_batch'),('value','in',['cancel'])]"
+        />
     <field name="restrict_user" eval="1" />
     <field name="computation_method">use_group</field>
     <field
-                name="group_ids"
-                eval="[(6,0,[ref('hr_leave_allocation_request_batch_validator_group')])]"
-            />
+            name="group_ids"
+            eval="[(6,0,[ref('hr_leave_allocation_request_batch_validator_group')])]"
+        />
     <field name="restrict_additional" eval="0" />
 </record>
 
 <!-- manual_number_ok -->
 <record
-            id="policy_template_hr_leave_allocation_request_batch_manual_number"
-            model="policy.template_detail"
-        >
+        id="policy_template_hr_leave_allocation_request_batch_manual_number"
+        model="policy.template_detail"
+    >
     <field name="template_id" ref="policy_template_hr_leave_allocation_request_batch" />
     <field
-                name="field_id"
-                search="[('model_id.model','=','hr.leave_allocation_request_batch'),('name','=','manual_number_ok')]"
-            />
+            name="field_id"
+            search="[('model_id.model','=','hr.leave_allocation_request_batch'),('name','=','manual_number_ok')]"
+        />
     <field name="restrict_state" eval="1" />
     <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','hr.leave_allocation_request_batch'),('value','=','draft')]"
-            />
+            name="state_ids"
+            search="[('field_id.model_id.model','=','hr.leave_allocation_request_batch'),('value','=','draft')]"
+        />
     <field name="restrict_user" eval="1" />
     <field name="computation_method">use_group</field>
     <field
-                name="group_ids"
-                eval="[(6,0,[ref('hr_leave_allocation_request_batch_validator_group')])]"
-            />
+            name="group_ids"
+            eval="[(6,0,[ref('hr_leave_allocation_request_batch_validator_group')])]"
+        />
     <field name="restrict_additional" eval="0" />
 </record>
-</data>
 </odoo>

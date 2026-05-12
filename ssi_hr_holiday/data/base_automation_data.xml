@@ -2,7 +2,6 @@
 <!-- Copyright 2022 OpenSynergy Indonesia
      Copyright 2022 PT. Simetri Sinergi Indonesia
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
-<data>
 <!-- leave allocation done -->
 <record id="leave_allocation_done" model="base.automation">
     <field name="action_server_id" ref="ssi_hr_holiday.leave_allocation_action_done" />
@@ -11,5 +10,4 @@
     <field name="filter_domain">[('num_of_days_available','=',0)]</field>
 </record>
 
-</data>
 </odoo>
