@@ -1,0 +1,899 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ssi_work_log_expense
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__move_id
+msgid "# Accounting Entry"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__name
+msgid "# Document"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_hr_work_log__expense_id
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_summary__expense_id
+msgid "# Expense"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__accrue_account_id
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_summary__account_id
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__accrue_account_id
+msgid "Account"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_expense.work_log_expense_view_form
+msgid "Accounting"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__message_needaction
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__active
+msgid "Active"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__active_approval_ids
+msgid "Active Approvals"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__active_approver_partner_ids
+msgid "Active Partners"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__active_approver_user_ids
+msgid "Active Users"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__activity_ids
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__activity_ids
+msgid "Activities"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__activity_exception_decoration
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__activity_state
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__activity_state
+msgid "Activity State"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__activity_type_icon
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__activity_type_icon
+msgid "Activity Type Icon"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:res.groups,name:ssi_work_log_expense.work_log_expense_all_group
+msgid "All"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:res.groups,name:ssi_work_log_expense.work_log_expense_direct_all_subordinate_group
+msgid "All Subordinate"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__allowed_analytic_account_ids
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__allowed_analytic_account_ids
+msgid "Allowed Analytic Accounts"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__allowed_analytic_group_ids
+msgid "Allowed Analytic Groups"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_expense.work_log_expense_type_view_form
+msgid "Allowed Analytics"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__allowed_policy_template_ids
+msgid "Allowed Policy Templates"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_summary__amount
+msgid "Amount"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__amount
+msgid "Amount Total"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_generate_work_log_expense__analytic_account_id
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__analytic_account_id
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_summary__analytic_account_id
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_expense.work_log_expense_view_search
+msgid "Analytic Account"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__analytic_group_id
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_expense.work_log_expense_view_search
+msgid "Analytic Group"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__analytic_partner_id
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_expense.work_log_expense_view_search
+msgid "Analytic Partner"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense__approval_template_id
+msgid "Approval Configuration"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__approval_template_id
+msgid "Approval Template"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__approval_ids
+msgid "Approvals"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense__approve_ok
+msgid ""
+"Approve policy\n"
+"\n"
+"* If active user can see and execute 'Approve' button"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__approved
+msgid "Approved"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_expense.generate_work_log_expense_view_form
+msgid "Are you sure?"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__message_attachment_count
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__message_attachment_count
+msgid "Attachment Count"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__approve_ok
+msgid "Can Approve"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__cancel_ok
+msgid "Can Cancel"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__confirm_ok
+msgid "Can Confirm"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__done_ok
+msgid "Can Finished"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__manual_number_ok
+msgid "Can Input Manual Document Number"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__reject_ok
+msgid "Can Reject"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__restart_ok
+msgid "Can Restart"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__restart_approval_ok
+msgid "Can Restart Approval"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_expense.generate_work_log_expense_view_form
+msgid "Cancel"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__cancel_reason_id
+msgid "Cancel Reason"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense__cancel_ok
+msgid ""
+"Cancel policy\n"
+"\n"
+"* If active user can see and execute 'Cancel' button"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields.selection,name:ssi_work_log_expense.selection__work_log_expense__state__cancel
+msgid "Cancelled"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_expense.work_log_expense_view_form
+msgid "Clear"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__code
+msgid "Code"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__company_id
+#: model:res.groups,name:ssi_work_log_expense.work_log_expense_company_group
+msgid "Company"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__company_partner_id
+msgid "Company Partner"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:res.groups,name:ssi_work_log_expense.work_log_expense_company_child_group
+msgid "Company and All Child Companies"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense__company_id
+msgid ""
+"Company that own the document\n"
+"\n"
+"* Automatically filled with user's company.\n"
+"  Default company can be changed"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_expense.generate_work_log_expense_view_form
+msgid "Confirm"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense__confirm_ok
+msgid ""
+"Confirm policy\n"
+"\n"
+"* If active user can see and execute 'Confirm' button"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_generate_work_log_expense__create_uid
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__create_uid
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_summary__create_uid
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_generate_work_log_expense__create_date
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__create_date
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_summary__create_date
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_generate_work_log_expense__date
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__date
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_expense.work_log_expense_view_search
+msgid "Date"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_generate_work_log_expense__date_end
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__date_end
+msgid "Date End"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_generate_work_log_expense__date_start
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__date_start
+msgid "Date Start"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__department_id
+msgid "Department"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__detail_ids
+msgid "Detail"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_expense.work_log_expense_view_form
+msgid "Details"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:res.groups,name:ssi_work_log_expense.work_log_expense_direct_subordinate_group
+msgid "Direct Subordinate"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_generate_work_log_expense__display_name
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_hr_work_log__display_name
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__display_name
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_summary__display_name
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields.selection,name:ssi_work_log_expense.selection__work_log_expense__state__done
+msgid "Done"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense__done_ok
+msgid ""
+"Done policy\n"
+"\n"
+"* If active user can see and execute 'Done' button"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields.selection,name:ssi_work_log_expense.selection__work_log_expense__state__draft
+msgid "Draft"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__employee_id
+msgid "Employee"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__employee_partner_id
+msgid "Employee Partner"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense__employee_partner_id
+msgid ""
+"Enter here the private address of the employee, not the one linked to your "
+"company."
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__message_follower_ids
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__message_channel_ids
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__message_channel_ids
+msgid "Followers (Channels)"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__message_partner_ids
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense__activity_type_icon
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense_type__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_expense.work_log_expense_type_view_form
+msgid "Generate"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.actions.act_window,name:ssi_work_log_expense.generate_work_log_expense_action
+#: model:ir.model,name:ssi_work_log_expense.model_generate_work_log_expense
+msgid "Generate Work Log Expense"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model,name:ssi_work_log_expense.model_hr_work_log
+msgid "HR Work Log"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_generate_work_log_expense__id
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_hr_work_log__id
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__id
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_summary__id
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__id
+msgid "ID"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__activity_exception_icon
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__activity_exception_icon
+msgid "Icon"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense__activity_exception_icon
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense_type__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense__message_needaction
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense__message_unread
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense_type__message_needaction
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense_type__message_unread
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense__message_has_error
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense_type__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:work_log_expense_type,name:ssi_work_log_expense.demo_work_log_expense_type1
+msgid "Internal - (test)"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__message_is_follower
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__job_id
+msgid "Job Position"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__journal_id
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__journal_id
+msgid "Journal"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_generate_work_log_expense____last_update
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_hr_work_log____last_update
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense____last_update
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_summary____last_update
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_generate_work_log_expense__write_uid
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__write_uid
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_summary__write_uid
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_generate_work_log_expense__write_date
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__write_date
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_summary__write_date
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__message_main_attachment_id
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__message_main_attachment_id
+msgid "Main Attachment"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__manager_id
+msgid "Manager"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense__manual_number_ok
+msgid ""
+"Manual number assignment policy\n"
+"\n"
+"* If active user can edit document number"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense_type__active
+msgid ""
+"Master data status\n"
+"\n"
+"* Inactive data can not be selected when creating new transaction\n"
+"* Transaction with inactive master data can still be viewed\n"
+"* Set master data as inactive if master data no longger needed,\n"
+"but master data already used on transaction"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense_type__code
+msgid ""
+"Master data unique identifier.\n"
+"\n"
+"* Fill with '/' if You do not need unique identifier\n"
+"* Click 'Generate Code' button to automatically assign code.\n"
+"  Sequence template mush be set to perform this action\n"
+"  Only master data with '/' code will be assign automatic code"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__message_has_error
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__message_ids
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_summary__move_line_id
+msgid "Move Line"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__my_activity_date_deadline
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__name
+msgid "Name"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__need_validation
+msgid "Need Validation"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__activity_date_deadline
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__activity_summary
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__activity_summary
+msgid "Next Activity Summary"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__activity_type_id
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__activity_type_id
+msgid "Next Activity Type"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__next_approval_ids
+msgid "Next Approvals"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__note
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__note
+msgid "Note"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__message_needaction_counter
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__message_has_error_counter
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense__message_needaction_counter
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense_type__message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense__message_has_error_counter
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense_type__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense__message_unread_counter
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense_type__message_unread_counter
+msgid "Number of unread messages"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__policy_template_id
+msgid "Policy Template"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_expense.work_log_expense_view_form
+msgid "Populate"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_summary__product_id
+msgid "Product"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields.selection,name:ssi_work_log_expense.selection__work_log_expense__state__reject
+msgid "Reject"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense__reject_ok
+msgid ""
+"Reject policy\n"
+"\n"
+"* If active user can see and execute 'Reject' button"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__rejected
+msgid "Rejected"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__user_id
+msgid "Responsible"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__activity_user_id
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__activity_user_id
+msgid "Responsible User"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense__restart_approval_ok
+msgid ""
+"Restart approval policy\n"
+"\n"
+"* If active user can see and execute 'Restart Approval' button"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense__restart_ok
+msgid ""
+"Restart policy\n"
+"\n"
+"* If active user can see and execute 'Restart' button"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__reviewer_id
+msgid "Reviewer"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__state
+msgid "State"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense__activity_state
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense_type__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__summary_ids
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_expense.work_log_expense_view_form
+msgid "Summary"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_expense.work_log_expense_view_tree
+msgid "Total Amount"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense__name
+msgid ""
+"Transaction/document number\n"
+"\n"
+"* Unique indentifer of transaction\n"
+"* Leave '/' to automatically generate number\n"
+"* Change '/' into any number/identifier to manually assign number.\n"
+"  Manual number assignment can be done in 'Draft' state\n"
+"  Only user with 'Can Manualy Assign Number' policy can manually assign number.\n"
+"* Transaction with number other than '/' can not be deleted."
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_generate_work_log_expense__type_id
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__type_id
+msgid "Type"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense__activity_exception_decoration
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense_type__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__message_unread
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__message_unread
+msgid "Unread Messages"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__message_unread_counter
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__message_unread_counter
+msgid "Unread Messages Counter"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:res.groups,name:ssi_work_log_expense.work_log_expense_user_group
+msgid "User"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense__user_id
+msgid ""
+"User that responsible for document\n"
+"\n"
+"* Create user can be different with responsible user\n"
+"* Automatically filled with user that initiate document creation.\n"
+"  Default responsible can be changed."
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense__reviewer_id
+msgid ""
+"User that responsible to review document\n"
+"\n"
+"* Unless it configured to approve reviewer does not equal to approver"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense__active_approver_user_ids
+msgid "Users that can approve/reject document"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:res.groups,name:ssi_work_log_expense.work_log_expense_validator_group
+msgid "Validator"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:res.groups,name:ssi_work_log_expense.work_log_expense_viewer_group
+msgid "Viewer"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields.selection,name:ssi_work_log_expense.selection__work_log_expense__state__confirm
+msgid "Waiting for Approval"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense__website_message_ids
+#: model:ir.model.fields,field_description:ssi_work_log_expense.field_work_log_expense_type__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense__website_message_ids
+#: model:ir.model.fields,help:ssi_work_log_expense.field_work_log_expense_type__website_message_ids
+msgid "Website communication history"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model,name:ssi_work_log_expense.model_work_log_expense
+#: model:ir.module.category,name:ssi_work_log_expense.work_log_expense_module_category
+msgid "Work Log Expense"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.module.category,name:ssi_work_log_expense.work_log_expense_configurator_module_category
+msgid "Work Log Expense - Configurator"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.module.category,name:ssi_work_log_expense.work_log_expense_data_ownership_module_category
+msgid "Work Log Expense - Data Ownership"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.module.category,name:ssi_work_log_expense.work_log_expense_workflow_module_category
+msgid "Work Log Expense - Workflow"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model,name:ssi_work_log_expense.model_work_log_expense_summary
+msgid "Work Log Expense Summary"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:res.groups,name:ssi_work_log_expense.work_log_expense_type_group
+msgid "Work Log Expense Type"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.actions.act_window,name:ssi_work_log_expense.work_log_expense_type_action
+#: model:ir.ui.menu,name:ssi_work_log_expense.work_log_expense_type_menu
+msgid "Work Log Expense Types"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.actions.act_window,name:ssi_work_log_expense.work_log_expense_action
+#: model:ir.ui.menu,name:ssi_work_log_expense.work_log_expense_menu
+msgid "Work Log Expenses"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model:ir.model,name:ssi_work_log_expense.model_work_log_expense_type
+msgid "Work Log To Expense Type"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: code:addons/ssi_work_log_expense/models/work_log_expense.py:0
+#, python-format
+msgid "Work log expense"
+msgstr ""
+
+#. module: ssi_work_log_expense
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_expense.generate_work_log_expense_view_form
+msgid "or"
+msgstr ""
