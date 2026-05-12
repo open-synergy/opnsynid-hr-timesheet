@@ -1,0 +1,727 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ssi_timesheet_attendance
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ssi_timesheet_attendance
+#: code:addons/ssi_timesheet_attendance/models/hr_employee.py:0
+#, python-format
+msgid ""
+"\n"
+"            Context: Sign in from employee data\n"
+"            Database ID: %s\n"
+"            Problem: No active timesheet\n"
+"            Solution: Create timesheet\n"
+"            "
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: code:addons/ssi_timesheet_attendance/models/hr_employee.py:0
+#, python-format
+msgid ""
+"\n"
+"            Context: Sign out from employee data\n"
+"            Database ID: %s\n"
+"            Problem: No active timesheet\n"
+"            Solution: Create timesheet\n"
+"            "
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__sheet_id
+msgid "# Timesheet"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.res_config_settings_view_form
+msgid ""
+"<span class=\"fa fa-lg fa-building-o\" title=\"Values set here are company-"
+"specific.\" groups=\"base.group_multi_company\"/>"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__hr_timesheet_attendance_schedule__state__absence
+msgid "Absence"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__active
+msgid "Active"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee__active_timesheet_id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee_base__active_timesheet_id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee_public__active_timesheet_id
+msgid "Active Timesheet"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__activity_ids
+msgid "Activities"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__activity_state
+msgid "Activity State"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__activity_type_icon
+msgid "Activity Type Icon"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.hr_timesheet_view_attendance_form
+msgid "Atendance Schedules"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_attachment_count
+msgid "Attachment Count"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.ui.menu,name:ssi_timesheet_attendance.menu_hr_attendance_configuration
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.hr_employee_view_form
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.hr_timesheet_view_attendance_form
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.res_config_settings_view_form
+msgid "Attendance"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.actions.act_window,name:ssi_timesheet_attendance.hr_attendance_reason_action
+#: model:ir.model,name:ssi_timesheet_attendance.model_hr_attendance_reason
+#: model:res.groups,name:ssi_timesheet_attendance.hr_attendance_reason_group
+msgid "Attendance Reason"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.ui.menu,name:ssi_timesheet_attendance.hr_attendance_reason_menu
+msgid "Attendance Reasons"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet__schedule_ids
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__schedule_id
+msgid "Attendance Schedule"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee__attendance_status
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee_base__attendance_status
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee_public__attendance_status
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet__attendance_status
+msgid "Attendance Status"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee__attendance_ids
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee_base__attendance_ids
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee_public__attendance_ids
+msgid "Attendance(s)"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.actions.act_window,name:ssi_timesheet_attendance.hr_timesheet_attendance_action
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet__attendance_ids
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__attendance_ids
+#: model:ir.ui.menu,name:ssi_timesheet_attendance.hr_timesheet_attendance_menu
+msgid "Attendances"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model,name:ssi_timesheet_attendance.model_hr_employee_base
+msgid "Basic Employee"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__check_date
+msgid "Check Date"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__check_in
+msgid "Check In"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_company__check_in_reason_id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_config_settings__check_in_reason_id
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.res_config_settings_view_form
+msgid "Check In Reason"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__check_out
+msgid "Check Out"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_company__checkout_buffer
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_config_settings__checkout_buffer
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.res_config_settings_view_form
+msgid "Check Out Buffer"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_company__check_out_reason_id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_config_settings__check_out_reason_id
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.res_config_settings_view_form
+msgid "Check Out Reason"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__code
+msgid "Code"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model,name:ssi_timesheet_attendance.model_res_company
+msgid "Companies"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.hr_timesheet_view_attendance_form
+msgid "Compute Schedules. Are you sure?"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model,name:ssi_timesheet_attendance.model_res_config_settings
+msgid "Config Settings"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.hr_timesheet_view_attendance_form
+msgid "Create Schedules"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__by_system
+msgid "Created By System"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__create_uid
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__create_uid
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__create_date
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__create_date
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__date
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__date
+msgid "Date"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.hr_timesheet_attendance_view_search
+msgid "Date <> Check In"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__date_end
+msgid "Date End"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__date_start
+msgid "Date Start"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: code:addons/ssi_timesheet_attendance/models/hr_timesheet_attendance_schedule.py:0
+#, python-format
+msgid "Date Start on Attendance Schedule MUST be in TIME SHEET range ..."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_timesheet_attendance__check_date
+msgid "Date is not the same as check in"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model_terms:ir.actions.act_window,help:ssi_timesheet_attendance.resource_calendar_action
+msgid ""
+"Define working hours and time table that could be scheduled to your project "
+"members"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__display_name
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee_base__display_name
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet__display_name
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__display_name
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__display_name
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_daily_summary__display_name
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_company__display_name
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_config_settings__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__early_start_hour
+msgid "Early Start"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__employee_id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__employee_id
+msgid "Employee"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__finish_early_hour
+msgid "Finish Early"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__finish_late_hour
+msgid "Finish Late"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_channel_ids
+msgid "Followers (Channels)"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model,name:ssi_timesheet_attendance.model_hr_timesheet_daily_summary
+msgid "HR Timesheet Daily Summary"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee_base__id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet__id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_daily_summary__id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_company__id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_config_settings__id
+msgid "ID"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__activity_exception_icon
+msgid "Icon"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__message_needaction
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__message_unread
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason____last_update
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee_base____last_update
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet____last_update
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance____last_update
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule____last_update
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_daily_summary____last_update
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_company____last_update
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_config_settings____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__write_uid
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__write_uid
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__write_date
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__write_date
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__late_start_hour
+msgid "Late Start"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee__latest_attendance_id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee_base__latest_attendance_id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee_public__latest_attendance_id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet__latest_attendance_id
+msgid "Latest Attedance"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_main_attachment_id
+msgid "Main Attachment"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__active
+msgid ""
+"Master data status\n"
+"\n"
+"* Inactive data can not be selected when creating new transaction\n"
+"* Transaction with inactive master data can still be viewed\n"
+"* Set master data as inactive if master data no longger needed,\n"
+"but master data already used on transaction"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__code
+msgid ""
+"Master data unique identifier.\n"
+"\n"
+"* Fill with '/' if You do not need unique identifier\n"
+"* Click 'Generate Code' button to automatically assign code.\n"
+"  Sequence template mush be set to perform this action\n"
+"  Only master data with '/' code will be assign automatic code"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__activity_summary
+msgid "Next Activity Summary"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__activity_type_id
+msgid "Next Activity Type"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.hr_timesheet_attendance_view_search
+msgid "No Check Out"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__note
+msgid "Note"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__message_unread_counter
+msgid "Number of unread messages"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__hr_timesheet_attendance__state__open
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__hr_timesheet_attendance_schedule__state__open
+msgid "Open"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__hr_timesheet_attendance__state__present
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__hr_timesheet_attendance_schedule__state__present
+msgid "Present"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__real_date_end
+msgid "Real Date End"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__real_date_start
+msgid "Real Date Start"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__real_valid_hour
+msgid "Real Valid Hour"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__real_work_hour
+msgid "Real Work Hour"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__name
+msgid "Reason"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__reason_check_in_id
+msgid "Reason In"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__reason_check_out_id
+msgid "Reason Out"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__activity_user_id
+msgid "Responsible User"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet__running_attendance
+msgid "Running Attendance"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: code:addons/ssi_timesheet_attendance/models/hr_timesheet_attendance_schedule.py:0
+#, python-format
+msgid "Schedule Hours Cannot Greater Than 24 Hours"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__schedule_work_hour
+msgid "Schedule Work Hour"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__sheet_id
+msgid "Sheet"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: code:addons/ssi_timesheet_attendance/models/hr_timesheet_attendance.py:0
+#, python-format
+msgid "Sheet Not FOUND .. Check in "
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#. openerp-web
+#: code:addons/ssi_timesheet_attendance/static/src/xml/attendance_systray.xml:0
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__hr_employee__attendance_status__sign_in
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__hr_employee_base__attendance_status__sign_in
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__hr_employee_public__attendance_status__sign_in
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.hr_employee_self_view_form
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.hr_timesheet_view_attendance_form
+#, python-format
+msgid "Sign In"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#. openerp-web
+#: code:addons/ssi_timesheet_attendance/static/src/xml/attendance_systray.xml:0
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__hr_employee__attendance_status__sign_out
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__hr_employee_base__attendance_status__sign_out
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__hr_employee_public__attendance_status__sign_out
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.hr_employee_self_view_form
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.hr_timesheet_view_attendance_form
+#, python-format
+msgid "Sign Out"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__state
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__state
+msgid "State"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model,name:ssi_timesheet_attendance.model_hr_timesheet
+msgid "Timesheet"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model,name:ssi_timesheet_attendance.model_hr_timesheet_attendance
+#: model:res.groups,name:ssi_timesheet_attendance.hr_timesheet_attendance_group
+msgid "Timesheet Attendance"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model,name:ssi_timesheet_attendance.model_hr_timesheet_attendance_schedule
+msgid "Timesheet Attendance Schedule"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee__timesheet_ids
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee_base__timesheet_ids
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee_public__timesheet_ids
+msgid "Timesheet(s)"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.hr_timesheet_attendance_view_search
+msgid "Today"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet__total_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_daily_summary__total_attendance
+msgid "Total Attendance"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__total_hour
+msgid "Total Hour"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.hr_timesheet_attendance_view_search
+msgid "Total Hour > 16h"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_daily_summary__total_valid_attendance
+msgid "Total Valid Attendance"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__total_valid_hour
+msgid "Total Valid Hour"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_unread
+msgid "Unread Messages"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_unread_counter
+msgid "Unread Messages Counter"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__valid_check_in
+msgid "Valid Check In"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__valid_check_out
+msgid "Valid Check Out"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__website_message_ids
+msgid "Website communication history"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.actions.act_window,name:ssi_timesheet_attendance.resource_calendar_action
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet__working_schedule_id
+#: model:ir.ui.menu,name:ssi_timesheet_attendance.resource_calendar_menu
+#: model:res.groups,name:ssi_timesheet_attendance.working_schedule_group
+msgid "Working Schedule"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:hr.attendance_reason,name:ssi_timesheet_attendance.hr_attendance_reason_system_check_in
+msgid "[SYSTEM] Automatic check in due to inactivity"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:hr.attendance_reason,name:ssi_timesheet_attendance.hr_attendance_reason_system_check_out
+msgid "[SYSTEM] Automatic check out due to inactivity"
+msgstr ""
