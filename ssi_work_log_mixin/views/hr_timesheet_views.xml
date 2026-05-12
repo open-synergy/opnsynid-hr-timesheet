@@ -8,11 +8,9 @@
     <field name="model">hr.timesheet</field>
     <field name="inherit_id" ref="ssi_timesheet.hr_timesheet_view_tree" />
     <field name="arch" type="xml">
-        <data>
             <xpath expr="//field[@name='job_id']" position="after">
                 <field name="total_work_log" widget="float_time" />
             </xpath>
-        </data>
     </field>
 </record>
 
@@ -21,7 +19,6 @@
     <field name="model">hr.timesheet</field>
     <field name="inherit_id" ref="ssi_timesheet.hr_timesheet_view_form" />
     <field name="arch" type="xml">
-        <data>
             <xpath expr="//page[@name='computation']" position="before">
                 <page name="page_work_log" string="All Work Log(s)">
                     <field name="all_work_log_ids" nolabel="1" />
@@ -30,7 +27,6 @@
             <xpath expr="//field[@name='date_end']" position="after">
                 <field name="total_work_log" widget="float_time" />
             </xpath>
-        </data>
     </field>
 </record>
 </odoo>
