@@ -1,0 +1,581 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ssi_hr_leave_request_batch
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave__batch_id
+msgid "# Batch"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__name
+msgid "# Document"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__active_approval_ids
+msgid "Active Approvals"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__active_approver_partner_ids
+msgid "Active Partners"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__active_approver_user_ids
+msgid "Active Users"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__activity_ids
+msgid "Activities"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__activity_state
+msgid "Activity State"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__activity_type_icon
+msgid "Activity Type Icon"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:res.groups,name:ssi_hr_leave_request_batch.hr_leave_request_batch_all_group
+msgid "All"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__allowed_policy_template_ids
+msgid "Allowed Policy Templates"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,help:ssi_hr_leave_request_batch.field_hr_leave_request_batch__approval_template_id
+msgid "Approval Configuration"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__approval_template_id
+msgid "Approval Template"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__approval_ids
+msgid "Approvals"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,help:ssi_hr_leave_request_batch.field_hr_leave_request_batch__approve_ok
+msgid ""
+"Approve policy\n"
+"\n"
+"* If active user can see and execute 'Approve' button"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__approved
+msgid "Approved"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__message_attachment_count
+msgid "Attachment Count"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__approve_ok
+msgid "Can Approve"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__cancel_ok
+msgid "Can Cancel"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__confirm_ok
+msgid "Can Confirm"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__done_ok
+msgid "Can Finished"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__manual_number_ok
+msgid "Can Input Manual Document Number"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__reject_ok
+msgid "Can Reject"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__restart_ok
+msgid "Can Restart"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__restart_approval_ok
+msgid "Can Restart Approval"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__cancel_reason_id
+msgid "Cancel Reason"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,help:ssi_hr_leave_request_batch.field_hr_leave_request_batch__cancel_ok
+msgid ""
+"Cancel policy\n"
+"\n"
+"* If active user can see and execute 'Cancel' button"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields.selection,name:ssi_hr_leave_request_batch.selection__hr_leave_request_batch__state__cancel
+msgid "Cancelled"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__company_id
+#: model:res.groups,name:ssi_hr_leave_request_batch.hr_leave_request_batch_company_group
+msgid "Company"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__company_partner_id
+msgid "Company Partner"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:res.groups,name:ssi_hr_leave_request_batch.hr_leave_request_batch_company_child_group
+msgid "Company and All Child Companies"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,help:ssi_hr_leave_request_batch.field_hr_leave_request_batch__company_id
+msgid ""
+"Company that own the document\n"
+"\n"
+"* Automatically filled with user's company.\n"
+"  Default company can be changed"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,help:ssi_hr_leave_request_batch.field_hr_leave_request_batch__confirm_ok
+msgid ""
+"Confirm policy\n"
+"\n"
+"* If active user can see and execute 'Confirm' button"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__date_end
+#: model_terms:ir.ui.view,arch_db:ssi_hr_leave_request_batch.hr_leave_request_batch_view_search
+msgid "Date End"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__date_start
+#: model_terms:ir.ui.view,arch_db:ssi_hr_leave_request_batch.hr_leave_request_batch_view_search
+msgid "Date Start"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave__display_name
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields.selection,name:ssi_hr_leave_request_batch.selection__hr_leave_request_batch__state__done
+msgid "Done"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,help:ssi_hr_leave_request_batch.field_hr_leave_request_batch__done_ok
+msgid ""
+"Done policy\n"
+"\n"
+"* If active user can see and execute 'Done' button"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields.selection,name:ssi_hr_leave_request_batch.selection__hr_leave_request_batch__state__draft
+msgid "Draft"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model_terms:ir.ui.view,arch_db:ssi_hr_leave_request_batch.hr_leave_request_batch_view_form
+msgid "Employee"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__employee_ids
+msgid "Employee(s)"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__message_channel_ids
+msgid "Followers (Channels)"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,help:ssi_hr_leave_request_batch.field_hr_leave_request_batch__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave__id
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__id
+msgid "ID"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__activity_exception_icon
+msgid "Icon"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,help:ssi_hr_leave_request_batch.field_hr_leave_request_batch__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,help:ssi_hr_leave_request_batch.field_hr_leave_request_batch__message_needaction
+#: model:ir.model.fields,help:ssi_hr_leave_request_batch.field_hr_leave_request_batch__message_unread
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,help:ssi_hr_leave_request_batch.field_hr_leave_request_batch__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave____last_update
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model_terms:ir.ui.view,arch_db:ssi_hr_leave_request_batch.hr_leave_request_batch_view_form
+msgid "Leave Request"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.actions.act_window,name:ssi_hr_leave_request_batch.hr_leave_request_batch_action
+#: model:ir.model,name:ssi_hr_leave_request_batch.model_hr_leave_request_batch
+#: model:ir.module.category,name:ssi_hr_leave_request_batch.hr_leave_request_batch_data_ownership_module_category
+#: model:ir.module.category,name:ssi_hr_leave_request_batch.hr_leave_request_batch_module_category
+#: model:ir.ui.menu,name:ssi_hr_leave_request_batch.menu_hr_leave_request_batch
+#: model_terms:ir.ui.view,arch_db:ssi_hr_leave_request_batch.hr_leave_view_search
+msgid "Leave Request Batch"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model,name:ssi_hr_leave_request_batch.model_hr_leave
+msgid "Leaves"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__message_main_attachment_id
+msgid "Main Attachment"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,help:ssi_hr_leave_request_batch.field_hr_leave_request_batch__manual_number_ok
+msgid ""
+"Manual number assignment policy\n"
+"\n"
+"* If active user can edit document number"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__need_validation
+msgid "Need Validation"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__activity_summary
+msgid "Next Activity Summary"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__activity_type_id
+msgid "Next Activity Type"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__next_approval_ids
+msgid "Next Approvals"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__note
+msgid "Note"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,help:ssi_hr_leave_request_batch.field_hr_leave_request_batch__message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,help:ssi_hr_leave_request_batch.field_hr_leave_request_batch__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,help:ssi_hr_leave_request_batch.field_hr_leave_request_batch__message_unread_counter
+msgid "Number of unread messages"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__policy_template_id
+msgid "Policy Template"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,help:ssi_hr_leave_request_batch.field_hr_leave_request_batch__reject_ok
+msgid ""
+"Reject policy\n"
+"\n"
+"* If active user can see and execute 'Reject' button"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__rejected
+#: model:ir.model.fields.selection,name:ssi_hr_leave_request_batch.selection__hr_leave_request_batch__state__reject
+msgid "Rejected"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__user_id
+msgid "Responsible"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__activity_user_id
+msgid "Responsible User"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,help:ssi_hr_leave_request_batch.field_hr_leave_request_batch__restart_approval_ok
+msgid ""
+"Restart approval policy\n"
+"\n"
+"* If active user can see and execute 'Restart Approval' button"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,help:ssi_hr_leave_request_batch.field_hr_leave_request_batch__restart_ok
+msgid ""
+"Restart policy\n"
+"\n"
+"* If active user can see and execute 'Restart' button"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__reviewer_id
+msgid "Reviewer"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__state
+msgid "State"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,help:ssi_hr_leave_request_batch.field_hr_leave_request_batch__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__leave_request_ids
+msgid "Time Off"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,help:ssi_hr_leave_request_batch.field_hr_leave_request_batch__name
+msgid ""
+"Transaction/document number\n"
+"\n"
+"* Unique indentifer of transaction\n"
+"* Leave '/' to automatically generate number\n"
+"* Change '/' into any number/identifier to manually assign number.\n"
+"  Manual number assignment can be done in 'Draft' state\n"
+"  Only user with 'Can Manualy Assign Number' policy can manually assign number.\n"
+"* Transaction with number other than '/' can not be deleted."
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__type_id
+#: model_terms:ir.ui.view,arch_db:ssi_hr_leave_request_batch.hr_leave_request_batch_view_search
+msgid "Type"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,help:ssi_hr_leave_request_batch.field_hr_leave_request_batch__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__message_unread
+msgid "Unread Messages"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__message_unread_counter
+msgid "Unread Messages Counter"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:res.groups,name:ssi_hr_leave_request_batch.hr_leave_request_batch_user_group
+msgid "User"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,help:ssi_hr_leave_request_batch.field_hr_leave_request_batch__user_id
+msgid ""
+"User that responsible for document\n"
+"\n"
+"* Create user can be different with responsible user\n"
+"* Automatically filled with user that initiate document creation.\n"
+"  Default responsible can be changed."
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,help:ssi_hr_leave_request_batch.field_hr_leave_request_batch__reviewer_id
+msgid ""
+"User that responsible to review document\n"
+"\n"
+"* Unless it configured to approve reviewer does not equal to approver"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,help:ssi_hr_leave_request_batch.field_hr_leave_request_batch__active_approver_user_ids
+msgid "Users that can approve/reject document"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:res.groups,name:ssi_hr_leave_request_batch.hr_leave_request_batch_validator_group
+msgid "Validator"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:res.groups,name:ssi_hr_leave_request_batch.hr_leave_request_batch_viewer_group
+msgid "Viewer"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields.selection,name:ssi_hr_leave_request_batch.selection__hr_leave_request_batch__state__confirm
+msgid "Waiting for Approval"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,field_description:ssi_hr_leave_request_batch.field_hr_leave_request_batch__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: ssi_hr_leave_request_batch
+#: model:ir.model.fields,help:ssi_hr_leave_request_batch.field_hr_leave_request_batch__website_message_ids
+msgid "Website communication history"
+msgstr ""
