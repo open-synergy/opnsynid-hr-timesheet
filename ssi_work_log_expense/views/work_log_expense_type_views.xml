@@ -12,7 +12,6 @@
         />
         <field name="mode">primary</field>
         <field name="arch" type="xml">
-            <data />
         </field>
     </record>
 
@@ -25,7 +24,6 @@
         />
         <field name="mode">primary</field>
         <field name="arch" type="xml">
-            <data />
         </field>
     </record>
 
@@ -38,15 +36,14 @@
         />
         <field name="mode">primary</field>
         <field name="arch" type="xml">
-            <data>
                 <xpath expr="//header" position="inside">
                     <button
-                        name="%(generate_work_log_expense_action)d"
-                        string="Generate"
-                        type="action"
-                        icon="fa-gear"
-                        class="oe_highlight"
-                    />
+                    name="%(generate_work_log_expense_action)d"
+                    string="Generate"
+                    type="action"
+                    icon="fa-gear"
+                    class="oe_highlight"
+                />
                 </xpath>
                 <xpath expr="//field[@name='active']" position="after">
                     <field name="journal_id" />
@@ -56,17 +53,16 @@
                     <page name="analytic" string="Allowed Analytics">
                         <group name="analytic_1" colspan="4" col="2">
                             <field
-                                name="allowed_analytic_group_ids"
-                                widget="many2many_tags"
-                            />
+                            name="allowed_analytic_group_ids"
+                            widget="many2many_tags"
+                        />
                             <field
-                                name="allowed_analytic_account_ids"
-                                widget="many2many_tags"
-                            />
+                            name="allowed_analytic_account_ids"
+                            widget="many2many_tags"
+                        />
                         </group>
                     </page>
                 </xpath>
-            </data>
         </field>
     </record>
 
