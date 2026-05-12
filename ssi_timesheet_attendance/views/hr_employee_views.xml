@@ -8,7 +8,6 @@
     <field name="model">hr.employee</field>
     <field name="inherit_id" ref="hr.view_employee_form" />
     <field name="arch" type="xml">
-        <data>
             <xpath expr="//notebook" position="inside">
                 <page name="attendance" string="Attendance">
                     <group name="attendance" colspan="4" col="2">
@@ -20,7 +19,6 @@
                     </group>
                 </page>
             </xpath>
-        </data>
     </field>
 </record>
 
@@ -29,25 +27,23 @@
     <field name="model">hr.employee</field>
     <field name="inherit_id" ref="ssi_hr_employee.hr_employee_self_view_form" />
     <field name="arch" type="xml">
-        <data>
             <xpath expr="//header" position="inside">
                 <field name="attendance_status" invisible="1" />
                 <button
-                        name="action_sign_in"
-                        string="Sign In"
-                        type="object"
-                        attrs="{'invisible':[('attendance_status','=','sign_in')]}"
-                        class="oe_highlight"
-                    />
+                    name="action_sign_in"
+                    string="Sign In"
+                    type="object"
+                    attrs="{'invisible':[('attendance_status','=','sign_in')]}"
+                    class="oe_highlight"
+                />
                 <button
-                        name="action_sign_out"
-                        string="Sign Out"
-                        type="object"
-                        attrs="{'invisible':[('attendance_status','=','sign_out')]}"
-                        class="oe_highlight"
-                    />
+                    name="action_sign_out"
+                    string="Sign Out"
+                    type="object"
+                    attrs="{'invisible':[('attendance_status','=','sign_out')]}"
+                    class="oe_highlight"
+                />
             </xpath>
-        </data>
     </field>
 </record>
 
