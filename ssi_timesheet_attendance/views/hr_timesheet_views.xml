@@ -8,9 +8,11 @@
     <field name="model">hr.timesheet</field>
     <field name="inherit_id" ref="ssi_timesheet.hr_timesheet_view_tree" />
     <field name="arch" type="xml">
+        <data>
             <xpath expr="//field[@name='job_id']" position="after">
                 <field name="total_attendance" widget="float_time" />
             </xpath>
+        </data>
     </field>
 </record>
 
@@ -20,6 +22,7 @@
     <field name="mode">extension</field>
     <field name="inherit_id" ref="ssi_timesheet.hr_timesheet_view_form" />
     <field name="arch" type="xml">
+        <data>
             <xpath expr="//field[@name='job_id']" position="after">
                 <field name="working_schedule_id" />
             </xpath>
@@ -31,16 +34,16 @@
                 <attribute name="invisible">0</attribute>
             </xpath>
             <xpath
-                expr="//field[@name='daily_summary_ids']/tree/field[@name='date']"
-                position="after"
-            >
+                    expr="//field[@name='daily_summary_ids']/tree/field[@name='date']"
+                    position="after"
+                >
                 <field name="total_attendance" widget="float_time" />
                 <field name="total_valid_attendance" widget="float_time" />
             </xpath>
             <xpath
-                expr="//field[@name='daily_summary_ids']/form/group/field[@name='date']"
-                position="after"
-            >
+                    expr="//field[@name='daily_summary_ids']/form/group/field[@name='date']"
+                    position="after"
+                >
                 <field name="total_attendance" widget="float_time" />
                 <field name="total_valid_attendance" widget="float_time" />
             </xpath>
@@ -48,49 +51,49 @@
                 <page name="page_attendance" string="Attendance">
                     <group name="attendance_1" colspan="4" col="2">
                         <button
-                            name="action_sign_in"
-                            string="Sign In"
-                            type="object"
-                            class="oe_highlight"
-                            attrs="{'invisible': ['|', ('state', '!=', 'open'),'&amp;',('state', '=', 'open'),('attendance_status','=','sign_in')]}"
-                            colspan="2"
-                            icon="fa-sign-in"
-                        />
+                                name="action_sign_in"
+                                string="Sign In"
+                                type="object"
+                                class="oe_highlight"
+                                attrs="{'invisible': ['|', ('state', '!=', 'open'),'&amp;',('state', '=', 'open'),('attendance_status','=','sign_in')]}"
+                                colspan="2"
+                                icon="fa-sign-in"
+                            />
                         <button
-                            name="action_sign_out"
-                            string="Sign Out"
-                            type="object"
-                            class="oe_highlight"
-                            attrs="{'invisible': ['|', ('state', '!=', 'open'),'&amp;',('state', '=', 'open'),('attendance_status','=','sign_out')]}"
-                            colspan="2"
-                            icon="fa-sign-out"
-                        />
+                                name="action_sign_out"
+                                string="Sign Out"
+                                type="object"
+                                class="oe_highlight"
+                                attrs="{'invisible': ['|', ('state', '!=', 'open'),'&amp;',('state', '=', 'open'),('attendance_status','=','sign_out')]}"
+                                colspan="2"
+                                icon="fa-sign-out"
+                            />
                     </group>
                     <group name="attendance_left" colspan="4" col="2">
                         <field name="latest_attendance_id" groups="base.group_no_one" />
                         <field name="attendance_status" />
                     </group>
                     <field
-                        context="{'default_employee_id': employee_id, 'user_id':user_id}"
-                        name="attendance_ids"
-                        nolabel="1"
-                        colspan="2"
-                        mode="tree"
-                    >
+                            context="{'default_employee_id': employee_id, 'user_id':user_id}"
+                            name="attendance_ids"
+                            nolabel="1"
+                            colspan="2"
+                            mode="tree"
+                        >
                         <tree editable="top">
                             <field invisible="1" name="create_date" />
                             <field name="date" />
                             <field name="check_in" />
                             <field
-                                name="reason_check_in_id"
-                                domain="[('by_system', '=', False)]"
-                            />
+                                    name="reason_check_in_id"
+                                    domain="[('by_system', '=', False)]"
+                                />
                             <field invisible="1" name="valid_check_in" />
                             <field name="check_out" />
                             <field
-                                name="reason_check_out_id"
-                                domain="[('by_system', '=', False)]"
-                            />
+                                    name="reason_check_out_id"
+                                    domain="[('by_system', '=', False)]"
+                                />
                             <field invisible="1" name="valid_check_out" />
                             <field invisible="1" name="employee_id" />
                             <field invisible="1" name="schedule_id" />
@@ -103,23 +106,23 @@
                 <page name="schedule" string="Atendance Schedules">
                     <group name="schedule" colspan="4" col="2">
                         <button
-                            name="action_compute_schedule"
-                            string="Create Schedules"
-                            type="object"
-                            confirm="Compute Schedules. Are you sure?"
-                            order="1"
-                            class="oe_highlight"
-                            attrs="{'invisible':[('state','not in', ['draft','open'])]}"
-                            colspan="2"
-                            icon="fa-cogs"
-                        />
+                                name="action_compute_schedule"
+                                string="Create Schedules"
+                                type="object"
+                                confirm="Compute Schedules. Are you sure?"
+                                order="1"
+                                class="oe_highlight"
+                                attrs="{'invisible':[('state','not in', ['draft','open'])]}"
+                                colspan="2"
+                                icon="fa-cogs"
+                            />
                     </group>
                     <field
-                        context="{'default_employee_id': employee_id, 'user_id':user_id}"
-                        name="schedule_ids"
-                        colspan="2"
-                        nolabel="1"
-                    >
+                            context="{'default_employee_id': employee_id, 'user_id':user_id}"
+                            name="schedule_ids"
+                            colspan="2"
+                            nolabel="1"
+                        >
                         <tree>
                             <field invisible="1" name="sheet_id" />
                             <field invisible="1" name="employee_id" />
@@ -132,25 +135,25 @@
                             <field name="real_work_hour" widget="float_time" />
                             <field name="real_valid_hour" widget="float_time" />
                             <field
-                                invisible="1"
-                                name="early_start_hour"
-                                widget="float_time"
-                            />
+                                    invisible="1"
+                                    name="early_start_hour"
+                                    widget="float_time"
+                                />
                             <field
-                                invisible="1"
-                                name="late_start_hour"
-                                widget="float_time"
-                            />
+                                    invisible="1"
+                                    name="late_start_hour"
+                                    widget="float_time"
+                                />
                             <field
-                                invisible="1"
-                                name="finish_early_hour"
-                                widget="float_time"
-                            />
+                                    invisible="1"
+                                    name="finish_early_hour"
+                                    widget="float_time"
+                                />
                             <field
-                                invisible="1"
-                                name="finish_late_hour"
-                                widget="float_time"
-                            />
+                                    invisible="1"
+                                    name="finish_late_hour"
+                                    widget="float_time"
+                                />
                             <field name="early_start_hour" widget="float_time" />
                             <field name="late_start_hour" widget="float_time" />
                             <field name="finish_early_hour" widget="float_time" />
@@ -174,30 +177,31 @@
                                 </group>
                                 <group name="schedule_1_2" colspan="1" col="2">
                                     <field
-                                        name="schedule_work_hour"
-                                        widget="float_time"
-                                    />
+                                            name="schedule_work_hour"
+                                            widget="float_time"
+                                        />
                                     <field name="real_work_hour" widget="float_time" />
                                     <field name="real_valid_hour" widget="float_time" />
                                     <field
-                                        name="early_start_hour"
-                                        widget="float_time"
-                                    />
+                                            name="early_start_hour"
+                                            widget="float_time"
+                                        />
                                     <field name="late_start_hour" widget="float_time" />
                                     <field
-                                        name="finish_early_hour"
-                                        widget="float_time"
-                                    />
+                                            name="finish_early_hour"
+                                            widget="float_time"
+                                        />
                                     <field
-                                        name="finish_late_hour"
-                                        widget="float_time"
-                                    />
+                                            name="finish_late_hour"
+                                            widget="float_time"
+                                        />
                                 </group>
                             </group>
                         </form>
                     </field>
                 </page>
             </xpath>
+        </data>
     </field>
 </record>
 
