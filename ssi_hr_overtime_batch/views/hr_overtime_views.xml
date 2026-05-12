@@ -8,11 +8,9 @@
         <field name="model">hr.overtime</field>
         <field name="inherit_id" ref="ssi_hr_overtime.hr_overtime_view_search" />
         <field name="arch" type="xml">
-            <data>
                 <xpath expr="//field[@name='user_id']" position="after">
                     <field name="batch_id" />
                 </xpath>
-            </data>
         </field>
     </record>
 
@@ -21,11 +19,9 @@
         <field name="model">hr.overtime</field>
         <field name="inherit_id" ref="ssi_hr_overtime.hr_overtime_view_form" />
         <field name="arch" type="xml">
-            <data>
                 <xpath expr="//group[@name='header_right']" position="inside">
                     <field name="batch_id" />
                 </xpath>
-            </data>
         </field>
     </record>
 </odoo>
