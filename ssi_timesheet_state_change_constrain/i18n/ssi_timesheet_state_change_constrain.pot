@@ -1,0 +1,49 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ssi_timesheet_state_change_constrain
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ssi_timesheet_state_change_constrain
+#: model:ir.model.fields,field_description:ssi_timesheet_state_change_constrain.field_hr_timesheet__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: ssi_timesheet_state_change_constrain
+#: model:ir.model.fields,field_description:ssi_timesheet_state_change_constrain.field_hr_timesheet__id
+msgid "ID"
+msgstr ""
+
+#. module: ssi_timesheet_state_change_constrain
+#: model:ir.model.fields,field_description:ssi_timesheet_state_change_constrain.field_hr_timesheet____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: ssi_timesheet_state_change_constrain
+#: model:ir.model.fields,field_description:ssi_timesheet_state_change_constrain.field_hr_timesheet__state_change_constrain_template_id
+msgid "State Change Constrain Template"
+msgstr ""
+
+#. module: ssi_timesheet_state_change_constrain
+#: model:ir.model.fields,field_description:ssi_timesheet_state_change_constrain.field_hr_timesheet__status_check_ids
+msgid "Status Check"
+msgstr ""
+
+#. module: ssi_timesheet_state_change_constrain
+#: model:ir.model.fields,field_description:ssi_timesheet_state_change_constrain.field_hr_timesheet__status_check_template_id
+msgid "Status Check Template"
+msgstr ""
+
+#. module: ssi_timesheet_state_change_constrain
+#: model:ir.model,name:ssi_timesheet_state_change_constrain.model_hr_timesheet
+msgid "Timesheet"
+msgstr ""
