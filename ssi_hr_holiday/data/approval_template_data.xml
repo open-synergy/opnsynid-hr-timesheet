@@ -2,8 +2,7 @@
 <!-- Copyright 2022 OpenSynergy Indonesia
      Copyright 2022 PT. Simetri Sinergi Indonesia
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
-<odoo>
-<data noupdate="1">
+<odoo noupdate="1">
 
 <!-- leave_allocation-->
 <record id="approval_template_leave_allocation" model="approval.template">
@@ -18,9 +17,9 @@
     <field name="template_id" ref="approval_template_leave_allocation" />
     <field name="approver_selection_method">use_group</field>
     <field
-                name="approver_group_ids"
-                eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_allocation_validator_group')])]"
-            />
+            name="approver_group_ids"
+            eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_allocation_validator_group')])]"
+        />
 </record>
 
 <!-- leave_-->
@@ -36,10 +35,9 @@
     <field name="template_id" ref="approval_template_leave" />
     <field name="approver_selection_method">use_group</field>
     <field
-                name="approver_group_ids"
-                eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_validator_group')])]"
-            />
+            name="approver_group_ids"
+            eval="[(6,0,[ref('ssi_hr_holiday.hr_leave_validator_group')])]"
+        />
 </record>
 
-</data>
 </odoo>

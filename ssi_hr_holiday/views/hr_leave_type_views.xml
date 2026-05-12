@@ -12,7 +12,6 @@
         />
     <field name="mode">primary</field>
     <field name="arch" type="xml">
-        <data />
     </field>
 </record>
 
@@ -22,7 +21,6 @@
     <field name="inherit_id" ref="ssi_master_data_mixin.mixin_master_data_view_tree" />
     <field name="mode">primary</field>
     <field name="arch" type="xml">
-        <data>
             <xpath expr="//field[@name='name']" position="after">
                 <field name="need_allocation" widget="boolean_toggle" />
                 <field name="apply_limit_per_request" widget="boolean_toggle" />
@@ -30,7 +28,6 @@
                 <field name="exclude_public_holiday" widget="boolean_toggle" />
                 <field name="exclude_rest_day" widget="boolean_toggle" />
             </xpath>
-        </data>
 
     </field>
 </record>
@@ -41,7 +38,6 @@
     <field name="inherit_id" ref="ssi_master_data_mixin.mixin_master_data_view_form" />
     <field name="mode">primary</field>
     <field name="arch" type="xml">
-        <data>
             <xpath expr="//field[@name='active']" position="after">
                 <field name="need_allocation" widget="boolean_toggle" />
                 <field name="apply_limit_per_request" widget="boolean_toggle" />
@@ -49,7 +45,6 @@
                 <field name="exclude_public_holiday" widget="boolean_toggle" />
                 <field name="exclude_rest_day" widget="boolean_toggle" />
             </xpath>
-        </data>
     </field>
 </record>
 

@@ -2,7 +2,6 @@
 <!-- Copyright 2022 OpenSynergy Indonesia
      Copyright 2022 PT. Simetri Sinergi Indonesia
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
-<data>
 <!-- leave aloocation done -->
 <record id="leave_allocation_action_done" model="ir.actions.server">
     <field name="name">Action Done</field>
@@ -10,5 +9,4 @@
     <field name="state">code</field>
     <field name="code">records.action_done()</field>
 </record>
-</data>
 </odoo>
