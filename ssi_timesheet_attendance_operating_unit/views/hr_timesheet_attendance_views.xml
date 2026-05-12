@@ -12,23 +12,21 @@
         />
     <field name="priority" eval="30" />
     <field name="arch" type="xml">
-        <data>
             <xpath expr="//search" position="inside">
                 <field
-                        name="operating_unit_id"
-                        groups="operating_unit.group_multi_operating_unit"
-                        optional="hide"
-                    />
+                    name="operating_unit_id"
+                    groups="operating_unit.group_multi_operating_unit"
+                    optional="hide"
+                />
                 <group name="group_by">
                     <filter
-                            name="grp_ou"
-                            string="Operating Unit"
-                            context="{'group_by':'operating_unit_id'}"
-                            groups="operating_unit.group_multi_operating_unit"
-                        />
+                        name="grp_ou"
+                        string="Operating Unit"
+                        context="{'group_by':'operating_unit_id'}"
+                        groups="operating_unit.group_multi_operating_unit"
+                    />
                 </group>
             </xpath>
-        </data>
     </field>
 </record>
 
@@ -41,15 +39,13 @@
         />
     <field name="priority" eval="30" />
     <field name="arch" type="xml">
-        <data>
             <xpath expr="//field[@name='state']" position="before">
                 <field
-                        name="operating_unit_id"
-                        groups="operating_unit.group_multi_operating_unit"
-                        optional="hide"
-                    />
+                    name="operating_unit_id"
+                    groups="operating_unit.group_multi_operating_unit"
+                    optional="hide"
+                />
             </xpath>
-        </data>
     </field>
 </record>
 
@@ -62,15 +58,13 @@
         />
     <field name="priority" eval="30" />
     <field name="arch" type="xml">
-        <data>
             <xpath expr="//field[@name='employee_id']" position="after">
                 <field
-                        name="operating_unit_id"
-                        groups="operating_unit.group_multi_operating_unit"
-                        optional="hide"
-                    />
+                    name="operating_unit_id"
+                    groups="operating_unit.group_multi_operating_unit"
+                    optional="hide"
+                />
             </xpath>
-        </data>
     </field>
 </record>
 </odoo>
