@@ -9,9 +9,11 @@
     <field name="mode">extension</field>
     <field name="inherit_id" ref="ssi_hr_overtime.hr_overtime_view_tree" />
     <field name="arch" type="xml">
+        <data>
             <xpath expr="//field[@name='type_id']" position="after">
                 <field name="analytic_account_id" />
             </xpath>
+        </data>
     </field>
 </record>
 
@@ -21,13 +23,15 @@
     <field name="mode">extension</field>
     <field name="inherit_id" ref="ssi_hr_overtime.hr_overtime_view_search" />
     <field name="arch" type="xml">
+        <data>
             <xpath expr="//group[@name='group_by']" position="inside">
                 <filter
-                    name="grp_analytic_account_id"
-                    string="Analytic Account"
-                    context="{'group_by':'analytic_account_id'}"
-                />
+                        name="grp_analytic_account_id"
+                        string="Analytic Account"
+                        context="{'group_by':'analytic_account_id'}"
+                    />
             </xpath>
+        </data>
     </field>
 </record>
 
@@ -37,17 +41,19 @@
     <field name="mode">extension</field>
     <field name="inherit_id" ref="ssi_hr_overtime.hr_overtime_view_form" />
     <field name="arch" type="xml">
+        <data>
           <xpath expr="//field[@name='type_id']" position="after">
               <field
-                    name="allowed_analytic_account_ids"
-                    widget="many2many_tags"
-                    invisible="1"
-                />
+                        name="allowed_analytic_account_ids"
+                        widget="many2many_tags"
+                        invisible="1"
+                    />
               <field
-                    name="analytic_account_id"
-                    domain="[('id', 'in', allowed_analytic_account_ids)]"
-                />
+                        name="analytic_account_id"
+                        domain="[('id', 'in', allowed_analytic_account_ids)]"
+                    />
           </xpath>
+        </data>
     </field>
 </record>
 </odoo>
