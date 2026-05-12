@@ -9,11 +9,9 @@
     <field name="inherit_id" ref="ssi_work_log_mixin.hr_timesheet_view_tree" />
     <field name="priority" eval="30" />
     <field name="arch" type="xml">
-        <data>
             <xpath expr="//field[@name='total_work_log']" position="after">
                 <field name="attendance_work_log_diff" widget="float_time" />
             </xpath>
-        </data>
     </field>
 </record>
 
@@ -23,11 +21,9 @@
     <field name="inherit_id" ref="ssi_work_log_mixin.hr_timesheet_view_form" />
     <field name="priority" eval="30" />
     <field name="arch" type="xml">
-        <data>
             <xpath expr="//field[@name='total_work_log']" position="after">
                 <field name="attendance_work_log_diff" widget="float_time" />
             </xpath>
-        </data>
     </field>
 </record>
 
@@ -37,23 +33,21 @@
     <field name="mode">extension</field>
     <field name="inherit_id" ref="ssi_timesheet.hr_timesheet_view_form" />
     <field name="arch" type="xml">
-        <data>
             <xpath expr="//page[@name='daily_summary']" position="attributes">
                 <attribute name="invisible">0</attribute>
             </xpath>
             <xpath
-                    expr="//field[@name='daily_summary_ids']/tree/field[@name='date']"
-                    position="after"
-                >
+                expr="//field[@name='daily_summary_ids']/tree/field[@name='date']"
+                position="after"
+            >
                 <field name="total_work_log" widget="float_time" />
             </xpath>
             <xpath
-                    expr="//field[@name='daily_summary_ids']/form/group/field[@name='date']"
-                    position="after"
-                >
+                expr="//field[@name='daily_summary_ids']/form/group/field[@name='date']"
+                position="after"
+            >
                 <field name="total_work_log" widget="float_time" />
             </xpath>
-        </data>
     </field>
 </record>
 
