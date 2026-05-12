@@ -1,0 +1,994 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ssi_work_log_mixin
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__name
+msgid "# Document"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_project_work_log_analysis__nbr
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_analysis__nbr
+msgid "# of Worklogs"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__message_needaction
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__active
+msgid "Active"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__active_approval_ids
+msgid "Active Approvals"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__active_approver_partner_ids
+msgid "Active Partners"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__active_approver_user_ids
+msgid "Active Users"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__activity_ids
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__activity_ids
+msgid "Activities"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__activity_exception_decoration
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__activity_state
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__activity_state
+msgid "Activity State"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__activity_type_icon
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__activity_type_icon
+msgid "Activity Type Icon"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:res.groups,name:ssi_work_log_mixin.hr_project_work_log_analysis_all_group
+#: model:res.groups,name:ssi_work_log_mixin.hr_work_log_all_group
+#: model:res.groups,name:ssi_work_log_mixin.hr_work_log_analysis_all_group
+msgid "All"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:res.groups,name:ssi_work_log_mixin.hr_project_work_log_analysis_direct_all_subordinate_group
+#: model:res.groups,name:ssi_work_log_mixin.hr_work_log_analysis_direct_all_subordinate_group
+#: model:res.groups,name:ssi_work_log_mixin.hr_work_log_direct_all_subordinate_group
+msgid "All Subordinate"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.hr_timesheet_view_form
+msgid "All Work Log(s)"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_timesheet__all_work_log_ids
+msgid "All Work Logs"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__allowed_analytic_account_ids
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.ir_model_form
+msgid "Allowed Analytic Accounts"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__allowed_policy_template_ids
+msgid "Allowed Policy Templates"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_account_analytic_account__allowed_work_log_user_ids
+msgid "Allowed Work Log Responsible"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model,name:ssi_work_log_mixin.model_account_analytic_account
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_project_work_log_analysis__analytic_account_id
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__analytic_account_id
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_analysis__analytic_account_id
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.hr_work_log_view_search
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.ir_model_form
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.view_hr_project_work_log_analysis_search
+msgid "Analytic Account"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_ir_model__work_log_aa_selection_method
+msgid "Analytic Account Selection Method"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_timesheet__allowed_analytic_account_ids
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_ir_model__work_log_aa_ids
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_mixin_work_object__allowed_analytic_account_ids
+msgid "Analytic Accounts"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__analytic_group_id
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.hr_work_log_view_search
+msgid "Analytic Group"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__analytic_partner_id
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.hr_work_log_view_search
+msgid "Analytic Partner"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log__approval_template_id
+msgid "Approval Configuration"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__approval_template_id
+msgid "Approval Template"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__approval_ids
+msgid "Approvals"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log__approve_ok
+msgid ""
+"Approve policy\n"
+"\n"
+"* If active user can see and execute 'Approve' button"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__approved
+msgid "Approved"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__message_attachment_count
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__message_attachment_count
+msgid "Attachment Count"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__approve_ok
+msgid "Can Approve"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__cancel_ok
+msgid "Can Cancel"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__confirm_ok
+msgid "Can Confirm"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__done_ok
+msgid "Can Finished"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__manual_number_ok
+msgid "Can Input Manual Document Number"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__reject_ok
+msgid "Can Reject"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__restart_ok
+msgid "Can Restart"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__restart_approval_ok
+msgid "Can Restart Approval"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__cancel_reason_id
+msgid "Cancel Reason"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log__cancel_ok
+msgid ""
+"Cancel policy\n"
+"\n"
+"* If active user can see and execute 'Cancel' button"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields.selection,name:ssi_work_log_mixin.selection__hr_project_work_log_analysis__state__cancel
+#: model:ir.model.fields.selection,name:ssi_work_log_mixin.selection__hr_work_log_analysis__state__cancel
+msgid "Cancelled"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__code
+msgid "Code"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__company_id
+#: model:res.groups,name:ssi_work_log_mixin.hr_project_work_log_analysis_company_group
+#: model:res.groups,name:ssi_work_log_mixin.hr_work_log_analysis_company_group
+#: model:res.groups,name:ssi_work_log_mixin.hr_work_log_company_group
+msgid "Company"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__company_partner_id
+msgid "Company Partner"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:res.groups,name:ssi_work_log_mixin.hr_project_work_log_analysis_company_child_group
+#: model:res.groups,name:ssi_work_log_mixin.hr_work_log_analysis_company_child_group
+#: model:res.groups,name:ssi_work_log_mixin.hr_work_log_company_child_group
+msgid "Company and All Child Companies"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log__company_id
+msgid ""
+"Company that own the document\n"
+"\n"
+"* Automatically filled with user's company.\n"
+"  Default company can be changed"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log__confirm_ok
+msgid ""
+"Confirm policy\n"
+"\n"
+"* If active user can see and execute 'Confirm' button"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__create_uid
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__create_date
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_project_work_log_analysis__date
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__date
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_analysis__date
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.hr_work_log_view_search
+msgid "Date"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_project_work_log_analysis__date_end
+msgid "Date End"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_project_work_log_analysis__date_start
+msgid "Date Start"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_project_work_log_analysis__department_id
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__department_id
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_analysis__department_id
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.view_hr_project_work_log_analysis_search
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.view_hr_work_log_analysis_search
+msgid "Department"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__description
+msgid "Description"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:res.groups,name:ssi_work_log_mixin.hr_project_work_log_analysis_direct_subordinate_group
+#: model:res.groups,name:ssi_work_log_mixin.hr_work_log_analysis_direct_subordinate_group
+#: model:res.groups,name:ssi_work_log_mixin.hr_work_log_direct_subordinate_group
+msgid "Direct Subordinate"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_account_analytic_account__display_name
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_project_work_log_analysis__display_name
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_timesheet__display_name
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__display_name
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_analysis__display_name
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__display_name
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_ir_model__display_name
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_mixin_work_object__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__work_object_id
+msgid "Document ID"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__work_object_reference
+msgid "Document Reference"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__model_id
+msgid "Document Type"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields.selection,name:ssi_work_log_mixin.selection__hr_project_work_log_analysis__state__done
+#: model:ir.model.fields.selection,name:ssi_work_log_mixin.selection__hr_work_log_analysis__state__done
+msgid "Done"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log__done_ok
+msgid ""
+"Done policy\n"
+"\n"
+"* If active user can see and execute 'Done' button"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields.selection,name:ssi_work_log_mixin.selection__hr_project_work_log_analysis__state__draft
+#: model:ir.model.fields.selection,name:ssi_work_log_mixin.selection__hr_work_log_analysis__state__draft
+msgid "Draft"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_project_work_log_analysis__amount
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__amount
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_analysis__amount
+msgid "Duration"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_project_work_log_analysis__employee_id
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__employee_id
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_analysis__employee_id
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.view_hr_project_work_log_analysis_search
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.view_hr_work_log_analysis_search
+msgid "Employee"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__employee_partner_id
+msgid "Employee Partner"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log__employee_partner_id
+msgid ""
+"Enter here the private address of the employee, not the one linked to your "
+"company."
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: code:addons/ssi_work_log_mixin/models/hr_work_log.py:0
+#, python-format
+msgid ""
+"Error evaluating conditions.\n"
+" %s"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.work_log_page
+msgid "Estimation"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.work_log_page
+msgid "Excess"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_timesheet__excess_work
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_mixin_work_object__excess_work
+msgid "Excess Work"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields.selection,name:ssi_work_log_mixin.selection__ir_model__work_log_aa_selection_method__fixed
+msgid "Fixed"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__message_follower_ids
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__message_channel_ids
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__message_channel_ids
+msgid "Followers (Channels)"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__message_partner_ids
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log__activity_type_icon
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log_tag__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.view_hr_project_work_log_analysis_search
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.view_hr_work_log_analysis_search
+msgid "Group By"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model,name:ssi_work_log_mixin.model_hr_work_log
+msgid "HR Work Log"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_account_analytic_account__id
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_project_work_log_analysis__id
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_timesheet__id
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__id
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_analysis__id
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__id
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_ir_model__id
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_mixin_work_object__id
+msgid "ID"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__activity_exception_icon
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__activity_exception_icon
+msgid "Icon"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log__activity_exception_icon
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log_tag__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log__message_needaction
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log__message_unread
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log_tag__message_needaction
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log_tag__message_unread
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log__message_has_error
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log_tag__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__message_is_follower
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_project_work_log_analysis__job_id
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__job_id
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_analysis__job_id
+msgid "Job Position"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_account_analytic_account____last_update
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_project_work_log_analysis____last_update
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_timesheet____last_update
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log____last_update
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_analysis____last_update
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag____last_update
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_ir_model____last_update
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_mixin_work_object____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__write_uid
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__write_date
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__message_main_attachment_id
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__message_main_attachment_id
+msgid "Main Attachment"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__manager_id
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_analysis__manager_id
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.view_hr_project_work_log_analysis_search
+msgid "Manager"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log__manual_number_ok
+msgid ""
+"Manual number assignment policy\n"
+"\n"
+"* If active user can edit document number"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log_tag__active
+msgid ""
+"Master data status\n"
+"\n"
+"* Inactive data can not be selected when creating new transaction\n"
+"* Transaction with inactive master data can still be viewed\n"
+"* Set master data as inactive if master data no longger needed,\n"
+"but master data already used on transaction"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log_tag__code
+msgid ""
+"Master data unique identifier.\n"
+"\n"
+"* Fill with '/' if You do not need unique identifier\n"
+"* Click 'Generate Code' button to automatically assign code.\n"
+"  Sequence template mush be set to perform this action\n"
+"  Only master data with '/' code will be assign automatic code"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__message_has_error
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__message_ids
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__model_name
+msgid "Model"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model,name:ssi_work_log_mixin.model_ir_model
+msgid "Models"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__my_activity_date_deadline
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__need_validation
+msgid "Need Validation"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__activity_date_deadline
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__activity_summary
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__activity_summary
+msgid "Next Activity Summary"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__activity_type_id
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__activity_type_id
+msgid "Next Activity Type"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__next_approval_ids
+msgid "Next Approvals"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__note
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__note
+msgid "Note"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__message_needaction_counter
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__message_has_error_counter
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log__message_needaction_counter
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log_tag__message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log__message_has_error_counter
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log_tag__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log__message_unread_counter
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log_tag__message_unread_counter
+msgid "Number of unread messages"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__policy_template_id
+msgid "Policy Template"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_project_work_log_analysis__manager_id
+msgid "Project Manager"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.actions.act_window,name:ssi_work_log_mixin.action_hr_project_work_log_analysis
+#: model:ir.model,name:ssi_work_log_mixin.model_hr_project_work_log_analysis
+#: model:ir.module.category,name:ssi_work_log_mixin.hr_project_work_log_analysis_data_ownership_module_category
+#: model:ir.ui.menu,name:ssi_work_log_mixin.menu_hr_project_work_log_analysis
+#: model:res.groups,name:ssi_work_log_mixin.hr_project_work_log_analysis_group
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.view_hr_project_work_log_analysis_graph
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.view_hr_project_work_log_analysis_pivot
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.view_hr_project_work_log_analysis_search
+msgid "Project Worklog Analysis"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_ir_model__python_code
+#: model:ir.model.fields.selection,name:ssi_work_log_mixin.selection__ir_model__work_log_aa_selection_method__python
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.ir_model_form
+msgid "Python Code"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log__reject_ok
+msgid ""
+"Reject policy\n"
+"\n"
+"* If active user can see and execute 'Reject' button"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__rejected
+#: model:ir.model.fields.selection,name:ssi_work_log_mixin.selection__hr_project_work_log_analysis__state__reject
+#: model:ir.model.fields.selection,name:ssi_work_log_mixin.selection__hr_work_log_analysis__state__reject
+msgid "Rejected"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.work_log_page
+msgid "Remaining"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_timesheet__remaining_work
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_mixin_work_object__remaining_work
+msgid "Remaining Work"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__user_id
+msgid "Responsible"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__activity_user_id
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__activity_user_id
+msgid "Responsible User"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log__restart_approval_ok
+msgid ""
+"Restart approval policy\n"
+"\n"
+"* If active user can see and execute 'Restart Approval' button"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log__restart_ok
+msgid ""
+"Restart policy\n"
+"\n"
+"* If active user can see and execute 'Restart' button"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__reviewer_id
+msgid "Reviewer"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.ir_model_form
+msgid "Selection Method"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_project_work_log_analysis__state
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__state
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_analysis__state
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.view_hr_project_work_log_analysis_search
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.view_hr_work_log_analysis_search
+msgid "State"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log__activity_state
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log_tag__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__tag_ids
+msgid "Tags"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model,name:ssi_work_log_mixin.model_hr_timesheet
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_project_work_log_analysis__sheet_id
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__sheet_id
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_analysis__sheet_id
+msgid "Timesheet"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: code:addons/ssi_work_log_mixin/models/hr_work_log.py:0
+#, python-format
+msgid "Timesheet for %s on %s not found"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.work_log_page
+msgid "Total"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.hr_work_log_view_tree
+msgid "Total Time"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_timesheet__total_work
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_mixin_work_object__total_work
+msgid "Total Work"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_timesheet__total_work_log
+msgid "Total Work Log"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log__name
+msgid ""
+"Transaction/document number\n"
+"\n"
+"* Unique indentifer of transaction\n"
+"* Leave '/' to automatically generate number\n"
+"* Change '/' into any number/identifier to manually assign number.\n"
+"  Manual number assignment can be done in 'Draft' state\n"
+"  Only user with 'Can Manualy Assign Number' policy can manually assign number.\n"
+"* Transaction with number other than '/' can not be deleted."
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log__activity_exception_decoration
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log_tag__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__message_unread
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__message_unread
+msgid "Unread Messages"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__message_unread_counter
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__message_unread_counter
+msgid "Unread Messages Counter"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:res.groups,name:ssi_work_log_mixin.hr_work_log_user_group
+msgid "User"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log__user_id
+msgid ""
+"User that responsible for document\n"
+"\n"
+"* Create user can be different with responsible user\n"
+"* Automatically filled with user that initiate document creation.\n"
+"  Default responsible can be changed."
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log__reviewer_id
+msgid ""
+"User that responsible to review document\n"
+"\n"
+"* Unless it configured to approve reviewer does not equal to approver"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log__active_approver_user_ids
+msgid "Users that can approve/reject document"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:res.groups,name:ssi_work_log_mixin.hr_work_log_validator_group
+msgid "Validator"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:res.groups,name:ssi_work_log_mixin.hr_work_log_viewer_group
+msgid "Viewer"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields.selection,name:ssi_work_log_mixin.selection__hr_project_work_log_analysis__state__confirm
+#: model:ir.model.fields.selection,name:ssi_work_log_mixin.selection__hr_work_log_analysis__state__confirm
+msgid "Waiting for Approval"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log__website_message_ids
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log__website_message_ids
+#: model:ir.model.fields,help:ssi_work_log_mixin.field_hr_work_log_tag__website_message_ids
+msgid "Website communication history"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_timesheet__work_estimation
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_mixin_work_object__work_estimation
+msgid "Work Estimation"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.ui.menu,name:ssi_work_log_mixin.menu_work_log
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.ir_model_form
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.work_log_page
+msgid "Work Log"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_timesheet__work_log_analytic_account_id
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_mixin_work_object__work_log_analytic_account_id
+msgid "Work Log Analytic Account"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model,name:ssi_work_log_mixin.model_hr_work_log_tag
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_work_log_tag__name
+msgid "Work Log Tag"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.actions.act_window,name:ssi_work_log_mixin.hr_work_log_tag_action
+#: model:ir.ui.menu,name:ssi_work_log_mixin.hr_work_log_tag_menu
+#: model:res.groups,name:ssi_work_log_mixin.hr_work_log_tag_group
+msgid "Work Log Tags"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.actions.act_window,name:ssi_work_log_mixin.hr_work_log_action
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_hr_timesheet__work_log_ids
+#: model:ir.model.fields,field_description:ssi_work_log_mixin.field_mixin_work_object__work_log_ids
+#: model:ir.ui.menu,name:ssi_work_log_mixin.hr_work_log_menu
+msgid "Work Logs"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.model,name:ssi_work_log_mixin.model_mixin_work_object
+msgid "Work Object Mixin"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.module.category,name:ssi_work_log_mixin.hr_work_log_data_ownership_module_category
+#: model:ir.module.category,name:ssi_work_log_mixin.hr_work_log_module_category
+msgid "Work log"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: model:ir.actions.act_window,name:ssi_work_log_mixin.action_hr_work_log_analysis
+#: model:ir.model,name:ssi_work_log_mixin.model_hr_work_log_analysis
+#: model:ir.module.category,name:ssi_work_log_mixin.hr_work_log_analysis_data_ownership_module_category
+#: model:ir.ui.menu,name:ssi_work_log_mixin.menu_hr_work_log_analysis
+#: model:res.groups,name:ssi_work_log_mixin.hr_work_log_analysis_group
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.view_hr_work_log_analysis_graph
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.view_hr_work_log_analysis_pivot
+#: model_terms:ir.ui.view,arch_db:ssi_work_log_mixin.view_hr_work_log_analysis_search
+msgid "Worklog Analysis"
+msgstr ""
+
+#. module: ssi_work_log_mixin
+#: code:addons/ssi_work_log_mixin/models/mixin_work_object.py:0
+#, python-format
+msgid ""
+"You cannot delete the work log!\n"
+"Timesheet with number %s is already on '%s' state!"
+msgstr ""
