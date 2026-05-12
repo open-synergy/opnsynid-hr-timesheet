@@ -2,8 +2,7 @@
 <!-- Copyright 2022 OpenSynergy Indonesia
      Copyright 2022 PT. Simetri Sinergi Indonesia
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
-<odoo>
-<data noupdate="1">
+<odoo noupdate="1">
 <record id="approval_template" model="approval.template">
     <field name="name">Standard</field>
     <field name="model_id" ref="model_work_log_rate" />
@@ -16,9 +15,8 @@
     <field name="template_id" ref="approval_template" />
     <field name="approver_selection_method">use_group</field>
     <field
-                name="approver_group_ids"
-                eval="[(6,0,[ref('work_log_rate_validator_group')])]"
-            />
+            name="approver_group_ids"
+            eval="[(6,0,[ref('work_log_rate_validator_group')])]"
+        />
 </record>
-</data>
 </odoo>
