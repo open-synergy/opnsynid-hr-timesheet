@@ -12,11 +12,13 @@
             ref="ssi_transaction_mixin.mixin_transaction_view_tree"
         />
         <field name="arch" type="xml">
+            <data>
                 <xpath expr="//field[@name='company_id']" position="after">
                     <field name="type_id" />
                     <field name="date_start" />
                     <field name="date_end" />
                 </xpath>
+            </data>
         </field>
     </record>
 
@@ -29,26 +31,28 @@
             ref="ssi_transaction_mixin.mixin_transaction_view_search"
         />
         <field name="arch" type="xml">
+            <data>
                 <xpath expr="//field[@name='user_id']" position="after">
                     <field name="type_id" />
                 </xpath>
                 <xpath expr="//group[@name='group_by']" position="inside">
                     <filter
-                    name="grp_date_start"
-                    string="Date Start"
-                    context="{'group_by':'date_start'}"
-                />
+                        name="grp_date_start"
+                        string="Date Start"
+                        context="{'group_by':'date_start'}"
+                    />
                     <filter
-                    name="grp_date_end"
-                    string="Date End"
-                    context="{'group_by':'date_end'}"
-                />
+                        name="grp_date_end"
+                        string="Date End"
+                        context="{'group_by':'date_end'}"
+                    />
                     <filter
-                    name="grp_type_id"
-                    string="Overtime Type"
-                    context="{'group_by':'type_id'}"
-                />
+                        name="grp_type_id"
+                        string="Overtime Type"
+                        context="{'group_by':'type_id'}"
+                    />
                 </xpath>
+            </data>
         </field>
     </record>
 
@@ -61,6 +65,7 @@
             ref="ssi_transaction_mixin.mixin_transaction_view_form"
         />
         <field name="arch" type="xml">
+            <data>
                 <xpath expr="//field[@name='user_id']" position="after">
                     <field name="type_id" />
                 </xpath>
@@ -76,6 +81,7 @@
                         <field name="overtime_ids" colspan="4" nolabel="1" />
                     </page>
                 </xpath>
+            </data>
         </field>
     </record>
 
