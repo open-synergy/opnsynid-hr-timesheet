@@ -8,19 +8,17 @@
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_form" />
         <field name="arch" type="xml">
-            <data>
                 <xpath expr="//notebook" position="inside">
                     <page name="timesheet_setting" string="Timesheet Settings">
                         <group name="timesheet_setting" colspan="4" col="2">
                             <field
-                                name="timesheet_computation_ids"
-                                nolabel="1"
-                                colspan="2"
-                            />
+                            name="timesheet_computation_ids"
+                            nolabel="1"
+                            colspan="2"
+                        />
                         </group>
                     </page>
                 </xpath>
-            </data>
         </field>
     </record>
 
