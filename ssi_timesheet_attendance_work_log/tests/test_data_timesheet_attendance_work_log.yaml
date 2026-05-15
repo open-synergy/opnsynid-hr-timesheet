@@ -1,0 +1,81 @@
+scenarios:
+  - name: "Work Log - Attendance Work Log Integration"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Attendance Work Log"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet for employee"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "EVAL: registry['employee'].id"
+          date_start: 2024-01-01
+          date_end: 2024-01-31
+          working_schedule_id: "EVAL: registry['working_schedule'].id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Get ir.model for res.partner"
+        action: "search"
+        model: "ir.model"
+        domain: [["model", "=", "res.partner"]]
+        save_as: "ir_model"
+        limit: 1
+
+      - step: "Get a partner record"
+        action: "search"
+        model: "res.partner"
+        domain: [["name", "!=", false]]
+        save_as: "partner"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create analytic account"
+        action: "create"
+        model: "account.analytic.account"
+        save_as: "analytic_account"
+        values:
+          name: "Test Analytic Attendance Work Log"
+
+      - step: "Create work log (triggers attendance onchange override)"
+        action: "create"
+        model: "hr.work_log"
+        save_as: "work_log"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "EVAL: registry['employee'].id"
+          description: "Work log from attendance work log test"
+          model_id: "EVAL: registry['ir_model'].id"
+          work_object_id: "EVAL: registry['partner'].id"
+          date: 2024-01-15
+          amount: 2.0
+          analytic_account_id: "EVAL: registry['analytic_account'].id"
+
+      - step: "Assert work log created"
+        action: "assert"
+        target: "work_log"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          sheet_id:
+            type: "value"
+            operator: "is_truthy"
