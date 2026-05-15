@@ -1,0 +1,50 @@
+scenarios:
+  - name: "HR Overtime Batch - Operating Unit Mixin"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee OT Batch OU"
+
+      - step: "Create overtime type"
+        action: "create"
+        model: "hr.overtime_type"
+        save_as: "overtime_type"
+        values:
+          name: "Overtime Batch OU Type"
+          code: "OBOU001"
+          apply_limit_per_day: false
+
+      - step: "Get operating unit"
+        action: "search"
+        model: "operating.unit"
+        domain: []
+        save_as: "operating_unit"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create overtime batch with operating unit"
+        action: "create"
+        model: "hr.overtime_batch"
+        save_as: "batch"
+        as_user: "base.user_admin"
+        values:
+          type_id: "EVAL: registry['overtime_type'].id"
+          date_start: "2024-01-15 08:00:00"
+          date_end: "2024-01-15 10:00:00"
+          operating_unit_id: "EVAL: registry['operating_unit'].id"
+          employee_ids:
+            - "EVAL: registry['employee'].id"
+
+      - step: "Assert batch created with operating unit"
+        action: "assert"
+        target: "batch"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          operating_unit_id:
+            type: "value"
+            operator: "is_truthy"
