@@ -1,0 +1,87 @@
+scenarios:
+  - name: "HR Overtime Account - Overtime with Analytic Account"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Overtime Account"
+
+      - step: "Create analytic account"
+        action: "create"
+        model: "account.analytic.account"
+        save_as: "analytic_account"
+        values:
+          name: "Test Analytic Overtime"
+
+      - step: "Create overtime type with analytic account"
+        action: "create"
+        model: "hr.overtime_type"
+        save_as: "overtime_type"
+        values:
+          name: "Overtime Account Type"
+          code: "OAT001"
+          apply_limit_per_day: false
+          analytic_account_method: "fixed"
+          analytic_account_ids:
+            - "EVAL: registry['analytic_account'].id"
+
+      - step: "Assert overtime type created"
+        action: "assert"
+        target: "overtime_type"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          analytic_account_method:
+            type: "value"
+            expected: "fixed"
+
+      - step: "Create overtime with analytic account"
+        action: "create"
+        model: "hr.overtime"
+        save_as: "overtime"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "EVAL: registry['employee'].id"
+          type_id: "EVAL: registry['overtime_type'].id"
+          date: 2024-01-15
+          date_start: "2024-01-15 08:00:00"
+          date_end: "2024-01-15 10:00:00"
+          analytic_account_id: "EVAL: registry['analytic_account'].id"
+
+      - step: "Assert overtime created"
+        action: "assert"
+        target: "overtime"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          state:
+            type: "value"
+            expected: "draft"
+
+      - step: "Confirm overtime"
+        action: "call"
+        target: "overtime"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Approve overtime"
+        action: "call"
+        target: "overtime"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+        asserts:
+          state:
+            type: "value"
+            expected: "done"
