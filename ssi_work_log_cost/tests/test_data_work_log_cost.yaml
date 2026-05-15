@@ -1,0 +1,51 @@
+scenarios:
+  - name: "Work Log Rate - Full Workflow: draft to confirm to ready"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Work Log Rate"
+
+      - step: "Create work log rate (draft)"
+        action: "create"
+        model: "work_log_rate"
+        save_as: "rate"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "EVAL: registry['employee'].id"
+          date: 2024-01-01
+          date_start: 2024-01-01
+
+      - step: "Assert rate created in draft"
+        action: "assert"
+        target: "rate"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+
+      - step: "Confirm rate"
+        action: "call"
+        target: "rate"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Approve rate"
+        action: "call"
+        target: "rate"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+        asserts:
+          state:
+            type: "value"
+            expected: "ready"
