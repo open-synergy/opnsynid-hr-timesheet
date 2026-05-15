@@ -1,0 +1,218 @@
+scenarios:
+  - name: "Leave Type - Create"
+    steps:
+      - step: "Create leave type"
+        action: "create"
+        model: "hr.leave_type"
+        save_as: "leave_type"
+        values:
+          name: "Annual Leave Test"
+          code: "ALT001"
+          need_allocation: false
+          apply_limit_per_request: false
+          limit_per_request: 0
+          exclude_public_holiday: false
+          exclude_rest_day: false
+
+      - step: "Assert leave type created"
+        action: "assert"
+        target: "leave_type"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          name:
+            type: "value"
+            expected: "Annual Leave Test"
+
+  - name: "Leave Type - Edit"
+    steps:
+      - step: "Create leave type"
+        action: "create"
+        model: "hr.leave_type"
+        save_as: "leave_type"
+        values:
+          name: "Leave Type Edit Test"
+          code: "LTE001"
+
+      - step: "Edit leave type"
+        action: "write"
+        target: "leave_type"
+        values:
+          name: "Leave Type Edited"
+          apply_limit_per_request: true
+          limit_per_request: 5
+
+      - step: "Assert edited"
+        action: "assert"
+        target: "leave_type"
+        asserts:
+          name:
+            type: "value"
+            expected: "Leave Type Edited"
+          apply_limit_per_request:
+            type: "value"
+            expected: true
+
+  - name: "Leave Type - Delete"
+    steps:
+      - step: "Create leave type"
+        action: "create"
+        model: "hr.leave_type"
+        save_as: "leave_type"
+        values:
+          name: "Leave Type Delete Test"
+          code: "LTD001"
+
+      - step: "Delete leave type"
+        action: "call"
+        target: "leave_type"
+        method: "unlink"
+
+      - step: "Verify deleted"
+        action: "search"
+        model: "hr.leave_type"
+        domain: [["code", "=", "LTD001"]]
+        save_as: "result"
+        expect_count: 0
+
+  - name: "HR Leave - Full Workflow: draft to done"
+    steps:
+      - step: "Create job position"
+        action: "create"
+        model: "hr.job"
+        save_as: "job"
+        values:
+          name: "Test Job Leave"
+
+      - step: "Create department"
+        action: "create"
+        model: "hr.department"
+        save_as: "department"
+        values:
+          name: "Test Department Leave"
+
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Leave"
+          job_id: "EVAL: registry['job'].id"
+          department_id: "EVAL: registry['department'].id"
+
+      - step: "Create leave type"
+        action: "create"
+        model: "hr.leave_type"
+        save_as: "leave_type"
+        values:
+          name: "Sick Leave Test"
+          code: "SLT001"
+          need_allocation: false
+
+      - step: "Create leave (draft)"
+        action: "create"
+        model: "hr.leave"
+        save_as: "leave"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "EVAL: registry['employee'].id"
+          type_id: "EVAL: registry['leave_type'].id"
+          date_start: 2024-01-15
+          date_end: 2024-01-15
+          number_of_days: 1
+
+      - step: "Assert leave created in draft"
+        action: "assert"
+        target: "leave"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+
+      - step: "Confirm leave"
+        action: "call"
+        target: "leave"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Approve leave"
+        action: "call"
+        target: "leave"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+        asserts:
+          state:
+            type: "value"
+            expected: "done"
+
+  - name: "HR Leave Allocation - Full Workflow: draft to open"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Allocation"
+
+      - step: "Create leave type"
+        action: "create"
+        model: "hr.leave_type"
+        save_as: "leave_type"
+        values:
+          name: "Annual Leave Alloc Test"
+          code: "ALA001"
+          need_allocation: true
+
+      - step: "Create leave allocation (draft)"
+        action: "create"
+        model: "hr.leave_allocation"
+        save_as: "allocation"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "EVAL: registry['employee'].id"
+          type_id: "EVAL: registry['leave_type'].id"
+          date_start: 2024-01-01
+          date_end: 2024-12-31
+          date_extended: 2024-12-31
+          number_of_days: 12
+
+      - step: "Assert allocation created in draft"
+        action: "assert"
+        target: "allocation"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+
+      - step: "Confirm allocation"
+        action: "call"
+        target: "allocation"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Approve allocation"
+        action: "call"
+        target: "allocation"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+        asserts:
+          state:
+            type: "value"
+            expected: "open"
