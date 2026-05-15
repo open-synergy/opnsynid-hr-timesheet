@@ -1,0 +1,172 @@
+scenarios:
+  - name: "Work Log Tag - Create"
+    steps:
+      - step: "Create work log tag"
+        action: "create"
+        model: "hr.work_log_tag"
+        save_as: "tag"
+        values:
+          name: "Development Tag Test"
+          code: "DTT001"
+
+      - step: "Assert tag created"
+        action: "assert"
+        target: "tag"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          name:
+            type: "value"
+            expected: "Development Tag Test"
+
+  - name: "Work Log Tag - Edit"
+    steps:
+      - step: "Create work log tag"
+        action: "create"
+        model: "hr.work_log_tag"
+        save_as: "tag"
+        values:
+          name: "Tag Edit Test"
+          code: "TET001"
+
+      - step: "Edit tag"
+        action: "write"
+        target: "tag"
+        values:
+          name: "Tag Edited"
+
+      - step: "Assert edited"
+        action: "assert"
+        target: "tag"
+        asserts:
+          name:
+            type: "value"
+            expected: "Tag Edited"
+
+  - name: "Work Log Tag - Delete"
+    steps:
+      - step: "Create work log tag"
+        action: "create"
+        model: "hr.work_log_tag"
+        save_as: "tag"
+        values:
+          name: "Tag Delete Test"
+          code: "TDT001"
+
+      - step: "Delete tag"
+        action: "call"
+        target: "tag"
+        method: "unlink"
+
+      - step: "Verify deleted"
+        action: "search"
+        model: "hr.work_log_tag"
+        domain: [["code", "=", "TDT001"]]
+        save_as: "result"
+        expect_count: 0
+
+  - name: "HR Work Log - Full Workflow: draft to done"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Work Log"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet for employee (open state required)"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "EVAL: registry['employee'].id"
+          date_start: 2024-01-01
+          date_end: 2024-01-31
+          working_schedule_id: "EVAL: registry['working_schedule'].id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Get ir.model for res.partner"
+        action: "search"
+        model: "ir.model"
+        domain: [["model", "=", "res.partner"]]
+        save_as: "ir_model"
+        limit: 1
+
+      - step: "Get a partner record"
+        action: "search"
+        model: "res.partner"
+        domain: [["name", "!=", false]]
+        save_as: "partner"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create analytic account"
+        action: "create"
+        model: "account.analytic.account"
+        save_as: "analytic_account"
+        values:
+          name: "Test Analytic Work Log"
+
+      - step: "Create work log (draft)"
+        action: "create"
+        model: "hr.work_log"
+        save_as: "work_log"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "EVAL: registry['employee'].id"
+          description: "Test Work Log Description"
+          model_id: "EVAL: registry['ir_model'].id"
+          work_object_id: "EVAL: registry['partner'].id"
+          date: 2024-01-15
+          amount: 4.0
+          analytic_account_id: "EVAL: registry['analytic_account'].id"
+
+      - step: "Assert work log created in draft"
+        action: "assert"
+        target: "work_log"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+          sheet_id:
+            type: "value"
+            operator: "is_truthy"
+
+      - step: "Confirm work log"
+        action: "call"
+        target: "work_log"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Approve work log"
+        action: "call"
+        target: "work_log"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+        asserts:
+          state:
+            type: "value"
+            expected: "done"
