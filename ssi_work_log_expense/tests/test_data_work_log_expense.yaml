@@ -1,0 +1,202 @@
+scenarios:
+  - name: "Work Log Expense Type - Create"
+    steps:
+      - step: "Search expense account"
+        action: "search"
+        model: "account.account"
+        domain: []
+        save_as: "expense_account"
+        limit: 1
+        order: "id asc"
+
+      - step: "Search journal"
+        action: "search"
+        model: "account.journal"
+        domain: []
+        save_as: "journal"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create expense type"
+        action: "create"
+        model: "work_log_expense_type"
+        save_as: "expense_type"
+        values:
+          name: "Test Expense Type"
+          code: "TET001"
+          accrue_account_id: "EVAL: registry['expense_account'].id"
+          journal_id: "EVAL: registry['journal'].id"
+
+      - step: "Assert expense type created"
+        action: "assert"
+        target: "expense_type"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          name:
+            type: "value"
+            expected: "Test Expense Type"
+
+  - name: "Work Log Expense Type - Edit"
+    steps:
+      - step: "Search expense account"
+        action: "search"
+        model: "account.account"
+        domain: []
+        save_as: "expense_account"
+        limit: 1
+        order: "id asc"
+
+      - step: "Search journal"
+        action: "search"
+        model: "account.journal"
+        domain: []
+        save_as: "journal"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create expense type"
+        action: "create"
+        model: "work_log_expense_type"
+        save_as: "expense_type"
+        values:
+          name: "Expense Type Edit"
+          code: "ETE001"
+          accrue_account_id: "EVAL: registry['expense_account'].id"
+          journal_id: "EVAL: registry['journal'].id"
+
+      - step: "Edit expense type"
+        action: "write"
+        target: "expense_type"
+        values:
+          name: "Expense Type Edited"
+
+      - step: "Assert edited"
+        action: "assert"
+        target: "expense_type"
+        asserts:
+          name:
+            type: "value"
+            expected: "Expense Type Edited"
+
+  - name: "Work Log Expense Type - Delete"
+    steps:
+      - step: "Search expense account"
+        action: "search"
+        model: "account.account"
+        domain: []
+        save_as: "expense_account"
+        limit: 1
+        order: "id asc"
+
+      - step: "Search journal"
+        action: "search"
+        model: "account.journal"
+        domain: []
+        save_as: "journal"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create expense type"
+        action: "create"
+        model: "work_log_expense_type"
+        save_as: "expense_type"
+        values:
+          name: "Expense Type Delete"
+          code: "ETD001"
+          accrue_account_id: "EVAL: registry['expense_account'].id"
+          journal_id: "EVAL: registry['journal'].id"
+
+      - step: "Delete expense type"
+        action: "call"
+        target: "expense_type"
+        method: "unlink"
+
+      - step: "Verify deleted"
+        action: "search"
+        model: "work_log_expense_type"
+        domain: [["code", "=", "ETD001"]]
+        save_as: "result"
+        expect_count: 0
+
+  - name: "Work Log Expense - Full Workflow"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee WL Expense"
+
+      - step: "Search expense account"
+        action: "search"
+        model: "account.account"
+        domain: []
+        save_as: "expense_account"
+        limit: 1
+        order: "id asc"
+
+      - step: "Search journal"
+        action: "search"
+        model: "account.journal"
+        domain: []
+        save_as: "journal"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create expense type"
+        action: "create"
+        model: "work_log_expense_type"
+        save_as: "expense_type"
+        values:
+          name: "Expense Workflow Type"
+          code: "EWT001"
+          accrue_account_id: "EVAL: registry['expense_account'].id"
+          journal_id: "EVAL: registry['journal'].id"
+
+      - step: "Create work log expense (draft)"
+        action: "create"
+        model: "work_log_expense"
+        save_as: "expense"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "EVAL: registry['employee'].id"
+          type_id: "EVAL: registry['expense_type'].id"
+          date: 2024-01-15
+          date_start: 2024-01-01
+          date_end: 2024-01-31
+          accrue_account_id: "EVAL: registry['expense_account'].id"
+          journal_id: "EVAL: registry['journal'].id"
+
+      - step: "Assert expense created in draft"
+        action: "assert"
+        target: "expense"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+
+      - step: "Confirm expense"
+        action: "call"
+        target: "expense"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Approve expense"
+        action: "call"
+        target: "expense"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+        asserts:
+          state:
+            type: "value"
+            expected: "done"
