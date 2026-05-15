@@ -1,0 +1,48 @@
+scenarios:
+  - name: "HR Timesheet - Operating Unit Mixin"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Timesheet OU"
+
+      - step: "Get operating unit"
+        action: "search"
+        model: "operating.unit"
+        domain: []
+        save_as: "operating_unit"
+        limit: 1
+        order: "id asc"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet with operating unit"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "EVAL: registry['employee'].id"
+          date_start: 2024-01-01
+          date_end: 2024-01-31
+          operating_unit_id: "EVAL: registry['operating_unit'].id"
+          working_schedule_id: "EVAL: registry['working_schedule'].id"
+
+      - step: "Assert timesheet created with operating unit"
+        action: "assert"
+        target: "timesheet"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          operating_unit_id:
+            type: "value"
+            operator: "is_truthy"
