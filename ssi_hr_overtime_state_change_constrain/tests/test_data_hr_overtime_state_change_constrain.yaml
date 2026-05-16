@@ -1,0 +1,50 @@
+scenarios:
+  - name: "HR Overtime - State Change Constrain Mixin"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee OT State Constrain"
+
+      - step: "Create overtime type"
+        action: "create"
+        model: "hr.overtime_type"
+        save_as: "overtime_type"
+        values:
+          name: "Overtime State Constrain Type"
+          code: "OSCT001"
+          apply_limit_per_day: false
+
+      - step: "Create overtime"
+        action: "create"
+        model: "hr.overtime"
+        save_as: "overtime"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "EVAL: registry['employee'].id"
+          type_id: "EVAL: registry['overtime_type'].id"
+          date: 2024-01-15
+          date_start: "2024-01-15 08:00:00"
+          date_end: "2024-01-15 10:00:00"
+
+      - step: "Assert overtime created in draft"
+        action: "assert"
+        target: "overtime"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+
+      - step: "Confirm overtime"
+        action: "call"
+        target: "overtime"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"

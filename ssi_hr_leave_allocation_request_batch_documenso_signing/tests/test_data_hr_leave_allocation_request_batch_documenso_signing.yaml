@@ -1,0 +1,42 @@
+scenarios:
+  - name: "HR Leave Allocation Request Batch - Documenso Signing Mixin"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Alloc Batch Documenso"
+
+      - step: "Get leave type"
+        action: "search"
+        model: "hr.leave_type"
+        domain: []
+        save_as: "leave_type"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create leave allocation batch"
+        action: "create"
+        model: "hr.leave_allocation_request_batch"
+        save_as: "batch"
+        as_user: "base.user_admin"
+        values:
+          type_id: "EVAL: registry['leave_type'].id"
+          number_of_days: 3
+          date_start: 2024-01-01
+          date_end: 2024-12-31
+          date_extended: 2024-12-31
+          employee_ids:
+            - "EVAL: registry['employee'].id"
+
+      - step: "Assert batch created"
+        action: "assert"
+        target: "batch"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          state:
+            type: "value"
+            expected: "draft"

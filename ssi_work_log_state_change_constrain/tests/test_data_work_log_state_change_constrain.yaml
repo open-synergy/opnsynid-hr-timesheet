@@ -1,0 +1,90 @@
+scenarios:
+  - name: "HR Work Log - State Change Constrain Mixin"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Work Log State Constrain"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet for employee"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "EVAL: registry['employee'].id"
+          date_start: 2024-01-01
+          date_end: 2024-01-31
+          working_schedule_id: "EVAL: registry['working_schedule'].id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Get ir.model for res.partner"
+        action: "search"
+        model: "ir.model"
+        domain: [["model", "=", "res.partner"]]
+        save_as: "ir_model"
+        limit: 1
+
+      - step: "Get a partner record"
+        action: "search"
+        model: "res.partner"
+        domain: [["name", "!=", false]]
+        save_as: "partner"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create analytic account"
+        action: "create"
+        model: "account.analytic.account"
+        save_as: "analytic_account"
+        values:
+          name: "Test Analytic State Constrain"
+
+      - step: "Create work log"
+        action: "create"
+        model: "hr.work_log"
+        save_as: "work_log"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "EVAL: registry['employee'].id"
+          description: "Test Work Log State Constrain"
+          model_id: "EVAL: registry['ir_model'].id"
+          work_object_id: "EVAL: registry['partner'].id"
+          date: 2024-01-15
+          amount: 3.0
+          analytic_account_id: "EVAL: registry['analytic_account'].id"
+
+      - step: "Assert work log created in draft"
+        action: "assert"
+        target: "work_log"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+
+      - step: "Confirm work log"
+        action: "call"
+        target: "work_log"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"

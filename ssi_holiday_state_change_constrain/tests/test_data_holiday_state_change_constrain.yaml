@@ -1,0 +1,99 @@
+scenarios:
+  - name: "HR Leave - Verify state change constrain mixin"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee State Constrain"
+
+      - step: "Create leave type"
+        action: "create"
+        model: "hr.leave_type"
+        save_as: "leave_type"
+        values:
+          name: "Leave Constrain Test"
+          code: "LCT001"
+          need_allocation: false
+
+      - step: "Create leave request"
+        action: "create"
+        model: "hr.leave"
+        save_as: "leave"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "EVAL: registry['employee'].id"
+          type_id: "EVAL: registry['leave_type'].id"
+          date_start: "2024-01-15 08:00:00"
+          date_end: "2024-01-15 17:00:00"
+
+      - step: "Assert leave created in draft"
+        action: "assert"
+        target: "leave"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+
+      - step: "Confirm leave"
+        action: "call"
+        target: "leave"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+  - name: "HR Leave Allocation - Verify state change constrain mixin"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Allocation Constrain"
+
+      - step: "Get leave type"
+        action: "search"
+        model: "hr.leave_type"
+        domain: []
+        save_as: "leave_type"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create leave allocation"
+        action: "create"
+        model: "hr.leave_allocation"
+        save_as: "allocation"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "EVAL: registry['employee'].id"
+          type_id: "EVAL: registry['leave_type'].id"
+          number_of_days: 5
+          date_start: 2024-01-01
+          date_end: 2024-12-31
+          date_extended: 2024-12-31
+
+      - step: "Assert allocation created in draft"
+        action: "assert"
+        target: "allocation"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+
+      - step: "Confirm allocation"
+        action: "call"
+        target: "allocation"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"

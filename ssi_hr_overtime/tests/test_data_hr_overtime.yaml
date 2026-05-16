@@ -1,0 +1,135 @@
+scenarios:
+  - name: "Overtime Type - Create"
+    steps:
+      - step: "Create overtime type"
+        action: "create"
+        model: "hr.overtime_type"
+        save_as: "overtime_type"
+        values:
+          name: "Regular Overtime Test"
+          code: "ROT001"
+          apply_limit_per_day: false
+          limit_per_day: 0
+
+      - step: "Assert overtime type created"
+        action: "assert"
+        target: "overtime_type"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          name:
+            type: "value"
+            expected: "Regular Overtime Test"
+
+  - name: "Overtime Type - Edit"
+    steps:
+      - step: "Create overtime type"
+        action: "create"
+        model: "hr.overtime_type"
+        save_as: "overtime_type"
+        values:
+          name: "Overtime Type Edit"
+          code: "OTE001"
+
+      - step: "Edit overtime type"
+        action: "write"
+        target: "overtime_type"
+        values:
+          apply_limit_per_day: true
+          limit_per_day: 3
+
+      - step: "Assert edited"
+        action: "assert"
+        target: "overtime_type"
+        asserts:
+          apply_limit_per_day:
+            type: "value"
+            expected: true
+          limit_per_day:
+            type: "value"
+            expected: 3
+
+  - name: "Overtime Type - Delete"
+    steps:
+      - step: "Create overtime type"
+        action: "create"
+        model: "hr.overtime_type"
+        save_as: "overtime_type"
+        values:
+          name: "Overtime Type Delete"
+          code: "OTD001"
+
+      - step: "Delete overtime type"
+        action: "call"
+        target: "overtime_type"
+        method: "unlink"
+
+      - step: "Verify deleted"
+        action: "search"
+        model: "hr.overtime_type"
+        domain: [["code", "=", "OTD001"]]
+        save_as: "result"
+        expect_count: 0
+
+  - name: "HR Overtime - Full Workflow: draft to done"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Overtime"
+
+      - step: "Create overtime type"
+        action: "create"
+        model: "hr.overtime_type"
+        save_as: "overtime_type"
+        values:
+          name: "Overtime Workflow Test Type"
+          code: "OWT001"
+          apply_limit_per_day: false
+
+      - step: "Create overtime (draft)"
+        action: "create"
+        model: "hr.overtime"
+        save_as: "overtime"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "EVAL: registry['employee'].id"
+          type_id: "EVAL: registry['overtime_type'].id"
+          date: 2024-01-15
+          date_start: "2024-01-15 08:00:00"
+          date_end: "2024-01-15 10:00:00"
+
+      - step: "Assert overtime created in draft"
+        action: "assert"
+        target: "overtime"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+
+      - step: "Confirm overtime"
+        action: "call"
+        target: "overtime"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Approve overtime"
+        action: "call"
+        target: "overtime"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+        asserts:
+          state:
+            type: "value"
+            expected: "done"

@@ -1,0 +1,133 @@
+scenarios:
+  - name: "Attendance Reason - Create"
+    steps:
+      - step: "Create attendance reason"
+        action: "create"
+        model: "hr.attendance_reason"
+        save_as: "reason"
+        values:
+          name: "Late Arrival Test"
+          code: "LAT001"
+          by_system: false
+
+      - step: "Assert attendance reason created"
+        action: "assert"
+        target: "reason"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          name:
+            type: "value"
+            expected: "Late Arrival Test"
+
+  - name: "Attendance Reason - Edit"
+    steps:
+      - step: "Create attendance reason"
+        action: "create"
+        model: "hr.attendance_reason"
+        save_as: "reason"
+        values:
+          name: "Attendance Reason Edit"
+          code: "ARE001"
+
+      - step: "Edit attendance reason"
+        action: "write"
+        target: "reason"
+        values:
+          name: "Attendance Reason Edited"
+
+      - step: "Assert edited"
+        action: "assert"
+        target: "reason"
+        asserts:
+          name:
+            type: "value"
+            expected: "Attendance Reason Edited"
+
+  - name: "Attendance Reason - Delete"
+    steps:
+      - step: "Create attendance reason"
+        action: "create"
+        model: "hr.attendance_reason"
+        save_as: "reason"
+        values:
+          name: "Attendance Reason Delete"
+          code: "ARD001"
+
+      - step: "Delete attendance reason"
+        action: "call"
+        target: "reason"
+        method: "unlink"
+
+      - step: "Verify deleted"
+        action: "search"
+        model: "hr.attendance_reason"
+        domain: [["code", "=", "ARD001"]]
+        save_as: "result"
+        expect_count: 0
+
+  - name: "HR Timesheet Attendance - Create with open timesheet"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Attendance"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet for employee"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "EVAL: registry['employee'].id"
+          date_start: 2024-01-01
+          date_end: 2024-01-31
+          working_schedule_id: "EVAL: registry['working_schedule'].id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create attendance"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "EVAL: registry['employee'].id"
+          date: 2024-01-15
+          check_in: "2024-01-15 08:00:00"
+          check_out: "2024-01-15 17:00:00"
+          sheet_id: "EVAL: registry['timesheet'].id"
+
+      - step: "Assert attendance created with state present"
+        action: "assert"
+        target: "attendance"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          state:
+            type: "value"
+            expected: "present"
+
+      - step: "Assert sheet linked"
+        action: "assert"
+        target: "attendance"
+        asserts:
+          sheet_id:
+            type: "value"
+            operator: "is_truthy"

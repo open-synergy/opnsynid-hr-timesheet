@@ -1,0 +1,62 @@
+scenarios:
+  - name: "HR Leave Request Batch - Full Workflow"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Leave Batch"
+
+      - step: "Create leave type"
+        action: "create"
+        model: "hr.leave_type"
+        save_as: "leave_type"
+        values:
+          name: "Leave Batch Test"
+          code: "LBT001"
+          need_allocation: false
+
+      - step: "Create leave request batch (draft)"
+        action: "create"
+        model: "hr.leave_request_batch"
+        save_as: "batch"
+        as_user: "base.user_admin"
+        values:
+          type_id: "EVAL: registry['leave_type'].id"
+          date_start: "2024-01-15 08:00:00"
+          date_end: "2024-01-15 17:00:00"
+          employee_ids:
+            - "EVAL: registry['employee'].id"
+
+      - step: "Assert batch created in draft"
+        action: "assert"
+        target: "batch"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+
+      - step: "Confirm batch"
+        action: "call"
+        target: "batch"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Approve batch"
+        action: "call"
+        target: "batch"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+        asserts:
+          state:
+            type: "value"
+            expected: "done"
