@@ -46,3 +46,55 @@ scenarios:
           operating_unit_id:
             type: "value"
             operator: "is_truthy"
+
+  - name: "HR Timesheet - Onchange Operating Unit from Employee"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Timesheet OU Onchange"
+
+      - step: "Get operating unit"
+        action: "search"
+        model: "operating.unit"
+        domain: []
+        save_as: "operating_unit"
+        limit: 1
+        order: "id asc"
+
+      - step: "Set employee operating unit"
+        action: "write"
+        target: "employee"
+        values:
+          operating_unit_id: "EVAL: registry['operating_unit'].id"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet without operating unit"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "EVAL: registry['employee'].id"
+          date_start: 2024-02-01
+          date_end: 2024-02-28
+          working_schedule_id: "EVAL: registry['working_schedule'].id"
+
+      - step: "Call onchange operating unit on timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "onchange_operating_unit_id"
+        as_user: "base.user_admin"
+        asserts:
+          operating_unit_id:
+            type: "value"
+            operator: "is_truthy"

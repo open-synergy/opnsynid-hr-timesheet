@@ -12,6 +12,7 @@
     "depends": [
         "ssi_timesheet",
         "ssi_operating_unit_mixin",
+        "ssi_hr_employee_operating_unit",
     ],
     "data": [
         "security/res_group/hr_timesheet.xml",
