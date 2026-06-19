@@ -35,12 +35,12 @@ addon | version | maintainers | summary
 [ssi_hr_overtime_documenso_signing](ssi_hr_overtime_documenso_signing/) | 14.0.2.1.0 |  | HR Overtime - Documenso Signing Integration
 [ssi_hr_overtime_operating_unit](ssi_hr_overtime_operating_unit/) | 14.0.1.1.0 |  | Overtime Management + Operating Unit
 [ssi_hr_overtime_state_change_constrain](ssi_hr_overtime_state_change_constrain/) | 14.0.1.1.0 |  | Overtime State Change Constrain
-[ssi_timesheet](ssi_timesheet/) | 14.0.3.1.0 |  | Timesheets
+[ssi_timesheet](ssi_timesheet/) | 14.0.3.2.0 |  | Timesheets
 [ssi_timesheet_attendance](ssi_timesheet_attendance/) | 14.0.1.17.0 |  | Timesheet Attendance
 [ssi_timesheet_attendance_operating_unit](ssi_timesheet_attendance_operating_unit/) | 14.0.1.1.0 |  | Timesheet + Attendance + Operating Unit
 [ssi_timesheet_attendance_work_log](ssi_timesheet_attendance_work_log/) | 14.0.1.4.0 |  | Timesheet + Attendance + Work Log
 [ssi_timesheet_documenso_signing](ssi_timesheet_documenso_signing/) | 14.0.1.1.0 |  | Timesheet - Documenso Signing Integration
-[ssi_timesheet_operating_unit](ssi_timesheet_operating_unit/) | 14.0.1.1.0 |  | Timesheet + Operating Unit
+[ssi_timesheet_operating_unit](ssi_timesheet_operating_unit/) | 14.0.1.2.0 |  | Timesheet + Operating Unit
 [ssi_timesheet_state_change_constrain](ssi_timesheet_state_change_constrain/) | 14.0.1.1.0 |  | Timesheet State Change Constrain
 [ssi_work_log_cost](ssi_work_log_cost/) | 14.0.2.1.0 |  | Work Log Cost
 [ssi_work_log_expense](ssi_work_log_expense/) | 14.0.2.1.0 |  | Work Log Expense
