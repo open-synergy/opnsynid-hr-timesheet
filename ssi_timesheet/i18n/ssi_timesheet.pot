@@ -182,6 +182,7 @@ msgstr ""
 
 #. module: ssi_timesheet
 #: model_terms:ir.ui.view,arch_db:ssi_timesheet.generate_timesheet_view_form
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet.timesheet_summary_report_view_form
 msgid "Cancel"
 msgstr ""
 
@@ -274,6 +275,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_computation__create_uid
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_computation_item__create_uid
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_daily_summary__create_uid
+#: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_summary_report__create_uid
 msgid "Created by"
 msgstr ""
 
@@ -283,6 +285,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_computation__create_date
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_computation_item__create_date
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_daily_summary__create_date
+#: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_summary_report__create_date
 msgid "Created on"
 msgstr ""
 
@@ -301,6 +304,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_generate_timesheet__date_end
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet__date_end
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_computation_analysis__date_end
+#: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_summary_report__date_end
 #: model_terms:ir.ui.view,arch_db:ssi_timesheet.hr_timesheet_computation_analysis_view_search
 #: model_terms:ir.ui.view,arch_db:ssi_timesheet.hr_timesheet_view_search
 msgid "Date End"
@@ -370,6 +374,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_generate_timesheet__date_start
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet__date_start
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_computation_analysis__date_start
+#: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_summary_report__date_start
 #: model_terms:ir.ui.view,arch_db:ssi_timesheet.hr_timesheet_computation_analysis_view_search
 #: model_terms:ir.ui.view,arch_db:ssi_timesheet.hr_timesheet_view_search
 msgid "Date Start"
@@ -467,6 +472,8 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_computation_analysis__display_name
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_computation_item__display_name
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_daily_summary__display_name
+#: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_summary_report__display_name
+#: model:ir.model.fields,field_description:ssi_timesheet.field_report_ssi_timesheet_timesheet_summary_xlsx__display_name
 msgid "Display Name"
 msgstr ""
 
@@ -510,6 +517,12 @@ msgid "Employee %s must have working schedule."
 msgstr ""
 
 #. module: ssi_timesheet
+#: code:addons/ssi_timesheet/reports/timesheet_summary_xlsx.py:0
+#, python-format
+msgid "Employee Name"
+msgstr ""
+
+#. module: ssi_timesheet
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet__employee_partner_id
 msgid "Employee Partner"
 msgstr ""
@@ -537,6 +550,11 @@ msgstr ""
 msgid ""
 "Error evaluating conditions.\n"
 " %s"
+msgstr ""
+
+#. module: ssi_timesheet
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet.timesheet_summary_report_view_form
+msgid "Export XLSX"
 msgstr ""
 
 #. module: ssi_timesheet
@@ -589,6 +607,8 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_computation_analysis__id
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_computation_item__id
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_daily_summary__id
+#: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_summary_report__id
+#: model:ir.model.fields,field_description:ssi_timesheet.field_report_ssi_timesheet_timesheet_summary_xlsx__id
 msgid "ID"
 msgstr ""
 
@@ -653,6 +673,8 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_computation_analysis____last_update
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_computation_item____last_update
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_daily_summary____last_update
+#: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_summary_report____last_update
+#: model:ir.model.fields,field_description:ssi_timesheet.field_report_ssi_timesheet_timesheet_summary_xlsx____last_update
 msgid "Last Modified on"
 msgstr ""
 
@@ -662,6 +684,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_computation__write_uid
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_computation_item__write_uid
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_daily_summary__write_uid
+#: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_summary_report__write_uid
 msgid "Last Updated by"
 msgstr ""
 
@@ -671,6 +694,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_computation__write_date
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_computation_item__write_date
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_daily_summary__write_date
+#: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_summary_report__write_date
 msgid "Last Updated on"
 msgstr ""
 
@@ -775,6 +799,12 @@ msgid "Next Approvals"
 msgstr ""
 
 #. module: ssi_timesheet
+#: code:addons/ssi_timesheet/reports/timesheet_summary_xlsx.py:0
+#, python-format
+msgid "No"
+msgstr ""
+
+#. module: ssi_timesheet
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet__note
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_computation_item__note
 msgid "Note"
@@ -811,8 +841,24 @@ msgid "Number of unread messages"
 msgstr ""
 
 #. module: ssi_timesheet
+#: model:ir.model.fields,help:ssi_timesheet.field_hr_timesheet_summary_report__date_end
+msgid "Only timesheets ending on or before this date are included."
+msgstr ""
+
+#. module: ssi_timesheet
+#: model:ir.model.fields,help:ssi_timesheet.field_hr_timesheet_summary_report__date_start
+msgid "Only timesheets starting on or after this date are included."
+msgstr ""
+
+#. module: ssi_timesheet
 #: model:ir.model.fields.selection,name:ssi_timesheet.selection__hr_timesheet_computation_analysis__timesheet_state__draft
 msgid "Open"
+msgstr ""
+
+#. module: ssi_timesheet
+#: code:addons/ssi_timesheet/reports/timesheet_summary_xlsx.py:0
+#, python-format
+msgid "Period: %s s/d %s"
 msgstr ""
 
 #. module: ssi_timesheet
@@ -920,6 +966,12 @@ msgid ""
 msgstr ""
 
 #. module: ssi_timesheet
+#: code:addons/ssi_timesheet/reports/timesheet_summary_xlsx.py:0
+#, python-format
+msgid "TIMESHEET SUMMARY"
+msgstr ""
+
+#. module: ssi_timesheet
 #: model:ir.model,name:ssi_timesheet.model_hr_timesheet
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_computation_analysis__timesheet_id
 #: model_terms:ir.ui.view,arch_db:ssi_timesheet.hr_timesheet_computation_analysis_view_search
@@ -970,6 +1022,30 @@ msgid "Timesheet State"
 msgstr ""
 
 #. module: ssi_timesheet
+#: code:addons/ssi_timesheet/reports/timesheet_summary_xlsx.py:0
+#: model:ir.actions.act_window,name:ssi_timesheet.timesheet_summary_report_action
+#: model:ir.ui.menu,name:ssi_timesheet.menu_timesheet_summary_report
+#, python-format
+msgid "Timesheet Summary"
+msgstr ""
+
+#. module: ssi_timesheet
+#: model:ir.model,name:ssi_timesheet.model_hr_timesheet_summary_report
+#: model:res.groups,name:ssi_timesheet.hr_timesheet_summary_report_group
+msgid "Timesheet Summary Report"
+msgstr ""
+
+#. module: ssi_timesheet
+#: model:ir.actions.report,name:ssi_timesheet.action_report_timesheet_summary_xlsx
+msgid "Timesheet Summary XLSX"
+msgstr ""
+
+#. module: ssi_timesheet
+#: model:ir.model,name:ssi_timesheet.model_report_ssi_timesheet_timesheet_summary_xlsx
+msgid "Timesheet Summary XLSX Report"
+msgstr ""
+
+#. module: ssi_timesheet
 #: code:addons/ssi_timesheet/wizards/generate_timesheet.py:0
 #, python-format
 msgid "Timesheet already exists for %s."
@@ -983,6 +1059,12 @@ msgstr ""
 #: model:ir.ui.menu,name:ssi_timesheet.menu_hr_timesheet_configuration
 #: model:ir.ui.menu,name:ssi_timesheet.timesheet_menu
 msgid "Timesheets"
+msgstr ""
+
+#. module: ssi_timesheet
+#: code:addons/ssi_timesheet/reports/timesheet_summary_xlsx.py:0
+#, python-format
+msgid "Total"
 msgstr ""
 
 #. module: ssi_timesheet
@@ -1083,5 +1165,6 @@ msgstr ""
 
 #. module: ssi_timesheet
 #: model_terms:ir.ui.view,arch_db:ssi_timesheet.generate_timesheet_view_form
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet.timesheet_summary_report_view_form
 msgid "or"
 msgstr ""
