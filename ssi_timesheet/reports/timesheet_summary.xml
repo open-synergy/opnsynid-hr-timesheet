@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <!-- XLSX report -->
+    <record id="action_report_timesheet_summary_xlsx" model="ir.actions.report">
+        <field name="name">Timesheet Summary XLSX</field>
+        <field name="model">hr.timesheet_summary_report</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">ssi_timesheet.timesheet_summary_xlsx</field>
+        <field name="report_file">ssi_timesheet.timesheet_summary_xlsx</field>
+    </record>
+
+</odoo>

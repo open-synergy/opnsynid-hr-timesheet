@@ -18,5 +18,6 @@
         "security/res_group/hr_timesheet.xml",
         "security/ir_rule/hr_timesheet.xml",
         "views/hr_timesheet_views.xml",
+        "wizards/timesheet_summary_report.xml",
     ],
 }
