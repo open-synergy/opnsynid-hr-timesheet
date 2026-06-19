@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <record id="timesheet_summary_report_view_form" model="ir.ui.view">
+        <field name="name">Timesheet Summary Report</field>
+        <field name="model">hr.timesheet_summary_report</field>
+        <field name="arch" type="xml">
+            <form>
+                <group name="group_1" colspan="4" col="2">
+                    <field name="date_start" />
+                    <field name="date_end" />
+                </group>
+                <footer>
+                    <button
+                        name="action_export_xlsx"
+                        type="object"
+                        string="Export XLSX"
+                        class="oe_highlight"
+                    />
+                    or
+                    <button special="cancel" string="Cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="timesheet_summary_report_action" model="ir.actions.act_window">
+        <field name="name">Timesheet Summary</field>
+        <field name="res_model">hr.timesheet_summary_report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="timesheet_summary_report_view_form" />
+        <field name="target">new</field>
+    </record>
+
+    <menuitem
+        id="menu_timesheet_summary_report"
+        name="Timesheet Summary"
+        parent="reporting_menu"
+        groups="hr_timesheet_summary_report_group"
+        action="timesheet_summary_report_action"
+        sequence="10"
+    />
+
+</odoo>

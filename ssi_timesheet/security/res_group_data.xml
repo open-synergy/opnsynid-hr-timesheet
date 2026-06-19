@@ -12,6 +12,14 @@
             eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
         />
 </record>
+<record id="hr_timesheet_summary_report_group" model="res.groups">
+    <field name="name">Timesheet Summary Report</field>
+    <field name="category_id" ref="ssi_hr.human_resource_reporting_module_category" />
+    <field
+            name="users"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
+</record>
 <!-- Configurator -->
 <record id="hr_timesheet_computation_item_group" model="res.groups">
     <field name="name">Timesheet Computation Item</field>
