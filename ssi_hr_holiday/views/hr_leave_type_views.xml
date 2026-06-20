@@ -12,7 +12,31 @@
         />
     <field name="mode">primary</field>
     <field name="arch" type="xml">
-        <data />
+        <data>
+            <xpath expr="//group[@name='dom_active']" position="before">
+                <separator />
+                <filter
+                        name="filter_need_allocation"
+                        string="Need Allocation"
+                        domain="[('need_allocation','=',True)]"
+                    />
+                <filter
+                        name="filter_apply_limit_per_request"
+                        string="Apply Limit Per Request"
+                        domain="[('apply_limit_per_request','=',True)]"
+                    />
+                <filter
+                        name="filter_exclude_public_holiday"
+                        string="Exclude Public Holiday"
+                        domain="[('exclude_public_holiday','=',True)]"
+                    />
+                <filter
+                        name="filter_exclude_rest_day"
+                        string="Exclude Rest Day"
+                        domain="[('exclude_rest_day','=',True)]"
+                    />
+            </xpath>
+        </data>
     </field>
 </record>
 

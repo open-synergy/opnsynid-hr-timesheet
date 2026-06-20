@@ -25,7 +25,12 @@
         />
         <field name="mode">primary</field>
         <field name="arch" type="xml">
-            <data />
+            <data>
+                <xpath expr="//field[@name='code']" position="after">
+                    <field name="journal_id" />
+                    <field name="accrue_account_id" />
+                </xpath>
+            </data>
         </field>
     </record>
 
