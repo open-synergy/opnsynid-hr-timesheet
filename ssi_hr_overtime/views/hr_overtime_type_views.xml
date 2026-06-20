@@ -12,7 +12,16 @@
         />
     <field name="mode">primary</field>
     <field name="arch" type="xml">
-        <data />
+        <data>
+            <xpath expr="//group[@name='dom_active']" position="before">
+                <separator />
+                <filter
+                        name="filter_apply_limit_per_day"
+                        string="Apply Limit Per Day"
+                        domain="[('apply_limit_per_day','=',True)]"
+                    />
+            </xpath>
+        </data>
     </field>
 </record>
 
