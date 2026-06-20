@@ -12,7 +12,16 @@
         />
     <field name="mode">primary</field>
     <field name="arch" type="xml">
-        <data />
+        <data>
+            <xpath expr="//group[@name='dom_active']" position="before">
+                <separator />
+                <filter
+                        name="filter_by_system"
+                        string="Created By System"
+                        domain="[('by_system','=',True)]"
+                    />
+            </xpath>
+        </data>
     </field>
 </record>
 
