@@ -218,6 +218,7 @@ msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__by_system
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.hr_attendance_reason_view_search
 msgid "Created By System"
 msgstr ""
 
