@@ -178,6 +178,7 @@ msgstr ""
 
 #. module: ssi_hr_holiday
 #: model:ir.model.fields,field_description:ssi_hr_holiday.field_hr_leave_type__apply_limit_per_request
+#: model_terms:ir.ui.view,arch_db:ssi_hr_holiday.hr_leave_type_view_search
 msgid "Apply Limit Per Request"
 msgstr ""
 
@@ -468,11 +469,13 @@ msgstr ""
 
 #. module: ssi_hr_holiday
 #: model:ir.model.fields,field_description:ssi_hr_holiday.field_hr_leave_type__exclude_public_holiday
+#: model_terms:ir.ui.view,arch_db:ssi_hr_holiday.hr_leave_type_view_search
 msgid "Exclude Public Holiday"
 msgstr ""
 
 #. module: ssi_hr_holiday
 #: model:ir.model.fields,field_description:ssi_hr_holiday.field_hr_leave_type__exclude_rest_day
+#: model_terms:ir.ui.view,arch_db:ssi_hr_holiday.hr_leave_type_view_search
 msgid "Exclude Rest Day"
 msgstr ""
 
@@ -701,6 +704,7 @@ msgstr ""
 
 #. module: ssi_hr_holiday
 #: model:ir.model.fields,field_description:ssi_hr_holiday.field_hr_leave_type__need_allocation
+#: model_terms:ir.ui.view,arch_db:ssi_hr_holiday.hr_leave_type_view_search
 msgid "Need Allocation"
 msgstr ""
 
