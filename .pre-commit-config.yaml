@@ -55,7 +55,7 @@ repos:
           - --addons-dir=.
           - --branch=14.0
           - --org-name=open-synergy
-          - --repo-name=opnnsynid-hr-timesheet
+          - --repo-name=opnsynid-hr-timesheet
           - --if-source-changed
           - --keep-source-digest
   - repo: https://github.com/OCA/odoo-pre-commit-hooks
