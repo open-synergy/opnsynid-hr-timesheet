@@ -161,6 +161,11 @@ msgid "Allowed Policy Templates"
 msgstr ""
 
 #. module: ssi_hr_overtime
+#: model_terms:ir.ui.view,arch_db:ssi_hr_overtime.hr_overtime_type_view_search
+msgid "Apply Limit Per Day"
+msgstr ""
+
+#. module: ssi_hr_overtime
 #: model:ir.model.fields,field_description:ssi_hr_overtime.field_hr_overtime__apply_limit_per_day
 #: model:ir.model.fields,field_description:ssi_hr_overtime.field_hr_overtime_type__apply_limit_per_day
 msgid "Apply Limit Per Days"
