@@ -28,6 +28,7 @@ setuptools.setup(
         'odoo14-addon-ssi_timesheet',
         'odoo14-addon-ssi_timesheet_attendance',
         'odoo14-addon-ssi_timesheet_attendance_operating_unit',
+        'odoo14-addon-ssi_timesheet_attendance_shift',
         'odoo14-addon-ssi_timesheet_attendance_work_log',
         'odoo14-addon-ssi_timesheet_documenso_signing',
         'odoo14-addon-ssi_timesheet_operating_unit',
