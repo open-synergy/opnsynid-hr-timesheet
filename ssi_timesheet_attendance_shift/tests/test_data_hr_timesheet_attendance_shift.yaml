@@ -614,9 +614,27 @@ scenarios:
       - step: "Assert exactly one attendance exists before sign out"
         action: "search"
         model: "hr.timesheet_attendance"
-        domain: [["sheet_id", "=", "REC: timesheet.id"]]
+        domain: [["employee_id", "=", "REC: employee.id"]]
         save_as: "before_sign_out"
         expect_count: 1
+
+      - step: "Create a second, non-overlapping open timesheet covering today"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "catch_all_timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "working_schedule"
+          working_schedule_id: "REC: calendar.id"
+          date_start: 2024-01-09
+          date_end: 2099-12-31
+
+      - step: "Open the catch-all timesheet"
+        action: "call"
+        target: "catch_all_timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
 
       - step: "Sign out at a real time far past the fixed check-in date"
         action: "call"
@@ -627,7 +645,7 @@ scenarios:
       - step: "Assert the anomaly branch created a second attendance"
         action: "search"
         model: "hr.timesheet_attendance"
-        domain: [["sheet_id", "=", "REC: timesheet.id"]]
+        domain: [["employee_id", "=", "REC: employee.id"]]
         save_as: "after_sign_out"
         expect_count: 2
 
