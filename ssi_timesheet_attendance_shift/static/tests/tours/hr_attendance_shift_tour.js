@@ -336,11 +336,11 @@ odoo.define("ssi_timesheet_attendance_shift.hr_attendance_shift_tour", function 
                 },
             },
             {
-                content: "Confirm unarchive",
-                trigger: ".modal-footer button.btn-primary",
-                in_modal: true,
-            },
-            {
+                // Unlike Archive/Delete, Unarchive executes immediately
+                // without a confirmation dialog (confirmed in CI: the
+                // action_unarchive RPC fires right after the click above,
+                // and no modal is ever displayed) — so there is no OK
+                // step to click here.
                 content: "Shift is restored and stays in the archived view",
                 trigger: ".o_data_row:contains(TOUR-SHIFT-ACTIVATE)",
                 extra_trigger: ".o_list_view",
