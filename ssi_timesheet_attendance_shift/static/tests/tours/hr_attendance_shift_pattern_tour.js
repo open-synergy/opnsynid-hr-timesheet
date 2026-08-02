@@ -117,10 +117,16 @@ odoo.define(
                     in_modal: false,
                 },
                 {
+                    // The <td> wrapping an o2m cell carries no `name`
+                    // attribute in 14.0 (only the field widget itself
+                    // does — abstract_field.js sets it on `this.$el`,
+                    // not on the surrounding cell), and there is only
+                    // one row here so there is no sibling cell to click
+                    // instead. Blur the still-open row by clicking the
+                    // always-visible Name field above the notebook
+                    // instead — a plain click does not change its text.
                     content: "Commit the cycle day line",
-                    trigger:
-                        ".o_field_widget[name='detail_ids'] " +
-                        ".o_data_row .o_field_cell[name='day_index']",
+                    trigger: ".o_field_widget[name='name']",
                     run: function () {
                         this.$anchor[0].click();
                     },
