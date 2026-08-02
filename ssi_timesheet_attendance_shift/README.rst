@@ -20,6 +20,15 @@ Work Instruction
 * `Delete Attendance Shift <docs/hr_attendance_shift/index.html>`_
 * `Deactivate Attendance Shift <docs/hr_attendance_shift/index.html>`_
 * `Activate Attendance Shift <docs/hr_attendance_shift/index.html>`_
+* `Create Attendance Shift Pattern <docs/hr_attendance_shift_pattern/index.html>`_
+* `Edit Attendance Shift Pattern <docs/hr_attendance_shift_pattern/index.html>`_
+* `Delete Attendance Shift Pattern <docs/hr_attendance_shift_pattern/index.html>`_
+* `Create Attendance Shift Assignment
+  <docs/hr_attendance_shift_assignment/index.html>`_
+* `Edit Attendance Shift Assignment
+  <docs/hr_attendance_shift_assignment/index.html>`_
+* `Delete Attendance Shift Assignment
+  <docs/hr_attendance_shift_assignment/index.html>`_
 
 
 Installation

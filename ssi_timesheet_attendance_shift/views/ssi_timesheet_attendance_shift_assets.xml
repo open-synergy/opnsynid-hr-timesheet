@@ -13,6 +13,14 @@
                 type="text/javascript"
                 src="/ssi_timesheet_attendance_shift/static/tests/tours/hr_attendance_shift_tour.js"
             />
+            <script
+                type="text/javascript"
+                src="/ssi_timesheet_attendance_shift/static/tests/tours/hr_attendance_shift_pattern_tour.js"
+            />
+            <script
+                type="text/javascript"
+                src="/ssi_timesheet_attendance_shift/static/tests/tours/hr_attendance_shift_assignment_tour.js"
+            />
         </xpath>
     </template>
 </odoo>

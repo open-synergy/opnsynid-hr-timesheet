@@ -22,7 +22,11 @@
     "data": [
         "security/res_groups/hr_attendance_shift.xml",
         "security/ir_model_access/hr_attendance_shift.xml",
+        "security/ir_model_access/hr_attendance_shift_pattern.xml",
+        "security/ir_model_access/hr_attendance_shift_assignment.xml",
         "views/hr_attendance_shift_views.xml",
+        "views/hr_attendance_shift_pattern_views.xml",
+        "views/hr_attendance_shift_assignment_views.xml",
         "views/ssi_timesheet_attendance_shift_assets.xml",
     ],
 }
