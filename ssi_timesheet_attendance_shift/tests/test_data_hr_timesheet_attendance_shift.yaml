@@ -220,20 +220,23 @@ scenarios:
           early_check_in_tolerance: 2.0
           late_check_out_tolerance: 3.0
 
-      - step: "Create single-day pattern anchored on the shift date"
+      - step: "Create two-day pattern: night shift then a day off"
         action: "create"
         model: "hr.attendance_shift_pattern"
         save_as: "pattern"
         values:
-          name: "Night Only Pattern"
+          name: "Night Then Off Pattern"
           code: "/"
-          cycle_length: 1
+          cycle_length: 2
           date_anchor: 2024-01-08
           detail_ids:
             - - 0
               - 0
               - day_index: 1
                 shift_id: "REC: night_shift.id"
+            - - 0
+              - 0
+              - day_index: 2
 
       - step: "Create employee in UTC"
         action: "create"
@@ -253,7 +256,7 @@ scenarios:
           cycle_offset: 0
           date_start: 2024-01-08
 
-      - step: "Create shift-roster timesheet for the shift date"
+      - step: "Create shift-roster timesheet spanning the shift day and the day off"
         action: "create"
         model: "hr.timesheet"
         save_as: "timesheet"
@@ -262,7 +265,7 @@ scenarios:
           employee_id: "REC: employee.id"
           schedule_source: "shift"
           date_start: 2024-01-08
-          date_end: 2024-01-08
+          date_end: 2024-01-09
 
       - step: "Open the timesheet"
         action: "call"
@@ -282,7 +285,7 @@ scenarios:
         as_user: "base.user_admin"
         values:
           employee_id: "REC: employee.id"
-          date: 2024-01-01
+          date: 2024-01-09
           check_in: "2024-01-08 14:00:00"
           sheet_id: "REC: timesheet.id"
 
