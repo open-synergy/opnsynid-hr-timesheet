@@ -100,6 +100,11 @@ msgid "Attendance Shifts"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
+#: model:ir.model,name:ssi_timesheet_attendance_shift.model_hr_employee_base
+msgid "Basic Employee"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__code
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__code
 msgid "Code"
@@ -163,10 +168,22 @@ msgid "Day Index"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
+#: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_employee__schedule_source
+#: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_employee_base__schedule_source
+#: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_employee_public__schedule_source
+msgid ""
+"Default attendance schedule source copied onto a new timesheet's own "
+"Schedule Source when this employee is set on it."
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__display_name
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_assignment__display_name
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__display_name
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern_detail__display_name
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_employee_base__display_name
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_timesheet__display_name
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_timesheet_attendance_schedule__display_name
 msgid "Display Name"
 msgstr ""
 
@@ -253,6 +270,9 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_assignment__id
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__id
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern_detail__id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_employee_base__id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_timesheet__id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_timesheet_attendance_schedule__id
 msgid "ID"
 msgstr ""
 
@@ -293,6 +313,9 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_assignment____last_update
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern____last_update
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern_detail____last_update
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_employee_base____last_update
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_timesheet____last_update
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_timesheet_attendance_schedule____last_update
 msgid "Last Modified on"
 msgstr ""
 
@@ -505,8 +528,25 @@ msgid "Rotation pattern this employee is assigned to."
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_employee__schedule_source
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_employee_base__schedule_source
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_employee_public__schedule_source
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_timesheet__schedule_source
+msgid "Schedule Source"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern_detail__shift_id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_timesheet_attendance_schedule__shift_id
 msgid "Shift"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance_shift.selection__hr_employee__schedule_source__shift
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance_shift.selection__hr_employee_base__schedule_source__shift
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance_shift.selection__hr_employee_public__schedule_source__shift
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance_shift.selection__hr_timesheet__schedule_source__shift
+msgid "Shift Roster"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
@@ -517,6 +557,14 @@ msgid ""
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
+#: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_timesheet_attendance_schedule__shift_id
+msgid ""
+"Shift this schedule line was generated from, when the owning timesheet's "
+"Schedule Source is Shift Roster. Left empty for schedule lines generated "
+"from a Working Schedule."
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift__activity_state
 #: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__activity_state
 msgid ""
@@ -524,6 +572,16 @@ msgid ""
 "Overdue: Due date is already passed\n"
 "Today: Activity date is today\n"
 "Planned: Future activities."
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
+#: model:ir.model,name:ssi_timesheet_attendance_shift.model_hr_timesheet
+msgid "Timesheet"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
+#: model:ir.model,name:ssi_timesheet_attendance_shift.model_hr_timesheet_attendance_schedule
+msgid "Timesheet Attendance Schedule"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
@@ -557,6 +615,15 @@ msgid "Website communication history"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
+#: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_timesheet__schedule_source
+msgid ""
+"Where this timesheet's attendance schedule (``schedule_ids``) is generated "
+"from. Working Schedule keeps the pre-existing resource.calendar-based "
+"generation; Shift Roster generates one schedule line per shift from the "
+"employee's rotation assignment instead."
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__hour_start
 msgid "Work From"
 msgstr ""
@@ -564,4 +631,13 @@ msgstr ""
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__hour_end
 msgid "Work To"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_timesheet__working_schedule_id
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance_shift.selection__hr_employee__schedule_source__working_schedule
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance_shift.selection__hr_employee_base__schedule_source__working_schedule
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance_shift.selection__hr_employee_public__schedule_source__working_schedule
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance_shift.selection__hr_timesheet__schedule_source__working_schedule
+msgid "Working Schedule"
 msgstr ""
