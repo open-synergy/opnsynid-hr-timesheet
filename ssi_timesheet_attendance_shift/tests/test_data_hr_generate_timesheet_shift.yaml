@@ -1,6 +1,14 @@
 scenarios:
   - name: "Generate Timesheet - Shift Employee With Contiguous Date Start Succeeds"
     steps:
+      - step: "Create a dedicated user for the employee"
+        action: "create"
+        model: "res.users"
+        save_as: "user"
+        values:
+          name: "Contiguous Shift User"
+          login: "gt_contiguous_shift_user@example.com"
+
       - step: "Create employee with a user"
         action: "create"
         model: "hr.employee"
@@ -8,7 +16,7 @@ scenarios:
         values:
           name: "Contiguous Shift Employee"
           tz: "UTC"
-          user_id: "REF: base.user_admin"
+          user_id: "REC: user.id"
 
       - step: "Create a one-day shift"
         action: "create"
@@ -77,6 +85,14 @@ scenarios:
 
   - name: "Generate Timesheet - Shift Employee With Date Gap Is Rejected"
     steps:
+      - step: "Create a dedicated user for the employee"
+        action: "create"
+        model: "res.users"
+        save_as: "user"
+        values:
+          name: "Gapped Shift User"
+          login: "gt_gapped_shift_user@example.com"
+
       - step: "Create employee with a user"
         action: "create"
         model: "hr.employee"
@@ -84,7 +100,7 @@ scenarios:
         values:
           name: "Gapped Shift Employee"
           tz: "UTC"
-          user_id: "REF: base.user_admin"
+          user_id: "REC: user.id"
 
       - step: "Create a one-day shift"
         action: "create"
@@ -156,6 +172,14 @@ scenarios:
 
   - name: "Generate Timesheet - Shift Employee's First Timesheet Skips Continuity Check"
     steps:
+      - step: "Create a dedicated user for the employee"
+        action: "create"
+        model: "res.users"
+        save_as: "user"
+        values:
+          name: "First Timesheet Shift User"
+          login: "gt_first_timesheet_shift_user@example.com"
+
       - step: "Create employee with a user"
         action: "create"
         model: "hr.employee"
@@ -163,7 +187,7 @@ scenarios:
         values:
           name: "First Timesheet Shift Employee"
           tz: "UTC"
-          user_id: "REF: base.user_admin"
+          user_id: "REC: user.id"
 
       - step: "Create a one-day shift"
         action: "create"
@@ -223,6 +247,14 @@ scenarios:
       "Generate Timesheet - Employee Without Shift Assignment Skips Continuity Check
       Despite Gap"
     steps:
+      - step: "Create a dedicated user for the employee"
+        action: "create"
+        model: "res.users"
+        save_as: "user"
+        values:
+          name: "No Assignment User"
+          login: "gt_no_assignment_user@example.com"
+
       - step: "Create employee with a user and no shift assignment"
         action: "create"
         model: "hr.employee"
@@ -230,7 +262,7 @@ scenarios:
         values:
           name: "No Assignment Employee"
           tz: "UTC"
-          user_id: "REF: base.user_admin"
+          user_id: "REC: user.id"
 
       - step: "Create the previous timesheet period directly"
         action: "create"
@@ -291,6 +323,14 @@ scenarios:
       "Generate Timesheet - Regression: Employee Without Working Schedule Is Still
       Rejected"
     steps:
+      - step: "Create a dedicated user for the employee"
+        action: "create"
+        model: "res.users"
+        save_as: "user"
+        values:
+          name: "No Working Schedule User"
+          login: "gt_no_working_schedule_user@example.com"
+
       - step: "Create employee with a user but no working schedule"
         action: "create"
         model: "hr.employee"
@@ -298,7 +338,7 @@ scenarios:
         values:
           name: "No Working Schedule Employee"
           tz: "UTC"
-          user_id: "REF: base.user_admin"
+          user_id: "REC: user.id"
           resource_calendar_id: false
 
       - step: "Generate is rejected with the pre-existing message"
@@ -318,6 +358,14 @@ scenarios:
   - name:
       "Generate Timesheet - Regression: Existing Overlapping Timesheet Is Still Rejected"
     steps:
+      - step: "Create a dedicated user for the employee"
+        action: "create"
+        model: "res.users"
+        save_as: "user"
+        values:
+          name: "Overlap User"
+          login: "gt_overlap_user@example.com"
+
       - step: "Create employee with a user"
         action: "create"
         model: "hr.employee"
@@ -325,7 +373,7 @@ scenarios:
         values:
           name: "Overlap Employee"
           tz: "UTC"
-          user_id: "REF: base.user_admin"
+          user_id: "REC: user.id"
 
       - step: "Create the existing overlapping timesheet directly"
         action: "create"
