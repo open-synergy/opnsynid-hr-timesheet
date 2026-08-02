@@ -2,12 +2,20 @@
 # Copyright 2026 PT. Simetri Sinergi Indonesia
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo.tests import HttpCase, tagged
+from odoo.tests import HttpSavepointCase, tagged
 
 
 @tagged("post_install", "-at_install")
-class TestUiHrAttendanceShift(HttpCase):
-    """Tour tests for the ``hr.attendance_shift`` work instructions."""
+class TestUiHrAttendanceShift(HttpSavepointCase):
+    """Tour tests for the ``hr.attendance_shift`` work instructions.
+
+    Uses ``HttpSavepointCase`` rather than plain ``HttpCase``: in 14.0
+    ``TransactionCase`` only assigns ``self.env`` inside instance
+    ``setUp()``, so ``cls.env`` is not available in ``setUpClass()``.
+    ``HttpSavepointCase`` (via ``SingleTransactionCase``) does set
+    ``cls.env`` in ``setUpClass()``, which the tours below rely on to
+    seed shift records visible to the browser session.
+    """
 
     @classmethod
     def setUpClass(cls):
