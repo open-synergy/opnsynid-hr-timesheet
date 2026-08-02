@@ -14,37 +14,49 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: ssi_timesheet_attendance_shift
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern_detail__pattern_id
+msgid "# Pattern"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__message_needaction
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__message_needaction
 msgid "Action Needed"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__active
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__active
 msgid "Active"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__activity_ids
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__activity_ids
 msgid "Activities"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__activity_exception_decoration
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__activity_exception_decoration
 msgid "Activity Exception Decoration"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__activity_state
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__activity_state
 msgid "Activity State"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__activity_type_icon
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__activity_type_icon
 msgid "Activity Type Icon"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__message_attachment_count
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__message_attachment_count
 msgid "Attachment Count"
 msgstr ""
 
@@ -55,6 +67,33 @@ msgid "Attendance Shift"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
+#: model:ir.model,name:ssi_timesheet_attendance_shift.model_hr_attendance_shift_assignment
+msgid "Attendance Shift Assignment"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
+#: model:ir.actions.act_window,name:ssi_timesheet_attendance_shift.hr_attendance_shift_assignment_action
+#: model:ir.ui.menu,name:ssi_timesheet_attendance_shift.hr_attendance_shift_assignment_menu
+msgid "Attendance Shift Assignments"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
+#: model:ir.model,name:ssi_timesheet_attendance_shift.model_hr_attendance_shift_pattern
+msgid "Attendance Shift Pattern"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
+#: model:ir.model,name:ssi_timesheet_attendance_shift.model_hr_attendance_shift_pattern_detail
+msgid "Attendance Shift Pattern - Detail"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
+#: model:ir.actions.act_window,name:ssi_timesheet_attendance_shift.hr_attendance_shift_pattern_action
+#: model:ir.ui.menu,name:ssi_timesheet_attendance_shift.hr_attendance_shift_pattern_menu
+msgid "Attendance Shift Patterns"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
 #: model:ir.actions.act_window,name:ssi_timesheet_attendance_shift.hr_attendance_shift_action
 #: model:ir.ui.menu,name:ssi_timesheet_attendance_shift.hr_attendance_shift_menu
 msgid "Attendance Shifts"
@@ -62,16 +101,23 @@ msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__code
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__code
 msgid "Code"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__create_uid
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_assignment__create_uid
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__create_uid
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern_detail__create_uid
 msgid "Created by"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__create_date
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_assignment__create_date
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__create_date
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern_detail__create_date
 msgid "Created on"
 msgstr ""
 
@@ -81,7 +127,46 @@ msgid "Cross Day"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__date_anchor
+msgid "Cycle Anchor Date"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__detail_ids
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance_shift.hr_attendance_shift_pattern_view_form
+msgid "Cycle Days"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__cycle_length
+msgid "Cycle Length (Days)"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_assignment__cycle_offset
+msgid "Cycle Offset (Days)"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_assignment__date_end
+msgid "Date End"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_assignment__date_start
+msgid "Date Start"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern_detail__day_index
+msgid "Day Index"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__display_name
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_assignment__display_name
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__display_name
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern_detail__display_name
 msgid "Display Name"
 msgstr ""
 
@@ -111,23 +196,51 @@ msgid "Early Check In Tolerance"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_assignment__employee_id
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance_shift.hr_attendance_shift_assignment_view_search
+msgid "Employee"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
+#: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift_assignment__date_start
+msgid "First calendar date this assignment applies from."
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__message_follower_ids
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__message_follower_ids
 msgid "Followers"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__message_channel_ids
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__message_channel_ids
 msgid "Followers (Channels)"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__message_partner_ids
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__message_partner_ids
 msgid "Followers (Partners)"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift__activity_type_icon
+#: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__activity_type_icon
 msgid "Font awesome icon e.g. fa-tasks"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
+#: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__date_anchor
+msgid ""
+"Global reference date day-in-cycle 1 is resolved from. Shared by every crew "
+"assigned to this pattern — a crew's own Cycle Offset (on its assignment) is "
+"what makes its rotation start on a different day, not a different anchor."
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance_shift.hr_attendance_shift_assignment_view_search
+msgid "Group By"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
@@ -137,48 +250,73 @@ msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_assignment__id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern_detail__id
 msgid "ID"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__activity_exception_icon
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__activity_exception_icon
 msgid "Icon"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift__activity_exception_icon
+#: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__activity_exception_icon
 msgid "Icon to indicate an exception activity."
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift__message_needaction
 #: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift__message_unread
+#: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__message_needaction
+#: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__message_unread
 msgid "If checked, new messages require your attention."
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift__message_has_error
+#: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__message_has_error
 msgid "If checked, some messages have a delivery error."
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__message_is_follower
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__message_is_follower
 msgid "Is Follower"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift____last_update
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_assignment____last_update
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern____last_update
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern_detail____last_update
 msgid "Last Modified on"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__write_uid
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_assignment__write_uid
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__write_uid
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern_detail__write_uid
 msgid "Last Updated by"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__write_date
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_assignment__write_date
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__write_date
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern_detail__write_date
 msgid "Last Updated on"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
+#: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift_assignment__date_end
+msgid ""
+"Last calendar date this assignment applies to. Left empty, the assignment "
+"has no end date."
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
@@ -196,11 +334,13 @@ msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__message_main_attachment_id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__message_main_attachment_id
 msgid "Main Attachment"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift__active
+#: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__active
 msgid ""
 "Master data status\n"
 "\n"
@@ -212,6 +352,7 @@ msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift__code
+#: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__code
 msgid ""
 "Master data unique identifier.\n"
 "\n"
@@ -240,76 +381,144 @@ msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__message_has_error
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__message_has_error
 msgid "Message Delivery error"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__message_ids
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__message_ids
 msgid "Messages"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__my_activity_date_deadline
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__my_activity_date_deadline
 msgid "My Activity Deadline"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__name
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__name
 msgid "Name"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__activity_date_deadline
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__activity_date_deadline
 msgid "Next Activity Deadline"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__activity_summary
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__activity_summary
 msgid "Next Activity Summary"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__activity_type_id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__activity_type_id
 msgid "Next Activity Type"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__note
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__note
 msgid "Note"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__message_needaction_counter
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__message_needaction_counter
 msgid "Number of Actions"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
+#: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__cycle_length
+msgid ""
+"Number of days in one full rotation of this pattern. Every detail line's Day"
+" Index must fall within 1 and this value."
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
+#: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift_assignment__cycle_offset
+msgid ""
+"Number of days subtracted from the day-in-cycle formula before taking the "
+"modulo. This is the crew distinguisher: several employees can share the same"
+" Pattern with different offsets so each starts the rotation on a different "
+"day."
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__message_has_error_counter
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__message_has_error_counter
 msgid "Number of errors"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift__message_needaction_counter
+#: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__message_needaction_counter
 msgid "Number of messages which requires an action"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift__message_has_error_counter
+#: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__message_has_error_counter
 msgid "Number of messages with delivery error"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift__message_unread_counter
+#: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__message_unread_counter
 msgid "Number of unread messages"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
+#: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__detail_ids
+msgid ""
+"One line per day-in-cycle, from 1 to Cycle Length (Days). A line whose Shift"
+" is left empty means that day-in-cycle is a day off."
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_assignment__pattern_id
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance_shift.hr_attendance_shift_assignment_view_search
+msgid "Pattern"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
+#: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern_detail__day_index
+msgid ""
+"Position of this line within the parent pattern's cycle, counted from 1 to "
+"the pattern's Cycle Length (Days)."
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__activity_user_id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__activity_user_id
 msgid "Responsible User"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
+#: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift_assignment__pattern_id
+msgid "Rotation pattern this employee is assigned to."
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern_detail__shift_id
+msgid "Shift"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
+#: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern_detail__shift_id
+msgid ""
+"Shift that applies on this day-in-cycle. Left empty, this day-in-cycle is a "
+"day off — not incomplete data."
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift__activity_state
+#: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__activity_state
 msgid ""
 "Status based on activities\n"
 "Overdue: Due date is already passed\n"
@@ -319,26 +528,31 @@ msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift__activity_exception_decoration
+#: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__activity_exception_decoration
 msgid "Type of the exception activity on record."
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__message_unread
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__message_unread
 msgid "Unread Messages"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__message_unread_counter
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__message_unread_counter
 msgid "Unread Messages Counter"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__website_message_ids
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__website_message_ids
 msgid "Website Messages"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift__website_message_ids
+#: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__website_message_ids
 msgid "Website communication history"
 msgstr ""
 
