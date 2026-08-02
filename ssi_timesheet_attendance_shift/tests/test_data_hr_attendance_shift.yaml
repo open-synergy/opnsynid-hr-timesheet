@@ -1,0 +1,225 @@
+scenarios:
+  - name: "Attendance Shift - Create"
+    steps:
+      - step: "Create attendance shift"
+        action: "create"
+        model: "hr.attendance_shift"
+        save_as: "shift"
+        values:
+          name: "Night Shift"
+          code: "/"
+          hour_start: 18.0
+          duration: 12.0
+
+      - step: "Assert attendance shift created"
+        action: "assert"
+        target: "shift"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          name:
+            type: "value"
+            expected: "Night Shift"
+
+  - name: "Attendance Shift - Edit"
+    steps:
+      - step: "Create attendance shift"
+        action: "create"
+        model: "hr.attendance_shift"
+        save_as: "shift"
+        values:
+          name: "Morning Shift"
+          code: "/"
+          hour_start: 6.0
+          duration: 8.0
+
+      - step: "Edit attendance shift"
+        action: "write"
+        target: "shift"
+        values:
+          name: "Morning Shift Edited"
+          duration: 9.0
+
+      - step: "Assert edited"
+        action: "assert"
+        target: "shift"
+        asserts:
+          name:
+            type: "value"
+            expected: "Morning Shift Edited"
+          duration:
+            type: "value"
+            expected: 9.0
+
+  - name: "Attendance Shift - Delete"
+    steps:
+      - step: "Create attendance shift"
+        action: "create"
+        model: "hr.attendance_shift"
+        save_as: "shift"
+        values:
+          name: "Shift To Delete"
+          code: "SHFTDEL001"
+          hour_start: 9.0
+          duration: 8.0
+
+      - step: "Delete attendance shift"
+        action: "call"
+        target: "shift"
+        method: "unlink"
+
+      - step: "Verify deleted"
+        action: "search"
+        model: "hr.attendance_shift"
+        domain: [["code", "=", "SHFTDEL001"]]
+        save_as: "result"
+        expect_count: 0
+
+  - name: "Attendance Shift - Compute Work To and Cross Day (18h + 12h)"
+    steps:
+      - step: "Create cross-midnight shift"
+        action: "create"
+        model: "hr.attendance_shift"
+        save_as: "shift"
+        values:
+          name: "Security Shift"
+          code: "/"
+          hour_start: 18.0
+          duration: 12.0
+
+      - step: "Assert hour_end and cross_day"
+        action: "assert"
+        target: "shift"
+        asserts:
+          hour_end:
+            type: "value"
+            expected: 6.0
+          cross_day:
+            type: "value"
+            expected: true
+
+  - name: "Attendance Shift - Compute Work To and Cross Day (8h + 8h)"
+    steps:
+      - step: "Create same-day shift"
+        action: "create"
+        model: "hr.attendance_shift"
+        save_as: "shift"
+        values:
+          name: "Day Shift"
+          code: "/"
+          hour_start: 8.0
+          duration: 8.0
+
+      - step: "Assert hour_end and cross_day"
+        action: "assert"
+        target: "shift"
+        asserts:
+          hour_end:
+            type: "value"
+            expected: 16.0
+          cross_day:
+            type: "value"
+            expected: false
+
+  - name: "Attendance Shift - Compute Work To and Cross Day (8h + 24h)"
+    steps:
+      - step: "Create full-day shift starting mid-morning"
+        action: "create"
+        model: "hr.attendance_shift"
+        save_as: "shift"
+        values:
+          name: "Full Day Shift"
+          code: "/"
+          hour_start: 8.0
+          duration: 24.0
+
+      - step: "Assert hour_end and cross_day"
+        action: "assert"
+        target: "shift"
+        asserts:
+          hour_end:
+            type: "value"
+            expected: 8.0
+          cross_day:
+            type: "value"
+            expected: true
+
+  - name: "Attendance Shift - Default Tolerances"
+    steps:
+      - step: "Create shift without tolerances"
+        action: "create"
+        model: "hr.attendance_shift"
+        save_as: "shift"
+        values:
+          name: "Default Tolerance Shift"
+          code: "/"
+          hour_start: 7.0
+          duration: 8.0
+
+      - step: "Assert default tolerances"
+        action: "assert"
+        target: "shift"
+        asserts:
+          early_check_in_tolerance:
+            type: "value"
+            expected: 2.0
+          late_check_out_tolerance:
+            type: "value"
+            expected: 3.0
+
+  - name: "Attendance Shift - Duration Zero Rejected"
+    steps:
+      - step: "Create with duration 0 must be rejected"
+        action: "create"
+        model: "hr.attendance_shift"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "Duration must be greater than 0 and at most 24 hours"
+        values:
+          name: "Invalid Duration Zero"
+          code: "/"
+          hour_start: 8.0
+          duration: 0
+
+  - name: "Attendance Shift - Duration 25 Rejected"
+    steps:
+      - step: "Create with duration 25 must be rejected"
+        action: "create"
+        model: "hr.attendance_shift"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "Duration must be greater than 0 and at most 24 hours"
+        values:
+          name: "Invalid Duration Too Long"
+          code: "/"
+          hour_start: 8.0
+          duration: 25
+
+  - name: "Attendance Shift - Hour Start 24 Rejected"
+    steps:
+      - step: "Create with hour_start 24 must be rejected"
+        action: "create"
+        model: "hr.attendance_shift"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "Work from must be between 0 and 23.99"
+        values:
+          name: "Invalid Hour Start 24"
+          code: "/"
+          hour_start: 24
+          duration: 4.0
+
+  - name: "Attendance Shift - Hour Start Negative Rejected"
+    steps:
+      - step: "Create with negative hour_start must be rejected"
+        action: "create"
+        model: "hr.attendance_shift"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "Work from must be between 0 and 23.99"
+        values:
+          name: "Invalid Hour Start Negative"
+          code: "/"
+          hour_start: -1
+          duration: 4.0
