@@ -105,6 +105,18 @@ msgid "Basic Employee"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
+#: code:addons/ssi_timesheet_attendance_shift/models/hr_timesheet.py:0
+#, python-format
+msgid "Cannot confirm timesheet while an attendance is still open"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
+#: code:addons/ssi_timesheet_attendance_shift/models/hr_timesheet.py:0
+#, python-format
+msgid "Cannot confirm timesheet while an attendance schedule is still open"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift__code
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__code
 msgid "Code"
@@ -182,6 +194,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__display_name
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern_detail__display_name
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_employee_base__display_name
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_generate_timesheet__display_name
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_timesheet__display_name
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_timesheet_attendance__display_name
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_timesheet_attendance_schedule__display_name
@@ -249,6 +262,11 @@ msgid "Font awesome icon e.g. fa-tasks"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
+#: model:ir.model,name:ssi_timesheet_attendance_shift.model_hr_generate_timesheet
+msgid "Generate Timesheet"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
 #: model:ir.model.fields,help:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__date_anchor
 msgid ""
 "Global reference date day-in-cycle 1 is resolved from. Shared by every crew "
@@ -272,6 +290,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern__id
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern_detail__id
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_employee_base__id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_generate_timesheet__id
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_timesheet__id
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_timesheet_attendance__id
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_timesheet_attendance_schedule__id
@@ -316,6 +335,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern____last_update
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern_detail____last_update
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_employee_base____last_update
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_generate_timesheet____last_update
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_timesheet____last_update
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_timesheet_attendance____last_update
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_timesheet_attendance_schedule____last_update
@@ -590,6 +610,12 @@ msgstr ""
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model,name:ssi_timesheet_attendance_shift.model_hr_timesheet_attendance_schedule
 msgid "Timesheet Attendance Schedule"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
+#: code:addons/ssi_timesheet_attendance_shift/wizards/generate_timesheet.py:0
+#, python-format
+msgid "Timesheet period must start one day after the previous period ends"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
