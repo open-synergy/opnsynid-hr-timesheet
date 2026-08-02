@@ -183,6 +183,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern_detail__display_name
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_employee_base__display_name
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_timesheet__display_name
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_timesheet_attendance__display_name
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_timesheet_attendance_schedule__display_name
 msgid "Display Name"
 msgstr ""
@@ -272,6 +273,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern_detail__id
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_employee_base__id
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_timesheet__id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_timesheet_attendance__id
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_timesheet_attendance_schedule__id
 msgid "ID"
 msgstr ""
@@ -315,6 +317,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_attendance_shift_pattern_detail____last_update
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_employee_base____last_update
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_timesheet____last_update
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_timesheet_attendance____last_update
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance_shift.field_hr_timesheet_attendance_schedule____last_update
 msgid "Last Modified on"
 msgstr ""
@@ -577,6 +580,11 @@ msgstr ""
 #. module: ssi_timesheet_attendance_shift
 #: model:ir.model,name:ssi_timesheet_attendance_shift.model_hr_timesheet
 msgid "Timesheet"
+msgstr ""
+
+#. module: ssi_timesheet_attendance_shift
+#: model:ir.model,name:ssi_timesheet_attendance_shift.model_hr_timesheet_attendance
+msgid "Timesheet Attendance"
 msgstr ""
 
 #. module: ssi_timesheet_attendance_shift
