@@ -1,0 +1,113 @@
+setup:
+  steps:
+    - step: "Get working schedule"
+      action: "search"
+      model: "resource.calendar"
+      domain: []
+      save_as: "working_schedule"
+      limit: 1
+      order: "id asc"
+
+scenarios:
+  - name: "Attendance Schedule - Sheet Resolved For Date Within Timesheet"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Schedule Covered"
+
+      - step: "Create timesheet covering February 2024"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date_start: 2024-02-01
+          date_end: 2024-02-29
+          working_schedule_id: "REC: working_schedule.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create schedule dated inside timesheet range"
+        action: "create"
+        model: "hr.timesheet_attendance_schedule"
+        save_as: "schedule"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date_start: "2024-02-10 08:00:00"
+          date_end: "2024-02-10 17:00:00"
+
+      - step: "Assert schedule linked to the covering timesheet"
+        action: "assert"
+        target: "schedule"
+        asserts:
+          sheet_id:
+            type: "m2o"
+            expected: "REC: timesheet"
+          date:
+            type: "value"
+            expected: 2024-02-10
+
+  - name: "Attendance Schedule - Rejected For Date Outside Timesheet Range"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Schedule Uncovered"
+
+      - step: "Create timesheet covering March 2024"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date_start: 2024-03-01
+          date_end: 2024-03-31
+          working_schedule_id: "REC: working_schedule.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Reject schedule dated outside every timesheet range"
+        action: "create"
+        model: "hr.timesheet_attendance_schedule"
+        as_user: "base.user_admin"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "Create a timesheet"
+        values:
+          employee_id: "REC: employee.id"
+          date_start: "2024-05-05 08:00:00"
+          date_end: "2024-05-05 17:00:00"
+
+  - name: "Company - Checkout Buffer Default Unchanged"
+    steps:
+      - step: "Create company"
+        action: "create"
+        model: "res.company"
+        save_as: "new_company"
+        as_user: "base.user_admin"
+        values:
+          name: "Test Timesheet Attendance Company"
+
+      - step: "Assert checkout buffer keeps its default value"
+        action: "assert"
+        target: "new_company"
+        asserts:
+          checkout_buffer:
+            type: "value"
+            expected: 0.0
