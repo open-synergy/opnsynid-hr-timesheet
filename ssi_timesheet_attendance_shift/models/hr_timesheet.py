@@ -9,6 +9,8 @@ import pytz
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
+from odoo.addons.ssi_decorator import ssi_decorator
+
 
 class HrTimesheet(models.Model):
     """
@@ -18,7 +20,10 @@ class HrTimesheet(models.Model):
     module) and a shift-roster generation that walks the employee's
     ``hr.attendance_shift_assignment`` day by day and produces one
     schedule line per shift, able to cross midnight as a single
-    block instead of being split at day boundaries.
+    block instead of being split at day boundaries. Also blocks
+    confirming a Shift Roster timesheet while an attendance or an
+    attendance schedule is still open, so a period cannot be closed
+    with an unresolved cross-day shift.
     """
 
     _inherit = "hr.timesheet"
@@ -220,3 +225,50 @@ class HrTimesheet(models.Model):
         if not detail or not detail.shift_id:
             return self.env["hr.attendance_shift"]
         return detail.shift_id
+
+    @ssi_decorator.pre_confirm_check()
+    def _10_check_open_shift_attendance(self):
+        """Block confirming a Shift Roster timesheet with open attendance.
+
+        Runs before the state is written, so raising here leaves the
+        timesheet in its previous state. A no-op when
+        ``schedule_source`` is not ``shift`` — Working Schedule
+        timesheets keep confirming with an open attendance exactly as
+        before this module was installed.
+
+        :raises ValidationError: when at least one of this
+            timesheet's ``attendance_ids`` has no ``check_out``
+        """
+        self.ensure_one()
+        if self.schedule_source != "shift":
+            return
+        open_attendance = self.attendance_ids.filtered(lambda a: not a.check_out)
+        if open_attendance:
+            error_message = _(
+                "Cannot confirm timesheet while an attendance is still open"
+            )
+            raise ValidationError(error_message)
+
+    @ssi_decorator.pre_confirm_check()
+    def _20_check_open_shift_schedule(self):
+        """Block confirming a Shift Roster timesheet with an open schedule.
+
+        Runs before the state is written, so raising here leaves the
+        timesheet in its previous state. A no-op when
+        ``schedule_source`` is not ``shift`` — Working Schedule
+        timesheets keep confirming with an open attendance schedule
+        exactly as before this module was installed.
+
+        :raises ValidationError: when at least one of this
+            timesheet's ``schedule_ids`` has ``state`` equal to
+            ``open``
+        """
+        self.ensure_one()
+        if self.schedule_source != "shift":
+            return
+        open_schedule = self.schedule_ids.filtered(lambda s: s.state == "open")
+        if open_schedule:
+            error_message = _(
+                "Cannot confirm timesheet while an attendance schedule " "is still open"
+            )
+            raise ValidationError(error_message)

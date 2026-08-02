@@ -1,0 +1,383 @@
+scenarios:
+  - name: "Generate Timesheet - Shift Employee With Contiguous Date Start Succeeds"
+    steps:
+      - step: "Create a dedicated user for the employee"
+        action: "create"
+        model: "res.users"
+        save_as: "user"
+        values:
+          name: "Contiguous Shift User"
+          login: "gt_contiguous_shift_user@example.com"
+
+      - step: "Create employee with a user"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Contiguous Shift Employee"
+          tz: "UTC"
+          user_id: "REC: user.id"
+
+      - step: "Create a one-day shift"
+        action: "create"
+        model: "hr.attendance_shift"
+        save_as: "shift"
+        values:
+          name: "Day Shift"
+          code: "/"
+          hour_start: 8.0
+          duration: 8.0
+
+      - step: "Create a single-day pattern"
+        action: "create"
+        model: "hr.attendance_shift_pattern"
+        save_as: "pattern"
+        values:
+          name: "Contiguous Pattern"
+          code: "/"
+          cycle_length: 1
+          date_anchor: 2024-01-01
+          detail_ids:
+            - - 0
+              - 0
+              - day_index: 1
+                shift_id: "REC: shift.id"
+
+      - step: "Assign the employee to the pattern with no end date"
+        action: "create"
+        model: "hr.attendance_shift_assignment"
+        save_as: "assignment"
+        values:
+          employee_id: "REC: employee.id"
+          pattern_id: "REC: pattern.id"
+          cycle_offset: 0
+          date_start: 2024-01-01
+
+      - step: "Create the previous timesheet period directly"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "previous_timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "shift"
+          date_start: 2024-01-08
+          date_end: 2024-01-14
+
+      - step: "Generate the next contiguous period through the wizard"
+        action: "wizard"
+        model: "hr.generate_timesheet"
+        target: "employee"
+        as_user: "base.user_admin"
+        values:
+          employee_ids: [[6, 0, ["REC: employee.id"]]]
+          date_start: 2024-01-15
+          date_end: 2024-01-21
+        method: "action_generate"
+
+      - step: "Assert the new contiguous timesheet was created"
+        action: "search"
+        model: "hr.timesheet"
+        domain:
+          [["employee_id", "=", "REC: employee.id"], ["date_start", "=", 2024-01-15]]
+        save_as: "new_timesheet"
+        expect_count: 1
+
+  - name: "Generate Timesheet - Shift Employee With Date Gap Is Rejected"
+    steps:
+      - step: "Create a dedicated user for the employee"
+        action: "create"
+        model: "res.users"
+        save_as: "user"
+        values:
+          name: "Gapped Shift User"
+          login: "gt_gapped_shift_user@example.com"
+
+      - step: "Create employee with a user"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Gapped Shift Employee"
+          tz: "UTC"
+          user_id: "REC: user.id"
+
+      - step: "Create a one-day shift"
+        action: "create"
+        model: "hr.attendance_shift"
+        save_as: "shift"
+        values:
+          name: "Day Shift"
+          code: "/"
+          hour_start: 8.0
+          duration: 8.0
+
+      - step: "Create a single-day pattern"
+        action: "create"
+        model: "hr.attendance_shift_pattern"
+        save_as: "pattern"
+        values:
+          name: "Gapped Pattern"
+          code: "/"
+          cycle_length: 1
+          date_anchor: 2024-01-01
+          detail_ids:
+            - - 0
+              - 0
+              - day_index: 1
+                shift_id: "REC: shift.id"
+
+      - step: "Assign the employee to the pattern with no end date"
+        action: "create"
+        model: "hr.attendance_shift_assignment"
+        save_as: "assignment"
+        values:
+          employee_id: "REC: employee.id"
+          pattern_id: "REC: pattern.id"
+          cycle_offset: 0
+          date_start: 2024-01-01
+
+      - step: "Create the previous timesheet period directly"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "previous_timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "shift"
+          date_start: 2024-01-08
+          date_end: 2024-01-14
+
+      - step: "Generate a period leaving a one-day gap is rejected"
+        action: "wizard"
+        model: "hr.generate_timesheet"
+        target: "employee"
+        as_user: "base.user_admin"
+        values:
+          employee_ids: [[6, 0, ["REC: employee.id"]]]
+          date_start: 2024-01-16
+          date_end: 2024-01-22
+        method: "action_generate"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "must start one day after the previous period ends"
+
+      - step: "Assert no new timesheet was created for the gapped period"
+        action: "search"
+        model: "hr.timesheet"
+        domain:
+          [["employee_id", "=", "REC: employee.id"], ["date_start", "=", 2024-01-16]]
+        save_as: "gapped_timesheet"
+        expect_count: 0
+
+  - name: "Generate Timesheet - Shift Employee's First Timesheet Skips Continuity Check"
+    steps:
+      - step: "Create a dedicated user for the employee"
+        action: "create"
+        model: "res.users"
+        save_as: "user"
+        values:
+          name: "First Timesheet Shift User"
+          login: "gt_first_timesheet_shift_user@example.com"
+
+      - step: "Create employee with a user"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "First Timesheet Shift Employee"
+          tz: "UTC"
+          user_id: "REC: user.id"
+
+      - step: "Create a one-day shift"
+        action: "create"
+        model: "hr.attendance_shift"
+        save_as: "shift"
+        values:
+          name: "Day Shift"
+          code: "/"
+          hour_start: 8.0
+          duration: 8.0
+
+      - step: "Create a single-day pattern"
+        action: "create"
+        model: "hr.attendance_shift_pattern"
+        save_as: "pattern"
+        values:
+          name: "First Timesheet Pattern"
+          code: "/"
+          cycle_length: 1
+          date_anchor: 2024-02-01
+          detail_ids:
+            - - 0
+              - 0
+              - day_index: 1
+                shift_id: "REC: shift.id"
+
+      - step: "Assign the employee to the pattern with no end date"
+        action: "create"
+        model: "hr.attendance_shift_assignment"
+        save_as: "assignment"
+        values:
+          employee_id: "REC: employee.id"
+          pattern_id: "REC: pattern.id"
+          cycle_offset: 0
+          date_start: 2024-02-01
+
+      - step: "Generate the employee's first ever timesheet period"
+        action: "wizard"
+        model: "hr.generate_timesheet"
+        target: "employee"
+        as_user: "base.user_admin"
+        values:
+          employee_ids: [[6, 0, ["REC: employee.id"]]]
+          date_start: 2024-02-05
+          date_end: 2024-02-11
+        method: "action_generate"
+
+      - step: "Assert the first timesheet was created without a predecessor"
+        action: "search"
+        model: "hr.timesheet"
+        domain:
+          [["employee_id", "=", "REC: employee.id"], ["date_start", "=", 2024-02-05]]
+        save_as: "first_timesheet"
+        expect_count: 1
+
+  - name:
+      "Generate Timesheet - Employee Without Shift Assignment Skips Continuity Check
+      Despite Gap"
+    steps:
+      - step: "Create a dedicated user for the employee"
+        action: "create"
+        model: "res.users"
+        save_as: "user"
+        values:
+          name: "No Assignment User"
+          login: "gt_no_assignment_user@example.com"
+
+      - step: "Create employee with a user and no shift assignment"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "No Assignment Employee"
+          tz: "UTC"
+          user_id: "REC: user.id"
+
+      - step: "Create the previous timesheet period directly"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "previous_timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "working_schedule"
+          working_schedule_id: "REF: resource.resource_calendar_std"
+          date_start: 2024-03-04
+          date_end: 2024-03-10
+
+      - step: "Generate a gapped period succeeds because there is no shift assignment"
+        action: "wizard"
+        model: "hr.generate_timesheet"
+        target: "employee"
+        as_user: "base.user_admin"
+        values:
+          employee_ids: [[6, 0, ["REC: employee.id"]]]
+          date_start: 2024-03-13
+          date_end: 2024-03-19
+        method: "action_generate"
+
+      - step: "Assert the gapped period was created without a continuity check"
+        action: "search"
+        model: "hr.timesheet"
+        domain:
+          [["employee_id", "=", "REC: employee.id"], ["date_start", "=", 2024-03-13]]
+        save_as: "unassigned_timesheet"
+        expect_count: 1
+
+  - name: "Generate Timesheet - Regression: Employee Without User Is Still Rejected"
+    steps:
+      - step: "Create employee without a user"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "No User Employee"
+          tz: "UTC"
+
+      - step: "Generate is rejected with the pre-existing message"
+        action: "wizard"
+        model: "hr.generate_timesheet"
+        target: "employee"
+        as_user: "base.user_admin"
+        values:
+          employee_ids: [[6, 0, ["REC: employee.id"]]]
+          date_start: 2024-04-01
+          date_end: 2024-04-07
+        method: "action_generate"
+        expect_error:
+          type: "UserError"
+          message_contains: "must be linked to a user"
+
+  # NOTE: a third old-rejection regression, "Employee Without Working Schedule
+  # Is Still Rejected", is intentionally NOT covered here. Constructing that
+  # fixture (an hr.employee with a falsy resource_calendar_id) is impossible
+  # through the ORM in this codebase: hr.employee inherits resource.mixin,
+  # whose resource_calendar_id is `related='resource_id.calendar_id'` on a
+  # resource.resource record where calendar_id is `required=True` with a real
+  # PostgreSQL NOT NULL constraint on the column. resource.mixin.create()
+  # never forwards `calendar_id` into the resource.resource it creates, so it
+  # always defaults to the company calendar; writing an explicit False back
+  # through the related field's inverse then violates the NOT NULL
+  # constraint at flush time with a raw psycopg2.IntegrityError (see PR
+  # #114 discussion on issue #108) instead of the clean UserError under
+  # test. This makes `ssi_timesheet`'s `if not employee.resource_calendar_id`
+  # branch unreachable dead code in this schema — a pre-existing condition of
+  # `ssi_timesheet` itself, out of scope for this item and left untouched
+  # per the non-regression constraint (ssi_timesheet is not modified here).
+
+  - name:
+      "Generate Timesheet - Regression: Existing Overlapping Timesheet Is Still Rejected"
+    steps:
+      - step: "Create a dedicated user for the employee"
+        action: "create"
+        model: "res.users"
+        save_as: "user"
+        values:
+          name: "Overlap User"
+          login: "gt_overlap_user@example.com"
+
+      - step: "Create employee with a user"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Overlap Employee"
+          tz: "UTC"
+          user_id: "REC: user.id"
+
+      - step: "Create the existing overlapping timesheet directly"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "existing_timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "working_schedule"
+          working_schedule_id: "REF: resource.resource_calendar_std"
+          date_start: 2024-05-01
+          date_end: 2024-05-07
+
+      - step: "Generate is rejected because a timesheet already exists"
+        action: "wizard"
+        model: "hr.generate_timesheet"
+        target: "employee"
+        as_user: "base.user_admin"
+        values:
+          employee_ids: [[6, 0, ["REC: employee.id"]]]
+          date_start: 2024-05-01
+          date_end: 2024-05-07
+        method: "action_generate"
+        expect_error:
+          type: "UserError"
+          message_contains: "Timesheet already exists"
