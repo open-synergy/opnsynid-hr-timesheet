@@ -21,11 +21,11 @@
 
 1. Open the **Human Resource > Configurations > Attendance > Attendance Shifts** menu.
 2. Enable the **Archived** filter in the search bar.
-3. Select one or more records to reactivate (check the checkbox).
-4. Click **Action** > **Unarchive**. The records are restored immediately — unlike
+3. Open the record to reactivate.
+4. Click **Action** > **Unarchive**. The record is restored immediately — unlike
    Archive, Unarchive does not show a confirmation dialog.
 
 ## Post-Condition
 
-- The records are restored and appear again in the default list view.
-- The records can be selected again in new records that reference this shift.
+- The record is restored and the **Archived** ribbon no longer appears.
+- The record can be selected again in new records that reference this shift.

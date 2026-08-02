@@ -298,33 +298,32 @@ odoo.define("ssi_timesheet_attendance_shift.hr_attendance_shift_tour", function 
                 extra_trigger: ".o_list_view",
             },
             {
-                content: "Select the archived record",
-                // A dispatched "click" event here — whether targeting the
-                // <input> or its .o_list_record_selector container —
-                // consistently opens the record's form instead of just
-                // selecting the row (confirmed twice in CI: page title
-                // changes to the record name right after this step).
-                // Avoid the click entirely: set the checkbox state and
-                // fire only the "change" event that
-                // ListRenderer._onSelectRecord listens for.
-                trigger:
-                    ".o_data_row:contains(TOUR-SHIFT-ACTIVATE) " +
-                    ".o_list_record_selector input",
+                // Open the record instead of selecting it via the list
+                // checkbox: CI repeatedly showed the list-view checkbox +
+                // multi-select Action menu combination racing with Owl's
+                // async re-render, sometimes leaving the "Action" dropdown
+                // never opened. Opening the record first and using its
+                // own (form-view) Action menu mirrors the delete tour
+                // above, which has been reliable across every CI run.
+                content: "Open the record",
+                trigger: ".o_data_row:contains(TOUR-SHIFT-ACTIVATE) .o_data_cell:first",
+                extra_trigger: ".o_list_view",
+            },
+            {
+                trigger: ".o_form_view",
                 run: function () {
-                    this.$anchor.prop("checked", true).trigger("change");
+                    // Assertion only; do not trigger the default click
+                    // action.
                 },
             },
             {
                 content: "Open the Action menu",
                 trigger: ".o_cp_action_menus button:contains(Action)",
-                run: function () {
-                    // Owl dropdowns in 14.0 are not always opened by a
-                    // synthetic click — use a native click instead.
-                    this.$anchor[0].click();
-                },
             },
             {
                 content: "Click Unarchive",
+                // Action menu items are Owl components; match the exact
+                // label so "Duplicate"/"Delete" is never picked instead.
                 trigger: ".o_cp_action_menus .o_menu_item a",
                 run: function () {
                     var $unarchive = $(".o_cp_action_menus .o_menu_item a").filter(
@@ -341,9 +340,8 @@ odoo.define("ssi_timesheet_attendance_shift.hr_attendance_shift_tour", function 
                 // action_unarchive RPC fires right after the click above,
                 // and no modal is ever displayed) — so there is no OK
                 // step to click here.
-                content: "Shift is restored and stays in the archived view",
-                trigger: ".o_data_row:contains(TOUR-SHIFT-ACTIVATE)",
-                extra_trigger: ".o_list_view",
+                content: "Archived ribbon is no longer displayed",
+                trigger: ".o_form_view:not(:has(.ribbon:visible:contains(Archived)))",
                 run: function () {
                     // Assertion only; do not trigger the default click
                     // action.
