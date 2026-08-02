@@ -299,18 +299,20 @@ odoo.define("ssi_timesheet_attendance_shift.hr_attendance_shift_tour", function 
             },
             {
                 content: "Select the archived record",
-                // Click the checkbox CONTAINER, not the nested <input>: in
-                // 14.0, clicking the input directly bypasses
-                // ListRenderer._onToggleCheckbox's delegated handler
-                // (`$(ev.target).find(...)` finds nothing when ev.target
-                // IS the input, since find() only searches descendants),
-                // relying on native checkbox toggling instead — which is
-                // fragile and was observed opening the record's form
-                // instead of just selecting the row.
+                // A dispatched "click" event here — whether targeting the
+                // <input> or its .o_list_record_selector container —
+                // consistently opens the record's form instead of just
+                // selecting the row (confirmed twice in CI: page title
+                // changes to the record name right after this step).
+                // Avoid the click entirely: set the checkbox state and
+                // fire only the "change" event that
+                // ListRenderer._onSelectRecord listens for.
                 trigger:
                     ".o_data_row:contains(TOUR-SHIFT-ACTIVATE) " +
-                    ".o_list_record_selector",
-                run: "click",
+                    ".o_list_record_selector input",
+                run: function () {
+                    this.$anchor.prop("checked", true).trigger("change");
+                },
             },
             {
                 content: "Open the Action menu",
