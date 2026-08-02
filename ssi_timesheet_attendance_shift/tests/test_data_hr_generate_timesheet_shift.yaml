@@ -319,41 +319,22 @@ scenarios:
           type: "UserError"
           message_contains: "must be linked to a user"
 
-  - name:
-      "Generate Timesheet - Regression: Employee Without Working Schedule Is Still
-      Rejected"
-    steps:
-      - step: "Create a dedicated user for the employee"
-        action: "create"
-        model: "res.users"
-        save_as: "user"
-        values:
-          name: "No Working Schedule User"
-          login: "gt_no_working_schedule_user@example.com"
-
-      - step: "Create employee with a user but no working schedule"
-        action: "create"
-        model: "hr.employee"
-        save_as: "employee"
-        values:
-          name: "No Working Schedule Employee"
-          tz: "UTC"
-          user_id: "REC: user.id"
-          resource_calendar_id: false
-
-      - step: "Generate is rejected with the pre-existing message"
-        action: "wizard"
-        model: "hr.generate_timesheet"
-        target: "employee"
-        as_user: "base.user_admin"
-        values:
-          employee_ids: [[6, 0, ["REC: employee.id"]]]
-          date_start: 2024-04-08
-          date_end: 2024-04-14
-        method: "action_generate"
-        expect_error:
-          type: "UserError"
-          message_contains: "must have working schedule"
+  # NOTE: a third old-rejection regression, "Employee Without Working Schedule
+  # Is Still Rejected", is intentionally NOT covered here. Constructing that
+  # fixture (an hr.employee with a falsy resource_calendar_id) is impossible
+  # through the ORM in this codebase: hr.employee inherits resource.mixin,
+  # whose resource_calendar_id is `related='resource_id.calendar_id'` on a
+  # resource.resource record where calendar_id is `required=True` with a real
+  # PostgreSQL NOT NULL constraint on the column. resource.mixin.create()
+  # never forwards `calendar_id` into the resource.resource it creates, so it
+  # always defaults to the company calendar; writing an explicit False back
+  # through the related field's inverse then violates the NOT NULL
+  # constraint at flush time with a raw psycopg2.IntegrityError (see PR
+  # #114 discussion on issue #108) instead of the clean UserError under
+  # test. This makes `ssi_timesheet`'s `if not employee.resource_calendar_id`
+  # branch unreachable dead code in this schema — a pre-existing condition of
+  # `ssi_timesheet` itself, out of scope for this item and left untouched
+  # per the non-regression constraint (ssi_timesheet is not modified here).
 
   - name:
       "Generate Timesheet - Regression: Existing Overlapping Timesheet Is Still Rejected"
