@@ -1,0 +1,724 @@
+scenarios:
+  - name: "Shift Schedule - One Week Pattern Generates Expected Records"
+    steps:
+      - step: "Create night shift crossing midnight"
+        action: "create"
+        model: "hr.attendance_shift"
+        save_as: "night_shift"
+        values:
+          name: "Night Shift"
+          code: "/"
+          hour_start: 18.0
+          duration: 12.0
+
+      - step: "Create day shift"
+        action: "create"
+        model: "hr.attendance_shift"
+        save_as: "day_shift"
+        values:
+          name: "Day Shift"
+          code: "/"
+          hour_start: 8.0
+          duration: 8.0
+
+      - step: "Create 7-day pattern: 1 night, 4 day, 2 off"
+        action: "create"
+        model: "hr.attendance_shift_pattern"
+        save_as: "pattern"
+        values:
+          name: "Week Pattern"
+          code: "/"
+          cycle_length: 7
+          date_anchor: 2024-01-01
+          detail_ids:
+            - - 0
+              - 0
+              - day_index: 1
+                shift_id: "REC: night_shift.id"
+            - - 0
+              - 0
+              - day_index: 2
+                shift_id: "REC: day_shift.id"
+            - - 0
+              - 0
+              - day_index: 3
+                shift_id: "REC: day_shift.id"
+            - - 0
+              - 0
+              - day_index: 4
+                shift_id: "REC: day_shift.id"
+            - - 0
+              - 0
+              - day_index: 5
+                shift_id: "REC: day_shift.id"
+            - - 0
+              - 0
+              - day_index: 6
+            - - 0
+              - 0
+              - day_index: 7
+
+      - step: "Create employee in UTC"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Week Pattern Employee"
+          tz: "UTC"
+
+      - step: "Assign employee to the pattern from cycle day 1"
+        action: "create"
+        model: "hr.attendance_shift_assignment"
+        save_as: "assignment"
+        values:
+          employee_id: "REC: employee.id"
+          pattern_id: "REC: pattern.id"
+          cycle_offset: 0
+          date_start: 2024-01-01
+
+      - step: "Create shift-roster timesheet for the week"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "shift"
+          date_start: 2024-01-08
+          date_end: 2024-01-14
+
+      - step: "Generate the schedule"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Assert 5 schedule lines generated (1 night + 4 day)"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"]]
+        save_as: "all_schedules"
+        expect_count: 5
+
+      - step: "Fetch the night shift schedule line"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"], ["date", "=", 2024-01-08]]
+        save_as: "night_schedule"
+        limit: 1
+
+      - step: "Assert night shift line hours, date and shift"
+        action: "assert"
+        target: "night_schedule"
+        asserts:
+          schedule_work_hour:
+            type: "value"
+            expected: 12.0
+          date:
+            type: "value"
+            expected: 2024-01-08
+          shift_id:
+            type: "m2o"
+            expected: "REC: night_shift"
+
+      - step: "Assert a day-off cycle day generates no schedule line"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"], ["date", "=", 2024-01-13]]
+        save_as: "off_day_schedule"
+        expect_count: 0
+
+  - name: "Shift Schedule - Working Schedule Source Single-Slot Regression"
+    steps:
+      - step: "Create single-slot Mon-Fri calendar"
+        action: "create"
+        model: "resource.calendar"
+        save_as: "calendar"
+        values:
+          name: "Single Slot Calendar"
+          tz: "UTC"
+          attendance_ids:
+            - - 0
+              - 0
+              - name: "Monday"
+                dayofweek: "0"
+                hour_from: 8.0
+                hour_to: 17.0
+                day_period: "morning"
+            - - 0
+              - 0
+              - name: "Tuesday"
+                dayofweek: "1"
+                hour_from: 8.0
+                hour_to: 17.0
+                day_period: "morning"
+            - - 0
+              - 0
+              - name: "Wednesday"
+                dayofweek: "2"
+                hour_from: 8.0
+                hour_to: 17.0
+                day_period: "morning"
+            - - 0
+              - 0
+              - name: "Thursday"
+                dayofweek: "3"
+                hour_from: 8.0
+                hour_to: 17.0
+                day_period: "morning"
+            - - 0
+              - 0
+              - name: "Friday"
+                dayofweek: "4"
+                hour_from: 8.0
+                hour_to: 17.0
+                day_period: "morning"
+
+      - step: "Create employee for the single-slot regression"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Single Slot Employee"
+          tz: "UTC"
+
+      - step: "Create working-schedule timesheet for the week"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "working_schedule"
+          working_schedule_id: "REC: calendar.id"
+          date_start: 2024-01-08
+          date_end: 2024-01-14
+
+      - step: "Generate the schedule"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Assert one schedule line per working day (5)"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"]]
+        save_as: "all_schedules"
+        expect_count: 5
+
+  - name: "Shift Schedule - Working Schedule Multi-Slot Per Day Regression"
+    steps:
+      - step: "Create two-slot-per-day Mon-Fri calendar"
+        action: "create"
+        model: "resource.calendar"
+        save_as: "calendar"
+        values:
+          name: "Multi Slot Calendar"
+          tz: "UTC"
+          attendance_ids:
+            - - 0
+              - 0
+              - name: "Monday Morning"
+                dayofweek: "0"
+                hour_from: 8.0
+                hour_to: 12.0
+                day_period: "morning"
+            - - 0
+              - 0
+              - name: "Monday Afternoon"
+                dayofweek: "0"
+                hour_from: 13.0
+                hour_to: 17.0
+                day_period: "afternoon"
+            - - 0
+              - 0
+              - name: "Tuesday Morning"
+                dayofweek: "1"
+                hour_from: 8.0
+                hour_to: 12.0
+                day_period: "morning"
+            - - 0
+              - 0
+              - name: "Tuesday Afternoon"
+                dayofweek: "1"
+                hour_from: 13.0
+                hour_to: 17.0
+                day_period: "afternoon"
+            - - 0
+              - 0
+              - name: "Wednesday Morning"
+                dayofweek: "2"
+                hour_from: 8.0
+                hour_to: 12.0
+                day_period: "morning"
+            - - 0
+              - 0
+              - name: "Wednesday Afternoon"
+                dayofweek: "2"
+                hour_from: 13.0
+                hour_to: 17.0
+                day_period: "afternoon"
+            - - 0
+              - 0
+              - name: "Thursday Morning"
+                dayofweek: "3"
+                hour_from: 8.0
+                hour_to: 12.0
+                day_period: "morning"
+            - - 0
+              - 0
+              - name: "Thursday Afternoon"
+                dayofweek: "3"
+                hour_from: 13.0
+                hour_to: 17.0
+                day_period: "afternoon"
+            - - 0
+              - 0
+              - name: "Friday Morning"
+                dayofweek: "4"
+                hour_from: 8.0
+                hour_to: 12.0
+                day_period: "morning"
+            - - 0
+              - 0
+              - name: "Friday Afternoon"
+                dayofweek: "4"
+                hour_from: 13.0
+                hour_to: 17.0
+                day_period: "afternoon"
+
+      - step: "Create employee for the multi-slot regression"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Multi Slot Employee"
+          tz: "UTC"
+
+      - step: "Create working-schedule timesheet for the week"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "working_schedule"
+          working_schedule_id: "REC: calendar.id"
+          date_start: 2024-01-08
+          date_end: 2024-01-14
+
+      - step: "Generate the schedule"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Assert two schedule lines per working day (10), super() untouched"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"]]
+        save_as: "all_schedules"
+        expect_count: 10
+
+      - step: "Fetch Monday morning session"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain:
+          [
+            ["sheet_id", "=", "REC: timesheet.id"],
+            ["date", "=", 2024-01-08],
+            ["schedule_work_hour", "=", 4.0],
+          ]
+        save_as: "monday_sessions"
+        expect_count: 2
+
+  - name: "Shift Schedule - Working Schedule With ID Saves Successfully"
+    steps:
+      - step: "Create default calendar"
+        action: "create"
+        model: "resource.calendar"
+        save_as: "calendar"
+        values:
+          name: "Default Calendar"
+          tz: "UTC"
+
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "With Schedule Employee"
+          tz: "UTC"
+
+      - step: "Create timesheet with working schedule filled"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "working_schedule"
+          working_schedule_id: "REC: calendar.id"
+          date_start: 2024-06-03
+          date_end: 2024-06-09
+
+      - step: "Assert timesheet saved"
+        action: "assert"
+        target: "timesheet"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+
+  - name: "Shift Schedule - Working Schedule Without ID Rejected"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Without Schedule Employee"
+          tz: "UTC"
+
+      - step: "Create timesheet without working schedule must be rejected"
+        action: "create"
+        model: "hr.timesheet"
+        expect_error:
+          type: "ValidationError"
+          message_contains:
+            "Working schedule is required when schedule source is working schedule"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "working_schedule"
+          date_start: 2024-06-10
+          date_end: 2024-06-16
+
+  - name: "Shift Schedule - Assignment Switch Mid-Period Changes Shift"
+    steps:
+      - step: "Create morning shift"
+        action: "create"
+        model: "hr.attendance_shift"
+        save_as: "shift_morning"
+        values:
+          name: "Morning Shift"
+          code: "/"
+          hour_start: 6.0
+          duration: 6.0
+
+      - step: "Create evening shift"
+        action: "create"
+        model: "hr.attendance_shift"
+        save_as: "shift_evening"
+        values:
+          name: "Evening Shift"
+          code: "/"
+          hour_start: 14.0
+          duration: 6.0
+
+      - step: "Create always-morning pattern"
+        action: "create"
+        model: "hr.attendance_shift_pattern"
+        save_as: "pattern_morning"
+        values:
+          name: "Always Morning Pattern"
+          code: "/"
+          cycle_length: 1
+          date_anchor: 2024-02-01
+          detail_ids:
+            - - 0
+              - 0
+              - day_index: 1
+                shift_id: "REC: shift_morning.id"
+
+      - step: "Create always-evening pattern"
+        action: "create"
+        model: "hr.attendance_shift_pattern"
+        save_as: "pattern_evening"
+        values:
+          name: "Always Evening Pattern"
+          code: "/"
+          cycle_length: 1
+          date_anchor: 2024-02-01
+          detail_ids:
+            - - 0
+              - 0
+              - day_index: 1
+                shift_id: "REC: shift_evening.id"
+
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Switching Crew Employee"
+          tz: "UTC"
+
+      - step: "Assign morning pattern for the first half"
+        action: "create"
+        model: "hr.attendance_shift_assignment"
+        save_as: "assignment_morning"
+        values:
+          employee_id: "REC: employee.id"
+          pattern_id: "REC: pattern_morning.id"
+          cycle_offset: 0
+          date_start: 2024-02-01
+          date_end: 2024-02-15
+
+      - step: "Assign evening pattern from the switch date"
+        action: "create"
+        model: "hr.attendance_shift_assignment"
+        save_as: "assignment_evening"
+        values:
+          employee_id: "REC: employee.id"
+          pattern_id: "REC: pattern_evening.id"
+          cycle_offset: 0
+          date_start: 2024-02-16
+
+      - step: "Create timesheet spanning the switch date"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "shift"
+          date_start: 2024-02-14
+          date_end: 2024-02-17
+
+      - step: "Generate the schedule"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Fetch schedule line before the switch"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"], ["date", "=", 2024-02-14]]
+        save_as: "schedule_before"
+        limit: 1
+
+      - step: "Assert shift before the switch is the morning shift"
+        action: "assert"
+        target: "schedule_before"
+        asserts:
+          shift_id:
+            type: "m2o"
+            expected: "REC: shift_morning"
+
+      - step: "Fetch schedule line on the switch date"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"], ["date", "=", 2024-02-16]]
+        save_as: "schedule_after"
+        limit: 1
+
+      - step: "Assert shift on the switch date is the evening shift"
+        action: "assert"
+        target: "schedule_after"
+        asserts:
+          shift_id:
+            type: "m2o"
+            expected: "REC: shift_evening"
+
+  - name: "Shift Schedule - Employee Without Assignment Generates No Records"
+    steps:
+      - step: "Create employee without any assignment"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Unassigned Employee"
+          tz: "UTC"
+
+      - step: "Create shift-roster timesheet"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "shift"
+          date_start: 2024-03-18
+          date_end: 2024-03-24
+
+      - step: "Generate the schedule without error"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Assert no schedule line was generated"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"]]
+        save_as: "all_schedules"
+        expect_count: 0
+
+  - name: "Shift Schedule - Shift Starting On Period's Last Day Not Regenerated"
+    steps:
+      - step: "Create alternating shift/off shift"
+        action: "create"
+        model: "hr.attendance_shift"
+        save_as: "cutoff_shift"
+        values:
+          name: "Cutoff Night Shift"
+          code: "/"
+          hour_start: 18.0
+          duration: 12.0
+
+      - step: "Create alternating cutoff pattern anchored on the cutoff date"
+        action: "create"
+        model: "hr.attendance_shift_pattern"
+        save_as: "cutoff_pattern"
+        values:
+          name: "Cutoff Pattern"
+          code: "/"
+          cycle_length: 2
+          date_anchor: 2024-04-07
+          detail_ids:
+            - - 0
+              - 0
+              - day_index: 1
+                shift_id: "REC: cutoff_shift.id"
+            - - 0
+              - 0
+              - day_index: 2
+
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Cutoff Employee"
+          tz: "UTC"
+
+      - step: "Assign employee to the cutoff pattern"
+        action: "create"
+        model: "hr.attendance_shift_assignment"
+        save_as: "assignment"
+        values:
+          employee_id: "REC: employee.id"
+          pattern_id: "REC: cutoff_pattern.id"
+          cycle_offset: 0
+          date_start: 2024-04-01
+
+      - step: "Create the first period ending on the cutoff date"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "period_one"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "shift"
+          date_start: 2024-04-01
+          date_end: 2024-04-07
+
+      - step: "Generate the schedule for the first period"
+        action: "call"
+        target: "period_one"
+        method: "action_compute_schedule"
+
+      - step: "Assert the cutoff-day shift is booked into the first period"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: period_one.id"], ["date", "=", 2024-04-07]]
+        save_as: "cutoff_schedule"
+        expect_count: 1
+
+      - step: "Create the second period starting the day after the cutoff"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "period_two"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "shift"
+          date_start: 2024-04-08
+          date_end: 2024-04-14
+
+      - step: "Generate the schedule for the second period"
+        action: "call"
+        target: "period_two"
+        method: "action_compute_schedule"
+
+      - step: "Assert the second period does not regenerate the cutoff shift"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: period_two.id"], ["date", "=", 2024-04-08]]
+        save_as: "not_regenerated_schedule"
+        expect_count: 0
+
+  - name: "Shift Schedule - Public Holiday On Shift Start Date Skips Generation"
+    steps:
+      - step: "Create daily shift"
+        action: "create"
+        model: "hr.attendance_shift"
+        save_as: "daily_shift"
+        values:
+          name: "Holiday Test Shift"
+          code: "/"
+          hour_start: 8.0
+          duration: 8.0
+
+      - step: "Create every-day pattern"
+        action: "create"
+        model: "hr.attendance_shift_pattern"
+        save_as: "daily_pattern"
+        values:
+          name: "Daily Pattern"
+          code: "/"
+          cycle_length: 1
+          date_anchor: 2024-05-01
+          detail_ids:
+            - - 0
+              - 0
+              - day_index: 1
+                shift_id: "REC: daily_shift.id"
+
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Holiday Test Employee"
+          tz: "UTC"
+
+      - step: "Assign employee to the daily pattern"
+        action: "create"
+        model: "hr.attendance_shift_assignment"
+        save_as: "assignment"
+        values:
+          employee_id: "REC: employee.id"
+          pattern_id: "REC: daily_pattern.id"
+          cycle_offset: 0
+          date_start: 2024-05-01
+
+      - step: "Declare a national public holiday in the middle of the week"
+        action: "create"
+        model: "base.public.holiday"
+        save_as: "holiday_year"
+        values:
+          year: 2024
+          line_ids:
+            - - 0
+              - 0
+              - name: "Test National Holiday"
+                date: 2024-05-15
+
+      - step: "Create shift-roster timesheet covering the holiday"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "shift"
+          date_start: 2024-05-13
+          date_end: 2024-05-17
+
+      - step: "Generate the schedule"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Assert the holiday date has no schedule line"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"], ["date", "=", 2024-05-15]]
+        save_as: "holiday_schedule"
+        expect_count: 0
+
+      - step: "Assert the other 4 working days still generated a line"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"]]
+        save_as: "all_schedules"
+        expect_count: 4

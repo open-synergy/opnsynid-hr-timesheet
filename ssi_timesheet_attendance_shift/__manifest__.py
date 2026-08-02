@@ -27,6 +27,8 @@
         "views/hr_attendance_shift_views.xml",
         "views/hr_attendance_shift_pattern_views.xml",
         "views/hr_attendance_shift_assignment_views.xml",
+        "views/hr_timesheet_views.xml",
+        "views/hr_employee_views.xml",
         "views/ssi_timesheet_attendance_shift_assets.xml",
     ],
 }
