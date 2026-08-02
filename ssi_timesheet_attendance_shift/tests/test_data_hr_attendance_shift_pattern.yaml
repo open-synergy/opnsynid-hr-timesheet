@@ -1,0 +1,335 @@
+setup:
+  steps:
+    - step: "Create shift for pattern details"
+      action: "create"
+      model: "hr.attendance_shift"
+      save_as: "shift"
+      values:
+        name: "Pattern Test Shift"
+        code: "/"
+        hour_start: 7.0
+        duration: 8.0
+
+scenarios:
+  - name: "Attendance Shift Pattern - Create"
+    steps:
+      - step: "Create pattern"
+        action: "create"
+        model: "hr.attendance_shift_pattern"
+        save_as: "pattern"
+        values:
+          name: "Three Crew Rotation"
+          code: "/"
+          cycle_length: 7
+          date_anchor: 2024-01-01
+
+      - step: "Assert pattern created"
+        action: "assert"
+        target: "pattern"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          name:
+            type: "value"
+            expected: "Three Crew Rotation"
+          cycle_length:
+            type: "value"
+            expected: 7
+
+  - name: "Attendance Shift Pattern - Edit"
+    steps:
+      - step: "Create pattern"
+        action: "create"
+        model: "hr.attendance_shift_pattern"
+        save_as: "pattern"
+        values:
+          name: "Edit Me Pattern"
+          code: "/"
+          cycle_length: 7
+          date_anchor: 2024-01-01
+
+      - step: "Edit pattern"
+        action: "write"
+        target: "pattern"
+        values:
+          name: "Edited Pattern"
+          cycle_length: 14
+
+      - step: "Assert edited"
+        action: "assert"
+        target: "pattern"
+        asserts:
+          name:
+            type: "value"
+            expected: "Edited Pattern"
+          cycle_length:
+            type: "value"
+            expected: 14
+
+  - name: "Attendance Shift Pattern - Delete"
+    steps:
+      - step: "Create pattern"
+        action: "create"
+        model: "hr.attendance_shift_pattern"
+        save_as: "pattern"
+        values:
+          name: "Pattern To Delete"
+          code: "PATDEL001"
+          cycle_length: 7
+          date_anchor: 2024-01-01
+
+      - step: "Delete pattern"
+        action: "unlink"
+        target: "pattern"
+
+      - step: "Verify deleted"
+        action: "search"
+        model: "hr.attendance_shift_pattern"
+        domain: [["code", "=", "PATDEL001"]]
+        save_as: "result"
+        expect_count: 0
+
+  - name: "Attendance Shift Pattern - Three Detail Lines"
+    steps:
+      - step: "Create pattern with three detail lines"
+        action: "create"
+        model: "hr.attendance_shift_pattern"
+        save_as: "pattern"
+        values:
+          name: "Pattern With Details"
+          code: "/"
+          cycle_length: 7
+          date_anchor: 2024-01-01
+          detail_ids:
+            - - 0
+              - 0
+              - day_index: 1
+                shift_id: "REC: shift.id"
+            - - 0
+              - 0
+              - day_index: 2
+                shift_id: "REC: shift.id"
+            - - 0
+              - 0
+              - day_index: 3
+                shift_id: "REC: shift.id"
+
+      - step: "Assert three detail lines"
+        action: "assert"
+        target: "pattern"
+        asserts:
+          detail_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 3
+
+  - name: "Attendance Shift Pattern - Detail Line Without Shift Is A Day Off"
+    steps:
+      - step: "Create pattern"
+        action: "create"
+        model: "hr.attendance_shift_pattern"
+        save_as: "pattern"
+        values:
+          name: "Pattern With Day Off"
+          code: "/"
+          cycle_length: 7
+          date_anchor: 2024-01-01
+
+      - step: "Create detail line without shift"
+        action: "create"
+        model: "hr.attendance_shift_pattern.detail"
+        save_as: "detail"
+        values:
+          pattern_id: "REC: pattern.id"
+          day_index: 1
+
+      - step: "Assert shift_id is empty"
+        action: "assert"
+        target: "detail"
+        asserts:
+          shift_id:
+            type: "value"
+            operator: "is_falsy"
+
+  - name: "Attendance Shift Pattern - Cycle Length 21 With 21 Detail Lines"
+    steps:
+      - step: "Create pattern with 21-day cycle and 21 detail lines"
+        action: "create"
+        model: "hr.attendance_shift_pattern"
+        save_as: "pattern"
+        values:
+          name: "21-Day Rotation"
+          code: "/"
+          cycle_length: 21
+          date_anchor: 2024-01-01
+          detail_ids:
+            - - 0
+              - 0
+              - day_index: 1
+                shift_id: "REC: shift.id"
+            - - 0
+              - 0
+              - day_index: 2
+                shift_id: "REC: shift.id"
+            - - 0
+              - 0
+              - day_index: 3
+                shift_id: "REC: shift.id"
+            - - 0
+              - 0
+              - day_index: 4
+                shift_id: "REC: shift.id"
+            - - 0
+              - 0
+              - day_index: 5
+                shift_id: "REC: shift.id"
+            - - 0
+              - 0
+              - day_index: 6
+                shift_id: "REC: shift.id"
+            - - 0
+              - 0
+              - day_index: 7
+                shift_id: "REC: shift.id"
+            - - 0
+              - 0
+              - day_index: 8
+                shift_id: "REC: shift.id"
+            - - 0
+              - 0
+              - day_index: 9
+                shift_id: "REC: shift.id"
+            - - 0
+              - 0
+              - day_index: 10
+                shift_id: "REC: shift.id"
+            - - 0
+              - 0
+              - day_index: 11
+                shift_id: "REC: shift.id"
+            - - 0
+              - 0
+              - day_index: 12
+                shift_id: "REC: shift.id"
+            - - 0
+              - 0
+              - day_index: 13
+                shift_id: "REC: shift.id"
+            - - 0
+              - 0
+              - day_index: 14
+                shift_id: "REC: shift.id"
+            - - 0
+              - 0
+              - day_index: 15
+                shift_id: "REC: shift.id"
+            - - 0
+              - 0
+              - day_index: 16
+                shift_id: "REC: shift.id"
+            - - 0
+              - 0
+              - day_index: 17
+                shift_id: "REC: shift.id"
+            - - 0
+              - 0
+              - day_index: 18
+                shift_id: "REC: shift.id"
+            - - 0
+              - 0
+              - day_index: 19
+                shift_id: "REC: shift.id"
+            - - 0
+              - 0
+              - day_index: 20
+                shift_id: "REC: shift.id"
+            - - 0
+              - 0
+              - day_index: 21
+                shift_id: "REC: shift.id"
+
+      - step: "Assert 21 detail lines"
+        action: "assert"
+        target: "pattern"
+        asserts:
+          detail_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 21
+
+  - name: "Attendance Shift Pattern Detail - Day Index Zero Rejected"
+    steps:
+      - step: "Create pattern"
+        action: "create"
+        model: "hr.attendance_shift_pattern"
+        save_as: "pattern"
+        values:
+          name: "Range Check Pattern Zero"
+          code: "/"
+          cycle_length: 7
+          date_anchor: 2024-01-01
+
+      - step: "Create detail with day_index 0 must be rejected"
+        action: "create"
+        model: "hr.attendance_shift_pattern.detail"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "Day index must be between 1 and the pattern cycle length"
+        values:
+          pattern_id: "REC: pattern.id"
+          day_index: 0
+
+  - name: "Attendance Shift Pattern Detail - Day Index Exceeds Cycle Length Rejected"
+    steps:
+      - step: "Create pattern"
+        action: "create"
+        model: "hr.attendance_shift_pattern"
+        save_as: "pattern"
+        values:
+          name: "Range Check Pattern Overflow"
+          code: "/"
+          cycle_length: 7
+          date_anchor: 2024-01-01
+
+      - step: "Create detail with day_index 8 must be rejected"
+        action: "create"
+        model: "hr.attendance_shift_pattern.detail"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "Day index must be between 1 and the pattern cycle length"
+        values:
+          pattern_id: "REC: pattern.id"
+          day_index: 8
+
+  - name: "Attendance Shift Pattern Detail - Duplicate Day Index Rejected"
+    steps:
+      - step: "Create pattern"
+        action: "create"
+        model: "hr.attendance_shift_pattern"
+        save_as: "pattern"
+        values:
+          name: "Duplicate Check Pattern"
+          code: "/"
+          cycle_length: 7
+          date_anchor: 2024-01-01
+
+      - step: "Create first detail line"
+        action: "create"
+        model: "hr.attendance_shift_pattern.detail"
+        save_as: "detail_1"
+        values:
+          pattern_id: "REC: pattern.id"
+          day_index: 1
+          shift_id: "REC: shift.id"
+
+      - step: "Create duplicate day_index must be rejected"
+        action: "create"
+        model: "hr.attendance_shift_pattern.detail"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "Day index must be unique within a pattern"
+        values:
+          pattern_id: "REC: pattern.id"
+          day_index: 1
+          shift_id: "REC: shift.id"

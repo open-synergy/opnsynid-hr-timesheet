@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+<record id="hr_attendance_shift_assignment_view_search" model="ir.ui.view">
+    <field name="name">hr.attendance_shift_assignment - search</field>
+    <field name="model">hr.attendance_shift_assignment</field>
+    <field name="arch" type="xml">
+        <search>
+            <field name="employee_id" />
+            <field name="pattern_id" />
+            <group name="group_by" string="Group By">
+                <filter
+                        name="group_by_employee_id"
+                        string="Employee"
+                        context="{'group_by': 'employee_id'}"
+                    />
+                <filter
+                        name="group_by_pattern_id"
+                        string="Pattern"
+                        context="{'group_by': 'pattern_id'}"
+                    />
+            </group>
+        </search>
+    </field>
+</record>
+
+<record id="hr_attendance_shift_assignment_view_tree" model="ir.ui.view">
+    <field name="name">hr.attendance_shift_assignment - tree</field>
+    <field name="model">hr.attendance_shift_assignment</field>
+    <field name="arch" type="xml">
+        <tree>
+            <field name="employee_id" />
+            <field name="pattern_id" />
+            <field name="cycle_offset" />
+            <field name="date_start" />
+            <field name="date_end" />
+        </tree>
+    </field>
+</record>
+
+<record id="hr_attendance_shift_assignment_view_form" model="ir.ui.view">
+    <field name="name">hr.attendance_shift_assignment - form</field>
+    <field name="model">hr.attendance_shift_assignment</field>
+    <field name="arch" type="xml">
+        <form>
+            <sheet>
+                <group name="group_1">
+                    <field name="employee_id" />
+                    <field name="pattern_id" />
+                    <field name="cycle_offset" />
+                    <field name="date_start" />
+                    <field name="date_end" />
+                </group>
+            </sheet>
+        </form>
+    </field>
+</record>
+
+<record id="hr_attendance_shift_assignment_action" model="ir.actions.act_window">
+    <field name="name">Attendance Shift Assignments</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">hr.attendance_shift_assignment</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+<menuitem
+        id="hr_attendance_shift_assignment_menu"
+        name="Attendance Shift Assignments"
+        parent="ssi_timesheet_attendance.menu_hr_attendance_configuration"
+        groups="attendance_shift_group"
+        action="hr_attendance_shift_assignment_action"
+        sequence="5"
+    />
+
+</odoo>

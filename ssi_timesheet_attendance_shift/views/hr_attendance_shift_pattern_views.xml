@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+<record id="hr_attendance_shift_pattern_view_search" model="ir.ui.view">
+    <field name="name">hr.attendance_shift_pattern - search</field>
+    <field name="model">hr.attendance_shift_pattern</field>
+    <field
+            name="inherit_id"
+            ref="ssi_master_data_mixin.mixin_master_data_view_search"
+        />
+    <field name="mode">primary</field>
+    <field name="arch" type="xml">
+        <data />
+    </field>
+</record>
+
+<record id="hr_attendance_shift_pattern_view_tree" model="ir.ui.view">
+    <field name="name">hr.attendance_shift_pattern - tree</field>
+    <field name="model">hr.attendance_shift_pattern</field>
+    <field name="inherit_id" ref="ssi_master_data_mixin.mixin_master_data_view_tree" />
+    <field name="mode">primary</field>
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="cycle_length" />
+                <field name="date_anchor" />
+            </xpath>
+        </data>
+    </field>
+</record>
+
+<record id="hr_attendance_shift_pattern_view_form" model="ir.ui.view">
+    <field name="name">hr.attendance_shift_pattern - form</field>
+    <field name="model">hr.attendance_shift_pattern</field>
+    <field name="inherit_id" ref="ssi_master_data_mixin.mixin_master_data_view_form" />
+    <field name="mode">primary</field>
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//field[@name='active']" position="after">
+                <field name="cycle_length" />
+                <field name="date_anchor" />
+            </xpath>
+            <xpath expr="//notebook/page[@name='note']" position="before">
+                <page name="cycle_days" string="Cycle Days">
+                    <field name="detail_ids">
+                        <tree editable="bottom">
+                            <field name="day_index" />
+                            <field name="shift_id" />
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </data>
+    </field>
+</record>
+
+<record id="hr_attendance_shift_pattern_action" model="ir.actions.act_window">
+    <field name="name">Attendance Shift Patterns</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">hr.attendance_shift_pattern</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+<menuitem
+        id="hr_attendance_shift_pattern_menu"
+        name="Attendance Shift Patterns"
+        parent="ssi_timesheet_attendance.menu_hr_attendance_configuration"
+        groups="attendance_shift_group"
+        action="hr_attendance_shift_pattern_action"
+        sequence="4"
+    />
+
+</odoo>

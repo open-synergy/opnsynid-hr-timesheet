@@ -1,0 +1,203 @@
+setup:
+  steps:
+    - step: "Create pattern for assignment"
+      action: "create"
+      model: "hr.attendance_shift_pattern"
+      save_as: "pattern"
+      values:
+        name: "Assignment Test Pattern"
+        code: "/"
+        cycle_length: 7
+        date_anchor: 2024-01-01
+
+    - step: "Create employee for assignment"
+      action: "create"
+      model: "hr.employee"
+      save_as: "employee"
+      values:
+        name: "Assignment Test Employee"
+
+scenarios:
+  - name: "Attendance Shift Assignment - Create"
+    steps:
+      - step: "Create assignment"
+        action: "create"
+        model: "hr.attendance_shift_assignment"
+        save_as: "assignment"
+        values:
+          employee_id: "REC: employee.id"
+          pattern_id: "REC: pattern.id"
+          cycle_offset: 0
+          date_start: 2024-01-01
+
+      - step: "Assert assignment created"
+        action: "assert"
+        target: "assignment"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          cycle_offset:
+            type: "value"
+            expected: 0
+
+  - name: "Attendance Shift Assignment - Edit"
+    steps:
+      - step: "Create assignment"
+        action: "create"
+        model: "hr.attendance_shift_assignment"
+        save_as: "assignment"
+        values:
+          employee_id: "REC: employee.id"
+          pattern_id: "REC: pattern.id"
+          cycle_offset: 0
+          date_start: 2024-02-01
+          date_end: 2024-02-29
+
+      - step: "Edit assignment"
+        action: "write"
+        target: "assignment"
+        values:
+          cycle_offset: 3
+          date_end: 2024-03-31
+
+      - step: "Assert edited"
+        action: "assert"
+        target: "assignment"
+        asserts:
+          cycle_offset:
+            type: "value"
+            expected: 3
+          date_end:
+            type: "value"
+            expected: 2024-03-31
+
+  - name: "Attendance Shift Assignment - Delete"
+    steps:
+      - step: "Create assignment"
+        action: "create"
+        model: "hr.attendance_shift_assignment"
+        save_as: "assignment"
+        values:
+          employee_id: "REC: employee.id"
+          pattern_id: "REC: pattern.id"
+          cycle_offset: 0
+          date_start: 2024-04-01
+          date_end: 2024-04-30
+
+      - step: "Delete assignment"
+        action: "unlink"
+        target: "assignment"
+
+      - step: "Verify deleted"
+        action: "search"
+        model: "hr.attendance_shift_assignment"
+        domain:
+          [["employee_id", "=", "REC: employee.id"], ["date_start", "=", 2024-04-01]]
+        save_as: "result"
+        expect_count: 0
+
+  - name: "Attendance Shift Assignment - Open-Ended Date End"
+    steps:
+      - step: "Create assignment without date_end"
+        action: "create"
+        model: "hr.attendance_shift_assignment"
+        save_as: "assignment"
+        values:
+          employee_id: "REC: employee.id"
+          pattern_id: "REC: pattern.id"
+          cycle_offset: 1
+          date_start: 2024-05-01
+
+      - step: "Assert date_end is empty"
+        action: "assert"
+        target: "assignment"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          date_end:
+            type: "value"
+            operator: "is_falsy"
+
+  - name: "Attendance Shift Assignment - Two Non-Overlapping Assignments Saved"
+    steps:
+      - step: "Create first assignment"
+        action: "create"
+        model: "hr.attendance_shift_assignment"
+        save_as: "assignment_1"
+        values:
+          employee_id: "REC: employee.id"
+          pattern_id: "REC: pattern.id"
+          cycle_offset: 0
+          date_start: 2024-06-01
+          date_end: 2024-06-30
+
+      - step: "Create second non-overlapping assignment"
+        action: "create"
+        model: "hr.attendance_shift_assignment"
+        save_as: "assignment_2"
+        values:
+          employee_id: "REC: employee.id"
+          pattern_id: "REC: pattern.id"
+          cycle_offset: 2
+          date_start: 2024-07-01
+          date_end: 2024-07-31
+
+      - step: "Assert first assignment saved"
+        action: "assert"
+        target: "assignment_1"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+
+      - step: "Assert second assignment saved"
+        action: "assert"
+        target: "assignment_2"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+
+  - name: "Attendance Shift Assignment - Overlapping Range Rejected"
+    steps:
+      - step: "Create first assignment"
+        action: "create"
+        model: "hr.attendance_shift_assignment"
+        save_as: "assignment_1"
+        values:
+          employee_id: "REC: employee.id"
+          pattern_id: "REC: pattern.id"
+          cycle_offset: 0
+          date_start: 2024-08-01
+          date_end: 2024-08-31
+
+      - step: "Create overlapping assignment must be rejected"
+        action: "create"
+        model: "hr.attendance_shift_assignment"
+        expect_error:
+          type: "ValidationError"
+          message_contains:
+            "Shift assignment date range cannot overlap for the same employee"
+        values:
+          employee_id: "REC: employee.id"
+          pattern_id: "REC: pattern.id"
+          cycle_offset: 1
+          date_start: 2024-08-15
+          date_end: 2024-09-15
+
+  - name: "Attendance Shift Assignment - Date End Before Date Start Rejected"
+    steps:
+      - step: "Create assignment with date_end before date_start must be rejected"
+        action: "create"
+        model: "hr.attendance_shift_assignment"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "Date end cannot be earlier than date start"
+        values:
+          employee_id: "REC: employee.id"
+          pattern_id: "REC: pattern.id"
+          cycle_offset: 0
+          date_start: 2024-09-10
+          date_end: 2024-09-01

@@ -3,4 +3,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from . import test_hr_attendance_shift
+from . import test_hr_attendance_shift_pattern
+from . import test_hr_attendance_shift_assignment
 from . import test_ui_hr_attendance_shift
+from . import test_ui_hr_attendance_shift_pattern
+from . import test_ui_hr_attendance_shift_assignment
