@@ -11,6 +11,15 @@ from odoo.tools import format_datetime
 
 
 class HRTimesheet(models.Model):
+    """
+    Adds attendance tracking to the timesheet document.
+
+    Links recorded ``hr.timesheet_attendance`` entries and their
+    derived ``hr.timesheet_attendance_schedule`` slots to the
+    timesheet, and provides the sign-in/sign-out actions employees use
+    to record their attendance against it.
+    """
+
     _inherit = "hr.timesheet"
 
     @api.depends(
@@ -248,15 +257,6 @@ class HRTimesheet(models.Model):
             "check_out": fields.Datetime.now(),
             "reason_check_out_id": reason and reason.id or False,
         }
-
-    def _prepare_domain_sign_out(self):
-        self.ensure_one()
-        criteria = [
-            ("sheet_id", "=", self.employee_id.active_timesheet_id.id),
-            ("date", "=", fields.Date.today()),
-            ("check_out", "=", False),
-        ]
-        return criteria
 
     def unlink(self):
         _super = super(HRTimesheet, self)

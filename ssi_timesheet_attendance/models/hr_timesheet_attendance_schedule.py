@@ -4,10 +4,18 @@
 
 
 from odoo import _, api, fields, models
-from odoo.exceptions import Warning as UserError
+from odoo.exceptions import ValidationError
 
 
 class HRTimesheetAttendanceSchedule(models.Model):
+    """
+    Represents a planned attendance schedule slot for an employee.
+
+    Resolves the timesheet that covers its date, aggregates the actual
+    attendance recorded against it, and derives the resulting
+    early/late/finish deviations against the planned schedule window.
+    """
+
     _name = "hr.timesheet_attendance_schedule"
     _inherit = [
         "mixin.datetime_duration",
@@ -33,6 +41,15 @@ class HRTimesheetAttendanceSchedule(models.Model):
         "employee_id",
     )
     def _compute_sheet(self):
+        """Resolve the timesheet that covers this schedule's date.
+
+        Searches ``hr.timesheet`` for a record of the same
+        ``employee_id`` whose ``date_start``/``date_end`` range covers
+        ``date``.
+
+        :raises ValidationError: when no timesheet of ``employee_id``
+            covers ``date`` — the schedule cannot exist without one.
+        """
         obj_sheet = self.env["hr.timesheet"]
         for record in self:
             criteria = [
@@ -44,7 +61,21 @@ class HRTimesheetAttendanceSchedule(models.Model):
             if len(sheet) > 0:
                 record.sheet_id = sheet[0].id
             else:
-                raise UserError(str(record.date))
+                error_message = _(
+                    """
+Context: Determine the timesheet for an attendance schedule
+Database ID: %s
+Problem: No timesheet of employee %s covers the schedule date %s
+Solution: Create a timesheet whose date range includes %s
+"""
+                    % (
+                        record.id,
+                        record.employee_id.name,
+                        record.date,
+                        record.date,
+                    )
+                )
+                raise ValidationError(error_message)
 
     @api.depends(
         "attendance_ids",
@@ -249,14 +280,24 @@ class HRTimesheetAttendanceSchedule(models.Model):
 
     @api.constrains("schedule_work_hour")
     def _check_schedule_work_hour(self):
+        """Ensure the computed schedule duration stays within a day.
+
+        :raises ValidationError: when ``schedule_work_hour`` exceeds
+            23.99 hours.
+        """
         for record in self.sudo():
             if record.schedule_work_hour:
                 strWarning = _("Schedule Hours Cannot Greater Than 24 Hours")
                 if record.schedule_work_hour > 23.99:
-                    raise UserError(strWarning)
+                    raise ValidationError(strWarning)
 
     @api.constrains("date_start")
     def _check_sheet(self):
+        """Ensure the schedule's date stays within its timesheet range.
+
+        :raises ValidationError: when ``date`` falls outside
+            ``sheet_id``'s ``date_start``/``date_end`` range.
+        """
         for record in self.sudo():
             if record.date_start:
                 strWarning = _(
@@ -265,4 +306,4 @@ class HRTimesheetAttendanceSchedule(models.Model):
                 if (record.date < record.sheet_id.date_start) or (
                     record.date > record.sheet_id.date_end
                 ):
-                    raise UserError(strWarning)
+                    raise ValidationError(strWarning)
