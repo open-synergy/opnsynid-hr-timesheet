@@ -307,6 +307,11 @@ odoo.define("ssi_timesheet_attendance_shift.hr_attendance_shift_tour", function 
             {
                 content: "Open the Action menu",
                 trigger: ".o_cp_action_menus button:contains(Action)",
+                run: function () {
+                    // Owl dropdowns in 14.0 are not always opened by a
+                    // synthetic click — use a native click instead.
+                    this.$anchor[0].click();
+                },
             },
             {
                 content: "Click Unarchive",
