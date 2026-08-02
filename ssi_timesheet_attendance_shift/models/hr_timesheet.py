@@ -149,6 +149,38 @@ class HrTimesheet(models.Model):
         )
         return pytz.timezone(tz_name)
 
+    def _sign_out(self, reason=False):
+        """Close a cross-day shift attendance, skipping the anomaly path.
+
+        Delegates unchanged to ``super()`` unless the employee's open
+        attendance (``latest_attendance_id``) is pinned to a schedule
+        line generated from a shift whose ``cross_day`` is True. For
+        such an attendance, a check-out landing on the next calendar
+        day is expected, not an anomaly: the date-mismatch comparison
+        and ``checkout_buffer`` branch inherited from
+        ``ssi_timesheet_attendance`` — which would otherwise leave
+        the attendance open and create a new one — are skipped
+        entirely, and the open attendance is closed directly. Every
+        other case, including shift attendances that do not cross a
+        day, keeps going through the inherited anomaly branch
+        unchanged.
+
+        :param reason: ``hr.attendance_reason`` record for the
+            check-out, or a falsy value
+        :return: nothing
+        """
+        self.ensure_one()
+        latest_attendance_id = self.employee_id.latest_attendance_id
+        if (
+            latest_attendance_id
+            and latest_attendance_id._is_cross_day_shift_attendance()
+        ):
+            latest_attendance_id.write(
+                self._prepare_attendance_data_update(reason=reason)
+            )
+            return
+        super(HrTimesheet, self)._sign_out(reason=reason)
+
     def _get_shift_for_date(self, employee, date_check):
         """Resolve the shift an employee's roster assigns on a date.
 
