@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+<record id="hr_timesheet_view_shift_form" model="ir.ui.view">
+    <field name="name">hr.timesheet shift form</field>
+    <field name="model">hr.timesheet</field>
+    <field
+            name="inherit_id"
+            ref="ssi_timesheet_attendance.hr_timesheet_view_attendance_form"
+        />
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//field[@name='working_schedule_id']" position="before">
+                <field name="schedule_source" />
+            </xpath>
+            <xpath
+                    expr="//field[@name='schedule_ids']/tree/field[@name='date']"
+                    position="after"
+                >
+                <field name="shift_id" />
+            </xpath>
+            <xpath
+                    expr="//field[@name='schedule_ids']/form//group[@name='schedule_1_1']/field[@name='date']"
+                    position="after"
+                >
+                <field name="shift_id" />
+            </xpath>
+        </data>
+    </field>
+</record>
+</odoo>
