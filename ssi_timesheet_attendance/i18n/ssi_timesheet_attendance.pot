@@ -38,6 +38,17 @@ msgid ""
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: code:addons/ssi_timesheet_attendance/models/hr_timesheet_attendance_schedule.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Determine the timesheet for an attendance schedule\n"
+"Database ID: %s\n"
+"Problem: No timesheet of employee %s covers the schedule date %s\n"
+"Solution: Create a timesheet whose date range includes %s\n"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__sheet_id
 msgid "# Timesheet"
 msgstr ""
@@ -266,6 +277,26 @@ msgstr ""
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_timesheet_attendance__check_date
 msgid "Date is not the same as check in"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_res_company__check_in_reason_id
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_res_config_settings__check_in_reason_id
+msgid ""
+"Default reason applied to the check-in of a system-generated attendance "
+"record created when a sign-out is detected as an anomaly (outside the check "
+"out buffer). Falls back to the module's default check in reason when left "
+"empty."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_res_company__check_out_reason_id
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_res_config_settings__check_out_reason_id
+msgid ""
+"Default reason applied to the check-out of a system-generated attendance "
+"record created when a sign-out is detected as an anomaly (outside the check "
+"out buffer). Falls back to the module's default check out reason when left "
+"empty."
 msgstr ""
 
 #. module: ssi_timesheet_attendance
@@ -646,6 +677,18 @@ msgstr ""
 #. module: ssi_timesheet_attendance
 #: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.hr_timesheet_attendance_view_search
 msgid "Today"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_res_company__checkout_buffer
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_res_config_settings__checkout_buffer
+msgid ""
+"Tolerance, in hours, between the scheduled end of the attendance and the "
+"actual check-out time before a check-out recorded on a different date than "
+"its attendance is treated as an anomaly (a new attendance record is created "
+"instead of closing the current one). A value of 0.0 means every check-out "
+"that falls on a different date than its attendance is immediately treated as"
+" an anomaly."
 msgstr ""
 
 #. module: ssi_timesheet_attendance
