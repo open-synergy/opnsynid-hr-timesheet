@@ -1,0 +1,380 @@
+scenarios:
+  - name: "Confirm Lock - Shift Timesheet With All Attendance Closed Succeeds"
+    steps:
+      - step: "Create day shift"
+        action: "create"
+        model: "hr.attendance_shift"
+        save_as: "shift"
+        values:
+          name: "Day Shift"
+          code: "/"
+          hour_start: 8.0
+          duration: 8.0
+
+      - step: "Create single-day pattern anchored on the shift date"
+        action: "create"
+        model: "hr.attendance_shift_pattern"
+        save_as: "pattern"
+        values:
+          name: "Day Only Pattern"
+          code: "/"
+          cycle_length: 1
+          date_anchor: 2024-01-08
+          detail_ids:
+            - - 0
+              - 0
+              - day_index: 1
+                shift_id: "REC: shift.id"
+
+      - step: "Create employee in UTC"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Closed Attendance Employee"
+          tz: "UTC"
+
+      - step: "Assign employee to the day pattern"
+        action: "create"
+        model: "hr.attendance_shift_assignment"
+        save_as: "assignment"
+        values:
+          employee_id: "REC: employee.id"
+          pattern_id: "REC: pattern.id"
+          cycle_offset: 0
+          date_start: 2024-01-08
+
+      - step: "Create shift-roster timesheet for the shift date"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "shift"
+          date_start: 2024-01-08
+          date_end: 2024-01-08
+
+      - step: "Open the timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Generate the schedule"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Create a fully closed attendance matching the shift"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date: 2024-01-08
+          check_in: "2024-01-08 08:00:00"
+          check_out: "2024-01-08 16:00:00"
+          sheet_id: "REC: timesheet.id"
+
+      - step: "Confirm the timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+  - name: "Confirm Lock - Shift Timesheet With Open Attendance Is Rejected"
+    steps:
+      - step: "Create day shift"
+        action: "create"
+        model: "hr.attendance_shift"
+        save_as: "shift"
+        values:
+          name: "Day Shift"
+          code: "/"
+          hour_start: 8.0
+          duration: 8.0
+
+      - step: "Create single-day pattern anchored on the shift date"
+        action: "create"
+        model: "hr.attendance_shift_pattern"
+        save_as: "pattern"
+        values:
+          name: "Day Only Pattern"
+          code: "/"
+          cycle_length: 1
+          date_anchor: 2024-01-08
+          detail_ids:
+            - - 0
+              - 0
+              - day_index: 1
+                shift_id: "REC: shift.id"
+
+      - step: "Create employee in UTC"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Open Attendance Employee"
+          tz: "UTC"
+
+      - step: "Assign employee to the day pattern"
+        action: "create"
+        model: "hr.attendance_shift_assignment"
+        save_as: "assignment"
+        values:
+          employee_id: "REC: employee.id"
+          pattern_id: "REC: pattern.id"
+          cycle_offset: 0
+          date_start: 2024-01-08
+
+      - step: "Create shift-roster timesheet for the shift date"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "shift"
+          date_start: 2024-01-08
+          date_end: 2024-01-08
+
+      - step: "Open the timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Generate the schedule"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Check in without checking out yet"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date: 2024-01-08
+          check_in: "2024-01-08 08:00:00"
+          sheet_id: "REC: timesheet.id"
+
+      - step: "Confirm is rejected while the attendance is still open"
+        action: "call"
+        target: "timesheet"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+        expect_error:
+          type: "ValidationError"
+          message_contains: "attendance is still open"
+
+      - step: "Assert the timesheet is still open, not confirmed"
+        action: "assert"
+        target: "timesheet"
+        asserts:
+          state:
+            type: "value"
+            expected: "open"
+
+  - name: "Confirm Lock - Shift Timesheet With Open Attendance Schedule Is Rejected"
+    steps:
+      - step: "Create day shift"
+        action: "create"
+        model: "hr.attendance_shift"
+        save_as: "shift"
+        values:
+          name: "Day Shift"
+          code: "/"
+          hour_start: 8.0
+          duration: 8.0
+
+      - step: "Create single-day pattern anchored on the shift date"
+        action: "create"
+        model: "hr.attendance_shift_pattern"
+        save_as: "pattern"
+        values:
+          name: "Day Only Pattern"
+          code: "/"
+          cycle_length: 1
+          date_anchor: 2024-01-08
+          detail_ids:
+            - - 0
+              - 0
+              - day_index: 1
+                shift_id: "REC: shift.id"
+
+      - step: "Create employee in UTC"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Open Schedule Employee"
+          tz: "UTC"
+
+      - step: "Assign employee to the day pattern"
+        action: "create"
+        model: "hr.attendance_shift_assignment"
+        save_as: "assignment"
+        values:
+          employee_id: "REC: employee.id"
+          pattern_id: "REC: pattern.id"
+          cycle_offset: 0
+          date_start: 2024-01-08
+
+      - step: "Create shift-roster timesheet for the shift date"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "shift"
+          date_start: 2024-01-08
+          date_end: 2024-01-08
+
+      - step: "Open the timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Generate the schedule"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Create a fully closed attendance matching the shift"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date: 2024-01-08
+          check_in: "2024-01-08 08:00:00"
+          check_out: "2024-01-08 16:00:00"
+          sheet_id: "REC: timesheet.id"
+
+      - step: "Fetch the generated schedule line"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"]]
+        save_as: "schedule"
+        limit: 1
+
+      - step: "Force the schedule back to open, independently of the attendance"
+        action: "write"
+        target: "schedule"
+        values:
+          state: "open"
+
+      - step: "Assert the attendance itself is not open"
+        action: "assert"
+        target: "attendance"
+        asserts:
+          check_out:
+            type: "value"
+            operator: "is_truthy"
+
+      - step: "Confirm is rejected while the schedule is still open"
+        action: "call"
+        target: "timesheet"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+        expect_error:
+          type: "ValidationError"
+          message_contains: "attendance schedule is still open"
+
+      - step: "Assert the timesheet is still open, not confirmed"
+        action: "assert"
+        target: "timesheet"
+        asserts:
+          state:
+            type: "value"
+            expected: "open"
+
+  - name:
+      "Confirm Lock - Working Schedule Timesheet With Open Attendance Still Confirms"
+    steps:
+      - step: "Create Monday-only calendar"
+        action: "create"
+        model: "resource.calendar"
+        save_as: "calendar"
+        values:
+          name: "Monday Only Calendar"
+          tz: "UTC"
+          attendance_ids:
+            - - 0
+              - 0
+              - name: "Monday"
+                dayofweek: "0"
+                hour_from: 8.0
+                hour_to: 17.0
+                day_period: "morning"
+
+      - step: "Create employee for the confirm-lock regression"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Working Schedule Confirm Regression Employee"
+          tz: "UTC"
+
+      - step: "Create working-schedule timesheet for the Monday"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "working_schedule"
+          working_schedule_id: "REC: calendar.id"
+          date_start: 2024-01-08
+          date_end: 2024-01-08
+
+      - step: "Open the timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Generate the schedule"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Check in without checking out yet (open attendance)"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date: 2024-01-08
+          check_in: "2024-01-08 08:00:00"
+          sheet_id: "REC: timesheet.id"
+
+      - step: "Confirm still succeeds for a Working Schedule timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
