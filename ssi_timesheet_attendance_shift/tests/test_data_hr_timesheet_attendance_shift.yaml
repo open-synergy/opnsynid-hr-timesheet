@@ -1,0 +1,637 @@
+scenarios:
+  - name: "Attendance Shift - Cross-Day Check-In Matches Shift And Sets Business Date"
+    steps:
+      - step: "Create night shift crossing midnight with explicit tolerances"
+        action: "create"
+        model: "hr.attendance_shift"
+        save_as: "night_shift"
+        values:
+          name: "Night Shift"
+          code: "/"
+          hour_start: 18.0
+          duration: 12.0
+          early_check_in_tolerance: 2.0
+          late_check_out_tolerance: 3.0
+
+      - step: "Create single-day pattern anchored on the shift date"
+        action: "create"
+        model: "hr.attendance_shift_pattern"
+        save_as: "pattern"
+        values:
+          name: "Night Only Pattern"
+          code: "/"
+          cycle_length: 1
+          date_anchor: 2024-01-08
+          detail_ids:
+            - - 0
+              - 0
+              - day_index: 1
+                shift_id: "REC: night_shift.id"
+
+      - step: "Create employee in UTC"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Cross Day Match Employee"
+          tz: "UTC"
+
+      - step: "Assign employee to the night pattern"
+        action: "create"
+        model: "hr.attendance_shift_assignment"
+        save_as: "assignment"
+        values:
+          employee_id: "REC: employee.id"
+          pattern_id: "REC: pattern.id"
+          cycle_offset: 0
+          date_start: 2024-01-08
+
+      - step: "Create shift-roster timesheet for the shift date"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "shift"
+          date_start: 2024-01-08
+          date_end: 2024-01-08
+
+      - step: "Open the timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Generate the schedule"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Fetch the generated night schedule line"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"]]
+        save_as: "night_schedule"
+        limit: 1
+
+      - step: "Create the cross-day attendance"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date: 2024-01-08
+          check_in: "2024-01-08 18:00:00"
+          check_out: "2024-01-09 06:00:00"
+          sheet_id: "REC: timesheet.id"
+
+      - step: "Assert the attendance matched the night schedule line"
+        action: "assert"
+        target: "attendance"
+        asserts:
+          schedule_id:
+            type: "m2o"
+            expected: "REC: night_schedule"
+
+      - step: "Assert the whole 12-hour block counts as valid hours"
+        action: "assert"
+        target: "attendance"
+        asserts:
+          total_valid_hour:
+            type: "value"
+            expected: 12.0
+
+      - step: "Assert the business date is the shift's start date"
+        action: "assert"
+        target: "attendance"
+        asserts:
+          date:
+            type: "value"
+            expected: 2024-01-08
+
+  - name: "Attendance Shift - Early Check-In Within Tolerance Still Matches"
+    steps:
+      - step: "Create night shift crossing midnight with explicit tolerances"
+        action: "create"
+        model: "hr.attendance_shift"
+        save_as: "night_shift"
+        values:
+          name: "Night Shift"
+          code: "/"
+          hour_start: 18.0
+          duration: 12.0
+          early_check_in_tolerance: 2.0
+          late_check_out_tolerance: 3.0
+
+      - step: "Create single-day pattern anchored on the shift date"
+        action: "create"
+        model: "hr.attendance_shift_pattern"
+        save_as: "pattern"
+        values:
+          name: "Night Only Pattern"
+          code: "/"
+          cycle_length: 1
+          date_anchor: 2024-01-08
+          detail_ids:
+            - - 0
+              - 0
+              - day_index: 1
+                shift_id: "REC: night_shift.id"
+
+      - step: "Create employee in UTC"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Early Tolerance Employee"
+          tz: "UTC"
+
+      - step: "Assign employee to the night pattern"
+        action: "create"
+        model: "hr.attendance_shift_assignment"
+        save_as: "assignment"
+        values:
+          employee_id: "REC: employee.id"
+          pattern_id: "REC: pattern.id"
+          cycle_offset: 0
+          date_start: 2024-01-08
+
+      - step: "Create shift-roster timesheet for the shift date"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "shift"
+          date_start: 2024-01-08
+          date_end: 2024-01-08
+
+      - step: "Open the timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Generate the schedule"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Fetch the generated night schedule line"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"]]
+        save_as: "night_schedule"
+        limit: 1
+
+      - step: "Create an attendance checking in 1 hour early (within 2h tolerance)"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date: 2024-01-08
+          check_in: "2024-01-08 17:00:00"
+          sheet_id: "REC: timesheet.id"
+
+      - step: "Assert the early check-in still matched the night schedule"
+        action: "assert"
+        target: "attendance"
+        asserts:
+          schedule_id:
+            type: "m2o"
+            expected: "REC: night_schedule"
+
+  - name: "Attendance Shift - Check-In Outside Tolerance Does Not Match"
+    steps:
+      - step: "Create night shift crossing midnight with explicit tolerances"
+        action: "create"
+        model: "hr.attendance_shift"
+        save_as: "night_shift"
+        values:
+          name: "Night Shift"
+          code: "/"
+          hour_start: 18.0
+          duration: 12.0
+          early_check_in_tolerance: 2.0
+          late_check_out_tolerance: 3.0
+
+      - step: "Create single-day pattern anchored on the shift date"
+        action: "create"
+        model: "hr.attendance_shift_pattern"
+        save_as: "pattern"
+        values:
+          name: "Night Only Pattern"
+          code: "/"
+          cycle_length: 1
+          date_anchor: 2024-01-08
+          detail_ids:
+            - - 0
+              - 0
+              - day_index: 1
+                shift_id: "REC: night_shift.id"
+
+      - step: "Create employee in UTC"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Outside Tolerance Employee"
+          tz: "UTC"
+
+      - step: "Assign employee to the night pattern"
+        action: "create"
+        model: "hr.attendance_shift_assignment"
+        save_as: "assignment"
+        values:
+          employee_id: "REC: employee.id"
+          pattern_id: "REC: pattern.id"
+          cycle_offset: 0
+          date_start: 2024-01-08
+
+      - step: "Create shift-roster timesheet for the shift date"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "shift"
+          date_start: 2024-01-08
+          date_end: 2024-01-08
+
+      - step: "Open the timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Generate the schedule"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Create an attendance checking in 4 hours early (outside 2h tolerance)"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date: 2024-01-01
+          check_in: "2024-01-08 14:00:00"
+          sheet_id: "REC: timesheet.id"
+
+      - step: "Assert the too-early check-in did not match any schedule"
+        action: "assert"
+        target: "attendance"
+        asserts:
+          schedule_id:
+            type: "value"
+            operator: "is_falsy"
+
+  - name: "Attendance Shift - Employee Without Any Shift Schedule Does Not Raise"
+    steps:
+      - step: "Create employee without any shift assignment"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "No Schedule Employee"
+          tz: "UTC"
+
+      - step: "Create shift-roster timesheet with no generated schedule"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "shift"
+          date_start: 2024-03-18
+          date_end: 2024-03-24
+
+      - step: "Open the timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Generate the schedule (no assignment, no lines)"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Create an attendance with no schedule to match, without error"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date: 2024-03-18
+          check_in: "2024-03-18 09:00:00"
+          sheet_id: "REC: timesheet.id"
+
+      - step: "Assert the attendance was created without a schedule"
+        action: "assert"
+        target: "attendance"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          schedule_id:
+            type: "value"
+            operator: "is_falsy"
+
+  - name: "Attendance Shift - Sign Out Closes Cross-Day Attendance Without Anomaly"
+    steps:
+      - step: "Create night shift crossing midnight"
+        action: "create"
+        model: "hr.attendance_shift"
+        save_as: "night_shift"
+        values:
+          name: "Night Shift"
+          code: "/"
+          hour_start: 18.0
+          duration: 12.0
+          early_check_in_tolerance: 2.0
+          late_check_out_tolerance: 3.0
+
+      - step: "Create single-day pattern anchored on the shift date"
+        action: "create"
+        model: "hr.attendance_shift_pattern"
+        save_as: "pattern"
+        values:
+          name: "Night Only Pattern"
+          code: "/"
+          cycle_length: 1
+          date_anchor: 2024-01-08
+          detail_ids:
+            - - 0
+              - 0
+              - day_index: 1
+                shift_id: "REC: night_shift.id"
+
+      - step: "Create employee in UTC"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Sign Out Employee"
+          tz: "UTC"
+
+      - step: "Assign employee to the night pattern"
+        action: "create"
+        model: "hr.attendance_shift_assignment"
+        save_as: "assignment"
+        values:
+          employee_id: "REC: employee.id"
+          pattern_id: "REC: pattern.id"
+          cycle_offset: 0
+          date_start: 2024-01-08
+
+      - step: "Create shift-roster timesheet for the shift date"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "shift"
+          date_start: 2024-01-08
+          date_end: 2024-01-08
+
+      - step: "Open the timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Generate the schedule"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Check in without checking out yet (open attendance)"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date: 2024-01-08
+          check_in: "2024-01-08 18:00:00"
+          sheet_id: "REC: timesheet.id"
+
+      - step: "Assert exactly one attendance exists before sign out"
+        action: "search"
+        model: "hr.timesheet_attendance"
+        domain: [["sheet_id", "=", "REC: timesheet.id"]]
+        save_as: "before_sign_out"
+        expect_count: 1
+
+      - step: "Sign out from the timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_sign_out"
+        as_user: "base.user_admin"
+
+      - step: "Assert the attendance count did not increase"
+        action: "search"
+        model: "hr.timesheet_attendance"
+        domain: [["sheet_id", "=", "REC: timesheet.id"]]
+        save_as: "after_sign_out"
+        expect_count: 1
+
+      - step: "Assert the same attendance is now closed"
+        action: "assert"
+        target: "attendance"
+        asserts:
+          check_out:
+            type: "value"
+            operator: "is_truthy"
+
+  - name: "Attendance Shift - Working Schedule Regression - Exact Date Matching"
+    steps:
+      - step: "Create Monday-only calendar"
+        action: "create"
+        model: "resource.calendar"
+        save_as: "calendar"
+        values:
+          name: "Monday Only Calendar"
+          tz: "UTC"
+          attendance_ids:
+            - - 0
+              - 0
+              - name: "Monday"
+                dayofweek: "0"
+                hour_from: 8.0
+                hour_to: 17.0
+                day_period: "morning"
+
+      - step: "Create employee for the working-schedule regression"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Working Schedule Regression Employee"
+          tz: "UTC"
+
+      - step: "Create working-schedule timesheet for the Monday"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "working_schedule"
+          working_schedule_id: "REC: calendar.id"
+          date_start: 2024-01-08
+          date_end: 2024-01-08
+
+      - step: "Open the timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Generate the schedule"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Fetch the generated working-schedule line"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"]]
+        save_as: "monday_schedule"
+        limit: 1
+
+      - step: "Create attendance matching the working day exactly"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date: 2024-01-08
+          check_in: "2024-01-08 08:00:00"
+          check_out: "2024-01-08 17:00:00"
+          sheet_id: "REC: timesheet.id"
+
+      - step: "Assert the attendance matched the working-schedule line"
+        action: "assert"
+        target: "attendance"
+        asserts:
+          schedule_id:
+            type: "m2o"
+            expected: "REC: monday_schedule"
+
+      - step: "Assert the business date is unchanged (the check-in date)"
+        action: "assert"
+        target: "attendance"
+        asserts:
+          date:
+            type: "value"
+            expected: 2024-01-08
+
+      - step: "Assert the total valid hour is unchanged (same-day arithmetic)"
+        action: "assert"
+        target: "attendance"
+        asserts:
+          total_valid_hour:
+            type: "value"
+            expected: 9.0
+
+  - name: "Attendance Shift - Working Schedule Regression - Sign Out Anomaly Path"
+    steps:
+      - step: "Create Monday-only calendar"
+        action: "create"
+        model: "resource.calendar"
+        save_as: "calendar"
+        values:
+          name: "Monday Only Calendar"
+          tz: "UTC"
+          attendance_ids:
+            - - 0
+              - 0
+              - name: "Monday"
+                dayofweek: "0"
+                hour_from: 8.0
+                hour_to: 17.0
+                day_period: "morning"
+
+      - step: "Create employee for the sign-out regression"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Working Schedule Sign Out Employee"
+          tz: "UTC"
+
+      - step: "Create working-schedule timesheet for the Monday"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "working_schedule"
+          working_schedule_id: "REC: calendar.id"
+          date_start: 2024-01-08
+          date_end: 2024-01-08
+
+      - step: "Open the timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Generate the schedule"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Check in without checking out yet (open attendance)"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date: 2024-01-08
+          check_in: "2024-01-08 08:00:00"
+          sheet_id: "REC: timesheet.id"
+
+      - step: "Assert exactly one attendance exists before sign out"
+        action: "search"
+        model: "hr.timesheet_attendance"
+        domain: [["sheet_id", "=", "REC: timesheet.id"]]
+        save_as: "before_sign_out"
+        expect_count: 1
+
+      - step: "Sign out at a real time far past the fixed check-in date"
+        action: "call"
+        target: "timesheet"
+        method: "action_sign_out"
+        as_user: "base.user_admin"
+
+      - step: "Assert the anomaly branch created a second attendance"
+        action: "search"
+        model: "hr.timesheet_attendance"
+        domain: [["sheet_id", "=", "REC: timesheet.id"]]
+        save_as: "after_sign_out"
+        expect_count: 2
+
+      - step: "Assert the original open attendance was left unclosed"
+        action: "assert"
+        target: "attendance"
+        asserts:
+          check_out:
+            type: "value"
+            operator: "is_falsy"
