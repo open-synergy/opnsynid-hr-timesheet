@@ -53,7 +53,7 @@
 </record>
 
 <record id="hr_attendance_shift_action" model="ir.actions.act_window">
-    <field name="name">Attendance Shift</field>
+    <field name="name">Attendance Shifts</field>
     <field name="type">ir.actions.act_window</field>
     <field name="res_model">hr.attendance_shift</field>
     <field name="view_mode">tree,form</field>
