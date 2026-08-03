@@ -9,7 +9,11 @@ setup:
       save_as: "item1"
       values:
         name: "Computation Item 1"
-        code: "ITEM1"
+        # "/" is excluded from the unique-code check (mixin.master_data),
+        # which matters here because `setup:` re-runs before EVERY
+        # scenario in this file and would otherwise collide on a fixed
+        # code (see odoo-development-unit-test test-traps.md T-01).
+        code: "/"
         python_code: "result = 10.0"
 
     - step: "Create employee with item #1 registered"
@@ -214,7 +218,7 @@ scenarios:
         save_as: "item2"
         values:
           name: "Computation Item 2"
-          code: "ITEM2"
+          code: "/"
           python_code: "result = 5.0"
 
       - step: "Register item #2 on the employee"
