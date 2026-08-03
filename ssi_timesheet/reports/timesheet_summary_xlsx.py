@@ -24,10 +24,14 @@ class TimesheetSummaryXlsx(models.AbstractModel):
         return items.sorted(key=lambda item: (item.code or "", item.name or ""))
 
     def _get_amounts_by_employee(self, timesheets):
-        """Return {employee_id: {item_id: amount}} for the timesheets.
+        """Return {employee_id: {item_id: final_amount}} for the timesheets.
 
-        When an employee has several timesheets in the period, the amount of
-        each computation item is summed across those timesheets.
+        ``final_amount`` (``amount`` plus any manual
+        ``correction_amount``) is summed, not the raw ``amount``, so
+        the report reflects corrections applied to a computation line.
+        When an employee has several timesheets in the period, the
+        amount of each computation item is summed across those
+        timesheets.
         """
         result = {}
         for timesheet in timesheets:
@@ -36,7 +40,7 @@ class TimesheetSummaryXlsx(models.AbstractModel):
             for computation in timesheet.computation_ids:
                 item_id = computation.item_id.id
                 employee_data[item_id] = (
-                    employee_data.get(item_id, 0.0) + computation.amount
+                    employee_data.get(item_id, 0.0) + computation.final_amount
                 )
         return result
 

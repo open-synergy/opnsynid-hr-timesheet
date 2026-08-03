@@ -82,6 +82,58 @@ class TestTimesheetSummaryReport(YamlTransactionCase):
         self.assertEqual(amounts[employee.id][item_a.id], 3.0)
         self.assertEqual(amounts[employee.id][item_b.id], 7.0)
 
+    def test_amounts_by_employee_uses_final_amount_with_correction(self):
+        """Aggregated amount reflects amount plus correction_amount.
+
+        Pure Python — trigger P1 (skill ``odoo-development-unit-test``,
+        ``python-escape-hatch.md`` §3): the assertion is on the return
+        value of ``_get_amounts_by_employee`` (a plain Python dict),
+        not on a side effect verifiable through a domain search on a
+        model.
+        """
+        item = self._create_item("Count Corr", "TSUM_CORR", 3.0)
+        timesheet, employee = self._create_done_timesheet(
+            "RPT Emp Correction", "2024-06-01", "2024-06-30", item
+        )
+        computation = timesheet.computation_ids
+        self.assertEqual(computation.amount, 3.0)
+        computation.write({"correction_amount": 2.0})
+
+        report = self.env["report.ssi_timesheet.timesheet_summary_xlsx"]
+        amounts = report._get_amounts_by_employee(timesheet)
+
+        self.assertEqual(
+            amounts[employee.id][item.id],
+            computation.amount + computation.correction_amount,
+        )
+        self.assertEqual(amounts[employee.id][item.id], 5.0)
+
+    def test_amounts_by_employee_without_correction_matches_amount(self):
+        """Aggregated amount equals amount when there is no correction.
+
+        Pure Python — trigger P1 (skill ``odoo-development-unit-test``,
+        ``python-escape-hatch.md`` §3): the assertion is on the return
+        value of ``_get_amounts_by_employee`` (a plain Python dict),
+        not on a side effect verifiable through a domain search on a
+        model. This is the zero-regression counterpart to
+        ``test_amounts_by_employee_uses_final_amount_with_correction``:
+        with the default ``correction_amount`` of ``0.0``, the result
+        must stay identical to the pre-fix behaviour that summed the
+        raw ``amount``.
+        """
+        item = self._create_item("Count NoCorr", "TSUM_NOCORR", 4.0)
+        timesheet, employee = self._create_done_timesheet(
+            "RPT Emp No Correction", "2024-07-01", "2024-07-31", item
+        )
+        computation = timesheet.computation_ids
+        self.assertEqual(computation.correction_amount, 0.0)
+
+        report = self.env["report.ssi_timesheet.timesheet_summary_xlsx"]
+        amounts = report._get_amounts_by_employee(timesheet)
+
+        self.assertEqual(amounts[employee.id][item.id], computation.amount)
+        self.assertEqual(amounts[employee.id][item.id], 4.0)
+
     def test_render_xlsx_produces_workbook(self):
         """The full xlsx render returns a valid (zip/xlsx) binary."""
         item = self._create_item("Count R", "TSUM_R", 2.0)
