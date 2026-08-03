@@ -96,6 +96,13 @@ msgid "Amount"
 msgstr ""
 
 #. module: ssi_timesheet
+#: model:ir.model.fields,help:ssi_timesheet.field_hr_timesheet_computation__final_amount
+msgid ""
+"Amount actually used downstream: the computed ``amount`` plus the manual "
+"``correction_amount``."
+msgstr ""
+
+#. module: ssi_timesheet
 #: model:ir.model.fields,help:ssi_timesheet.field_hr_timesheet__approval_template_id
 msgid "Approval Configuration"
 msgstr ""
@@ -267,6 +274,11 @@ msgid ""
 "Confirm policy\n"
 "\n"
 "* If active user can see and execute 'Confirm' button"
+msgstr ""
+
+#. module: ssi_timesheet
+#: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_computation__correction_amount
+msgid "Correction Amount"
 msgstr ""
 
 #. module: ssi_timesheet
@@ -558,6 +570,11 @@ msgid "Export XLSX"
 msgstr ""
 
 #. module: ssi_timesheet
+#: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_computation__final_amount
+msgid "Final Amount"
+msgstr ""
+
+#. module: ssi_timesheet
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet__message_follower_ids
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_computation_item__message_follower_ids
 msgid "Followers"
@@ -709,6 +726,14 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_timesheet.field_hr_timesheet_computation_analysis__parent_id
 #: model_terms:ir.ui.view,arch_db:ssi_timesheet.hr_timesheet_computation_analysis_view_search
 msgid "Manager"
+msgstr ""
+
+#. module: ssi_timesheet
+#: model:ir.model.fields,help:ssi_timesheet.field_hr_timesheet_computation__correction_amount
+msgid ""
+"Manual correction applied on top of the computed amount. Negative values are"
+" allowed, to reduce the computed amount for a single exceptional line "
+"without editing the item formula shared by every employee."
 msgstr ""
 
 #. module: ssi_timesheet
