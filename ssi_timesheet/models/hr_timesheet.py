@@ -79,7 +79,6 @@ class HRTimesheet(models.Model):
         string="Computations",
         comodel_name="hr.timesheet_computation",
         inverse_name="sheet_id",
-        readonly=True,
     )
     state = fields.Selection(
         string="State",
@@ -227,12 +226,57 @@ class HRTimesheet(models.Model):
             localdict[computation.code] = result
 
     def _reload_timesheet_computation(self):
+        """Reconcile ``computation_ids`` in place against the employee.
+
+        Unlike the previous unlink-then-recreate approach, rows whose
+        ``item_id`` is still registered on
+        ``employee_id.timesheet_computation_ids`` are left untouched,
+        so their ``id``, ``sequence`` and manually entered
+        ``correction_amount`` survive a Reload (and the automatic
+        reload triggered by the ``pre_open``/``pre_confirm`` hooks).
+        Rows whose ``item_id`` is no longer registered are removed
+        (their correction is intentionally lost); items newly
+        registered on the employee that do not yet have a row get a
+        new row with ``correction_amount`` set to ``0.0``. When more
+        than one row shares the same ``item_id`` (legacy duplicate
+        data), only the row with the smallest ``id`` is kept and the
+        rest are removed.
+
+        :return: nothing; writes ``computation_ids``
+        """
         self.ensure_one()
-        self.computation_ids.unlink()
-        result = []
-        for computation in self.employee_id.timesheet_computation_ids:
-            result.append((0, 0, {"item_id": computation.id}))
-        self.write({"computation_ids": result})
+        Computation = self.env[  # pylint: disable=invalid-name
+            "hr.timesheet_computation"
+        ]
+        registered_item_ids = self.employee_id.timesheet_computation_ids.ids
+
+        keeper_by_item = {}
+        duplicate_lines = Computation
+        for line in self.computation_ids.sorted(key=lambda rec: rec.id):
+            if line.item_id.id in keeper_by_item:
+                duplicate_lines |= line
+            else:
+                keeper_by_item[line.item_id.id] = line
+
+        stale_lines = Computation
+        for item_id, line in keeper_by_item.items():
+            if item_id not in registered_item_ids:
+                stale_lines |= line
+
+        to_unlink = duplicate_lines | stale_lines
+        if to_unlink:
+            to_unlink.unlink()
+
+        kept_item_ids = {
+            item_id for item_id in keeper_by_item if item_id in registered_item_ids
+        }
+        new_values = [
+            (0, 0, {"item_id": item_id, "correction_amount": 0.0})
+            for item_id in registered_item_ids
+            if item_id not in kept_item_ids
+        ]
+        if new_values:
+            self.write({"computation_ids": new_values})
 
     @api.constrains(
         "employee_id",

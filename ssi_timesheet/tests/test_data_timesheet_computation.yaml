@@ -1,0 +1,315 @@
+options:
+  auto_refresh: true
+
+setup:
+  steps:
+    - step: "Create computation item #1 (result = 10.0)"
+      action: "create"
+      model: "hr.timesheet_computation_item"
+      save_as: "item1"
+      values:
+        name: "Computation Item 1"
+        # "/" is excluded from the unique-code check (mixin.master_data),
+        # which matters here because `setup:` re-runs before EVERY
+        # scenario in this file and would otherwise collide on a fixed
+        # code (see odoo-development-unit-test test-traps.md T-01).
+        code: "/"
+        python_code: "result = 10.0"
+
+    - step: "Create employee with item #1 registered"
+      action: "create"
+      model: "hr.employee"
+      save_as: "employee"
+      values:
+        name: "Test Employee Timesheet Computation"
+        timesheet_computation_ids:
+          - - 6
+            - 0
+            - - "REC: item1.id"
+
+    - step: "Get working schedule"
+      action: "search"
+      model: "resource.calendar"
+      domain: []
+      save_as: "working_schedule"
+      limit: 1
+      order: "id asc"
+
+    - step: "Create timesheet (draft)"
+      action: "create"
+      model: "hr.timesheet"
+      save_as: "timesheet"
+      as_user: "base.user_admin"
+      values:
+        employee_id: "REC: employee.id"
+        date_start: 2026-01-01
+        date_end: 2026-01-31
+        working_schedule_id: "REC: working_schedule.id"
+
+    - step: "Open timesheet (triggers reload + compute)"
+      action: "call"
+      target: "timesheet"
+      method: "action_open"
+      as_user: "base.user_admin"
+
+    - step: "Locate the computation line for item #1"
+      action: "search"
+      model: "hr.timesheet_computation"
+      domain:
+        - ["sheet_id", "=", "REC: timesheet.id"]
+        - ["item_id", "=", "REC: item1.id"]
+      save_as: "line1"
+      limit: 1
+
+scenarios:
+  - name: "Positif 1 - initial value after Open"
+    steps:
+      - step: "Assert amount/correction/final right after Open"
+        action: "assert"
+        target: "line1"
+        asserts:
+          amount:
+            type: "value"
+            expected: 10.0
+          correction_amount:
+            type: "value"
+            expected: 0.0
+          final_amount:
+            type: "value"
+            expected: 10.0
+
+  - name: "Positif 2 - positive correction"
+    steps:
+      - step: "Write a positive correction"
+        action: "write"
+        target: "line1"
+        values:
+          correction_amount: 2.5
+
+      - step: "Assert final_amount follows the correction"
+        action: "assert"
+        target: "line1"
+        asserts:
+          amount:
+            type: "value"
+            expected: 10.0
+          final_amount:
+            type: "value"
+            expected: 12.5
+
+  - name: "Positif 3 - negative correction"
+    steps:
+      - step: "Write a negative correction"
+        action: "write"
+        target: "line1"
+        values:
+          correction_amount: -2.5
+
+      - step: "Assert final_amount follows the negative correction"
+        action: "assert"
+        target: "line1"
+        asserts:
+          final_amount:
+            type: "value"
+            expected: 7.5
+
+  - name: "Positif 4 - Reload preserves the correction (regression)"
+    steps:
+      - step: "Write a correction before reloading"
+        action: "write"
+        target: "line1"
+        values:
+          correction_amount: 2.5
+
+      - step: "Reload the timesheet computation"
+        action: "call"
+        target: "timesheet"
+        method: "action_reload_timesheet_computation"
+        as_user: "base.user_admin"
+
+      - step: "Locate the line again after Reload"
+        action: "search"
+        model: "hr.timesheet_computation"
+        domain:
+          - ["sheet_id", "=", "REC: timesheet.id"]
+          - ["item_id", "=", "REC: item1.id"]
+        save_as: "line1_after_reload"
+        limit: 1
+
+      - step: "Assert the correction and the row identity survived"
+        action: "assert"
+        target: "line1_after_reload"
+        asserts:
+          id:
+            type: "value"
+            expected: "REC: line1.id"
+          correction_amount:
+            type: "value"
+            expected: 2.5
+          final_amount:
+            type: "value"
+            expected: 12.5
+
+  - name: "Positif 5 - Compute only rewrites amount"
+    steps:
+      - step: "Write a correction"
+        action: "write"
+        target: "line1"
+        values:
+          correction_amount: 2.5
+
+      - step: "Recompute (Compute button)"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_computation"
+        as_user: "base.user_admin"
+
+      - step: "Assert amount is rewritten, correction is untouched"
+        action: "assert"
+        target: "line1"
+        asserts:
+          amount:
+            type: "value"
+            expected: 10.0
+          correction_amount:
+            type: "value"
+            expected: 2.5
+          final_amount:
+            type: "value"
+            expected: 12.5
+
+  - name: "Positif 6 - Item removed from the employee"
+    steps:
+      - step: "Un-register item #1 from the employee"
+        action: "write"
+        target: "employee"
+        values:
+          timesheet_computation_ids:
+            - - 3
+              - "REC: item1.id"
+              - 0
+
+      - step: "Reload the timesheet computation"
+        action: "call"
+        target: "timesheet"
+        method: "action_reload_timesheet_computation"
+        as_user: "base.user_admin"
+
+      - step: "Assert the line for item #1 is gone"
+        action: "search"
+        model: "hr.timesheet_computation"
+        domain:
+          - ["sheet_id", "=", "REC: timesheet.id"]
+          - ["item_id", "=", "REC: item1.id"]
+        save_as: "search_result"
+        expect_count: 0
+
+  - name: "Positif 7 - Item added to the employee"
+    steps:
+      - step: "Write a correction on the existing line #1"
+        action: "write"
+        target: "line1"
+        values:
+          correction_amount: 2.5
+
+      - step: "Create computation item #2 (result = 5.0)"
+        action: "create"
+        model: "hr.timesheet_computation_item"
+        save_as: "item2"
+        values:
+          name: "Computation Item 2"
+          code: "/"
+          python_code: "result = 5.0"
+
+      - step: "Register item #2 on the employee"
+        action: "write"
+        target: "employee"
+        values:
+          timesheet_computation_ids:
+            - - 4
+              - "REC: item2.id"
+              - 0
+
+      - step: "Reload the timesheet computation"
+        action: "call"
+        target: "timesheet"
+        method: "action_reload_timesheet_computation"
+        as_user: "base.user_admin"
+
+      - step: "Locate the new line for item #2"
+        action: "search"
+        model: "hr.timesheet_computation"
+        domain:
+          - ["sheet_id", "=", "REC: timesheet.id"]
+          - ["item_id", "=", "REC: item2.id"]
+        save_as: "line2"
+        limit: 1
+
+      - step: "Assert the new line starts with no correction"
+        action: "assert"
+        target: "line2"
+        asserts:
+          correction_amount:
+            type: "value"
+            expected: 0.0
+
+      - step: "Locate the line for item #1 again"
+        action: "search"
+        model: "hr.timesheet_computation"
+        domain:
+          - ["sheet_id", "=", "REC: timesheet.id"]
+          - ["item_id", "=", "REC: item1.id"]
+        save_as: "line1_again"
+        limit: 1
+
+      - step: "Assert the correction on item #1 is preserved"
+        action: "assert"
+        target: "line1_again"
+        asserts:
+          correction_amount:
+            type: "value"
+            expected: 2.5
+
+  - name: "Positif 8 - Duplicate rows are pruned"
+    steps:
+      - step: "Write a distinguishable correction on line #1"
+        action: "write"
+        target: "line1"
+        values:
+          correction_amount: 2.5
+
+      - step: "Simulate legacy duplicate data for item #1"
+        action: "create"
+        model: "hr.timesheet_computation"
+        save_as: "duplicate_line"
+        values:
+          sheet_id: "REC: timesheet.id"
+          item_id: "REC: item1.id"
+          correction_amount: 9.9
+
+      - step: "Reload the timesheet computation"
+        action: "call"
+        target: "timesheet"
+        method: "action_reload_timesheet_computation"
+        as_user: "base.user_admin"
+
+      - step: "Only one line remains for item #1"
+        action: "search"
+        model: "hr.timesheet_computation"
+        domain:
+          - ["sheet_id", "=", "REC: timesheet.id"]
+          - ["item_id", "=", "REC: item1.id"]
+        save_as: "survivor"
+        limit: 1
+        expect_count: 1
+
+      - step: "The surviving row is the smallest id, with its correction"
+        action: "assert"
+        target: "survivor"
+        asserts:
+          id:
+            type: "value"
+            expected: "REC: line1.id"
+          correction_amount:
+            type: "value"
+            expected: 2.5

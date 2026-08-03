@@ -110,12 +110,19 @@
                             type="object"
                             icon="fa-cogs"
                         />
-                    <field name="computation_ids" nolabel="1" colspan="2">
-                        <tree>
+                    <field
+                            name="computation_ids"
+                            nolabel="1"
+                            colspan="2"
+                            attrs="{'readonly': [('state', 'not in', ['draft', 'open'])]}"
+                        >
+                        <tree editable="bottom">
                             <field name="sequence" invisible="1" />
-                            <field name="code" />
-                            <field name="item_id" />
-                            <field name="amount" />
+                            <field name="code" readonly="1" />
+                            <field name="item_id" readonly="1" />
+                            <field name="amount" readonly="1" />
+                            <field name="correction_amount" />
+                            <field name="final_amount" readonly="1" />
                         </tree>
                     </field>
                 </page>
