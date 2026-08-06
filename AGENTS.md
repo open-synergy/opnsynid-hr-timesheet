@@ -196,6 +196,23 @@ Menu: **Human Resource > Configuration > Timesheets > Leave Type**
 | `ssi_hr_holiday/docs/hr_leave_type/04-deactivate.md` | Deactivate a leave type |
 | `ssi_hr_holiday/docs/hr_leave_type/05-activate.md`   | Activate a leave type   |
 
+### `ssi_hr_leave_request_batch` — Model: `hr.leave_request_batch`
+
+Menu: **Human Resource > Timesheets > Leave Request Batch**
+
+| File                                                                            | Action                                                                    |
+| ------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `ssi_hr_leave_request_batch/docs/hr_leave_request_batch/01-create.md`           | Create a new leave request batch                                          |
+| `ssi_hr_leave_request_batch/docs/hr_leave_request_batch/02-edit.md`             | Edit a leave request batch                                                |
+| `ssi_hr_leave_request_batch/docs/hr_leave_request_batch/03-delete.md`           | Delete a leave request batch                                              |
+| `ssi_hr_leave_request_batch/docs/hr_leave_request_batch/04-confirm.md`          | Confirm a leave request batch (creates & confirms the derived leaves)     |
+| `ssi_hr_leave_request_batch/docs/hr_leave_request_batch/05-approve.md`          | Approve a leave request batch (approves the derived leaves too)           |
+| `ssi_hr_leave_request_batch/docs/hr_leave_request_batch/06-reject.md`           | Reject a leave request batch (rejects the derived leaves too)             |
+| `ssi_hr_leave_request_batch/docs/hr_leave_request_batch/10-cancel.md`           | Cancel a leave request batch (cancels the derived leaves too)             |
+| `ssi_hr_leave_request_batch/docs/hr_leave_request_batch/12-restart.md`          | Restart a cancelled leave request batch (restarts the derived leaves too) |
+| `ssi_hr_leave_request_batch/docs/hr_leave_request_batch/13-reset-number.md`     | Reset a leave request batch's document number                             |
+| `ssi_hr_leave_request_batch/docs/hr_leave_request_batch/14-restart-approval.md` | Restart a leave request batch's approval process                          |
+
 ### `ssi_timesheet_attendance` — Model: `hr.timesheet` (extends `ssi_timesheet`)
 
 Menu: **Human Resource > Timesheets > Timesheets**
