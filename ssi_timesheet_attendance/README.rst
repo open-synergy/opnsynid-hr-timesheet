@@ -7,6 +7,26 @@ Timesheet Attendance
 ====================
 
 
+Work Instruction
+================
+
+* `Create Timesheet Attendance <docs/hr_timesheet_attendance/index.html>`_
+* `Edit Timesheet Attendance <docs/hr_timesheet_attendance/index.html>`_
+* `Delete Timesheet Attendance <docs/hr_timesheet_attendance/index.html>`_
+* `Create Attendance Reason <docs/hr_attendance_reason/index.html>`_
+* `Edit Attendance Reason <docs/hr_attendance_reason/index.html>`_
+* `Delete Attendance Reason <docs/hr_attendance_reason/index.html>`_
+* `Deactivate Attendance Reason <docs/hr_attendance_reason/index.html>`_
+* `Activate Attendance Reason <docs/hr_attendance_reason/index.html>`_
+* `Reset Code — Attendance Reason <docs/hr_attendance_reason/index.html>`_
+* `Create Timesheet (additional fields) <docs/hr_timesheet/index.html>`_
+* `Edit Timesheet (additional fields) <docs/hr_timesheet/index.html>`_
+* `Start Timesheet (additional effect) <docs/hr_timesheet/index.html>`_
+* `Sign In — Timesheet <docs/hr_timesheet/index.html>`_
+* `Sign Out — Timesheet <docs/hr_timesheet/index.html>`_
+* `Create Schedules — Timesheet <docs/hr_timesheet/index.html>`_
+
+
 Installation
 ============
 
