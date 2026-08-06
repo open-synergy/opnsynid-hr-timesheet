@@ -7,6 +7,28 @@ Timesheets
 ==========
 
 
+Work Instruction
+================
+
+* `Create Timesheet <docs/hr_timesheet/index.html>`_
+* `Edit Timesheet <docs/hr_timesheet/index.html>`_
+* `Delete Timesheet <docs/hr_timesheet/index.html>`_
+* `Confirm Timesheet <docs/hr_timesheet/index.html>`_
+* `Approve Timesheet <docs/hr_timesheet/index.html>`_
+* `Reject Timesheet <docs/hr_timesheet/index.html>`_
+* `Start Timesheet <docs/hr_timesheet/index.html>`_
+* `Cancel Timesheet <docs/hr_timesheet/index.html>`_
+* `Restart Timesheet <docs/hr_timesheet/index.html>`_
+* `Reset Document Number — Timesheet <docs/hr_timesheet/index.html>`_
+* `Restart Approval Process — Timesheet <docs/hr_timesheet/index.html>`_
+* `Create Timesheet Computation Item <docs/hr_timesheet_computation_item/index.html>`_
+* `Edit Timesheet Computation Item <docs/hr_timesheet_computation_item/index.html>`_
+* `Delete Timesheet Computation Item <docs/hr_timesheet_computation_item/index.html>`_
+* `Deactivate Timesheet Computation Item <docs/hr_timesheet_computation_item/index.html>`_
+* `Activate Timesheet Computation Item <docs/hr_timesheet_computation_item/index.html>`_
+* `Reset Code — Timesheet Computation Item <docs/hr_timesheet_computation_item/index.html>`_
+
+
 Installation
 ============
 
