@@ -8,6 +8,17 @@
 
 opnsynid-hr-timesheet
 
+## Work Instructions
+
+Each module provides step-by-step operational documentation (Work Instructions)
+for using the feature from the user's perspective, stored under:
+
+```
+<module_name>/docs/<model_name>/<number>-<action>.md
+```
+
+The list of available Work Instructions can be found in each module's `README.rst`.
+
 <!-- /!\ do not modify below this line -->
 
 <!-- prettier-ignore-start -->
