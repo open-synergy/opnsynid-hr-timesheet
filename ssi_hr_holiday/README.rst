@@ -7,6 +7,38 @@ Leave Management
 ================
 
 
+Work Instruction
+================
+
+* `Create Leave <docs/hr_leave/index.html>`_
+* `Edit Leave <docs/hr_leave/index.html>`_
+* `Delete Leave <docs/hr_leave/index.html>`_
+* `Confirm Leave <docs/hr_leave/index.html>`_
+* `Approve Leave <docs/hr_leave/index.html>`_
+* `Reject Leave <docs/hr_leave/index.html>`_
+* `Cancel Leave <docs/hr_leave/index.html>`_
+* `Restart Leave <docs/hr_leave/index.html>`_
+* `Reset Document Number — Leave <docs/hr_leave/index.html>`_
+* `Restart Approval Process — Leave <docs/hr_leave/index.html>`_
+* `Create Leave Allocation <docs/hr_leave_allocation/index.html>`_
+* `Edit Leave Allocation <docs/hr_leave_allocation/index.html>`_
+* `Delete Leave Allocation <docs/hr_leave_allocation/index.html>`_
+* `Confirm Leave Allocation <docs/hr_leave_allocation/index.html>`_
+* `Approve Leave Allocation <docs/hr_leave_allocation/index.html>`_
+* `Reject Leave Allocation <docs/hr_leave_allocation/index.html>`_
+* `Auto Transition to Done — Leave Allocation <docs/hr_leave_allocation/index.html>`_
+* `Cancel Leave Allocation <docs/hr_leave_allocation/index.html>`_
+* `Terminate Leave Allocation <docs/hr_leave_allocation/index.html>`_
+* `Restart Leave Allocation <docs/hr_leave_allocation/index.html>`_
+* `Reset Document Number — Leave Allocation <docs/hr_leave_allocation/index.html>`_
+* `Restart Approval Process — Leave Allocation <docs/hr_leave_allocation/index.html>`_
+* `Create Leave Type <docs/hr_leave_type/index.html>`_
+* `Edit Leave Type <docs/hr_leave_type/index.html>`_
+* `Delete Leave Type <docs/hr_leave_type/index.html>`_
+* `Deactivate Leave Type <docs/hr_leave_type/index.html>`_
+* `Activate Leave Type <docs/hr_leave_type/index.html>`_
+
+
 Installation
 ============
 

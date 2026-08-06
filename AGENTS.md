@@ -102,6 +102,54 @@ Menu: **Human Resource > Configuration > Timesheets > Timesheet Computation Item
 | `ssi_timesheet/docs/hr_timesheet_computation_item/05-activate.md`   | Activate a timesheet computation item   |
 | `ssi_timesheet/docs/hr_timesheet_computation_item/06-reset-code.md` | Reset the code of one or more items     |
 
+### `ssi_hr_holiday` — Model: `hr.leave`
+
+Menu: **Human Resource > Timesheets > Leaves**
+
+| File                                                  | Action                                |
+| ----------------------------------------------------- | ------------------------------------- |
+| `ssi_hr_holiday/docs/hr_leave/01-create.md`           | Create a new leave                    |
+| `ssi_hr_holiday/docs/hr_leave/02-edit.md`             | Edit a leave                          |
+| `ssi_hr_holiday/docs/hr_leave/03-delete.md`           | Delete a leave                        |
+| `ssi_hr_holiday/docs/hr_leave/04-confirm.md`          | Confirm a leave (submit for approval) |
+| `ssi_hr_holiday/docs/hr_leave/05-approve.md`          | Approve a leave                       |
+| `ssi_hr_holiday/docs/hr_leave/06-reject.md`           | Reject a leave                        |
+| `ssi_hr_holiday/docs/hr_leave/10-cancel.md`           | Cancel a leave                        |
+| `ssi_hr_holiday/docs/hr_leave/12-restart.md`          | Restart a cancelled/rejected leave    |
+| `ssi_hr_holiday/docs/hr_leave/13-reset-number.md`     | Reset a leave's document number       |
+| `ssi_hr_holiday/docs/hr_leave/14-restart-approval.md` | Restart a leave's approval process    |
+
+### `ssi_hr_holiday` — Model: `hr.leave_allocation`
+
+Menu: **Human Resource > Timesheets > Leave Allocations**
+
+| File                                                             | Action                                           |
+| ---------------------------------------------------------------- | ------------------------------------------------ |
+| `ssi_hr_holiday/docs/hr_leave_allocation/01-create.md`           | Create a new leave allocation                    |
+| `ssi_hr_holiday/docs/hr_leave_allocation/02-edit.md`             | Edit a leave allocation                          |
+| `ssi_hr_holiday/docs/hr_leave_allocation/03-delete.md`           | Delete a leave allocation                        |
+| `ssi_hr_holiday/docs/hr_leave_allocation/04-confirm.md`          | Confirm a leave allocation (submit for approval) |
+| `ssi_hr_holiday/docs/hr_leave_allocation/05-approve.md`          | Approve a leave allocation                       |
+| `ssi_hr_holiday/docs/hr_leave_allocation/06-reject.md`           | Reject a leave allocation                        |
+| `ssi_hr_holiday/docs/hr_leave_allocation/09-auto-done.md`        | Automatic transition to Done when days run out   |
+| `ssi_hr_holiday/docs/hr_leave_allocation/10-cancel.md`           | Cancel a leave allocation                        |
+| `ssi_hr_holiday/docs/hr_leave_allocation/11-terminate.md`        | Terminate a leave allocation                     |
+| `ssi_hr_holiday/docs/hr_leave_allocation/12-restart.md`          | Restart a cancelled leave allocation             |
+| `ssi_hr_holiday/docs/hr_leave_allocation/13-reset-number.md`     | Reset a leave allocation's document number       |
+| `ssi_hr_holiday/docs/hr_leave_allocation/14-restart-approval.md` | Restart a leave allocation's approval process    |
+
+### `ssi_hr_holiday` — Model: `hr.leave_type`
+
+Menu: **Human Resource > Configuration > Timesheets > Leave Type**
+
+| File                                                 | Action                  |
+| ---------------------------------------------------- | ----------------------- |
+| `ssi_hr_holiday/docs/hr_leave_type/01-create.md`     | Create a new leave type |
+| `ssi_hr_holiday/docs/hr_leave_type/02-edit.md`       | Edit a leave type       |
+| `ssi_hr_holiday/docs/hr_leave_type/03-delete.md`     | Delete a leave type     |
+| `ssi_hr_holiday/docs/hr_leave_type/04-deactivate.md` | Deactivate a leave type |
+| `ssi_hr_holiday/docs/hr_leave_type/05-activate.md`   | Activate a leave type   |
+
 ### `ssi_timesheet_attendance` — Model: `hr.timesheet` (extends `ssi_timesheet`)
 
 Menu: **Human Resource > Timesheets > Timesheets**
