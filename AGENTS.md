@@ -102,6 +102,35 @@ Menu: **Human Resource > Configuration > Timesheets > Timesheet Computation Item
 | `ssi_timesheet/docs/hr_timesheet_computation_item/05-activate.md`   | Activate a timesheet computation item   |
 | `ssi_timesheet/docs/hr_timesheet_computation_item/06-reset-code.md` | Reset the code of one or more items     |
 
+### `ssi_hr_overtime` — Model: `hr.overtime`
+
+Menu: **Human Resource > Timesheets > Overtimes**
+
+| File                                                      | Action                                    |
+| --------------------------------------------------------- | ----------------------------------------- |
+| `ssi_hr_overtime/docs/hr_overtime/01-create.md`           | Create a new overtime                     |
+| `ssi_hr_overtime/docs/hr_overtime/02-edit.md`             | Edit an overtime                          |
+| `ssi_hr_overtime/docs/hr_overtime/03-delete.md`           | Delete an overtime                        |
+| `ssi_hr_overtime/docs/hr_overtime/04-confirm.md`          | Confirm an overtime (submit for approval) |
+| `ssi_hr_overtime/docs/hr_overtime/05-approve.md`          | Approve an overtime                       |
+| `ssi_hr_overtime/docs/hr_overtime/06-reject.md`           | Reject an overtime                        |
+| `ssi_hr_overtime/docs/hr_overtime/10-cancel.md`           | Cancel an overtime                        |
+| `ssi_hr_overtime/docs/hr_overtime/12-restart.md`          | Restart a cancelled/rejected overtime     |
+| `ssi_hr_overtime/docs/hr_overtime/13-reset-number.md`     | Reset an overtime's document number       |
+| `ssi_hr_overtime/docs/hr_overtime/14-restart-approval.md` | Restart an overtime's approval process    |
+
+### `ssi_hr_overtime` — Model: `hr.overtime_type`
+
+Menu: **Human Resource > Configuration > Timesheets > Overtime Types**
+
+| File                                                     | Action                      |
+| -------------------------------------------------------- | --------------------------- |
+| `ssi_hr_overtime/docs/hr_overtime_type/01-create.md`     | Create a new overtime type  |
+| `ssi_hr_overtime/docs/hr_overtime_type/02-edit.md`       | Edit an overtime type       |
+| `ssi_hr_overtime/docs/hr_overtime_type/03-delete.md`     | Delete an overtime type     |
+| `ssi_hr_overtime/docs/hr_overtime_type/04-deactivate.md` | Deactivate an overtime type |
+| `ssi_hr_overtime/docs/hr_overtime_type/05-activate.md`   | Activate an overtime type   |
+
 ### `ssi_hr_holiday` — Model: `hr.leave`
 
 Menu: **Human Resource > Timesheets > Leaves**
