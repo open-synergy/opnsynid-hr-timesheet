@@ -7,6 +7,21 @@ Human Resource Overtime Batch
 =============================
 
 
+Work Instruction
+================
+
+* `Create Overtime Batch <docs/hr_overtime_batch/index.html>`_
+* `Edit Overtime Batch <docs/hr_overtime_batch/index.html>`_
+* `Delete Overtime Batch <docs/hr_overtime_batch/index.html>`_
+* `Confirm Overtime Batch <docs/hr_overtime_batch/index.html>`_
+* `Approve Overtime Batch <docs/hr_overtime_batch/index.html>`_
+* `Reject Overtime Batch <docs/hr_overtime_batch/index.html>`_
+* `Cancel Overtime Batch <docs/hr_overtime_batch/index.html>`_
+* `Restart Overtime Batch <docs/hr_overtime_batch/index.html>`_
+* `Reset Document Number — Overtime Batch <docs/hr_overtime_batch/index.html>`_
+* `Restart Approval Process — Overtime Batch <docs/hr_overtime_batch/index.html>`_
+
+
 Installation
 ============
 
