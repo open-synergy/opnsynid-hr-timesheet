@@ -102,6 +102,46 @@ Menu: **Human Resource > Configuration > Timesheets > Timesheet Computation Item
 | `ssi_timesheet/docs/hr_timesheet_computation_item/05-activate.md`   | Activate a timesheet computation item   |
 | `ssi_timesheet/docs/hr_timesheet_computation_item/06-reset-code.md` | Reset the code of one or more items     |
 
+### `ssi_timesheet_attendance` — Model: `hr.timesheet` (extends `ssi_timesheet`)
+
+Menu: **Human Resource > Timesheets > Timesheets**
+
+| File                                                                | Action                                                               |
+| ------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `ssi_timesheet_attendance/docs/hr_timesheet/01-create.md`           | Additional field when creating a timesheet (Working Schedule)        |
+| `ssi_timesheet_attendance/docs/hr_timesheet/02-edit.md`             | Additional field when editing a timesheet (Working Schedule)         |
+| `ssi_timesheet_attendance/docs/hr_timesheet/07-start.md`            | Additional effect when starting a timesheet (attendance tabs unlock) |
+| `ssi_timesheet_attendance/docs/hr_timesheet/15-sign-in.md`          | Sign in (record a check-in attendance)                               |
+| `ssi_timesheet_attendance/docs/hr_timesheet/16-sign-out.md`         | Sign out (record a check-out attendance)                             |
+| `ssi_timesheet_attendance/docs/hr_timesheet/17-compute-schedule.md` | Create Schedules (generate the attendance schedule)                  |
+
+> Read together with `ssi_timesheet/docs/hr_timesheet/*` — these files are deltas
+> (additional fields/effects) or new actions on top of the base `hr.timesheet` IK, only
+> relevant when `ssi_timesheet_attendance` is installed.
+
+### `ssi_timesheet_attendance` — Model: `hr.timesheet_attendance`
+
+Menu: **Human Resource > Timesheets > Attendances**
+
+| File                                                                 | Action                            |
+| -------------------------------------------------------------------- | --------------------------------- |
+| `ssi_timesheet_attendance/docs/hr_timesheet_attendance/01-create.md` | Create a new timesheet attendance |
+| `ssi_timesheet_attendance/docs/hr_timesheet_attendance/02-edit.md`   | Edit a timesheet attendance       |
+| `ssi_timesheet_attendance/docs/hr_timesheet_attendance/03-delete.md` | Delete a timesheet attendance     |
+
+### `ssi_timesheet_attendance` — Model: `hr.attendance_reason`
+
+Menu: **Human Resource > Configuration > Attendance > Attendance Reasons**
+
+| File                                                                  | Action                                           |
+| --------------------------------------------------------------------- | ------------------------------------------------ |
+| `ssi_timesheet_attendance/docs/hr_attendance_reason/01-create.md`     | Create a new attendance reason                   |
+| `ssi_timesheet_attendance/docs/hr_attendance_reason/02-edit.md`       | Edit an attendance reason                        |
+| `ssi_timesheet_attendance/docs/hr_attendance_reason/03-delete.md`     | Delete an attendance reason                      |
+| `ssi_timesheet_attendance/docs/hr_attendance_reason/04-deactivate.md` | Deactivate an attendance reason                  |
+| `ssi_timesheet_attendance/docs/hr_attendance_reason/05-activate.md`   | Activate an attendance reason                    |
+| `ssi_timesheet_attendance/docs/hr_attendance_reason/06-reset-code.md` | Reset the code of one or more attendance reasons |
+
 ### `ssi_timesheet_attendance_shift` — Model: `hr.attendance_shift`
 
 Menu: **Human Resource > Configurations > Attendance > Attendance Shifts**
