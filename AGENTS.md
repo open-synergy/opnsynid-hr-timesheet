@@ -131,6 +131,23 @@ Menu: **Human Resource > Configuration > Timesheets > Overtime Types**
 | `ssi_hr_overtime/docs/hr_overtime_type/04-deactivate.md` | Deactivate an overtime type |
 | `ssi_hr_overtime/docs/hr_overtime_type/05-activate.md`   | Activate an overtime type   |
 
+### `ssi_hr_overtime_batch` — Model: `hr.overtime_batch`
+
+Menu: **Human Resource > Timesheets > Overtime Batch**
+
+| File                                                                  | Action                                                                           |
+| --------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `ssi_hr_overtime_batch/docs/hr_overtime_batch/01-create.md`           | Create a new overtime batch                                                      |
+| `ssi_hr_overtime_batch/docs/hr_overtime_batch/02-edit.md`             | Edit an overtime batch                                                           |
+| `ssi_hr_overtime_batch/docs/hr_overtime_batch/03-delete.md`           | Delete an overtime batch                                                         |
+| `ssi_hr_overtime_batch/docs/hr_overtime_batch/04-confirm.md`          | Confirm an overtime batch (creates & confirms the derived overtimes)             |
+| `ssi_hr_overtime_batch/docs/hr_overtime_batch/05-approve.md`          | Approve an overtime batch (approves the derived overtimes too)                   |
+| `ssi_hr_overtime_batch/docs/hr_overtime_batch/06-reject.md`           | Reject an overtime batch (rejects the derived overtimes too)                     |
+| `ssi_hr_overtime_batch/docs/hr_overtime_batch/10-cancel.md`           | Cancel an overtime batch (cancels the derived overtimes too)                     |
+| `ssi_hr_overtime_batch/docs/hr_overtime_batch/12-restart.md`          | Restart a cancelled/rejected overtime batch (restarts the derived overtimes too) |
+| `ssi_hr_overtime_batch/docs/hr_overtime_batch/13-reset-number.md`     | Reset an overtime batch's document number                                        |
+| `ssi_hr_overtime_batch/docs/hr_overtime_batch/14-restart-approval.md` | Restart an overtime batch's approval process                                     |
+
 ### `ssi_hr_holiday` — Model: `hr.leave`
 
 Menu: **Human Resource > Timesheets > Leaves**
