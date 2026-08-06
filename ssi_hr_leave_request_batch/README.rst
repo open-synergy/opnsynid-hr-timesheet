@@ -7,6 +7,21 @@ Leave Request Batch
 ====================
 
 
+Work Instruction
+================
+
+* `Create Leave Request Batch <docs/hr_leave_request_batch/index.html>`_
+* `Edit Leave Request Batch <docs/hr_leave_request_batch/index.html>`_
+* `Delete Leave Request Batch <docs/hr_leave_request_batch/index.html>`_
+* `Confirm Leave Request Batch <docs/hr_leave_request_batch/index.html>`_
+* `Approve Leave Request Batch <docs/hr_leave_request_batch/index.html>`_
+* `Reject Leave Request Batch <docs/hr_leave_request_batch/index.html>`_
+* `Cancel Leave Request Batch <docs/hr_leave_request_batch/index.html>`_
+* `Restart Leave Request Batch <docs/hr_leave_request_batch/index.html>`_
+* `Reset Document Number — Leave Request Batch <docs/hr_leave_request_batch/index.html>`_
+* `Restart Approval Process — Leave Request Batch <docs/hr_leave_request_batch/index.html>`_
+
+
 Installation
 ============
 
