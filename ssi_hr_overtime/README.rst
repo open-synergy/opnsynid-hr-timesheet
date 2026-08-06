@@ -7,6 +7,26 @@ Overtime Management
 ===================
 
 
+Work Instruction
+================
+
+* `Create Overtime <docs/hr_overtime/index.html>`_
+* `Edit Overtime <docs/hr_overtime/index.html>`_
+* `Delete Overtime <docs/hr_overtime/index.html>`_
+* `Confirm Overtime <docs/hr_overtime/index.html>`_
+* `Approve Overtime <docs/hr_overtime/index.html>`_
+* `Reject Overtime <docs/hr_overtime/index.html>`_
+* `Cancel Overtime <docs/hr_overtime/index.html>`_
+* `Restart Overtime <docs/hr_overtime/index.html>`_
+* `Reset Document Number — Overtime <docs/hr_overtime/index.html>`_
+* `Restart Approval Process — Overtime <docs/hr_overtime/index.html>`_
+* `Create Overtime Type <docs/hr_overtime_type/index.html>`_
+* `Edit Overtime Type <docs/hr_overtime_type/index.html>`_
+* `Delete Overtime Type <docs/hr_overtime_type/index.html>`_
+* `Deactivate Overtime Type <docs/hr_overtime_type/index.html>`_
+* `Activate Overtime Type <docs/hr_overtime_type/index.html>`_
+
+
 Installation
 ============
 
