@@ -71,6 +71,37 @@ operational documentation for using the feature from the user's perspective.
 
 ## Work Instruction Index
 
+### `ssi_timesheet` — Model: `hr.timesheet`
+
+Menu: **Human Resource > Timesheets > Timesheets**
+
+| File                                                     | Action                                    |
+| -------------------------------------------------------- | ----------------------------------------- |
+| `ssi_timesheet/docs/hr_timesheet/01-create.md`           | Create a new timesheet                    |
+| `ssi_timesheet/docs/hr_timesheet/02-edit.md`             | Edit a timesheet                          |
+| `ssi_timesheet/docs/hr_timesheet/03-delete.md`           | Delete a timesheet                        |
+| `ssi_timesheet/docs/hr_timesheet/04-confirm.md`          | Confirm a timesheet (submit for approval) |
+| `ssi_timesheet/docs/hr_timesheet/05-approve.md`          | Approve a timesheet                       |
+| `ssi_timesheet/docs/hr_timesheet/06-reject.md`           | Reject a timesheet                        |
+| `ssi_timesheet/docs/hr_timesheet/07-start.md`            | Start a timesheet                         |
+| `ssi_timesheet/docs/hr_timesheet/10-cancel.md`           | Cancel a timesheet                        |
+| `ssi_timesheet/docs/hr_timesheet/12-restart.md`          | Restart a cancelled/rejected timesheet    |
+| `ssi_timesheet/docs/hr_timesheet/13-reset-number.md`     | Reset a timesheet's document number       |
+| `ssi_timesheet/docs/hr_timesheet/14-restart-approval.md` | Restart a timesheet's approval process    |
+
+### `ssi_timesheet` — Model: `hr.timesheet_computation_item`
+
+Menu: **Human Resource > Configuration > Timesheets > Timesheet Computation Items**
+
+| File                                                                | Action                                  |
+| ------------------------------------------------------------------- | --------------------------------------- |
+| `ssi_timesheet/docs/hr_timesheet_computation_item/01-create.md`     | Create a new timesheet computation item |
+| `ssi_timesheet/docs/hr_timesheet_computation_item/02-edit.md`       | Edit a timesheet computation item       |
+| `ssi_timesheet/docs/hr_timesheet_computation_item/03-delete.md`     | Delete a timesheet computation item     |
+| `ssi_timesheet/docs/hr_timesheet_computation_item/04-deactivate.md` | Deactivate a timesheet computation item |
+| `ssi_timesheet/docs/hr_timesheet_computation_item/05-activate.md`   | Activate a timesheet computation item   |
+| `ssi_timesheet/docs/hr_timesheet_computation_item/06-reset-code.md` | Reset the code of one or more items     |
+
 ### `ssi_timesheet_attendance_shift` — Model: `hr.attendance_shift`
 
 Menu: **Human Resource > Configurations > Attendance > Attendance Shifts**
