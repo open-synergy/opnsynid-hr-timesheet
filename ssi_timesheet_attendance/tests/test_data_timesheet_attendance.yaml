@@ -364,15 +364,17 @@ scenarios:
         values:
           name: "Test Employee No Sheet"
 
-      - step: "Attempt to create attendance with Date but no open timesheet"
-        action: "create"
+      - step:
+          "Fill Date on the form with no open timesheet - raises Sheet Not FOUND on the
+          onchange, before any INSERT is attempted"
+        action: "form"
         model: "hr.timesheet_attendance"
         as_user: "base.user_admin"
         expect_error:
           type: "UserError"
           message_contains: "Sheet Not FOUND"
         values:
-          employee_id: "REC: employee_no_sheet.id"
+          employee_id: "REC: employee_no_sheet"
           date: 2024-02-01
           check_in: "2024-02-01 08:00:00"
 
@@ -411,21 +413,17 @@ scenarios:
         as_user: "base.user_admin"
 
       - step:
-          "Create attendance with Date covered by the open sheet, without explicitly
-          passing sheet_id"
-        action: "create"
+          "Fill the form with Date covered by the open sheet, without explicitly passing
+          sheet_id - the onchange resolves it before save"
+        action: "form"
         model: "hr.timesheet_attendance"
         save_as: "attendance_compute_sheet"
         as_user: "base.user_admin"
         values:
-          employee_id: "REC: employee_compute_sheet.id"
+          employee_id: "REC: employee_compute_sheet"
           date: 2024-03-15
           check_in: "2024-03-15 08:00:00"
           check_out: "2024-03-15 17:00:00"
-
-      - step: "Assert sheet_id resolved to the matching open timesheet"
-        action: "assert"
-        target: "attendance_compute_sheet"
         asserts:
           sheet_id:
             type: "m2o"
