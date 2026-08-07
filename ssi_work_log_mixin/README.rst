@@ -7,6 +7,28 @@ Work Log Mixin
 ==============
 
 
+Work Instruction
+================
+
+* `Create Work Log <docs/hr_work_log/index.html>`_
+* `Edit Work Log <docs/hr_work_log/index.html>`_
+* `Delete Work Log <docs/hr_work_log/index.html>`_
+* `Confirm Work Log <docs/hr_work_log/index.html>`_
+* `Approve Work Log <docs/hr_work_log/index.html>`_
+* `Reject Work Log <docs/hr_work_log/index.html>`_
+* `Cancel Work Log <docs/hr_work_log/index.html>`_
+* `Restart Work Log <docs/hr_work_log/index.html>`_
+* `Reset Document Number — Work Log <docs/hr_work_log/index.html>`_
+* `Restart Approval Process — Work Log <docs/hr_work_log/index.html>`_
+* `Create Work Log Tag <docs/hr_work_log_tag/index.html>`_
+* `Edit Work Log Tag <docs/hr_work_log_tag/index.html>`_
+* `Delete Work Log Tag <docs/hr_work_log_tag/index.html>`_
+* `Deactivate Work Log Tag <docs/hr_work_log_tag/index.html>`_
+* `Activate Work Log Tag <docs/hr_work_log_tag/index.html>`_
+* `Create Timesheet (additional fields) <docs/hr_timesheet/index.html>`_
+* `Start Timesheet (additional effect) <docs/hr_timesheet/index.html>`_
+
+
 Installation
 ============
 

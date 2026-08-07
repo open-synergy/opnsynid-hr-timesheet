@@ -302,6 +302,53 @@ Menu: **Human Resource > Configurations > Attendance > Attendance Shift Assignme
 | `ssi_timesheet_attendance_shift/docs/hr_attendance_shift_assignment/02-edit.md`   | Edit an attendance shift assignment      |
 | `ssi_timesheet_attendance_shift/docs/hr_attendance_shift_assignment/03-delete.md` | Delete an attendance shift assignment    |
 
+### `ssi_work_log_mixin` — Model: `hr.work_log`
+
+Menu: **Human Resource > Timesheets > Timesheets** (open a timesheet, then use its
+**Work Log** tab — see the note in `01-create.md`)
+
+| File                                                         | Action                                   |
+| ------------------------------------------------------------ | ---------------------------------------- |
+| `ssi_work_log_mixin/docs/hr_work_log/01-create.md`           | Create a new work log                    |
+| `ssi_work_log_mixin/docs/hr_work_log/02-edit.md`             | Edit a work log                          |
+| `ssi_work_log_mixin/docs/hr_work_log/03-delete.md`           | Delete a work log                        |
+| `ssi_work_log_mixin/docs/hr_work_log/04-confirm.md`          | Confirm a work log (submit for approval) |
+| `ssi_work_log_mixin/docs/hr_work_log/05-approve.md`          | Approve a work log                       |
+| `ssi_work_log_mixin/docs/hr_work_log/06-reject.md`           | Reject a work log                        |
+| `ssi_work_log_mixin/docs/hr_work_log/10-cancel.md`           | Cancel a work log                        |
+| `ssi_work_log_mixin/docs/hr_work_log/12-restart.md`          | Restart a cancelled/rejected work log    |
+| `ssi_work_log_mixin/docs/hr_work_log/13-reset-number.md`     | Reset a work log's document number       |
+| `ssi_work_log_mixin/docs/hr_work_log/14-restart-approval.md` | Restart a work log's approval process    |
+
+> `hr.work_log` also has a standalone **Human Resource > Timesheets > Work Logs** menu
+> (group _Work log — Viewer_) for browsing/reporting only — it cannot be used to create
+> a new work log. See the note in `01-create.md`.
+
+### `ssi_work_log_mixin` — Model: `hr.work_log_tag`
+
+Menu: **Human Resource > Configuration > Timesheets > Work Log Tags**
+
+| File                                                       | Action                    |
+| ---------------------------------------------------------- | ------------------------- |
+| `ssi_work_log_mixin/docs/hr_work_log_tag/01-create.md`     | Create a new work log tag |
+| `ssi_work_log_mixin/docs/hr_work_log_tag/02-edit.md`       | Edit a work log tag       |
+| `ssi_work_log_mixin/docs/hr_work_log_tag/03-delete.md`     | Delete a work log tag     |
+| `ssi_work_log_mixin/docs/hr_work_log_tag/04-deactivate.md` | Deactivate a work log tag |
+| `ssi_work_log_mixin/docs/hr_work_log_tag/05-activate.md`   | Activate a work log tag   |
+
+### `ssi_work_log_mixin` — Model: `hr.timesheet` (extends `ssi_timesheet`)
+
+Menu: **Human Resource > Timesheets > Timesheets**
+
+| File                                                | Action                                                                              |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `ssi_work_log_mixin/docs/hr_timesheet/01-create.md` | Additional fields when creating a timesheet (Estimation, Work Log Analytic Account) |
+| `ssi_work_log_mixin/docs/hr_timesheet/07-start.md`  | Additional effect when starting a timesheet (Work Log tab becomes usable)           |
+
+> Read together with `ssi_timesheet/docs/hr_timesheet/*` — these files are deltas
+> (additional fields/effects) on top of the base `hr.timesheet` IK, only relevant when
+> `ssi_work_log_mixin` is installed.
+
 ---
 
 ## Module Development Guidelines
