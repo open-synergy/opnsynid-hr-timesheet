@@ -77,6 +77,21 @@ odoo.define("ssi_timesheet_attendance.hr_timesheet_attendance_tour", function (
                 extra_trigger: ".o_form_view.o_form_editable",
                 run: "text_blur 01/15/2026",
             },
+            // ── Gate — Date's onchange resolves Sheet (sheet_id,
+            // required+stored, depends on Date + Employee) asynchronously;
+            // "Fill in Date" succeeding only means the DOM input changed,
+            // not that the onchange RPC has round-tripped. Clicking Save
+            // before it returns sends the still-empty Sheet value and
+            // fails the NOT NULL constraint. Wait for the Sheet field to
+            // actually show a resolved value first.
+            {
+                content: "Sheet is resolved from Date",
+                trigger: ".o_field_widget[name='sheet_id'] input:not([value=''])",
+                run: function () {
+                    // Assertion only; do not trigger the default click
+                    // action.
+                },
+            },
             // ── Flow 4 — Click Save.
             {
                 content: "Save the record",
