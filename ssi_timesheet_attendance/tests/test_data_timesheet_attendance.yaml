@@ -528,30 +528,39 @@ scenarios:
         as_user: "base.user_admin"
 
       - step:
-          "On a new attendance form, set Employee A then Date - sheet resolves to
-          employee A's sheet; then switch Employee to B WITHOUT touching Date again -
-          sheet must recompute to employee B's own sheet (regression guard for
-          @api.depends missing 'employee_id')"
-        action: "form"
+          "Create attendance dated in June for employee A; sheet_id passed explicitly so
+          the initial INSERT satisfies the NOT NULL constraint (Odoo only computes
+          stored fields AFTER insert, so a required stored compute field can never be
+          left out of create() values)"
+        action: "create"
         model: "hr.timesheet_attendance"
         save_as: "attendance_recompute"
         as_user: "base.user_admin"
-        save: true
-        ops:
-          - set: {employee_id: "REC: employee_recompute_a"}
-          - set: {date: 2024-06-15}
-          - set: {check_in: "2024-06-15 08:00:00"}
-          - assert:
-              sheet_id:
-                type: "m2o"
-                expected: "REC: timesheet_recompute_a"
-          - set: {employee_id: "REC: employee_recompute_b"}
-          - assert:
-              sheet_id:
-                type: "m2o"
-                expected: "REC: timesheet_recompute_b"
+        values:
+          employee_id: "REC: employee_recompute_a.id"
+          date: 2024-06-15
+          check_in: "2024-06-15 08:00:00"
+          sheet_id: "REC: timesheet_recompute_a.id"
 
-      - step: "Assert sheet stays correctly resolved after save"
+      - step: "Assert precondition: sheet_id is employee A's sheet"
+        action: "assert"
+        target: "attendance_recompute"
+        asserts:
+          sheet_id:
+            type: "m2o"
+            expected: "REC: timesheet_recompute_a"
+
+      - step:
+          "Switch the attendance's Employee to B WITHOUT touching Date - write() only
+          updates the given column, so the recompute this triggers runs safely against
+          the already-existing row; this is the exact regression guard for @api.depends
+          missing 'employee_id'"
+        action: "write"
+        target: "attendance_recompute"
+        values:
+          employee_id: "REC: employee_recompute_b.id"
+
+      - step: "Assert sheet_id was recomputed to employee B's own sheet"
         action: "assert"
         target: "attendance_recompute"
         asserts:
