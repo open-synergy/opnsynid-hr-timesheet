@@ -5,3 +5,5 @@
 from . import test_timesheet
 from . import test_timesheet_computation
 from . import test_timesheet_summary_report
+from . import test_ui_hr_timesheet
+from . import test_ui_hr_timesheet_computation_item
