@@ -23,7 +23,7 @@ class HRTimesheetAttendance(models.Model):
         required=True,
     )
 
-    @api.depends("date")
+    @api.depends("date", "employee_id")
     def _compute_sheet(self):
         """Resolve the open ``hr.timesheet`` sheet covering ``date``.
 
