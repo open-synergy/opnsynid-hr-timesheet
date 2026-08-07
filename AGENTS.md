@@ -307,7 +307,7 @@ Menu: **Human Resource > Configurations > Attendance > Attendance Shift Assignme
 Menu: **Human Resource > Timesheets > Timesheets** (open a timesheet, then use its
 **Work Log** tab — see the note in `01-create.md`)
 
-| File                                                       | Action                                  |
+| File                                                         | Action                                   |
 | ------------------------------------------------------------ | ---------------------------------------- |
 | `ssi_work_log_mixin/docs/hr_work_log/01-create.md`           | Create a new work log                    |
 | `ssi_work_log_mixin/docs/hr_work_log/02-edit.md`             | Edit a work log                          |
@@ -321,29 +321,29 @@ Menu: **Human Resource > Timesheets > Timesheets** (open a timesheet, then use i
 | `ssi_work_log_mixin/docs/hr_work_log/14-restart-approval.md` | Restart a work log's approval process    |
 
 > `hr.work_log` also has a standalone **Human Resource > Timesheets > Work Logs** menu
-> (group _Work log — Viewer_) for browsing/reporting only — it cannot be used to create a
-> new work log. See the note in `01-create.md`.
+> (group _Work log — Viewer_) for browsing/reporting only — it cannot be used to create
+> a new work log. See the note in `01-create.md`.
 
 ### `ssi_work_log_mixin` — Model: `hr.work_log_tag`
 
 Menu: **Human Resource > Configuration > Timesheets > Work Log Tags**
 
-| File                                                     | Action                       |
-| --------------------------------------------------------- | ----------------------------- |
-| `ssi_work_log_mixin/docs/hr_work_log_tag/01-create.md`     | Create a new work log tag     |
-| `ssi_work_log_mixin/docs/hr_work_log_tag/02-edit.md`       | Edit a work log tag           |
-| `ssi_work_log_mixin/docs/hr_work_log_tag/03-delete.md`     | Delete a work log tag         |
-| `ssi_work_log_mixin/docs/hr_work_log_tag/04-deactivate.md` | Deactivate a work log tag     |
-| `ssi_work_log_mixin/docs/hr_work_log_tag/05-activate.md`   | Activate a work log tag       |
+| File                                                       | Action                    |
+| ---------------------------------------------------------- | ------------------------- |
+| `ssi_work_log_mixin/docs/hr_work_log_tag/01-create.md`     | Create a new work log tag |
+| `ssi_work_log_mixin/docs/hr_work_log_tag/02-edit.md`       | Edit a work log tag       |
+| `ssi_work_log_mixin/docs/hr_work_log_tag/03-delete.md`     | Delete a work log tag     |
+| `ssi_work_log_mixin/docs/hr_work_log_tag/04-deactivate.md` | Deactivate a work log tag |
+| `ssi_work_log_mixin/docs/hr_work_log_tag/05-activate.md`   | Activate a work log tag   |
 
 ### `ssi_work_log_mixin` — Model: `hr.timesheet` (extends `ssi_timesheet`)
 
 Menu: **Human Resource > Timesheets > Timesheets**
 
-| File                                                   | Action                                                          |
-| --------------------------------------------------------- | ---------------------------------------------------------------- |
-| `ssi_work_log_mixin/docs/hr_timesheet/01-create.md`         | Additional fields when creating a timesheet (Estimation, Work Log Analytic Account) |
-| `ssi_work_log_mixin/docs/hr_timesheet/07-start.md`          | Additional effect when starting a timesheet (Work Log tab becomes usable) |
+| File                                                | Action                                                                              |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `ssi_work_log_mixin/docs/hr_timesheet/01-create.md` | Additional fields when creating a timesheet (Estimation, Work Log Analytic Account) |
+| `ssi_work_log_mixin/docs/hr_timesheet/07-start.md`  | Additional effect when starting a timesheet (Work Log tab becomes usable)           |
 
 > Read together with `ssi_timesheet/docs/hr_timesheet/*` — these files are deltas
 > (additional fields/effects) on top of the base `hr.timesheet` IK, only relevant when
