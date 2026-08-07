@@ -75,18 +75,25 @@ odoo.define("ssi_timesheet.hr_timesheet_computation_item_tour", function (requir
                 extra_trigger: ".o_form_view.o_form_editable",
                 run: "text TOUR-COMP-CREATE-UI",
             },
-            // ── Flow 4 — Click Generate Code.
+            // ── Flow 4 — Click Generate Code. No sequence.template is
+            // configured for this model in this repo (see the IK's own
+            // caveat), so this always raises "No sequence template
+            // found" — dismiss that dialog, then fill Code manually
+            // with a non-"/" value as the IK instructs for that case.
             {
                 content: "Click Generate Code",
                 trigger: ".o_statusbar_buttons button[name='action_generate_code']",
             },
             {
-                content: "UI is no longer blocked",
-                trigger: "body:not(.o_ui_blocked)",
-                run: function () {
-                    // Assertion only; do not trigger the default click
-                    // action.
-                },
+                content: 'Dismiss the "No sequence template found" dialog',
+                trigger: ".modal-footer button.btn-primary",
+                in_modal: true,
+            },
+            {
+                content: "Fill in Code manually",
+                trigger: ".o_field_widget[name='code']",
+                extra_trigger: ".o_form_view.o_form_editable",
+                run: "text TOUR-CREATE-01",
             },
             // ── Flow 5 — On the Computation tab, the Python Code field is
             // shown pre-filled with the default comment template.
@@ -175,18 +182,25 @@ odoo.define("ssi_timesheet.hr_timesheet_computation_item_tour", function (requir
                 extra_trigger: ".o_form_view.o_form_editable",
                 run: "text /",
             },
-            // ── Flow 4 — Click Generate Code.
+            // ── Flow 4 — Click Generate Code. No sequence.template is
+            // configured for this model in this repo (see the IK's own
+            // caveat), so this always raises "No sequence template
+            // found" — dismiss that dialog, then fill Code manually
+            // with a non-"/" value as the IK instructs for that case.
             {
                 content: "Click Generate Code",
                 trigger: ".o_statusbar_buttons button[name='action_generate_code']",
             },
             {
-                content: "UI is no longer blocked",
-                trigger: "body:not(.o_ui_blocked)",
-                run: function () {
-                    // Assertion only; do not trigger the default click
-                    // action.
-                },
+                content: 'Dismiss the "No sequence template found" dialog',
+                trigger: ".modal-footer button.btn-primary",
+                in_modal: true,
+            },
+            {
+                content: "Fill in Code manually",
+                trigger: ".o_field_widget[name='code']",
+                extra_trigger: ".o_form_view.o_form_editable",
+                run: "text TOUR-EDIT-02",
             },
             // ── Flow 5 — Click Save.
             {
@@ -427,22 +441,22 @@ odoo.define("ssi_timesheet.hr_timesheet_computation_item_tour", function (requir
                     ".o_list_record_selector input",
                 run: "click",
             },
-            // ── Flow 3 — Click the Reset code button.
+            // ── Flow 3 — Click the Reset code button. Unlike form-view
+            // buttons, list-view <header> buttons in 14.0 never honor
+            // `confirm=` (web/static/src/js/views/list/list_controller.js
+            // `_onHeaderButtonClicked` calls `_executeButtonAction`
+            // directly and never reads `node.attrs.confirm`), so no
+            // dialog appears here despite the IK's Flow step 4 — the
+            // action runs immediately.
             {
                 content: "Click the Reset code button",
                 trigger: ".o_control_panel button[name='action_reset_code']",
             },
-            // ── Flow 4 — Click OK on the confirmation dialog.
+            // ── Post-Condition — Code returns to "/": the list reloads
+            // after the action and the row no longer shows the old code.
             {
-                content: "Confirm the dialog",
-                trigger: ".modal-footer button.btn-primary",
-                in_modal: true,
-            },
-            // ── Post-Condition — Code returns to "/"; the dialog closing
-            // without error is the visible evidence.
-            {
-                content: "Dialog is closed",
-                trigger: "body:not(:has(.modal))",
+                content: "Row no longer shows the old code",
+                trigger: ".o_list_view:not(:has(.o_data_row:contains(TCI-RESET)))",
                 run: function () {
                     // Assertion only; do not trigger the default click
                     // action.
