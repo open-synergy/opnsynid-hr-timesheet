@@ -69,11 +69,23 @@ odoo.define("ssi_timesheet.hr_timesheet_computation_item_tour", function (requir
                 },
             },
             // ── Flow 3 — Fill in Name; leave Code as the default "/".
+            // ``code`` carries no field-level default (unlike
+            // ``hr.timesheet.name``), so it starts genuinely empty on a
+            // new record — set it to "/" explicitly (matching what the
+            // IK calls "the default") so the implicit save behind the
+            // Generate Code click below does not race client-side
+            // required-field validation on a still-blank Code.
             {
                 content: "Fill in Name",
                 trigger: ".o_field_widget[name='name']",
                 extra_trigger: ".o_form_view.o_form_editable",
                 run: "text TOUR-COMP-CREATE-UI",
+            },
+            {
+                content: "Ensure Code is /",
+                trigger: ".o_field_widget[name='code']",
+                extra_trigger: ".o_form_view.o_form_editable",
+                run: "text_blur /",
             },
             // ── Flow 4 — Click Generate Code. No sequence.template is
             // configured for this model in this repo (see the IK's own
@@ -180,7 +192,7 @@ odoo.define("ssi_timesheet.hr_timesheet_computation_item_tour", function (requir
                 content: "Reset the Code field to /",
                 trigger: ".o_field_widget[name='code']",
                 extra_trigger: ".o_form_view.o_form_editable",
-                run: "text /",
+                run: "text_blur /",
             },
             // ── Flow 4 — Click Generate Code. No sequence.template is
             // configured for this model in this repo (see the IK's own

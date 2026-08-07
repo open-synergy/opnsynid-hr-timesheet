@@ -106,13 +106,13 @@ odoo.define("ssi_timesheet.hr_timesheet_tour", function (require) {
                 content: "Fill in Date Start",
                 trigger: ".o_field_widget[name='date_start'] input",
                 extra_trigger: ".o_form_view.o_form_editable",
-                run: "text 01/01/2026",
+                run: "text_blur 01/01/2026",
             },
             {
                 content: "Fill in Date End",
                 trigger: ".o_field_widget[name='date_end'] input",
                 extra_trigger: ".o_form_view.o_form_editable",
-                run: "text 01/31/2026",
+                run: "text_blur 01/31/2026",
             },
             // ── Flow 4 — On the Computations tab, click Reload, then
             // Compute.
@@ -218,7 +218,7 @@ odoo.define("ssi_timesheet.hr_timesheet_tour", function (require) {
                 content: "Change Date End",
                 trigger: ".o_field_widget[name='date_end'] input",
                 extra_trigger: ".o_form_view.o_form_editable",
-                run: "text 01/20/2026",
+                run: "text_blur 01/20/2026",
             },
             // ── Flow 4 — On the Computations tab, click Reload, then
             // Compute.
