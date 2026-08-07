@@ -65,7 +65,7 @@ class TestUiHrAttendanceReason(HttpSavepointCase):
         cls.reason_reset_code = reason_model.create(
             {
                 "name": "TOUR-REASON-RESETCODE-UI",
-                "code": "REASON-RESET",
+                "code": "OLDCODE99",
             }
         )
 

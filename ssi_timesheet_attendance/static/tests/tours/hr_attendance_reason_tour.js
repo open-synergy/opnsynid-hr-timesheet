@@ -474,12 +474,16 @@ odoo.define("ssi_timesheet_attendance.hr_attendance_reason_tour", function (requ
             // than the whole list view — a transient duplicate render of
             // ``.o_list_view`` during reload can otherwise make a
             // list-wide "does not contain" check flap even after the
-            // value is already correctly updated server-side.
+            // value is already correctly updated server-side. NOTE: the
+            // old code must not be a substring of the Reason name itself
+            // (e.g. "REASON-RESET" inside "TOUR-REASON-RESETCODE-UI"),
+            // or ":not(:contains(...))" can never match regardless of
+            // whether the reset actually happened — hence "OLDCODE99".
             {
                 content: "Row no longer shows the old code",
                 trigger:
                     ".o_data_row:contains(TOUR-REASON-RESETCODE-UI)" +
-                    ":not(:contains(REASON-RESET))",
+                    ":not(:contains(OLDCODE99))",
                 run: function () {
                     // Assertion only; do not trigger the default click
                     // action.

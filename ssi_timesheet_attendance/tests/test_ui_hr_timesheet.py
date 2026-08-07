@@ -56,7 +56,7 @@ class TestUiHrTimesheet(HttpSavepointCase):
         # past month range would stop covering "today" the moment the
         # calendar rolls past it. A wide window centered on the actual
         # run date keeps the fixture valid regardless of when CI runs.
-        today = fields.Date.context_today(cls)
+        today = fields.Date.today()
         window_start = today - timedelta(days=60)
         window_end = today + timedelta(days=60)
 
