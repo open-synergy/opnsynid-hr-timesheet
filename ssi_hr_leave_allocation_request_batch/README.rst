@@ -7,6 +7,21 @@ Leave Allocation Request Batch
 ==============================
 
 
+Work Instruction
+================
+
+* `Create Leave Allocation Request Batch <docs/hr_leave_allocation_request_batch/index.html>`_
+* `Edit Leave Allocation Request Batch <docs/hr_leave_allocation_request_batch/index.html>`_
+* `Delete Leave Allocation Request Batch <docs/hr_leave_allocation_request_batch/index.html>`_
+* `Confirm Leave Allocation Request Batch <docs/hr_leave_allocation_request_batch/index.html>`_
+* `Approve Leave Allocation Request Batch <docs/hr_leave_allocation_request_batch/index.html>`_
+* `Reject Leave Allocation Request Batch <docs/hr_leave_allocation_request_batch/index.html>`_
+* `Cancel Leave Allocation Request Batch <docs/hr_leave_allocation_request_batch/index.html>`_
+* `Restart Leave Allocation Request Batch <docs/hr_leave_allocation_request_batch/index.html>`_
+* `Reset Document Number — Leave Allocation Request Batch <docs/hr_leave_allocation_request_batch/index.html>`_
+* `Restart Approval Process — Leave Allocation Request Batch <docs/hr_leave_allocation_request_batch/index.html>`_
+
+
 Installation
 ============
 
