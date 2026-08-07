@@ -82,11 +82,14 @@ odoo.define("ssi_timesheet_attendance.hr_timesheet_attendance_tour", function (
             // "Fill in Date" succeeding only means the DOM input changed,
             // not that the onchange RPC has round-tripped. Clicking Save
             // before it returns sends the still-empty Sheet value and
-            // fails the NOT NULL constraint. Wait for the Sheet field to
-            // actually show a resolved value first.
+            // fails the NOT NULL constraint. Sheet has no inverse, so
+            // Odoo renders it readonly (an <a><span> link, not an
+            // <input>) even while the rest of the form is editable — wait
+            // for that span to carry actual text instead of testing for
+            // an input value.
             {
                 content: "Sheet is resolved from Date",
-                trigger: ".o_field_widget[name='sheet_id'] input:not([value=''])",
+                trigger: ".o_field_widget[name='sheet_id'] span:not(:empty)",
                 run: function () {
                     // Assertion only; do not trigger the default click
                     // action.
