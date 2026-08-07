@@ -227,6 +227,22 @@ class HRTimesheet(models.Model):
         return value
 
     def _sign_out(self, reason=False):
+        """Close the employee's latest open attendance.
+
+        On a same-day check-out, the latest attendance is updated in
+        place. On a cross-day check-out, the gap against the
+        attendance's ``schedule_id`` is compared to
+        ``checkout_buffer``: past the buffer, a new anomaly
+        attendance is created instead of touching the old one. When
+        the latest attendance has no ``schedule_id`` (no working
+        schedule slot resolved for it), there is nothing to compare
+        it against, so this is treated outright as an anomaly.
+
+        :param reason: check-out reason to record on a same-day
+            update
+        :type reason: hr.attendance_reason recordset or False
+        :return: None
+        """
         self.ensure_one()
         Attendance = self.env["hr.timesheet_attendance"]
         latest_attendance_id = self.employee_id.latest_attendance_id
@@ -239,6 +255,9 @@ class HRTimesheet(models.Model):
 
             if latest_attendance_id.date != date_check_out:
                 schedule = latest_attendance_id.schedule_id
+                if not schedule:
+                    Attendance.create(self._prepare_attendance_data_uncommon())
+                    return
                 schedule_check_out = schedule.date_end
                 _check = (check_out - schedule_check_out).total_seconds() / 3600.0
                 company = self.env.company

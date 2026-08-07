@@ -4,6 +4,7 @@
 
 from . import test_timesheet_attendance
 from . import test_timesheet_attendance_schedule
+from . import test_timesheet_sign_out
 from . import test_ui_hr_attendance_reason
 from . import test_ui_hr_timesheet_attendance
 from . import test_ui_hr_timesheet

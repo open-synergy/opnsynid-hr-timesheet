@@ -131,3 +131,215 @@ scenarios:
           sheet_id:
             type: "value"
             operator: "is_truthy"
+
+  - name: "HR Timesheet - Sign Out Without Schedule Does Not Raise"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Sign Out No Schedule"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule"
+        limit: 1
+        order: "id asc"
+
+      - step:
+          "Create timesheet for employee (must span today: the anomaly attendance
+          _sign_out() creates is dated today's real date, not the historical attendance
+          date below)"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date_start: "EVAL: (datetime.now() - timedelta(days=30)).date()"
+          date_end: "EVAL: (datetime.now() + timedelta(days=5)).date()"
+          working_schedule_id: "REC: working_schedule.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create open attendance without a matching schedule slot"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date: "EVAL: (datetime.now() - timedelta(days=20)).date()"
+          check_in:
+            "EVAL: (datetime.now() - timedelta(days=20)).replace(hour=8, minute=0,
+            second=0, microsecond=0)"
+          sheet_id: "REC: timesheet.id"
+
+      - step: "Assert precondition: attendance has no schedule"
+        action: "assert"
+        target: "attendance"
+        asserts:
+          schedule_id:
+            type: "value"
+            operator: "is_falsy"
+
+      - step: "Sign out (cross-day, no schedule to compare against)"
+        action: "call"
+        target: "timesheet"
+        method: "_sign_out"
+        as_user: "base.user_admin"
+
+      - step: "Verify an anomaly attendance was created for the employee"
+        action: "search"
+        model: "hr.timesheet_attendance"
+        domain: [["employee_id", "=", "REC: employee.id"]]
+        save_as: "all_attendances"
+        expect_count: 2
+
+      - step: "Get the newly created anomaly attendance"
+        action: "search"
+        model: "hr.timesheet_attendance"
+        domain: [["employee_id", "=", "REC: employee.id"]]
+        save_as: "anomaly_attendance"
+        limit: 1
+        order: "check_in desc"
+
+      - step: "Assert anomaly attendance is a new, closed record"
+        action: "assert"
+        target: "anomaly_attendance"
+        asserts:
+          id:
+            type: "value"
+            operator: "not_equals"
+            expected: "REC: attendance.id"
+          check_out:
+            type: "value"
+            operator: "is_truthy"
+
+      - step: "Assert original attendance was left untouched (still open)"
+        action: "assert"
+        target: "attendance"
+        asserts:
+          check_out:
+            type: "value"
+            operator: "is_falsy"
+
+  - name: "HR Timesheet - Sign Out With Schedule Filled Keeps Buffer Behavior"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Sign Out With Schedule"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule"
+        limit: 1
+        order: "id asc"
+
+      - step:
+          "Create timesheet for employee (must span today: the anomaly attendance
+          _sign_out() creates is dated today's real date, not the historical attendance
+          date below)"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date_start: "EVAL: (datetime.now() - timedelta(days=30)).date()"
+          date_end: "EVAL: (datetime.now() + timedelta(days=5)).date()"
+          working_schedule_id: "REC: working_schedule.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create a schedule slot dated the same day as the attendance"
+        action: "create"
+        model: "hr.timesheet_attendance_schedule"
+        save_as: "schedule"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date_start:
+            "EVAL: (datetime.now() - timedelta(days=20)).replace(hour=8, minute=0,
+            second=0, microsecond=0)"
+          date_end:
+            "EVAL: (datetime.now() - timedelta(days=20)).replace(hour=17, minute=0,
+            second=0, microsecond=0)"
+
+      - step: "Create open attendance matching the schedule slot's date"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date: "EVAL: (datetime.now() - timedelta(days=20)).date()"
+          check_in:
+            "EVAL: (datetime.now() - timedelta(days=20)).replace(hour=8, minute=0,
+            second=0, microsecond=0)"
+          sheet_id: "REC: timesheet.id"
+
+      - step: "Assert precondition: attendance schedule is resolved"
+        action: "assert"
+        target: "attendance"
+        asserts:
+          schedule_id:
+            type: "m2o"
+            expected: "REC: schedule"
+
+      - step: "Sign out (cross-day, gap far exceeds checkout_buffer)"
+        action: "call"
+        target: "timesheet"
+        method: "_sign_out"
+        as_user: "base.user_admin"
+
+      - step: "Verify an anomaly attendance was still created"
+        action: "search"
+        model: "hr.timesheet_attendance"
+        domain: [["employee_id", "=", "REC: employee.id"]]
+        save_as: "all_attendances"
+        expect_count: 2
+
+      - step: "Get the newly created anomaly attendance"
+        action: "search"
+        model: "hr.timesheet_attendance"
+        domain: [["employee_id", "=", "REC: employee.id"]]
+        save_as: "anomaly_attendance"
+        limit: 1
+        order: "check_in desc"
+
+      - step: "Assert anomaly attendance is a new, closed record"
+        action: "assert"
+        target: "anomaly_attendance"
+        asserts:
+          id:
+            type: "value"
+            operator: "not_equals"
+            expected: "REC: attendance.id"
+          check_out:
+            type: "value"
+            operator: "is_truthy"
+
+      - step: "Assert original attendance was left untouched (still open)"
+        action: "assert"
+        target: "attendance"
+        asserts:
+          check_out:
+            type: "value"
+            operator: "is_falsy"
