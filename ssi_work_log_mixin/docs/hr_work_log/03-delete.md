@@ -21,8 +21,8 @@
 
 1. Open the **Human Resource > Timesheets > Timesheets** menu.
 2. Open the timesheet that owns the work log to delete.
-3. On the **Work Log** tab, select the line to delete and click the row's delete
-   (trash) icon.
+3. On the **Work Log** tab, select the line to delete and click the row's delete (trash)
+   icon.
 4. Click **Save** on the timesheet form.
 
 ## Post-Condition

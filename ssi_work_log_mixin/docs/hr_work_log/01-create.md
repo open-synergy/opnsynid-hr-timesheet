@@ -15,9 +15,9 @@
 
 - **Record:** A `hr.timesheet` exists and its status is **On Progress** (see
   `ssi_timesheet/docs/hr_timesheet/07-start.md`), covering the **Date** to be logged for
-  the same **Employee**. A work log cannot be saved otherwise — its **Timesheet** field is
-  resolved automatically from **Employee** and **Date**, and saving fails with an error if
-  no matching **On Progress** timesheet is found.
+  the same **Employee**. A work log cannot be saved otherwise — its **Timesheet** field
+  is resolved automatically from **Employee** and **Date**, and saving fails with an
+  error if no matching **On Progress** timesheet is found.
 - **Config:** An active `policy.template` for this model grants `confirm_ok` (state
   `draft`), `manual_number_ok` (state `draft`), `cancel_ok` (states `draft`, `confirm`,
   `done`), and `restart_ok` (states `cancel`, `reject`) to the relevant groups — see the
@@ -28,8 +28,8 @@
   `sequence.template` shipped with this module.
 - **Data:** The allowed **Analytic Account** list is configured on the **Document Type**
   (the `ir.model` record for `hr.timesheet`) — either a fixed list or a Python-evaluated
-  list. This configuration is set up by a developer/administrator and is out of scope for
-  this Work Instruction.
+  list. This configuration is set up by a developer/administrator and is out of scope
+  for this Work Instruction.
 - **Access:** User is in group _Work log — User_.
 
 ## Flow
