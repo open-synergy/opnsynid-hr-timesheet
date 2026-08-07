@@ -395,10 +395,10 @@ scenarios:
         limit: 1
         order: "id asc"
 
-      - step: "Create timesheet for employee"
+      - step: "Create first open timesheet (March)"
         action: "create"
         model: "hr.timesheet"
-        save_as: "timesheet_compute_sheet"
+        save_as: "timesheet_march"
         as_user: "base.user_admin"
         values:
           employee_id: "REC: employee_compute_sheet.id"
@@ -406,25 +406,65 @@ scenarios:
           date_end: 2024-03-31
           working_schedule_id: "REC: working_schedule_compute_sheet.id"
 
-      - step: "Open timesheet"
+      - step: "Open March timesheet"
         action: "call"
-        target: "timesheet_compute_sheet"
+        target: "timesheet_march"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create second open timesheet (April)"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_april"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_compute_sheet.id"
+          date_start: 2024-04-01
+          date_end: 2024-04-30
+          working_schedule_id: "REC: working_schedule_compute_sheet.id"
+
+      - step: "Open April timesheet"
+        action: "call"
+        target: "timesheet_april"
         method: "action_open"
         as_user: "base.user_admin"
 
       - step:
-          "Fill the form with Date covered by the open sheet, without explicitly passing
-          sheet_id - the onchange resolves it before save"
-        action: "form"
+          "Create attendance dated in March; sheet_id passed explicitly so the initial
+          INSERT satisfies the NOT NULL constraint (Odoo only computes stored fields
+          AFTER insert, so a required stored compute field can never be left out of
+          create() values)"
+        action: "create"
         model: "hr.timesheet_attendance"
         save_as: "attendance_compute_sheet"
         as_user: "base.user_admin"
         values:
-          employee_id: "REC: employee_compute_sheet"
+          employee_id: "REC: employee_compute_sheet.id"
           date: 2024-03-15
           check_in: "2024-03-15 08:00:00"
-          check_out: "2024-03-15 17:00:00"
+          sheet_id: "REC: timesheet_march.id"
+
+      - step: "Assert precondition: sheet_id is the March sheet"
+        action: "assert"
+        target: "attendance_compute_sheet"
         asserts:
           sheet_id:
             type: "m2o"
-            expected: "REC: timesheet_compute_sheet"
+            expected: "REC: timesheet_march"
+
+      - step:
+          "Move the attendance Date into April without touching sheet_id - write() only
+          updates the given columns, so the recompute this triggers via
+          @api.depends('date') runs safely against the already-existing row"
+        action: "write"
+        target: "attendance_compute_sheet"
+        values:
+          date: 2024-04-15
+
+      - step: "Assert sheet_id was recomputed to the April sheet"
+        action: "assert"
+        target: "attendance_compute_sheet"
+        asserts:
+          sheet_id:
+            type: "m2o"
+            expected: "REC: timesheet_april"
