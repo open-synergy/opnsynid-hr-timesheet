@@ -72,11 +72,18 @@ class TestUiHrTimesheet(HttpSavepointCase):
             }
         )
         cls.timesheet_sign_out.with_context(bypass_policy_check=True).action_open()
+        # ``sheet_id`` is a required, stored computed field
+        # (``_compute_sheet``); it is only resolved automatically when a
+        # record is created through the web client's onchange flow (as
+        # the Sign In button does). A direct ORM ``create()`` call like
+        # this one has to supply it explicitly, or the initial INSERT
+        # violates the NOT NULL constraint before the compute ever runs.
         cls.attendance_sign_out = attendance_model.create(
             {
                 "date": "2026-02-01",
                 "employee_id": cls.employee_sign_out.id,
                 "check_in": "2026-02-01 08:00:00",
+                "sheet_id": cls.timesheet_sign_out.id,
             }
         )
 
