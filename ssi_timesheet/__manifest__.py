@@ -20,6 +20,7 @@
         "ssi_employee_document_mixin",
         "ssi_decorator",
         "report_xlsx",
+        "web_tour",
     ],
     "data": [
         "security/ir_module_category_data.xml",
@@ -34,6 +35,7 @@
         "views/hr_timesheet_computation_item_views.xml",
         "views/hr_timesheet_views.xml",
         "views/hr_employee_views.xml",
+        "views/ssi_timesheet_assets.xml",
         "wizards/generate_timesheet.xml",
         "wizards/timesheet_summary_report.xml",
         "reports/hr_timesheet_computation_analysis.xml",

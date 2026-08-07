@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <template
+        id="assets_tests"
+        name="ssi_timesheet assets tests"
+        inherit_id="web.assets_tests"
+    >
+        <xpath expr="." position="inside">
+            <script
+                type="text/javascript"
+                src="/ssi_timesheet/static/tests/tours/hr_timesheet_tour.js"
+            />
+            <script
+                type="text/javascript"
+                src="/ssi_timesheet/static/tests/tours/hr_timesheet_computation_item_tour.js"
+            />
+        </xpath>
+    </template>
+</odoo>
