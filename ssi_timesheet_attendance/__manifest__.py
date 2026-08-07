@@ -13,6 +13,7 @@
         "ssi_timesheet",
         "ssi_duration_mixin",
         "base_public_holiday",
+        "web_tour",
     ],
     "data": [
         "data/hr_attendance_reason.xml",
@@ -27,6 +28,7 @@
         "views/hr_employee_views.xml",
         "views/resource_calendar_views.xml",
         "views/ssi_timesheet_attendance_assets.xml",
+        "views/ssi_timesheet_attendance_assets_tests.xml",
     ],
     "qweb": [
         "static/src/xml/attendance_systray.xml",
