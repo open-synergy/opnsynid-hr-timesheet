@@ -196,6 +196,23 @@ Menu: **Human Resource > Configuration > Timesheets > Leave Type**
 | `ssi_hr_holiday/docs/hr_leave_type/04-deactivate.md` | Deactivate a leave type |
 | `ssi_hr_holiday/docs/hr_leave_type/05-activate.md`   | Activate a leave type   |
 
+### `ssi_hr_leave_allocation_request_batch` — Model: `hr.leave_allocation_request_batch`
+
+Menu: **Human Resource > Timesheets > Leave Allocation Request Batch**
+
+| File                                                                                                  | Action                                                                                             |
+| ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `ssi_hr_leave_allocation_request_batch/docs/hr_leave_allocation_request_batch/01-create.md`           | Create a new leave allocation request batch                                                        |
+| `ssi_hr_leave_allocation_request_batch/docs/hr_leave_allocation_request_batch/02-edit.md`             | Edit a leave allocation request batch                                                              |
+| `ssi_hr_leave_allocation_request_batch/docs/hr_leave_allocation_request_batch/03-delete.md`           | Delete a leave allocation request batch                                                            |
+| `ssi_hr_leave_allocation_request_batch/docs/hr_leave_allocation_request_batch/04-confirm.md`          | Confirm a leave allocation request batch (submit for approval)                                     |
+| `ssi_hr_leave_allocation_request_batch/docs/hr_leave_allocation_request_batch/05-approve.md`          | Approve a leave allocation request batch (creates & leaves the derived leave allocations in Draft) |
+| `ssi_hr_leave_allocation_request_batch/docs/hr_leave_allocation_request_batch/06-reject.md`           | Reject a leave allocation request batch                                                            |
+| `ssi_hr_leave_allocation_request_batch/docs/hr_leave_allocation_request_batch/10-cancel.md`           | Cancel a leave allocation request batch (deletes the derived leave allocations, if any)            |
+| `ssi_hr_leave_allocation_request_batch/docs/hr_leave_allocation_request_batch/12-restart.md`          | Restart a cancelled leave allocation request batch                                                 |
+| `ssi_hr_leave_allocation_request_batch/docs/hr_leave_allocation_request_batch/13-reset-number.md`     | Reset a leave allocation request batch's document number                                           |
+| `ssi_hr_leave_allocation_request_batch/docs/hr_leave_allocation_request_batch/14-restart-approval.md` | Restart a leave allocation request batch's approval process                                        |
+
 ### `ssi_hr_leave_request_batch` — Model: `hr.leave_request_batch`
 
 Menu: **Human Resource > Timesheets > Leave Request Batch**
