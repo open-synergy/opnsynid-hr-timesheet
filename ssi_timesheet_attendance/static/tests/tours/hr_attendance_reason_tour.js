@@ -469,11 +469,17 @@ odoo.define("ssi_timesheet_attendance.hr_attendance_reason_tour", function (requ
                 content: "Click the Reset code button",
                 trigger: ".o_control_panel button[name='action_reset_code']",
             },
-            // ── Post-Condition — Code returns to "/": the list reloads
-            // after the action and the row no longer shows the old code.
+            // ── Post-Condition — Code returns to "/": scoped to this
+            // record's own row (matched by its stable Reason name) rather
+            // than the whole list view — a transient duplicate render of
+            // ``.o_list_view`` during reload can otherwise make a
+            // list-wide "does not contain" check flap even after the
+            // value is already correctly updated server-side.
             {
                 content: "Row no longer shows the old code",
-                trigger: ".o_list_view:not(:has(.o_data_row:contains(REASON-RESET)))",
+                trigger:
+                    ".o_data_row:contains(TOUR-REASON-RESETCODE-UI)" +
+                    ":not(:contains(REASON-RESET))",
                 run: function () {
                     // Assertion only; do not trigger the default click
                     // action.

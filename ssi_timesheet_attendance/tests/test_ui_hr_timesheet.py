@@ -2,6 +2,9 @@
 # Copyright 2026 PT. Simetri Sinergi Indonesia
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from datetime import datetime, time, timedelta
+
+from odoo import fields
 from odoo.tests import HttpSavepointCase, tagged
 
 
@@ -45,6 +48,18 @@ class TestUiHrTimesheet(HttpSavepointCase):
         )
         cls.working_schedule = working_schedule
 
+        # Sign In / Sign Out always stamp the real wall-clock date
+        # (``fields.Datetime.now()``, not a value the tour controls), and
+        # ``hr.timesheet_attendance._compute_sheet`` recomputes ``sheet_id``
+        # by searching for a sheet whose range covers that date whenever
+        # ``date`` is set alongside it in the same ``create()`` — a fixed
+        # past month range would stop covering "today" the moment the
+        # calendar rolls past it. A wide window centered on the actual
+        # run date keeps the fixture valid regardless of when CI runs.
+        today = fields.Date.context_today(cls)
+        window_start = today - timedelta(days=60)
+        window_end = today + timedelta(days=60)
+
         # --- 15-sign-in.md: On Progress, no attendance recorded yet, so
         # Attendance Status defaults to Sign Out and the Sign In button
         # is visible.
@@ -52,8 +67,8 @@ class TestUiHrTimesheet(HttpSavepointCase):
         cls.timesheet_sign_in = timesheet_model.create(
             {
                 "employee_id": cls.employee_sign_in.id,
-                "date_start": "2026-01-01",
-                "date_end": "2026-01-31",
+                "date_start": window_start,
+                "date_end": window_end,
                 "working_schedule_id": working_schedule.id,
             }
         )
@@ -66,8 +81,8 @@ class TestUiHrTimesheet(HttpSavepointCase):
         cls.timesheet_sign_out = timesheet_model.create(
             {
                 "employee_id": cls.employee_sign_out.id,
-                "date_start": "2026-02-01",
-                "date_end": "2026-02-28",
+                "date_start": window_start,
+                "date_end": window_end,
                 "working_schedule_id": working_schedule.id,
             }
         )
@@ -80,9 +95,9 @@ class TestUiHrTimesheet(HttpSavepointCase):
         # violates the NOT NULL constraint before the compute ever runs.
         cls.attendance_sign_out = attendance_model.create(
             {
-                "date": "2026-02-01",
+                "date": window_start,
                 "employee_id": cls.employee_sign_out.id,
-                "check_in": "2026-02-01 08:00:00",
+                "check_in": datetime.combine(window_start, time(8, 0)),
                 "sheet_id": cls.timesheet_sign_out.id,
             }
         )
