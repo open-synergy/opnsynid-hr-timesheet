@@ -445,6 +445,19 @@ odoo.define("ssi_timesheet_attendance.hr_attendance_reason_tour", function (requ
                     ".o_list_record_selector input",
                 run: "click",
             },
+            // ── Gate — wait for the checkbox click above to actually
+            // register as checked before firing the header button; without
+            // this the button can act on zero selected records (race).
+            {
+                content: "Record is selected",
+                trigger:
+                    ".o_data_row:contains(TOUR-REASON-RESETCODE-UI) " +
+                    ".o_list_record_selector input:checked",
+                run: function () {
+                    // Assertion only; do not trigger the default click
+                    // action.
+                },
+            },
             // ── Flow 3 — Click the Reset code button. Flow 4 ("Click OK
             // on the confirmation dialog") does not apply here: list-view
             // <header> buttons in 14.0 never honor `confirm=`

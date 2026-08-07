@@ -37,15 +37,21 @@ class TestUiHrTimesheetAttendance(HttpSavepointCase):
         ).sudo().write({"users": [(4, cls.env.ref("base.user_admin").id)]})
 
         admin_user = cls.env.ref("base.user_admin")
-        employee_model = cls.env["hr.employee"]
-        cls.admin_employee = employee_model.search(
-            [("user_id", "=", admin_user.id)], limit=1
-        )
+        # ``res.users.employee_id`` is a compute (``_compute_company_employee``)
+        # that filters ``employee_ids`` by the CURRENT company, not a plain
+        # search on ``user_id`` — a user can have one ``hr.employee`` per
+        # company. Resolving the fixture through this same compute (instead
+        # of a bare ``search()``) guarantees it is the exact record the tour
+        # session's ``_default_employee_id`` (``self.env.user.employee_id``)
+        # will resolve to, even if demo data already ships an employee for
+        # this user in a different company.
+        cls.admin_employee = admin_user.employee_id
         if not cls.admin_employee:
-            cls.admin_employee = employee_model.create(
+            cls.admin_employee = cls.env["hr.employee"].create(
                 {
                     "name": "TOUR-ADMIN-ATTENDANCE-EMPLOYEE",
                     "user_id": admin_user.id,
+                    "company_id": cls.env.company.id,
                 }
             )
 
