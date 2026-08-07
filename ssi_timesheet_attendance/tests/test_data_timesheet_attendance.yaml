@@ -468,3 +468,93 @@ scenarios:
           sheet_id:
             type: "m2o"
             expected: "REC: timesheet_april"
+
+  - name: "HR Timesheet Attendance - Compute Sheet Recomputes When Employee Changes"
+    steps:
+      - step: "Create first employee (has an open sheet for June)"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_recompute_a"
+        values:
+          name: "Test Employee Recompute A"
+
+      - step: "Create second employee (has its own open sheet for June)"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_recompute_b"
+        values:
+          name: "Test Employee Recompute B"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_recompute"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create open June timesheet for first employee"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_recompute_a"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_recompute_a.id"
+          date_start: 2024-06-01
+          date_end: 2024-06-30
+          working_schedule_id: "REC: working_schedule_recompute.id"
+
+      - step: "Open first employee timesheet"
+        action: "call"
+        target: "timesheet_recompute_a"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create open June timesheet for second employee"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_recompute_b"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_recompute_b.id"
+          date_start: 2024-06-01
+          date_end: 2024-06-30
+          working_schedule_id: "REC: working_schedule_recompute.id"
+
+      - step: "Open second employee timesheet"
+        action: "call"
+        target: "timesheet_recompute_b"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step:
+          "On a new attendance form, set Employee A then Date - sheet resolves to
+          employee A's sheet; then switch Employee to B WITHOUT touching Date again -
+          sheet must recompute to employee B's own sheet (regression guard for
+          @api.depends missing 'employee_id')"
+        action: "form"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_recompute"
+        as_user: "base.user_admin"
+        save: true
+        ops:
+          - set: {employee_id: "REC: employee_recompute_a"}
+          - set: {date: 2024-06-15}
+          - set: {check_in: "2024-06-15 08:00:00"}
+          - assert:
+              sheet_id:
+                type: "m2o"
+                expected: "REC: timesheet_recompute_a"
+          - set: {employee_id: "REC: employee_recompute_b"}
+          - assert:
+              sheet_id:
+                type: "m2o"
+                expected: "REC: timesheet_recompute_b"
+
+      - step: "Assert sheet stays correctly resolved after save"
+        action: "assert"
+        target: "attendance_recompute"
+        asserts:
+          sheet_id:
+            type: "m2o"
+            expected: "REC: timesheet_recompute_b"
