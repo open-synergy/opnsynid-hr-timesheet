@@ -25,8 +25,19 @@ class HRTimesheetAttendance(models.Model):
 
     @api.depends("date")
     def _compute_sheet(self):
+        """Resolve the open ``hr.timesheet`` sheet covering ``date``.
+
+        :raises UserError: if ``date`` is set but no open sheet covers it.
+        """
         obj_sheet = self.env["hr.timesheet"]
         for record in self:
+            if not record.date:
+                # New/incomplete record: nothing to search for yet. Leave
+                # ``sheet_id`` empty instead of raising - the required
+                # constraint on ``sheet_id`` will block save until ``date``
+                # (and therefore ``sheet_id``) is filled in.
+                record.sheet_id = False
+                continue
             criteria = [
                 ("employee_id", "=", record.employee_id.id),
                 ("date_start", "<=", record.date),
