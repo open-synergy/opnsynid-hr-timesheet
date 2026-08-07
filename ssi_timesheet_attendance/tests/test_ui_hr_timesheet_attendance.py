@@ -66,11 +66,20 @@ class TestUiHrTimesheetAttendance(HttpSavepointCase):
 
         # --- 02-edit.md: Check In filled, Check Out still empty (Open),
         # so the tour's Check Out fill exercises the Present transition.
+        # ``sheet_id`` is a required, stored computed field
+        # (``_compute_sheet``); it is only resolved automatically when a
+        # record is created through the web client's onchange flow (as
+        # the create tour does). A direct ORM ``create()`` call like this
+        # one has to supply it explicitly, or the initial INSERT violates
+        # the NOT NULL constraint before the compute ever runs — the same
+        # workaround already used by
+        # ``tests/test_data_timesheet_attendance.yaml``.
         cls.attendance_edit = attendance_model.create(
             {
                 "date": "2026-01-16",
                 "employee_id": cls.admin_employee.id,
                 "check_in": "2026-01-16 08:00:00",
+                "sheet_id": cls.timesheet_open.id,
             }
         )
 
@@ -79,6 +88,7 @@ class TestUiHrTimesheetAttendance(HttpSavepointCase):
             {
                 "date": "2026-01-20",
                 "employee_id": cls.admin_employee.id,
+                "sheet_id": cls.timesheet_open.id,
                 "check_in": "2026-01-20 08:00:00",
                 "check_out": "2026-01-20 17:00:00",
             }
