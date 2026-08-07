@@ -5,17 +5,23 @@
 from freezegun import freeze_time
 
 from odoo.tests import tagged
-from odoo.tests.common import TransactionCase
+from odoo.tests.common import SavepointCase
 
 
 @tagged("post_install", "-at_install")
-class TestTimesheetSignOut(TransactionCase):
+class TestTimesheetSignOut(SavepointCase):
     """Test ``HRTimesheet._sign_out()``'s same-day check-out path.
 
     Pure Python — trigger P6 (L-16: the YAML evaluator cannot freeze
     time, and this scenario needs the attendance's ``date`` and the
     check-out date derived from the real clock to fall on the exact
     same calendar day, which is only reliable under a frozen clock).
+
+    Uses ``SavepointCase`` rather than plain ``TransactionCase``: in
+    14.0 ``TransactionCase`` only assigns ``self.env`` inside instance
+    ``setUp()``, so ``cls.env`` is not available in ``setUpClass()``.
+    ``SavepointCase`` (via ``SingleTransactionCase``) does set
+    ``cls.env`` in ``setUpClass()``, which the fixture below relies on.
     """
 
     @classmethod

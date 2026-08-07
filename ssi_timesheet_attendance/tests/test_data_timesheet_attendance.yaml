@@ -149,15 +149,18 @@ scenarios:
         limit: 1
         order: "id asc"
 
-      - step: "Create timesheet for employee"
+      - step:
+          "Create timesheet for employee (must span today: the anomaly attendance
+          _sign_out() creates is dated today's real date, not the historical attendance
+          date below)"
         action: "create"
         model: "hr.timesheet"
         save_as: "timesheet"
         as_user: "base.user_admin"
         values:
           employee_id: "REC: employee.id"
-          date_start: 2024-01-01
-          date_end: 2024-01-31
+          date_start: "EVAL: (datetime.now() - timedelta(days=30)).date()"
+          date_end: "EVAL: (datetime.now() + timedelta(days=5)).date()"
           working_schedule_id: "REC: working_schedule.id"
 
       - step: "Open timesheet"
@@ -173,8 +176,10 @@ scenarios:
         as_user: "base.user_admin"
         values:
           employee_id: "REC: employee.id"
-          date: 2024-01-20
-          check_in: "2024-01-20 08:00:00"
+          date: "EVAL: (datetime.now() - timedelta(days=20)).date()"
+          check_in:
+            "EVAL: (datetime.now() - timedelta(days=20)).replace(hour=8, minute=0,
+            second=0, microsecond=0)"
           sheet_id: "REC: timesheet.id"
 
       - step: "Assert precondition: attendance has no schedule"
@@ -243,15 +248,18 @@ scenarios:
         limit: 1
         order: "id asc"
 
-      - step: "Create timesheet for employee"
+      - step:
+          "Create timesheet for employee (must span today: the anomaly attendance
+          _sign_out() creates is dated today's real date, not the historical attendance
+          date below)"
         action: "create"
         model: "hr.timesheet"
         save_as: "timesheet"
         as_user: "base.user_admin"
         values:
           employee_id: "REC: employee.id"
-          date_start: 2024-01-01
-          date_end: 2024-01-31
+          date_start: "EVAL: (datetime.now() - timedelta(days=30)).date()"
+          date_end: "EVAL: (datetime.now() + timedelta(days=5)).date()"
           working_schedule_id: "REC: working_schedule.id"
 
       - step: "Open timesheet"
@@ -267,8 +275,12 @@ scenarios:
         as_user: "base.user_admin"
         values:
           employee_id: "REC: employee.id"
-          date_start: "2024-01-20 08:00:00"
-          date_end: "2024-01-20 17:00:00"
+          date_start:
+            "EVAL: (datetime.now() - timedelta(days=20)).replace(hour=8, minute=0,
+            second=0, microsecond=0)"
+          date_end:
+            "EVAL: (datetime.now() - timedelta(days=20)).replace(hour=17, minute=0,
+            second=0, microsecond=0)"
 
       - step: "Create open attendance matching the schedule slot's date"
         action: "create"
@@ -277,8 +289,10 @@ scenarios:
         as_user: "base.user_admin"
         values:
           employee_id: "REC: employee.id"
-          date: 2024-01-20
-          check_in: "2024-01-20 08:00:00"
+          date: "EVAL: (datetime.now() - timedelta(days=20)).date()"
+          check_in:
+            "EVAL: (datetime.now() - timedelta(days=20)).replace(hour=8, minute=0,
+            second=0, microsecond=0)"
           sheet_id: "REC: timesheet.id"
 
       - step: "Assert precondition: attendance schedule is resolved"
