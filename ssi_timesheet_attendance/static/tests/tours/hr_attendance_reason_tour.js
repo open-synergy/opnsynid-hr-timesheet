@@ -31,11 +31,15 @@ odoo.define("ssi_timesheet_attendance.hr_attendance_reason_tour", function (requ
             },
             {
                 // Gate: wait for the TARGET action, not just any list view —
-                // the app landing action is also a .o_list_view.
-                content: "Attendance Reasons list is displayed",
+                // the app landing action is also a .o_list_view. NOTE: the
+                // breadcrumb shows the ir.actions.act_window's own `name`
+                // ("Attendance Reason", singular), NOT the menu item's
+                // label ("Attendance Reasons", plural) — verified against
+                // the actual rendered DOM in CI.
+                content: "Attendance Reason list is displayed",
                 trigger:
                     ".o_control_panel " +
-                    ".breadcrumb-item.active:contains(Attendance Reasons)",
+                    ".breadcrumb-item.active:contains(Attendance Reason)",
                 extra_trigger: ".o_list_view",
                 run: function () {
                     // Assertion only; do not trigger the default click action.
@@ -119,9 +123,8 @@ odoo.define("ssi_timesheet_attendance.hr_attendance_reason_tour", function (requ
             // ── Post-Condition — a new attendance reason record is
             // created, active by default.
             {
-                content: "Back to the Attendance Reasons list",
-                trigger:
-                    ".breadcrumb-item.o_back_button a:contains(Attendance Reasons)",
+                content: "Back to the Attendance Reason list",
+                trigger: ".breadcrumb-item.o_back_button a:contains(Attendance Reason)",
             },
             {
                 content: "New record appears in the list",
@@ -267,9 +270,8 @@ odoo.define("ssi_timesheet_attendance.hr_attendance_reason_tour", function (requ
                 in_modal: true,
             },
             {
-                content: "Back to the Attendance Reasons list",
-                trigger:
-                    ".breadcrumb-item.o_back_button a:contains(Attendance Reasons)",
+                content: "Back to the Attendance Reason list",
+                trigger: ".breadcrumb-item.o_back_button a:contains(Attendance Reason)",
             },
             // ── Post-Condition — the record is permanently removed.
             {
