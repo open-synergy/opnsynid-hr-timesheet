@@ -81,7 +81,7 @@
                     </group>
                     <group name="attendance_1_2" colspan="1" col="2">
                         <field invisible="1" name="employee_id" />
-                        <field invisible="0" name="sheet_id" />
+                        <field force_save="1" invisible="0" name="sheet_id" />
                         <field invisible="0" name="schedule_id" />
                         <field name="total_hour" widget="float_time" />
                         <field name="total_valid_hour" widget="float_time" />

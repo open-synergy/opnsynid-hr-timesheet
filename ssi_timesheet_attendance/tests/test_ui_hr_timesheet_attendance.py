@@ -1,0 +1,134 @@
+# Copyright 2026 OpenSynergy Indonesia
+# Copyright 2026 PT. Simetri Sinergi Indonesia
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+
+from odoo.tests import HttpSavepointCase, tagged
+
+
+@tagged("post_install", "-at_install")
+class TestUiHrTimesheetAttendance(HttpSavepointCase):
+    """Tour tests for the ``hr.timesheet_attendance`` work instructions.
+
+    Uses ``HttpSavepointCase`` rather than plain ``HttpCase``: in 14.0
+    ``TransactionCase`` only assigns ``self.env`` inside instance
+    ``setUp()``, so ``cls.env`` is not available in ``setUpClass()``.
+    ``HttpSavepointCase`` (via ``SingleTransactionCase``) does set
+    ``cls.env`` in ``setUpClass()``, which the tours below rely on to
+    seed an open timesheet and attendance rows visible to the browser
+    session.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        """Grant the required group and seed an open timesheet for admin.
+
+        Pre-Condition common to every IK in this model: an
+        ``hr.timesheet`` for the current user's employee, covering the
+        record's **Date**, exists with status **On Progress** — ``Sheet``
+        is resolved automatically from **Date** and the employee, and
+        saving fails otherwise. Since ``employee_id`` on this model
+        defaults (and, per the view, is invisible) to
+        ``self.env.user.employee_id``, the tours run as "admin" need an
+        ``hr.employee`` linked to that user.
+        """
+        super().setUpClass()
+        cls.env.ref(
+            "ssi_timesheet_attendance.hr_timesheet_attendance_group"
+        ).sudo().write({"users": [(4, cls.env.ref("base.user_admin").id)]})
+
+        admin_user = cls.env.ref("base.user_admin")
+        # ``res.users.employee_id`` is a compute (``_compute_company_employee``)
+        # that filters ``employee_ids`` by the CURRENT company, not a plain
+        # search on ``user_id`` — a user can have one ``hr.employee`` per
+        # company. Resolving the fixture through this same compute (instead
+        # of a bare ``search()``) guarantees it is the exact record the tour
+        # session's ``_default_employee_id`` (``self.env.user.employee_id``)
+        # will resolve to, even if demo data already ships an employee for
+        # this user in a different company.
+        cls.admin_employee = admin_user.employee_id
+        if not cls.admin_employee:
+            cls.admin_employee = cls.env["hr.employee"].create(
+                {
+                    "name": "TOUR-ADMIN-ATTENDANCE-EMPLOYEE",
+                    "user_id": admin_user.id,
+                    "company_id": cls.env.company.id,
+                }
+            )
+
+        working_schedule = cls.env["resource.calendar"].search(
+            [], limit=1, order="id asc"
+        )
+        cls.timesheet_open = cls.env["hr.timesheet"].create(
+            {
+                "employee_id": cls.admin_employee.id,
+                "date_start": "2026-01-01",
+                "date_end": "2026-01-31",
+                "working_schedule_id": working_schedule.id,
+            }
+        )
+        cls.timesheet_open.with_context(bypass_policy_check=True).action_open()
+
+        attendance_model = cls.env["hr.timesheet_attendance"]
+
+        # --- 02-edit.md: Check In filled, Check Out still empty (Open),
+        # so the tour's Check Out fill exercises the Present transition.
+        # ``sheet_id`` is a required, stored computed field
+        # (``_compute_sheet``); it is only resolved automatically when a
+        # record is created through the web client's onchange flow (as
+        # the create tour does). A direct ORM ``create()`` call like this
+        # one has to supply it explicitly, or the initial INSERT violates
+        # the NOT NULL constraint before the compute ever runs — the same
+        # workaround already used by
+        # ``tests/test_data_timesheet_attendance.yaml``.
+        cls.attendance_edit = attendance_model.create(
+            {
+                "date": "2026-01-16",
+                "employee_id": cls.admin_employee.id,
+                "check_in": "2026-01-16 08:00:00",
+                "sheet_id": cls.timesheet_open.id,
+            }
+        )
+
+        # --- 03-delete.md: a fully closed attendance record.
+        cls.attendance_delete = attendance_model.create(
+            {
+                "date": "2026-01-20",
+                "employee_id": cls.admin_employee.id,
+                "sheet_id": cls.timesheet_open.id,
+                "check_in": "2026-01-20 08:00:00",
+                "check_out": "2026-01-20 17:00:00",
+            }
+        )
+
+    def test_create(self):
+        """Run the create tour for ``hr.timesheet_attendance``.
+
+        IK: docs/hr_timesheet_attendance/01-create.md
+        """
+        self.start_tour(
+            "/web",
+            "ssi_timesheet_attendance_hr_timesheet_attendance_create",
+            login="admin",
+        )
+
+    def test_edit(self):
+        """Run the edit tour for ``hr.timesheet_attendance``.
+
+        IK: docs/hr_timesheet_attendance/02-edit.md
+        """
+        self.start_tour(
+            "/web",
+            "ssi_timesheet_attendance_hr_timesheet_attendance_edit",
+            login="admin",
+        )
+
+    def test_delete(self):
+        """Run the delete tour for ``hr.timesheet_attendance``.
+
+        IK: docs/hr_timesheet_attendance/03-delete.md
+        """
+        self.start_tour(
+            "/web",
+            "ssi_timesheet_attendance_hr_timesheet_attendance_delete",
+            login="admin",
+        )
