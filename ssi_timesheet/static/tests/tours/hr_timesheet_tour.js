@@ -114,8 +114,19 @@ odoo.define("ssi_timesheet.hr_timesheet_tour", function (require) {
                 extra_trigger: ".o_form_view.o_form_editable",
                 run: "text_blur 01/31/2026",
             },
-            // ── Flow 4 — On the Computations tab, click Reload, then
-            // Compute.
+            // ── Flow 4 — On the Computations tab, click Reload. Compute
+            // is deliberately NOT clicked here: it neither writes any
+            // stored value (action_compute_computation only evaluates
+            // Python Code into a discarded local dict — see
+            // hr_timesheet.py _compute_computation) nor produces any
+            // other kasatmata change, so there is no data-driven gate
+            // that is guaranteed false before the click and true after
+            // (odoo-development-ui-test skill, patterns.md §P table:
+            // "aksi boleh menghasilkan nol data... jangan klik tombolnya
+            // di tour"). The IK itself frames it as optional ("You may
+            // then click Compute"), and both Reload and Compute already
+            // run automatically on Start/Confirm (docs/hr_timesheet/
+            // 07-start.md, 04-confirm.md).
             {
                 content: "Open the Computations tab",
                 trigger: ".o_notebook .nav-link:contains(Computations)",
@@ -134,18 +145,6 @@ odoo.define("ssi_timesheet.hr_timesheet_tour", function (require) {
                 trigger:
                     ".o_field_x2many[name='computation_ids'] " +
                     ".o_data_row:contains(TCC01)",
-                run: function () {
-                    // Assertion only; do not trigger the default click
-                    // action.
-                },
-            },
-            {
-                content: "Click Compute",
-                trigger: ".o_form_view button[name='action_compute_computation']",
-            },
-            {
-                content: "UI is no longer blocked",
-                trigger: "body:not(.o_ui_blocked)",
                 run: function () {
                     // Assertion only; do not trigger the default click
                     // action.
@@ -220,8 +219,19 @@ odoo.define("ssi_timesheet.hr_timesheet_tour", function (require) {
                 extra_trigger: ".o_form_view.o_form_editable",
                 run: "text_blur 01/20/2026",
             },
-            // ── Flow 4 — On the Computations tab, click Reload, then
-            // Compute.
+            // ── Flow 4 — On the Computations tab, click Reload. Compute
+            // is deliberately NOT clicked here: it neither writes any
+            // stored value (action_compute_computation only evaluates
+            // Python Code into a discarded local dict — see
+            // hr_timesheet.py _compute_computation) nor produces any
+            // other kasatmata change, so there is no data-driven gate
+            // that is guaranteed false before the click and true after
+            // (odoo-development-ui-test skill, patterns.md §P table:
+            // "aksi boleh menghasilkan nol data... jangan klik tombolnya
+            // di tour"). The IK itself frames it as optional ("You may
+            // then click Compute"), and both Reload and Compute already
+            // run automatically on Start/Confirm (docs/hr_timesheet/
+            // 07-start.md, 04-confirm.md).
             {
                 content: "Open the Computations tab",
                 trigger: ".o_notebook .nav-link:contains(Computations)",
@@ -239,18 +249,6 @@ odoo.define("ssi_timesheet.hr_timesheet_tour", function (require) {
                 trigger:
                     ".o_field_x2many[name='computation_ids'] " +
                     ".o_data_row:contains(TCE01)",
-                run: function () {
-                    // Assertion only; do not trigger the default click
-                    // action.
-                },
-            },
-            {
-                content: "Click Compute",
-                trigger: ".o_form_view button[name='action_compute_computation']",
-            },
-            {
-                content: "UI is no longer blocked",
-                trigger: "body:not(.o_ui_blocked)",
                 run: function () {
                     // Assertion only; do not trigger the default click
                     // action.
