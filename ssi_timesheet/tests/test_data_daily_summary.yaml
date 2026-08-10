@@ -1,0 +1,154 @@
+scenarios:
+  - name: "Open generates one daily summary per day in the period"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Daily Summary A"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "EVAL: registry['employee'].id"
+          date_start: 2024-01-01
+          date_end: 2024-01-03
+          working_schedule_id: "EVAL: registry['working_schedule'].id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "open"
+          daily_summary_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 3
+
+      - step: "Every generated summary points back to this sheet"
+        action: "search"
+        model: "hr.timesheet_daily_summary"
+        domain: [["sheet_id", "=", "REC: timesheet.id"]]
+        save_as: "summaries_for_sheet"
+        expect_count: 3
+
+  - name: "Regenerating an open timesheet does not duplicate or drop rows"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Daily Summary B"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "EVAL: registry['employee'].id"
+          date_start: 2024-01-01
+          date_end: 2024-01-03
+          working_schedule_id: "EVAL: registry['working_schedule'].id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+        asserts:
+          daily_summary_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 3
+
+      - step: "Generate daily summary again on the same sheet"
+        action: "call"
+        target: "timesheet"
+        method: "generate_daily_summary"
+        as_user: "base.user_admin"
+        asserts:
+          daily_summary_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 3
+
+  - name: "Extending date_end grows the daily summary set"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Daily Summary C"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "EVAL: registry['employee'].id"
+          date_start: 2024-01-01
+          date_end: 2024-01-03
+          working_schedule_id: "EVAL: registry['working_schedule'].id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+        asserts:
+          daily_summary_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 3
+
+      - step: "Extend the period by one day"
+        action: "write"
+        target: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          date_end: 2024-01-04
+
+      - step: "Daily summary now covers the extended period"
+        action: "assert"
+        target: "timesheet"
+        asserts:
+          daily_summary_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 4

@@ -2,6 +2,7 @@
 # Copyright 2026 PT. Simetri Sinergi Indonesia
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from . import test_daily_summary
 from . import test_timesheet
 from . import test_timesheet_computation
 from . import test_timesheet_summary_report

@@ -139,6 +139,18 @@ class HRTimesheet(models.Model):
         return daily_summary_values
 
     def generate_daily_summary(self):
+        """Synchronize ``daily_summary_ids`` with the current period.
+
+        For every record in ``open``/``confirm``/``done`` state,
+        rebuild the expected daily summary values for each day of
+        ``[date_start, date_end]`` (via ``_prepare_daily_summary_values``).
+        Days that do not have a summary yet are created; existing
+        summaries are written only when
+        ``hr.timesheet_daily_summary._get_daily_summary_diff()``
+        reports an actual difference, so calling this method again
+        with unchanged data issues no ``write()`` at all. Summaries
+        whose date fell out of the period are deleted.
+        """
         for rec in self.filtered(lambda r: r.state in ["open", "confirm", "done"]):
             daily_summary_values = rec._prepare_daily_summary_values()
             existing_dates = []
@@ -154,10 +166,7 @@ class HRTimesheet(models.Model):
                 if not summary_id:
                     obj_daily_summary.create(daily_summary_val)
                 else:
-                    to_write = {}
-                    for key, val in daily_summary_val.items():
-                        if summary_id[key] != val:
-                            to_write[key] = val
+                    to_write = summary_id._get_daily_summary_diff(daily_summary_val)
                     if to_write:
                         summary_id.write(to_write)
                 existing_dates.append(daily_summary_val["date"])
