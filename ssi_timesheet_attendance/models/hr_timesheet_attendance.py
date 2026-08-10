@@ -245,7 +245,10 @@ class HRTimesheetAttendance(models.Model):
         since ``super().write()`` overwrites them; the daily summary
         is then regenerated for the union of the old and new dates,
         so moving an attendance from one date to another refreshes
-        both the origin and the destination summaries.
+        both the origin and the destination summaries. ``date`` is a
+        required field, so both the pre-write and post-write values
+        are always set on an existing record -- no falsy guard is
+        needed around either one.
 
         :param values: field values to write
         :return: the value returned by the parent ``write()``
@@ -254,11 +257,6 @@ class HRTimesheetAttendance(models.Model):
         res = super(HRTimesheetAttendance, self).write(values)
         for rec in self:
             if "date" in values or "check_in" in values or "check_out" in values:
-                affected_dates = set()
-                old_date = old_date_by_id.get(rec.id)
-                if old_date:
-                    affected_dates.add(old_date)
-                if rec.date:
-                    affected_dates.add(rec.date)
+                affected_dates = {old_date_by_id[rec.id], rec.date}
                 rec.sheet_id.generate_daily_summary(dates=affected_dates)
         return res
