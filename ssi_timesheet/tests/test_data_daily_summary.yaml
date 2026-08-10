@@ -152,3 +152,84 @@ scenarios:
             type: "o2m"
             check: "count"
             expected_count: 4
+
+  - name: "Partial sweep with dates neither duplicates nor deletes"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Daily Summary D"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "EVAL: registry['employee'].id"
+          date_start: 2024-01-01
+          date_end: 2024-01-03
+          working_schedule_id: "EVAL: registry['working_schedule'].id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+        asserts:
+          daily_summary_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 3
+
+      - step: "Regenerate a single in-period date"
+        action: "call"
+        target: "timesheet"
+        method: "generate_daily_summary"
+        as_user: "base.user_admin"
+        kwargs:
+          dates: [2024-01-02]
+        asserts:
+          daily_summary_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 3
+
+      - step: "Regenerate an out-of-period date"
+        action: "call"
+        target: "timesheet"
+        method: "generate_daily_summary"
+        as_user: "base.user_admin"
+        kwargs:
+          dates: [2024-02-15]
+        asserts:
+          daily_summary_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 3
+
+      - step: "Narrow date_end to two days"
+        action: "write"
+        target: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          date_end: 2024-01-02
+
+      - step: "Full sweep triggered by write() still deletes the dropped day"
+        action: "assert"
+        target: "timesheet"
+        asserts:
+          daily_summary_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 2

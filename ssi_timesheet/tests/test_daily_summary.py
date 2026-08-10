@@ -2,6 +2,8 @@
 # Copyright 2026 PT. Simetri Sinergi Indonesia
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from datetime import date
+
 from odoo_yaml_test import YamlTransactionCase
 
 from odoo.tests import tagged
@@ -75,3 +77,26 @@ class TestDailySummary(YamlTransactionCase):
         diff = summary._get_daily_summary_diff(vals)
         self.assertIn("date", diff)
         self.assertNotIn("sheet_id", diff)
+
+    def test_prepare_daily_summary_values_dates_filter(self):
+        """Restrict the built vals to the requested ``dates`` only.
+
+        Pure Python — trigger P1 (L-01/L-02: the return value of
+        ``_prepare_daily_summary_values`` is a plain list of dicts,
+        which ``action: call`` discards and no YAML ``assert`` can
+        reach since it is not a field stored on any record). On a
+        three-day sheet, passing a single in-period date must build
+        vals for exactly that date, not the full period.
+        """
+        admin = self.env.ref("base.user_admin")
+        sheet = self._create_sheet(
+            "Test Employee Prepare Values Dates", "2024-01-01", "2024-01-03"
+        )
+        sheet.with_user(admin).action_open()
+
+        daily_summary_values = sheet._prepare_daily_summary_values(
+            dates=[date(2024, 1, 2)]
+        )
+
+        self.assertEqual(len(daily_summary_values), 1)
+        self.assertEqual(daily_summary_values[0]["date"], date(2024, 1, 2))

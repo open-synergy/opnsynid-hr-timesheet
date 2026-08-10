@@ -79,3 +79,139 @@ scenarios:
           sheet_id:
             type: "value"
             operator: "is_truthy"
+
+  - name: "Work Log - Daily Summary Reflects Only The Affected Date"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_daily_summary"
+        values:
+          name: "Test Employee Work Log Daily Summary"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_daily_summary"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create three-day timesheet"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_daily_summary"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_daily_summary.id"
+          date_start: 2024-01-01
+          date_end: 2024-01-03
+          working_schedule_id: "REC: working_schedule_daily_summary.id"
+
+      - step: "Open timesheet (creates one zeroed summary per day)"
+        action: "call"
+        target: "timesheet_daily_summary"
+        method: "action_open"
+        as_user: "base.user_admin"
+        asserts:
+          daily_summary_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 3
+
+      - step: "Get ir.model for res.partner"
+        action: "search"
+        model: "ir.model"
+        domain: [["model", "=", "res.partner"]]
+        save_as: "ir_model_daily_summary"
+        limit: 1
+
+      - step: "Get a partner record"
+        action: "search"
+        model: "res.partner"
+        domain: [["name", "!=", false]]
+        save_as: "partner_daily_summary"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create analytic account"
+        action: "create"
+        model: "account.analytic.account"
+        save_as: "analytic_account_daily_summary"
+        values:
+          name: "Test Analytic Work Log Daily Summary"
+
+      - step: "Create a work log on 2024-01-02"
+        action: "create"
+        model: "hr.work_log"
+        save_as: "work_log_daily_summary"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_daily_summary.id"
+          description: "Work log daily summary test"
+          model_id: "REC: ir_model_daily_summary.id"
+          work_object_id: "REC: partner_daily_summary.id"
+          date: 2024-01-02
+          amount: 3.0
+          analytic_account_id: "REC: analytic_account_daily_summary.id"
+
+      - step: "Find the 2024-01-02 daily summary"
+        action: "search"
+        model: "hr.timesheet_daily_summary"
+        domain:
+          [
+            ["sheet_id", "=", "REC: timesheet_daily_summary.id"],
+            ["date", "=", 2024-01-02],
+          ]
+        save_as: "wl_summary_0102"
+        expect_count: 1
+
+      - step: "2024-01-02 summary reflects the work log's amount"
+        action: "assert"
+        target: "wl_summary_0102"
+        asserts:
+          total_work_log:
+            type: "value"
+            expected: 3.0
+
+      - step: "Find the 2024-01-03 daily summary"
+        action: "search"
+        model: "hr.timesheet_daily_summary"
+        domain:
+          [
+            ["sheet_id", "=", "REC: timesheet_daily_summary.id"],
+            ["date", "=", 2024-01-03],
+          ]
+        save_as: "wl_summary_0103"
+        expect_count: 1
+
+      - step: "2024-01-03 summary is untouched"
+        action: "assert"
+        target: "wl_summary_0103"
+        asserts:
+          total_work_log:
+            type: "value"
+            expected: 0.0
+
+      - step: "Move the work log from 2024-01-02 to 2024-01-03"
+        action: "write"
+        target: "work_log_daily_summary"
+        as_user: "base.user_admin"
+        values:
+          date: 2024-01-03
+
+      - step: "2024-01-02 summary drops back to zero"
+        action: "assert"
+        target: "wl_summary_0102"
+        asserts:
+          total_work_log:
+            type: "value"
+            expected: 0.0
+
+      - step: "2024-01-03 summary now carries the work log's amount"
+        action: "assert"
+        target: "wl_summary_0103"
+        asserts:
+          total_work_log:
+            type: "value"
+            expected: 3.0
