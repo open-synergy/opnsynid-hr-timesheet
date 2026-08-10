@@ -122,15 +122,36 @@ class HRTimesheet(models.Model):
         res += policy_field
         return res
 
-    def _prepare_daily_summary_values(self):
+    def _prepare_daily_summary_values(self, dates=None):
+        """Build the daily summary vals for the affected dates.
+
+        :param dates: iterable of ``datetime.date`` to build vals
+            for, normalized to a ``set`` internally. Empty/``None``
+            (default) builds vals for every day of
+            ``[date_start, date_end]`` -- the full-sweep behaviour.
+            When given, only dates falling inside
+            ``[date_start, date_end]`` are used; dates outside the
+            period are silently ignored (not created, no error).
+        :return: list of vals dicts, one per considered date, built
+            by
+            ``hr.timesheet_daily_summary._prepare_daily_summary_vals``
+        """
         self.ensure_one()
         daily_summary_values = []
         if self.state in ("open", "confirm", "done"):
-            delta = self.date_end - self.date_start
-            date_ranges = []
-            for i in range(delta.days + 1):
-                day = self.date_start + timedelta(days=i)
-                date_ranges.append(day)
+            dates = set(dates) if dates else set()
+            if dates:
+                date_ranges = sorted(
+                    current_date
+                    for current_date in dates
+                    if self.date_start <= current_date <= self.date_end
+                )
+            else:
+                delta = self.date_end - self.date_start
+                date_ranges = []
+                for i in range(delta.days + 1):
+                    day = self.date_start + timedelta(days=i)
+                    date_ranges.append(day)
             for current_date in date_ranges:
                 vals = self.env[
                     "hr.timesheet_daily_summary"
@@ -138,21 +159,31 @@ class HRTimesheet(models.Model):
                 daily_summary_values.append(vals)
         return daily_summary_values
 
-    def generate_daily_summary(self):
-        """Synchronize ``daily_summary_ids`` with the current period.
+    def generate_daily_summary(self, dates=None):
+        """Synchronize ``daily_summary_ids`` with the affected dates.
 
-        For every record in ``open``/``confirm``/``done`` state,
-        rebuild the expected daily summary values for each day of
-        ``[date_start, date_end]`` (via ``_prepare_daily_summary_values``).
-        Days that do not have a summary yet are created; existing
-        summaries are written only when
-        ``hr.timesheet_daily_summary._get_daily_summary_diff()``
-        reports an actual difference, so calling this method again
-        with unchanged data issues no ``write()`` at all. Summaries
-        whose date fell out of the period are deleted.
+        :param dates: iterable of ``datetime.date`` to (re)generate
+            the daily summary for, normalized to a ``set``
+            internally. Empty/``None`` (default) means a
+            **full sweep**: every day of
+            ``[date_start, date_end]`` is (re)built (via
+            ``_prepare_daily_summary_values``) and any summary whose
+            date fell out of the period is deleted -- the
+            pre-existing behaviour, kept for backward compatibility
+            with existing callers and overrides. Existing summaries
+            are written only when
+            ``hr.timesheet_daily_summary._get_daily_summary_diff()``
+            reports an actual difference, so calling this method
+            again with unchanged data issues no ``write()`` at all.
+            When ``dates`` is given, only vals for those dates are
+            built and **no summary is ever deleted**: a partial
+            sweep only knows about a subset of the dates, so running
+            the deletion step would drop summaries of dates that
+            were never considered and are still legitimate.
         """
+        dates = set(dates) if dates else set()
         for rec in self.filtered(lambda r: r.state in ["open", "confirm", "done"]):
-            daily_summary_values = rec._prepare_daily_summary_values()
+            daily_summary_values = rec._prepare_daily_summary_values(dates=dates)
             existing_dates = []
             obj_daily_summary = self.env["hr.timesheet_daily_summary"]
             for daily_summary_val in daily_summary_values:
@@ -170,13 +201,14 @@ class HRTimesheet(models.Model):
                     if to_write:
                         summary_id.write(to_write)
                 existing_dates.append(daily_summary_val["date"])
-            to_delete_summary_ids = obj_daily_summary.search(
-                [
-                    ("sheet_id", "=", rec.id),
-                    ("date", "not in", existing_dates),
-                ]
-            )
-            to_delete_summary_ids.unlink()
+            if not dates:
+                to_delete_summary_ids = obj_daily_summary.search(
+                    [
+                        ("sheet_id", "=", rec.id),
+                        ("date", "not in", existing_dates),
+                    ]
+                )
+                to_delete_summary_ids.unlink()
 
     def get_trigger_fields_daily_summary(self):
         return [
