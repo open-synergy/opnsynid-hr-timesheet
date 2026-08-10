@@ -567,3 +567,134 @@ scenarios:
           sheet_id:
             type: "m2o"
             expected: "REC: timesheet_recompute_b"
+
+  - name: "HR Timesheet Attendance - Daily Summary Reflects Only The Affected Date"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_daily_summary"
+        values:
+          name: "Test Employee Attendance Daily Summary"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_daily_summary"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create three-day timesheet"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_daily_summary"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_daily_summary.id"
+          date_start: 2024-01-01
+          date_end: 2024-01-03
+          working_schedule_id: "REC: working_schedule_daily_summary.id"
+
+      - step: "Open timesheet (creates one zeroed summary per day)"
+        action: "call"
+        target: "timesheet_daily_summary"
+        method: "action_open"
+        as_user: "base.user_admin"
+        asserts:
+          daily_summary_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 3
+
+      - step: "Create an attendance on 2024-01-02"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_daily_summary"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_daily_summary.id"
+          date: 2024-01-02
+          check_in: "2024-01-02 08:00:00"
+          check_out: "2024-01-02 17:00:00"
+          sheet_id: "REC: timesheet_daily_summary.id"
+
+      - step: "Find the 2024-01-02 daily summary"
+        action: "search"
+        model: "hr.timesheet_daily_summary"
+        domain:
+          [
+            ["sheet_id", "=", "REC: timesheet_daily_summary.id"],
+            ["date", "=", 2024-01-02],
+          ]
+        save_as: "summary_0102"
+        expect_count: 1
+
+      - step: "2024-01-02 summary reflects the attendance's total hour"
+        action: "assert"
+        target: "summary_0102"
+        asserts:
+          total_attendance:
+            type: "value"
+            expected: "REC: attendance_daily_summary.total_hour"
+
+      - step: "Find the 2024-01-01 daily summary"
+        action: "search"
+        model: "hr.timesheet_daily_summary"
+        domain:
+          [
+            ["sheet_id", "=", "REC: timesheet_daily_summary.id"],
+            ["date", "=", 2024-01-01],
+          ]
+        save_as: "summary_0101"
+        expect_count: 1
+
+      - step: "2024-01-01 summary is untouched"
+        action: "assert"
+        target: "summary_0101"
+        asserts:
+          total_attendance:
+            type: "value"
+            expected: 0.0
+
+      - step: "Find the 2024-01-03 daily summary"
+        action: "search"
+        model: "hr.timesheet_daily_summary"
+        domain:
+          [
+            ["sheet_id", "=", "REC: timesheet_daily_summary.id"],
+            ["date", "=", 2024-01-03],
+          ]
+        save_as: "summary_0103"
+        expect_count: 1
+
+      - step: "2024-01-03 summary is untouched"
+        action: "assert"
+        target: "summary_0103"
+        asserts:
+          total_attendance:
+            type: "value"
+            expected: 0.0
+
+      - step: "Move the attendance from 2024-01-02 to 2024-01-03"
+        action: "write"
+        target: "attendance_daily_summary"
+        as_user: "base.user_admin"
+        values:
+          date: 2024-01-03
+
+      - step: "2024-01-02 summary drops back to zero"
+        action: "assert"
+        target: "summary_0102"
+        asserts:
+          total_attendance:
+            type: "value"
+            expected: 0.0
+
+      - step: "2024-01-03 summary now carries the attendance's total hour"
+        action: "assert"
+        target: "summary_0103"
+        asserts:
+          total_attendance:
+            type: "value"
+            expected: "REC: attendance_daily_summary.total_hour"
