@@ -1,0 +1,175 @@
+options:
+  auto_refresh: true
+
+scenarios:
+  - name:
+      "Generate Timesheet - Operating Unit Follows Each Employee, Not The Running User"
+    steps:
+      - step: "Create partner for operating unit A"
+        action: "create"
+        model: "res.partner"
+        save_as: "ou_a_partner"
+        values:
+          name: "Test Generate Timesheet OU A Partner"
+
+      - step: "Create operating unit A"
+        action: "create"
+        model: "operating.unit"
+        save_as: "ou_a"
+        values:
+          name:
+            "EVAL: 'Test Generate Timesheet OU A %d' %
+            env['operating.unit'].search_count([])"
+          code: "EVAL: 'GTSOUA%d' % env['operating.unit'].search_count([])"
+          partner_id: "REC: ou_a_partner.id"
+
+      - step: "Create partner for operating unit B"
+        action: "create"
+        model: "res.partner"
+        save_as: "ou_b_partner"
+        values:
+          name: "Test Generate Timesheet OU B Partner"
+
+      - step: "Create operating unit B"
+        action: "create"
+        model: "operating.unit"
+        save_as: "ou_b"
+        values:
+          name:
+            "EVAL: 'Test Generate Timesheet OU B %d' %
+            env['operating.unit'].search_count([])"
+          code: "EVAL: 'GTSOUB%d' % env['operating.unit'].search_count([])"
+          partner_id: "REC: ou_b_partner.id"
+
+      - step: "Create a dedicated user for employee A"
+        action: "create"
+        model: "res.users"
+        save_as: "user_a"
+        values:
+          name: "Generate Timesheet OU User A"
+          login: "gt_ou_user_a@example.com"
+
+      - step: "Create employee A assigned to operating unit A"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_a"
+        values:
+          name: "Generate Timesheet OU Employee A"
+          tz: "UTC"
+          user_id: "REC: user_a.id"
+          operating_unit_id: "REC: ou_a.id"
+
+      - step: "Create a dedicated user for employee B"
+        action: "create"
+        model: "res.users"
+        save_as: "user_b"
+        values:
+          name: "Generate Timesheet OU User B"
+          login: "gt_ou_user_b@example.com"
+
+      - step: "Create employee B assigned to operating unit B"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_b"
+        values:
+          name: "Generate Timesheet OU Employee B"
+          tz: "UTC"
+          user_id: "REC: user_b.id"
+          operating_unit_id: "REC: ou_b.id"
+
+      - step:
+          "Generate timesheets for both employees in one batch as the admin user (whose
+          default operating unit is neither A nor B)"
+        action: "wizard"
+        model: "hr.generate_timesheet"
+        target: "employee_a"
+        as_user: "base.user_admin"
+        values:
+          employee_ids: [[6, 0, ["REC: employee_a.id", "REC: employee_b.id"]]]
+          date_start: 2024-07-01
+          date_end: 2024-07-07
+        method: "action_generate"
+
+      - step: "Locate the timesheet generated for employee A"
+        action: "search"
+        model: "hr.timesheet"
+        domain:
+          [["employee_id", "=", "REC: employee_a.id"], ["date_start", "=", 2024-07-01]]
+        save_as: "timesheet_a"
+        expect_count: 1
+
+      - step: "Assert timesheet A carries employee A's operating unit"
+        action: "assert"
+        target: "timesheet_a"
+        asserts:
+          operating_unit_id:
+            type: "m2o"
+            expected: "REC: ou_a"
+
+      - step: "Locate the timesheet generated for employee B"
+        action: "search"
+        model: "hr.timesheet"
+        domain:
+          [["employee_id", "=", "REC: employee_b.id"], ["date_start", "=", 2024-07-01]]
+        save_as: "timesheet_b"
+        expect_count: 1
+
+      - step: "Assert timesheet B carries employee B's operating unit"
+        action: "assert"
+        target: "timesheet_b"
+        asserts:
+          operating_unit_id:
+            type: "m2o"
+            expected: "REC: ou_b"
+
+  - name:
+      "Generate Timesheet - Employee Without Operating Unit Produces A Timesheet Without
+      Operating Unit"
+    steps:
+      - step: "Create a dedicated user for the employee"
+        action: "create"
+        model: "res.users"
+        save_as: "user_no_ou"
+        values:
+          name: "Generate Timesheet No OU User"
+          login: "gt_no_ou_user@example.com"
+
+      - step: "Create employee without an operating unit"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_no_ou"
+        values:
+          name: "Generate Timesheet No OU Employee"
+          tz: "UTC"
+          user_id: "REC: user_no_ou.id"
+          operating_unit_id: false
+
+      - step: "Generate the timesheet for the employee with no operating unit"
+        action: "wizard"
+        model: "hr.generate_timesheet"
+        target: "employee_no_ou"
+        as_user: "base.user_admin"
+        values:
+          employee_ids: [[6, 0, ["REC: employee_no_ou.id"]]]
+          date_start: 2024-08-01
+          date_end: 2024-08-07
+        method: "action_generate"
+
+      - step: "Locate the generated timesheet"
+        action: "search"
+        model: "hr.timesheet"
+        domain:
+          [
+            ["employee_id", "=", "REC: employee_no_ou.id"],
+            ["date_start", "=", 2024-08-01],
+          ]
+        save_as: "timesheet_no_ou"
+        expect_count: 1
+
+      - step: "Assert the timesheet has no operating unit, not the admin's default"
+        action: "assert"
+        target: "timesheet_no_ou"
+        asserts:
+          operating_unit_id:
+            type: "value"
+            operator: "is_falsy"
