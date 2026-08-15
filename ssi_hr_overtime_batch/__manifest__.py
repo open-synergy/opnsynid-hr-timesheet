@@ -4,7 +4,7 @@
 
 {
     "name": "Human Resource Overtime Batch",
-    "version": "14.0.2.1.0",
+    "version": "14.0.2.1.1",
     "website": "https://simetri-sinergi.id",
     "author": "OpenSynergy Indonesia, PT. Simetri Sinergi Indonesia",
     "category": "Human Resource",
