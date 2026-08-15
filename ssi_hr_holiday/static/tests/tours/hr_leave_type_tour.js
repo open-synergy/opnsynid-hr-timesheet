@@ -296,6 +296,25 @@ odoo.define("ssi_hr_holiday.hr_leave_type_tour", function (require) {
                 },
             },
             {
+                // Gate: `aria-checked` on the filter's <a> is the real,
+                // synchronously-toggled signal that the Archived facet was
+                // applied (web/static/src/xml/base.xml:
+                // `t-att-aria-checked="props.isActive ? 'true' : 'false'"`).
+                // Without this, the list can briefly re-render with a stale
+                // domain before the facet lands, making the next steps
+                // (select row, Unarchive) race against an in-flight search
+                // and leaving the row stuck in the Archived list afterwards
+                // (odoo-development-ui-test skill, patterns.md §J).
+                content: "Archived filter is applied",
+                trigger:
+                    ".o_filter_menu .o_menu_item a:contains(Archived)" +
+                    "[aria-checked='true']",
+                run: function () {
+                    // Assertion only; do not trigger the default click
+                    // action.
+                },
+            },
+            {
                 // Gate: the archived TOUR-LTYPE-ACTIVATE record is only
                 // reachable once the Archived filter is actually applied.
                 content: "Archived leave type is displayed in the list",
