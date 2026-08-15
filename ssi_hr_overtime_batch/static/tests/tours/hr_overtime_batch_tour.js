@@ -121,6 +121,15 @@ odoo.define("ssi_hr_overtime_batch.hr_overtime_batch_tour", function (require) {
                     "TOUR-BATCH-OTTYPE-CREATE)",
                 in_modal: false,
             },
+            // Employee(s) lives on the "Employee" notebook tab, which is
+            // not the tab active by default when the form opens — it must
+            // be opened before its field is interactable (odoo-
+            // development-ui-test skill; same convention as "Open the
+            // Overtime tab" below).
+            {
+                content: "Open the Employee tab",
+                trigger: ".o_notebook .nav-link:contains(Employee)",
+            },
             {
                 content: "Select an Employee",
                 trigger: ".o_field_widget[name='employee_ids'] input",
