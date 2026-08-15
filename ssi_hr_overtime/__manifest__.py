@@ -11,6 +11,7 @@
     "installable": True,
     "depends": [
         "ssi_timesheet_attendance",
+        "web_tour",
     ],
     "data": [
         "security/ir_module_category_data.xml",
@@ -24,6 +25,7 @@
         "views/hr_overtime_type_views.xml",
         "views/hr_overtime_views.xml",
         "views/hr_timesheet_views.xml",
+        "views/ssi_hr_overtime_assets.xml",
     ],
     "demo": [
         "demo/hr_overtime_type_data_demo.xml",
