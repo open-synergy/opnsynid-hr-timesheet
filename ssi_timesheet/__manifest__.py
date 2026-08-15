@@ -4,7 +4,7 @@
 # pylint: disable=C8101
 {
     "name": "Timesheets",
-    "version": "14.0.3.3.4",
+    "version": "14.0.3.4.0",
     "website": "https://simetri-sinergi.id",
     "author": "OpenSynergy Indonesia, PT. Simetri Sinergi Indonesia",
     "license": "AGPL-3",
