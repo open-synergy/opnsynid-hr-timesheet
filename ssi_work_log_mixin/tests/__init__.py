@@ -3,3 +3,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from . import test_work_log_mixin
+from . import test_ui_hr_timesheet
+from . import test_ui_hr_work_log
+from . import test_ui_hr_work_log_tag

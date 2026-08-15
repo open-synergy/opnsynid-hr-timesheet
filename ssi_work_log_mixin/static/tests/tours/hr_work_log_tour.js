@@ -1,0 +1,656 @@
+odoo.define("ssi_work_log_mixin.hr_work_log_tour", function (require) {
+    "use strict";
+
+    var tour = require("web_tour.tour");
+
+    // Shared opening steps: Human Resource > Timesheets > Timesheets. Every
+    // hr_work_log IK is written starting from a timesheet's Work Log tab
+    // (docs/hr_work_log/01-create.md note), so all tours below share this
+    // navigation plus the same fixture timesheet (employee TOUR-EMP-WORKLOG).
+    function openTimesheetMenuSteps() {
+        return [
+            tour.stepUtils.showAppsMenuItem(),
+            {
+                content: "Open the Human Resource app",
+                trigger: '.o_app[data-menu-xmlid="ssi_hr.menu_root_human_resource"]',
+            },
+            {
+                content: "Open the Timesheets section",
+                trigger:
+                    ".o_menu_sections " +
+                    '[data-menu-xmlid="ssi_timesheet.timesheet_menu"]',
+            },
+            {
+                content: "Open the Timesheets menu item",
+                trigger:
+                    ".o_menu_sections " +
+                    '[data-menu-xmlid="ssi_timesheet.menu_hr_timesheet"]',
+            },
+            {
+                // Gate: wait for the TARGET action, not just any list view —
+                // the app landing action ("Employees") is also a
+                // .o_list_view.
+                content: "Timesheets list is displayed",
+                trigger:
+                    ".o_control_panel .breadcrumb-item.active:contains(Timesheets)",
+                extra_trigger: ".o_list_view",
+                run: function () {
+                    // Assertion only; do not trigger the default click action.
+                },
+            },
+            {
+                content: "Open the fixture timesheet",
+                trigger: ".o_data_row:contains(TOUR-EMP-WORKLOG) .o_data_cell:first",
+                extra_trigger: ".o_list_view",
+            },
+            {
+                trigger: ".o_form_view",
+                run: function () {
+                    // Assertion only; do not trigger the default click
+                    // action.
+                },
+            },
+        ];
+    }
+
+    // Open the auto-inserted "Work Log" tab (mixin.work_object,
+    // ssi_work_log_mixin.work_log_page). Matched by EXACT trimmed text, not
+    // :contains, because the sibling "All Work Log(s)" tab (registered by
+    // this module's own hr_timesheet_views.xml) contains "Work Log" as a
+    // substring — :contains would match both nav-links non-deterministically.
+    var openWorkLogTabStep = {
+        content: "Open the Work Log tab",
+        trigger: ".o_notebook .nav-link",
+        run: function () {
+            var $tab = $(".o_notebook .nav-link").filter(function () {
+                return $(this).text().trim() === "Work Log";
+            });
+            $tab[0].click();
+        },
+    };
+
+    // Click a statusbar/header button by its exact visible label — needed
+    // for the Cancel button, whose `name` attribute is a numeric action id
+    // (base_select_cancel_reason_action) rather than a method name.
+    function clickHeaderButtonByLabel(label) {
+        return {
+            content: "Click the " + label + " button",
+            trigger: ".o_statusbar_buttons button",
+            run: function () {
+                var $button = $(".o_statusbar_buttons button").filter(function () {
+                    return $(this).text().trim() === label;
+                });
+                $button[0].click();
+            },
+        };
+    }
+
+    var confirmDialogStep = {
+        content: "Confirm the dialog",
+        trigger: ".modal-footer button.btn-primary",
+        in_modal: true,
+    };
+
+    // Post-condition gate for state transitions that happen INSIDE the
+    // work log line's own dialog (opened via the non-editable
+    // `work_log_ids` one2many — see openWorkLogLineSteps below). Unlike a
+    // top-level record, that dialog never fully closes after the
+    // "Are you sure?" confirmation: it stays open (still a `.modal`) while
+    // only the confirmation dialog stacked on top of it closes. The
+    // documented `body:not(:has(.modal))` gate (odoo-development-ui-test
+    // skill, patterns.md §K) therefore never becomes true here. This is
+    // its nested-dialog equivalent: wait until at most ONE `.modal` is
+    // still on screen (the work log dialog itself), i.e. the confirmation
+    // dialog stacked on top of it (and, for Cancel, the reason wizard
+    // beneath it) has fully closed — the same FieldWrapper re-render race
+    // (patterns.md §K) can otherwise hit the statusbar widget inside that
+    // still-open dialog.
+    var nestedDialogSettledExtraTrigger = "body:not(:has(.modal:eq(1)))";
+
+    // Open the fixture work log line identified by its Description, from
+    // inside the (already open) Work Log tab. Used by every state
+    // transition tour (04-confirm through 14-restart-approval): clicking a
+    // row of a non-editable one2many list always opens the record's own
+    // form in a dialog, regardless of the parent form's edit/view mode, so
+    // no "Click Edit" step is needed here (unlike Create/Edit/Delete below).
+    function openWorkLogLineSteps(description) {
+        return [
+            openWorkLogTabStep,
+            {
+                content: "Open the work log line",
+                trigger:
+                    ".o_field_x2many[name='work_log_ids'] " +
+                    ".o_data_row:contains(" +
+                    description +
+                    ") .o_data_cell:first",
+            },
+            {
+                content: "Work log dialog is open",
+                trigger: ".modal .o_form_view",
+                run: function () {
+                    // Assertion only; do not trigger the default click
+                    // action.
+                },
+            },
+        ];
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // IK: docs/hr_work_log/01-create.md
+    // ═══════════════════════════════════════════════════════════════
+    tour.register(
+        "ssi_work_log_mixin_hr_work_log_create",
+        {
+            test: true,
+            url: "/web",
+        },
+        [].concat(openTimesheetMenuSteps(), [
+            // ── Flow 3 — On the Work Log tab, click Add a line. Adding a
+            // line (and Delete below) needs the timesheet FORM itself in
+            // edit mode — a non-editable one2many hides "Add a line" and
+            // the row delete icon while the parent form is read-only, the
+            // same mechanic that already forces every other IK in this
+            // repo to click "Edit" before touching a field (see
+            // odoo-development-ui-test skill precedent, e.g.
+            // ssi_timesheet_hr_timesheet_edit). The IK's own Flow omits
+            // this click; it is added here as the minimum bridging step
+            // the tour cannot run without.
+            {
+                content: "Click the Edit button",
+                trigger: ".o_form_button_edit",
+            },
+            {
+                content: "Form is now editable",
+                trigger: ".o_form_view.o_form_editable",
+                run: function () {
+                    // Assertion only; do not trigger the default click
+                    // action.
+                },
+            },
+            openWorkLogTabStep,
+            {
+                content: "Click Add a line",
+                trigger:
+                    ".o_field_x2many[name='work_log_ids'] " +
+                    ".o_field_x2many_list_row_add a",
+            },
+            {
+                content: "Work log dialog is open in edit mode",
+                trigger: ".modal .o_form_view.o_form_editable",
+                run: function () {
+                    // Assertion only; do not trigger the default click
+                    // action.
+                },
+            },
+            // ── Flow 3 (repeat) — Fill in Description, Date, Analytic
+            // Account, Duration.
+            {
+                content: "Fill in Description",
+                trigger: ".o_field_widget[name='description'] input",
+                run: "text TOUR-WL-CREATE-UI",
+            },
+            {
+                content: "Fill in Date",
+                trigger: ".o_field_widget[name='date'] input",
+                run: "text_blur 01/15/2026",
+            },
+            {
+                content: "Select the Analytic Account",
+                trigger: ".o_field_many2one[name='analytic_account_id'] input",
+                run: "text TOUR-WORKLOG-AA",
+            },
+            {
+                content: "Pick the Analytic Account from the dropdown",
+                trigger: ".ui-autocomplete .ui-menu-item a:contains(TOUR-WORKLOG-AA)",
+                in_modal: false,
+            },
+            {
+                content: "Fill in Duration",
+                trigger: ".o_field_widget[name='amount'] input",
+                run: "text_blur 4:00",
+            },
+            // ── Flow 3 (repeat) — Click Save & Close.
+            {
+                content: "Click Save & Close",
+                trigger: ".modal-footer button",
+                run: function () {
+                    var $button = $(".modal-footer button").filter(function () {
+                        return $(this).text().trim() === "Save & Close";
+                    });
+                    $button[0].click();
+                },
+            },
+            {
+                // Gate: dialog fully closed before touching the parent
+                // form again (odoo-development-ui-test skill, patterns.md
+                // §K — same FieldWrapper re-render race applies to the
+                // one2many list widget).
+                content: "New line is added to the Work Log tab",
+                trigger:
+                    ".o_field_x2many[name='work_log_ids'] " +
+                    ".o_data_row:contains(TOUR-WL-CREATE-UI)",
+                extra_trigger: "body:not(:has(.modal))",
+                run: function () {
+                    // Assertion only; do not trigger the default click
+                    // action.
+                },
+            },
+            // ── Flow 4 — Click Save on the timesheet form.
+            {
+                content: "Save the timesheet",
+                trigger: ".o_form_button_save",
+            },
+            // ── Post-Condition — new work log record created in Draft
+            // status, visible on the timesheet's Work Log tab.
+            {
+                content: "Timesheet is saved",
+                trigger: ".o_form_view.o_form_readonly",
+                run: function () {
+                    // Assertion only; do not trigger the default click
+                    // action.
+                },
+            },
+        ])
+    );
+
+    // ═══════════════════════════════════════════════════════════════
+    // IK: docs/hr_work_log/02-edit.md
+    // ═══════════════════════════════════════════════════════════════
+    tour.register(
+        "ssi_work_log_mixin_hr_work_log_edit",
+        {
+            test: true,
+            url: "/web",
+        },
+        [].concat(openTimesheetMenuSteps(), [
+            {
+                content: "Click the Edit button",
+                trigger: ".o_form_button_edit",
+            },
+            {
+                content: "Form is now editable",
+                trigger: ".o_form_view.o_form_editable",
+                run: function () {
+                    // Assertion only; do not trigger the default click
+                    // action.
+                },
+            },
+            openWorkLogTabStep,
+            // ── Flow 3 — On the Work Log tab, click the line to edit.
+            {
+                content: "Open the work log line",
+                trigger:
+                    ".o_field_x2many[name='work_log_ids'] " +
+                    ".o_data_row:contains(TOUR-WL-EDIT) .o_data_cell:first",
+            },
+            {
+                content: "Work log dialog is open in edit mode",
+                trigger: ".modal .o_form_view.o_form_editable",
+                run: function () {
+                    // Assertion only; do not trigger the default click
+                    // action.
+                },
+            },
+            // ── Flow 4 — Change Description.
+            {
+                content: "Change Description",
+                trigger: ".o_field_widget[name='description'] input",
+                run: "text TOUR-WL-EDITED",
+            },
+            // ── Flow 5 — Click Save & Close.
+            {
+                content: "Click Save & Close",
+                trigger: ".modal-footer button",
+                run: function () {
+                    var $button = $(".modal-footer button").filter(function () {
+                        return $(this).text().trim() === "Save & Close";
+                    });
+                    $button[0].click();
+                },
+            },
+            {
+                content: "Line shows the new Description",
+                trigger:
+                    ".o_field_x2many[name='work_log_ids'] " +
+                    ".o_data_row:contains(TOUR-WL-EDITED)",
+                extra_trigger: "body:not(:has(.modal))",
+                run: function () {
+                    // Assertion only; do not trigger the default click
+                    // action.
+                },
+            },
+            // ── Flow 6 — Click Save on the timesheet form.
+            {
+                content: "Save the timesheet",
+                trigger: ".o_form_button_save",
+            },
+            // ── Post-Condition — record is updated.
+            {
+                content: "Timesheet is saved",
+                trigger: ".o_form_view.o_form_readonly",
+                run: function () {
+                    // Assertion only; do not trigger the default click
+                    // action.
+                },
+            },
+        ])
+    );
+
+    // ═══════════════════════════════════════════════════════════════
+    // IK: docs/hr_work_log/03-delete.md
+    // ═══════════════════════════════════════════════════════════════
+    tour.register(
+        "ssi_work_log_mixin_hr_work_log_delete",
+        {
+            test: true,
+            url: "/web",
+        },
+        [].concat(openTimesheetMenuSteps(), [
+            {
+                content: "Click the Edit button",
+                trigger: ".o_form_button_edit",
+            },
+            {
+                content: "Form is now editable",
+                trigger: ".o_form_view.o_form_editable",
+                run: function () {
+                    // Assertion only; do not trigger the default click
+                    // action.
+                },
+            },
+            openWorkLogTabStep,
+            // ── Flow 3 — On the Work Log tab, select the line to delete
+            // and click the row's delete (trash) icon.
+            {
+                content: "Delete the work log line",
+                trigger:
+                    ".o_field_x2many[name='work_log_ids'] " +
+                    ".o_data_row:contains(TOUR-WL-DELETE) .o_list_record_remove",
+            },
+            {
+                content: "Line no longer appears on the Work Log tab",
+                trigger:
+                    ".o_field_x2many[name='work_log_ids']" +
+                    ":not(:has(.o_data_row:contains(TOUR-WL-DELETE)))",
+                run: function () {
+                    // Assertion only; do not trigger the default click
+                    // action.
+                },
+            },
+            // ── Flow 4 — Click Save on the timesheet form.
+            {
+                content: "Save the timesheet",
+                trigger: ".o_form_button_save",
+            },
+            // ── Post-Condition — work log record permanently removed.
+            {
+                content: "Timesheet is saved",
+                trigger: ".o_form_view.o_form_readonly",
+                run: function () {
+                    // Assertion only; do not trigger the default click
+                    // action.
+                },
+            },
+        ])
+    );
+
+    // ═══════════════════════════════════════════════════════════════
+    // IK: docs/hr_work_log/04-confirm.md
+    // ═══════════════════════════════════════════════════════════════
+    tour.register(
+        "ssi_work_log_mixin_hr_work_log_confirm",
+        {
+            test: true,
+            url: "/web",
+        },
+        [].concat(openTimesheetMenuSteps(), openWorkLogLineSteps("TOUR-WL-CONFIRM"), [
+            // ── Flow 4 — Click the Confirm button.
+            {
+                content: "Click the Confirm button",
+                trigger: ".o_statusbar_buttons button[name='action_confirm']",
+            },
+            // ── Flow 5 — Click OK on the confirmation dialog.
+            confirmDialogStep,
+            // ── Post-Condition — status changes to Waiting for Approval.
+            {
+                content: "Status is Waiting for Approval",
+                trigger:
+                    ".o_statusbar_status .o_arrow_button[data-value='confirm']" +
+                    ".btn-primary",
+                extra_trigger: nestedDialogSettledExtraTrigger,
+                run: function () {
+                    // Assertion only; do not trigger the default click
+                    // action.
+                },
+            },
+        ])
+    );
+
+    // ═══════════════════════════════════════════════════════════════
+    // IK: docs/hr_work_log/05-approve.md
+    // ═══════════════════════════════════════════════════════════════
+    tour.register(
+        "ssi_work_log_mixin_hr_work_log_approve",
+        {
+            test: true,
+            url: "/web",
+        },
+        [].concat(openTimesheetMenuSteps(), openWorkLogLineSteps("TOUR-WL-APPROVE"), [
+            // ── Flow 4 — Click the Approve button.
+            {
+                content: "Click the Approve button",
+                trigger: ".o_statusbar_buttons button[name='action_approve_approval']",
+            },
+            // ── Flow 5 — Click OK on the confirmation dialog.
+            confirmDialogStep,
+            // ── Post-Condition — single-level approval template
+            // fulfilled immediately, so status changes to Done.
+            {
+                content: "Status is Done",
+                trigger:
+                    ".o_statusbar_status .o_arrow_button[data-value='done']" +
+                    ".btn-primary",
+                extra_trigger: nestedDialogSettledExtraTrigger,
+                run: function () {
+                    // Assertion only; do not trigger the default click
+                    // action.
+                },
+            },
+        ])
+    );
+
+    // ═══════════════════════════════════════════════════════════════
+    // IK: docs/hr_work_log/06-reject.md
+    // ═══════════════════════════════════════════════════════════════
+    tour.register(
+        "ssi_work_log_mixin_hr_work_log_reject",
+        {
+            test: true,
+            url: "/web",
+        },
+        [].concat(openTimesheetMenuSteps(), openWorkLogLineSteps("TOUR-WL-REJECT"), [
+            // ── Flow 4 — Click the Reject button.
+            {
+                content: "Click the Reject button",
+                trigger: ".o_statusbar_buttons button[name='action_reject_approval']",
+            },
+            // ── Flow 5 — Click OK on the confirmation dialog.
+            confirmDialogStep,
+            // ── Post-Condition — status changes to Rejected.
+            {
+                content: "Status is Rejected",
+                trigger:
+                    ".o_statusbar_status .o_arrow_button[data-value='reject']" +
+                    ".btn-primary",
+                extra_trigger: nestedDialogSettledExtraTrigger,
+                run: function () {
+                    // Assertion only; do not trigger the default click
+                    // action.
+                },
+            },
+        ])
+    );
+
+    // ═══════════════════════════════════════════════════════════════
+    // IK: docs/hr_work_log/10-cancel.md
+    // ═══════════════════════════════════════════════════════════════
+    tour.register(
+        "ssi_work_log_mixin_hr_work_log_cancel",
+        {
+            test: true,
+            url: "/web",
+        },
+        [].concat(openTimesheetMenuSteps(), openWorkLogLineSteps("TOUR-WL-CANCEL"), [
+            // ── Flow 4 — Click the Cancel button. `name` is a numeric
+            // action id on this button, so match its label instead.
+            clickHeaderButtonByLabel("Cancel"),
+            // ── Flow 5 — In the wizard, select the Reason.
+            {
+                // 14.0: do NOT prefix with `.modal` — the trigger is
+                // searched INSIDE the (topmost) modal already.
+                content: "Wizard is open",
+                trigger: ".o_form_view",
+                run: function () {
+                    // Assertion only; do not trigger the default click
+                    // action.
+                },
+            },
+            {
+                content: "Select the cancellation reason",
+                trigger:
+                    ".o_field_widget[name='cancel_reason_id'] " +
+                    ".o_radio_item:contains(TOUR-WORKLOG-CANCEL-REASON) input",
+            },
+            // ── Flow 6 — Click Confirm.
+            {
+                content: "Confirm the wizard",
+                trigger: ".modal-footer button[name='action_confirm']",
+            },
+            // ── Flow 7 — Click OK on the confirmation dialog.
+            confirmDialogStep,
+            // ── Post-Condition — status changes to Cancelled, and the
+            // selected Reason is recorded on the work log.
+            {
+                content: "Status is Cancelled",
+                trigger:
+                    ".o_statusbar_status .o_arrow_button[data-value='cancel']" +
+                    ".btn-primary",
+                extra_trigger: nestedDialogSettledExtraTrigger,
+                run: function () {
+                    // Assertion only; do not trigger the default click
+                    // action.
+                },
+            },
+            {
+                content: "Cancellation reason is displayed",
+                trigger: ".modal:visible h2:contains(Cancellation reason)",
+                run: function () {
+                    // Assertion only; do not trigger the default click
+                    // action.
+                },
+            },
+        ])
+    );
+
+    // ═══════════════════════════════════════════════════════════════
+    // IK: docs/hr_work_log/12-restart.md
+    // ═══════════════════════════════════════════════════════════════
+    tour.register(
+        "ssi_work_log_mixin_hr_work_log_restart",
+        {
+            test: true,
+            url: "/web",
+        },
+        [].concat(openTimesheetMenuSteps(), openWorkLogLineSteps("TOUR-WL-RESTART"), [
+            // ── Flow 4 — Click the Restart button.
+            {
+                content: "Click the Restart button",
+                trigger: ".o_statusbar_buttons button[name='action_restart']",
+            },
+            // ── Flow 5 — Click OK on the confirmation dialog.
+            confirmDialogStep,
+            // ── Post-Condition — status returns to Draft.
+            {
+                content: "Status is Draft",
+                trigger:
+                    ".o_statusbar_status .o_arrow_button[data-value='draft']" +
+                    ".btn-primary",
+                extra_trigger: nestedDialogSettledExtraTrigger,
+                run: function () {
+                    // Assertion only; do not trigger the default click
+                    // action.
+                },
+            },
+        ])
+    );
+
+    // ═══════════════════════════════════════════════════════════════
+    // IK: docs/hr_work_log/13-reset-number.md
+    // ═══════════════════════════════════════════════════════════════
+    tour.register(
+        "ssi_work_log_mixin_hr_work_log_reset_number",
+        {
+            test: true,
+            url: "/web",
+        },
+        [].concat(openTimesheetMenuSteps(), openWorkLogLineSteps("TOUR-WL-RESETNUM"), [
+            // ── Flow 4 — Click the Reset Document Number button.
+            {
+                content: "Click the Reset Document Number button",
+                trigger:
+                    ".o_statusbar_buttons " +
+                    "button[name='action_reset_document_number']",
+            },
+            // ── Flow 5 — Click OK on the confirmation dialog.
+            confirmDialogStep,
+            // ── Post-Condition — document number returns to "/".
+            {
+                content: "Document number is reset to /",
+                trigger: ".modal:visible .o_field_widget[name='name']:contains(/)",
+                extra_trigger: nestedDialogSettledExtraTrigger,
+                run: function () {
+                    // Assertion only; do not trigger the default click
+                    // action.
+                },
+            },
+        ])
+    );
+
+    // ═══════════════════════════════════════════════════════════════
+    // IK: docs/hr_work_log/14-restart-approval.md
+    // ═══════════════════════════════════════════════════════════════
+    tour.register(
+        "ssi_work_log_mixin_hr_work_log_restart_approval",
+        {
+            test: true,
+            url: "/web",
+        },
+        [].concat(
+            openTimesheetMenuSteps(),
+            openWorkLogLineSteps("TOUR-WL-RESTARTAPPROVAL"),
+            [
+                // ── Flow 4 — Click the Restart Approval Process button.
+                {
+                    content: "Click the Restart Approval Process button",
+                    trigger:
+                        ".o_statusbar_buttons " +
+                        "button[name='action_reload_approval_template']",
+                },
+                // ── Flow 5 — Click OK on the confirmation dialog.
+                confirmDialogStep,
+                // ── Post-Condition — status remains Waiting for Approval.
+                {
+                    content: "Status remains Waiting for Approval",
+                    trigger:
+                        ".o_statusbar_status " +
+                        ".o_arrow_button[data-value='confirm'].btn-primary",
+                    extra_trigger: nestedDialogSettledExtraTrigger,
+                    run: function () {
+                        // Assertion only; do not trigger the default click
+                        // action.
+                    },
+                },
+            ]
+        )
+    );
+});
