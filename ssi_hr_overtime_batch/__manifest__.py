@@ -12,6 +12,7 @@
     "installable": True,
     "depends": [
         "ssi_hr_overtime",
+        "web_tour",
     ],
     "data": [
         "security/ir_module_category_data.xml",
@@ -24,6 +25,7 @@
         "data/approval_template_data.xml",
         "views/hr_overtime_batch_views.xml",
         "views/hr_overtime_views.xml",
+        "views/ssi_hr_overtime_batch_assets.xml",
     ],
     "demo": [],
 }
