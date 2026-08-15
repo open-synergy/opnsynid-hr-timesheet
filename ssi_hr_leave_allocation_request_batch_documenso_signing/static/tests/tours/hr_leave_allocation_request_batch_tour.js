@@ -73,11 +73,22 @@ odoo.define(
                 },
 
                 // ── Base Flow 2 — Open the record to approve.
+                // Matched on the Type column (added to the tree view by
+                // ssi_hr_leave_allocation_request_batch, right after
+                // "# Document") rather than the employee, because the
+                // list view never shows the employee(s) at all --
+                // `employee_ids` (many2many) is not one of its columns
+                // (# Document/user_id/reviewer_id/activities/state from
+                // the mixin.transaction base tree, plus Type/Date
+                // Start/Date Extended/Number Of Days added by the base
+                // module -- see hr_leave_allocation_request_batch_view_
+                // tree). A trigger built from the employee name can
+                // therefore never match any row.
                 {
                     content: "Open the record",
                     trigger:
                         ".o_data_row:contains(Tour HR Leave Allocation " +
-                        "Batch Documenso Employee) .o_data_cell:first",
+                        "Batch Documenso Type) .o_data_cell:first",
                     extra_trigger: ".o_list_view",
                 },
                 {
