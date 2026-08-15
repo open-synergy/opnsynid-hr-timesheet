@@ -10,7 +10,7 @@
     "author": "OpenSynergy Indonesia, PT. Simetri Sinergi Indonesia",
     "license": "AGPL-3",
     "installable": True,
-    "depends": ["ssi_hr_holiday"],
+    "depends": ["ssi_hr_holiday", "web_tour"],
     "data": [
         "security/ir_module_category_data.xml",
         "security/res_group_data.xml",
@@ -22,6 +22,7 @@
         "data/approval_template_data.xml",
         "views/hr_leave_allocation_request_batch_view.xml",
         "views/hr_leave_allocation_view.xml",
+        "views/ssi_hr_leave_allocation_request_batch_assets.xml",
     ],
     "demo": [],
     "images": [],
