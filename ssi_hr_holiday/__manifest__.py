@@ -4,7 +4,7 @@
 
 {
     "name": "Leave Management",
-    "version": "14.0.2.2.0",
+    "version": "14.0.2.2.1",
     "website": "https://simetri-sinergi.id",
     "author": "OpenSynergy Indonesia, PT. Simetri Sinergi Indonesia",
     "license": "AGPL-3",
