@@ -194,6 +194,8 @@
     <field name="arch" type="xml">
          <pivot>
              <field name="amount" type="measure" />
+             <field name="correction_amount" type="measure" />
+             <field name="final_amount" type="measure" />
         </pivot>
     </field>
 </record>

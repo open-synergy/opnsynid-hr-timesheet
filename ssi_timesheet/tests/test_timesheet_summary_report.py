@@ -85,11 +85,11 @@ class TestTimesheetSummaryReport(YamlTransactionCase):
     def test_amounts_by_employee_uses_final_amount_with_correction(self):
         """Aggregated amount reflects amount plus correction_amount.
 
-        Pure Python — trigger P1 (skill ``odoo-development-unit-test``,
-        ``python-escape-hatch.md`` §3): the assertion is on the return
-        value of ``_get_amounts_by_employee`` (a plain Python dict),
-        not on a side effect verifiable through a domain search on a
-        model.
+        Pure Python — trigger P1 (L-01: ``action: call`` discards a
+        method's return value, so YAML cannot assert it): the
+        assertion is on the return value of
+        ``_get_amounts_by_employee`` (a plain Python dict), not on a
+        side effect verifiable through a domain search on a model.
         """
         item = self._create_item("Count Corr", "TSUM_CORR", 3.0)
         timesheet, employee = self._create_done_timesheet(
@@ -111,11 +111,12 @@ class TestTimesheetSummaryReport(YamlTransactionCase):
     def test_amounts_by_employee_without_correction_matches_amount(self):
         """Aggregated amount equals amount when there is no correction.
 
-        Pure Python — trigger P1 (skill ``odoo-development-unit-test``,
-        ``python-escape-hatch.md`` §3): the assertion is on the return
-        value of ``_get_amounts_by_employee`` (a plain Python dict),
-        not on a side effect verifiable through a domain search on a
-        model. This is the zero-regression counterpart to
+        Pure Python — trigger P1 (L-01: ``action: call`` discards a
+        method's return value, so YAML cannot assert it): the
+        assertion is on the return value of
+        ``_get_amounts_by_employee`` (a plain Python dict), not on a
+        side effect verifiable through a domain search on a model.
+        This is the zero-regression counterpart to
         ``test_amounts_by_employee_uses_final_amount_with_correction``:
         with the default ``correction_amount`` of ``0.0``, the result
         must stay identical to the pre-fix behaviour that summed the

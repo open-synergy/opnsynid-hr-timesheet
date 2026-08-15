@@ -6,6 +6,14 @@ from odoo import api, fields, models
 
 
 class HrTimesheetComputationAnalysis(models.Model):
+    """Analysis report on top of ``hr.timesheet_computation``.
+
+    One row per computation line, exposing ``amount`` (the raw
+    computed value, kept for traceability), ``correction_amount``
+    (the manual override), and ``final_amount`` (the sum of both,
+    the value actually used downstream) as measures.
+    """
+
     _name = "hr.timesheet_computation_analysis"
     _description = "Timesheet Computation Analysis"
     _auto = False
@@ -52,6 +60,18 @@ class HrTimesheetComputationAnalysis(models.Model):
     amount = fields.Float(
         string="Amount",
     )
+    correction_amount = fields.Float(
+        string="Correction Amount",
+        help="Manual correction applied on top of the computed "
+        "amount, summed from ``hr.timesheet_computation."
+        "correction_amount``.",
+    )
+    final_amount = fields.Float(
+        string="Final Amount",
+        help="Amount actually used downstream: ``amount`` plus "
+        "``correction_amount``, summed from ``hr.timesheet_"
+        "computation.final_amount``.",
+    )
 
     @property
     def _table_query(self):
@@ -65,6 +85,15 @@ class HrTimesheetComputationAnalysis(models.Model):
 
     @api.model
     def _select(self):
+        """Build the SQL ``SELECT`` clause of the report.
+
+        ``amount``, ``correction_amount``, and ``final_amount`` are
+        each summed from ``hr_timesheet_computation`` (one row per
+        line after ``_group_by``, so the sum is a no-op per line but
+        keeps the aggregate consistent when grouped by pivot).
+
+        :return: SQL ``SELECT ...`` string
+        """
         select_str = """
         SELECT
             a.id AS id,
@@ -77,7 +106,9 @@ class HrTimesheetComputationAnalysis(models.Model):
             b.date_start AS date_start,
             b.date_end AS date_end,
             c.parent_id AS parent_id,
-            SUM(a.amount) AS amount
+            SUM(a.amount) AS amount,
+            SUM(a.correction_amount) AS correction_amount,
+            SUM(a.final_amount) AS final_amount
         """
         return select_str
 
