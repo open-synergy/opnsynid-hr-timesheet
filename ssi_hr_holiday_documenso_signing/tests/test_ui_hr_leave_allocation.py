@@ -19,7 +19,13 @@ class TestUiHrLeaveAllocation(HttpSavepointCase):
         ``hr_leave_allocation_validator_group`` (which implies the
         ``User`` and ``Viewer`` groups) via ``ssi_hr_holiday``'s
         ``security/res_group_data.xml``, so it can create and confirm
-        the record directly, without extra group setup. Pre-Condition
+        the record directly, without extra group setup. A dedicated
+        Leave Type is created rather than reusing an arbitrary demo
+        Leave Type, to keep this fixture isolated from demo data (see
+        ``test_ui_hr_leave.py`` for why that matters on ``hr.leave``'s
+        own confirm; it does not affect ``hr.leave_allocation``'s
+        confirm, which has no allocation-availability constraint of its
+        own, but isolation is kept consistent either way). Pre-Condition
         IK 05-approve.md (delta): the record is already Waiting for
         Approval, reached here via ``action_confirm()`` in Python, not
         via UI clicks. The "Standard" approval template used by
@@ -37,7 +43,17 @@ class TestUiHrLeaveAllocation(HttpSavepointCase):
             .with_user(cls.admin)
             .create({"name": "Tour HR Holiday Documenso Allocation Employee"})
         )
-        leave_type = cls.env["hr.leave_type"].search([], limit=1, order="id asc")
+        leave_type = (
+            cls.env["hr.leave_type"]
+            .with_user(cls.admin)
+            .create(
+                {
+                    "name": "Tour HR Holiday Documenso Allocation Type",
+                    "code": "TOURHHDALT",
+                    "need_allocation": True,
+                }
+            )
+        )
         cls.allocation = (
             cls.env["hr.leave_allocation"]
             .with_user(cls.admin)
