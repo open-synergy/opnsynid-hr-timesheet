@@ -1,0 +1,83 @@
+# Copyright 2026 OpenSynergy Indonesia
+# Copyright 2026 PT. Simetri Sinergi Indonesia
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+
+# HttpSavepointCase — BUKAN HttpCase. In 14.0, plain HttpCase does not
+# set up cls.env in setUpClass; HttpSavepointCase does.
+from odoo.tests import HttpSavepointCase, tagged
+
+
+@tagged("post_install", "-at_install")
+class TestUiHrLeaveAllocationRequestBatch(HttpSavepointCase):
+    """Tour test for the ``hr.leave_allocation_request_batch`` Documenso
+    signing delta.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        """Create a batch already Waiting for Approval.
+
+        ``base.user_admin`` is already a member of
+        ``hr_leave_allocation_request_batch_validator_group`` (which
+        implies the ``User`` and ``Viewer`` groups) via
+        ``ssi_hr_leave_allocation_request_batch``'s
+        ``security/res_group_data.xml``, so it can create and confirm
+        the record directly, without extra group setup. A dedicated
+        Leave Type is created rather than reusing an arbitrary demo
+        Leave Type, to keep this fixture isolated from demo data. The
+        Standard approval template used by
+        ``ssi_hr_leave_allocation_request_batch`` demo data has no
+        Documenso Signing Template configured, so the Signature
+        Requests tab is present (``_documenso_signing_create_page =
+        True``) but the base Approve/OK Flow is unaffected -- this
+        tour does not exercise it. Pre-Condition IK 05-approve.md
+        (delta): the record is already Waiting for Approval, reached
+        here via ``action_confirm()`` in Python, not via UI clicks.
+        """
+        super().setUpClass()
+        cls.admin = cls.env.ref("base.user_admin")
+
+        employee = (
+            cls.env["hr.employee"]
+            .with_user(cls.admin)
+            .create({"name": "Tour HR Leave Allocation Batch Documenso Employee"})
+        )
+        leave_type = (
+            cls.env["hr.leave_type"]
+            .with_user(cls.admin)
+            .create(
+                {
+                    "name": "Tour HR Leave Allocation Batch Documenso Type",
+                    "code": "TOURHLARBDT",
+                    "need_allocation": True,
+                }
+            )
+        )
+        cls.batch = (
+            cls.env["hr.leave_allocation_request_batch"]
+            .with_user(cls.admin)
+            .create(
+                {
+                    "type_id": leave_type.id,
+                    "number_of_days": 3,
+                    "date_start": "2026-01-01",
+                    "date_end": "2026-12-31",
+                    "date_extended": "2026-12-31",
+                    "employee_ids": [(6, 0, [employee.id])],
+                }
+            )
+        )
+        cls.batch.with_context(bypass_policy_check=True).action_confirm()
+
+    def test_approve(self):
+        """Run the approve tour for the Documenso signing delta.
+
+        IK: docs/hr_leave_allocation_request_batch/05-approve.md (E2a
+        delta -- Modified Flow)
+        """
+        self.start_tour(
+            "/web",
+            "ssi_hr_leave_allocation_request_batch_documenso_signing"
+            "_hr_leave_allocation_request_batch_approve",
+            login="admin",
+        )
