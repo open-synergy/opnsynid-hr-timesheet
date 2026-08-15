@@ -13,6 +13,7 @@
         "ssi_transaction_terminate_mixin",
         "ssi_timesheet_attendance",
         "base_automation",
+        "web_tour",
     ],
     "data": [
         "security/ir_module_category_data.xml",
@@ -30,6 +31,7 @@
         "views/hr_leave_allocation_views.xml",
         "views/hr_leave_views.xml",
         "views/hr_timesheet_views.xml",
+        "views/ssi_hr_holiday_assets.xml",
     ],
     "demo": [
         "demo/hr_leave_type_data_demo.xml",

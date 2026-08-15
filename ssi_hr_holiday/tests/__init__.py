@@ -3,3 +3,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from . import test_hr_holiday
+from . import test_ui_hr_leave
+from . import test_ui_hr_leave_allocation
+from . import test_ui_hr_leave_type
