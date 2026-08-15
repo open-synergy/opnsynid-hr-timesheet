@@ -55,7 +55,7 @@ addon | version | maintainers | summary
 [ssi_timesheet_operating_unit](ssi_timesheet_operating_unit/) | 14.0.1.2.1 |  | Timesheet + Operating Unit
 [ssi_timesheet_state_change_constrain](ssi_timesheet_state_change_constrain/) | 14.0.1.1.0 |  | Timesheet State Change Constrain
 [ssi_work_log_cost](ssi_work_log_cost/) | 14.0.2.1.1 |  | Work Log Cost
-[ssi_work_log_expense](ssi_work_log_expense/) | 14.0.2.2.0 |  | Work Log Expense
+[ssi_work_log_expense](ssi_work_log_expense/) | 14.0.2.2.1 |  | Work Log Expense
 [ssi_work_log_expense_work_log](ssi_work_log_expense_work_log/) | 14.0.1.1.0 |  | Worklog Expense - Work Log Integration
 [ssi_work_log_mixin](ssi_work_log_mixin/) | 14.0.2.1.0 |  | Work Log Mixin
 [ssi_work_log_state_change_constrain](ssi_work_log_state_change_constrain/) | 14.0.1.1.0 |  | Work Log State Change Constrain
