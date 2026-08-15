@@ -11,6 +11,7 @@
     "installable": True,
     "depends": [
         "ssi_hr_holiday",
+        "web_tour",
     ],
     "data": [
         "security/ir_module_category_data.xml",
@@ -23,6 +24,7 @@
         "data/approval_template_data.xml",
         "views/hr_leave_request_batch_view.xml",
         "views/hr_leave_views.xml",
+        "views/hr_leave_request_batch_assets.xml",
     ],
     "demo": [],
     "images": [],
