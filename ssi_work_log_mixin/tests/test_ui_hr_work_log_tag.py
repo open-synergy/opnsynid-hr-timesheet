@@ -25,21 +25,29 @@ class TestUiHrWorkLogTag(HttpSavepointCase):
         is in group *Work Log Tags*. That group already lists
         ``base.user_admin`` in ``security/res_group_data.xml``, so no
         extra group grant is needed here.
+
+        ``code`` (``mixin.master_data``, ``ssi_master_data_mixin``) is
+        ``required=True`` with no field-level default, so every fixture
+        must supply it explicitly — ``"/"`` is the SSI convention for
+        "assign automatically later" (see
+        ``ssi_master_data_mixin.mixin_master_data.code``'s own help text).
         """
         super().setUpClass()
         tag_model = cls.env["hr.work_log_tag"]
 
         # --- 02-edit.md
-        cls.tag_edit = tag_model.create({"name": "TOUR-TAG-EDIT"})
+        cls.tag_edit = tag_model.create({"name": "TOUR-TAG-EDIT", "code": "/"})
 
         # --- 03-delete.md
-        cls.tag_delete = tag_model.create({"name": "TOUR-TAG-DELETE"})
+        cls.tag_delete = tag_model.create({"name": "TOUR-TAG-DELETE", "code": "/"})
 
         # --- 04-deactivate.md
-        cls.tag_deactivate = tag_model.create({"name": "TOUR-TAG-DEACTIVATE"})
+        cls.tag_deactivate = tag_model.create(
+            {"name": "TOUR-TAG-DEACTIVATE", "code": "/"}
+        )
 
         # --- 05-activate.md: already archived.
-        cls.tag_activate = tag_model.create({"name": "TOUR-TAG-ACTIVATE"})
+        cls.tag_activate = tag_model.create({"name": "TOUR-TAG-ACTIVATE", "code": "/"})
         cls.tag_activate.sudo().write({"active": False})
 
     def test_create(self):

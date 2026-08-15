@@ -98,6 +98,20 @@ odoo.define("ssi_work_log_mixin.hr_work_log_tag_tour", function (require) {
                 extra_trigger: ".o_form_view.o_form_editable",
                 run: "text TOUR-TAG-CREATE-UI",
             },
+            // `code` (mixin.master_data, ssi_master_data_mixin) carries no
+            // field-level default (unlike ssi_timesheet's own
+            // hr.timesheet.name), so it starts genuinely empty on a new
+            // record and blocks Save until filled — same latent gap already
+            // documented for ssi_timesheet_hr_timesheet_computation_item_create
+            // (odoo-development-ui-test skill precedent in this repo). The
+            // IK's own Flow does not mention this field; "/" is the SSI
+            // convention for "assign automatically later".
+            {
+                content: "Ensure Code is /",
+                trigger: ".o_field_widget[name='code'] input",
+                extra_trigger: ".o_form_view.o_form_editable",
+                run: "text_blur /",
+            },
             // ── Flow 4 — Click Save.
             {
                 content: "Save the record",
