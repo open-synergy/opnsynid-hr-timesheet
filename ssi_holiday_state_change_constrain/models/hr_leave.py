@@ -5,7 +5,15 @@
 from odoo import models
 
 
-class HRLeave(models.Model):
+class HrLeave(models.Model):
+    """
+    Blocks ``hr.leave`` state transitions until configured Status Check
+    items are satisfied. Adds ``mixin.state_change_constrain`` and
+    ``mixin.status_check`` on top of the base leave document, so the
+    ``state`` constraint enforces any active
+    ``state.change.constrain.template`` that targets this model.
+    """
+
     _name = "hr.leave"
     _inherit = [
         "hr.leave",

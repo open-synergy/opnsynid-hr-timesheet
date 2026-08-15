@@ -7,6 +7,15 @@ Employee Holiday + State Change Constrain Integration
 =====================================================
 
 
+Work Instruction
+================
+
+* `Create Leave — State Change Constrain <docs/hr_leave/index.html>`_
+* `Confirm Leave — State Change Constrain <docs/hr_leave/index.html>`_
+* `Create Leave Allocation — State Change Constrain <docs/hr_leave_allocation/index.html>`_
+* `Confirm Leave Allocation — State Change Constrain <docs/hr_leave_allocation/index.html>`_
+
+
 Installation
 ============
 

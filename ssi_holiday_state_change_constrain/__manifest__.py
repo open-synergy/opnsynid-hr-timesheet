@@ -13,7 +13,10 @@
     "depends": [
         "ssi_hr_holiday",
         "ssi_state_change_constrain_mixin",
+        "web_tour",
     ],
-    "data": [],
+    "data": [
+        "views/ssi_holiday_state_change_constrain_assets.xml",
+    ],
     "demo": [],
 }
