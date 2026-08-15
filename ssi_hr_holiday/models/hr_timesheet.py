@@ -5,7 +5,13 @@
 from odoo import fields, models
 
 
-class HRTimesheet(models.Model):
+class HrTimesheet(models.Model):
+    """
+    Adds leave traceability to timesheets.
+    Links each leave request whose period this timesheet covers back
+    to the timesheet, so leaves are visible from their sheet.
+    """
+
     _name = "hr.timesheet"
     _inherit = "hr.timesheet"
 

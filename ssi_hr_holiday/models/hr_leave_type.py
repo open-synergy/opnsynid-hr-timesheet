@@ -6,6 +6,12 @@ from odoo import fields, models
 
 
 class HrLeaveType(models.Model):
+    """
+    Represents a category of leave (e.g. annual, sick, unpaid).
+    Configures whether requests of this type need an allocation to
+    draw from and whether a per-request day limit applies.
+    """
+
     _name = "hr.leave_type"
     _inherit = ["mixin.master_data"]
     _description = "Leave Type"

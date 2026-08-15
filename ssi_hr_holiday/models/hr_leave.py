@@ -10,7 +10,14 @@ from odoo.exceptions import Warning as UserError
 from odoo.addons.ssi_decorator import ssi_decorator
 
 
-class HRLeave(models.Model):
+class HrLeave(models.Model):
+    """
+    Represents an employee leave request.
+    Tracks the leave lifecycle from draft through approval to done,
+    computing the covering timesheet, matching attendance schedules,
+    leave duration, and the leave allocation the request draws from.
+    """
+
     _name = "hr.leave"
     _inherit = [
         "mixin.transaction_confirm",
@@ -78,6 +85,13 @@ class HRLeave(models.Model):
         "date_end",
     )
     def _compute_sheet(self):
+        """Resolve the timesheet that covers this leave's period.
+
+        Searches ``hr.timesheet`` for a sheet belonging to the same
+        employee whose ``date_start``/``date_end`` bounds the leave's
+        ``date_start``/``date_end``. Leaves this field empty when no
+        such sheet exists.
+        """
         obj_sheet = self.env["hr.timesheet"]
         for record in self:
             sheet_id = False
@@ -106,6 +120,12 @@ class HRLeave(models.Model):
         "employee_id",
     )
     def _compute_schedule_ids(self):
+        """Collect the attendance schedules covered by this leave.
+
+        Searches ``hr.timesheet_attendance_schedule`` for the same
+        employee with a ``date`` between the leave's ``date_start``
+        and ``date_end``.
+        """
         AttendanceSchedule = self.env["hr.timesheet_attendance_schedule"]
         for record in self:
             if record.date_start and record.date_end and record.employee_id:
@@ -143,6 +163,11 @@ class HRLeave(models.Model):
         "date_end",
     )
     def _compute_leave_duration(self):
+        """Compute the leave duration in days.
+
+        Starts from the number of covered ``schedule_ids`` and
+        subtracts any day that falls on a public holiday.
+        """
         PublicHoliday = self.env["base.public.holiday"]
         for record in self:
             leave_duration = 0
@@ -182,6 +207,11 @@ class HRLeave(models.Model):
         "date_end",
     )
     def _compute_leave_allocation_id(self):
+        """Resolve the leave allocation this request draws from.
+
+        Delegates to ``_get_leave_allocation`` once ``type_id``,
+        ``employee_id``, ``date_start`` and ``date_end`` are all set.
+        """
         for record in self:
             result = False
             if (
@@ -217,7 +247,7 @@ class HRLeave(models.Model):
 
     @api.model
     def _get_policy_field(self):
-        res = super(HRLeave, self)._get_policy_field()
+        res = super(HrLeave, self)._get_policy_field()
         policy_field = [
             "confirm_ok",
             "approve_ok",
@@ -235,6 +265,11 @@ class HRLeave(models.Model):
         "employee_id",
     )
     def onchange_policy_template_id(self):
+        """Set the policy template when ``employee_id`` changes.
+
+        Resolves the template through ``_get_template_policy`` so the
+        approval policy fields follow the selected employee.
+        """
         template_id = self._get_template_policy()
         self.policy_template_id = template_id
 
@@ -245,6 +280,17 @@ class HRLeave(models.Model):
         self.number_of_days = self.leave_duration
 
     def _get_leave_allocation(self):
+        """Find the leave allocation to draw this request's days from.
+
+        Searches ``hr.leave_allocation`` for an ``open`` record of the
+        same ``type_id``/``employee_id`` with enough available days
+        and a date range covering this request, ordered by
+        ``date_start`` so the oldest matching allocation is used
+        first.
+
+        :return: a single ``hr.leave_allocation`` record, or an empty
+            recordset when none matches
+        """
         self.ensure_one()
         LeaveAllocation = self.env["hr.leave_allocation"]
         criteria = [
@@ -262,6 +308,11 @@ class HRLeave(models.Model):
 
     @api.constrains("sheet_id")
     def _constrains_sheet_id(self):
+        """Require a covering timesheet for every leave request.
+
+        Raises ``UserError`` when ``sheet_id`` is empty, meaning no
+        ``hr.timesheet`` covers this leave's employee and date range.
+        """
         for record in self.sudo():
             if not record.sheet_id:
                 error_message = _(
@@ -277,6 +328,12 @@ class HRLeave(models.Model):
 
     @api.constrains("date_start", "date_end", "employee_id")
     def _constrains_overlap(self):
+        """Forbid leave requests whose dates overlap another request.
+
+        Delegates the check to ``_check_overlap`` and raises
+        ``UserError`` when an overlapping, non-cancelled/rejected
+        leave already exists for the same employee.
+        """
         for record in self.sudo():
             if not record._check_overlap():
                 error_message = _(
@@ -292,6 +349,12 @@ class HRLeave(models.Model):
 
     @api.constrains("type_id", "number_of_days")
     def _constrains_limit_request(self):
+        """Enforce the leave type's per-request day limit.
+
+        Delegates to ``_check_limit_per_request`` and raises
+        ``UserError`` when ``number_of_days`` exceeds the leave
+        type's ``limit_per_request``.
+        """
         for record in self.sudo():
             limit = record.type_id.limit_per_request
             if not record._check_limit_per_request():
@@ -308,6 +371,13 @@ class HRLeave(models.Model):
 
     @api.constrains("state")
     def _constrains_confirm(self):
+        """Require an available leave allocation to confirm a leave.
+
+        Only checks records whose ``state`` is ``confirm``; delegates
+        to ``_check_leave_allocation_available`` and raises
+        ``UserError`` when the leave type needs an allocation but
+        none is available with enough days.
+        """
         for record in self.sudo():
             if record.state != "confirm":
                 break
@@ -327,6 +397,12 @@ class HRLeave(models.Model):
                 raise UserError(_(error_message))
 
     def _check_overlap(self):
+        """Check whether this leave overlaps another active leave.
+
+        :return: ``False`` when another non-cancelled/rejected leave
+            of the same employee overlaps this record's date range,
+            ``True`` otherwise
+        """
         self.ensure_one()
         result = True
         Leave = self.env["hr.leave"]
@@ -344,6 +420,12 @@ class HRLeave(models.Model):
         return result
 
     def _check_limit_per_request(self):
+        """Check ``number_of_days`` against the leave type's limit.
+
+        :return: ``False`` when the leave type applies a per-request
+            limit and ``number_of_days`` exceeds it, ``True``
+            otherwise
+        """
         self.ensure_one()
         result = True
         if (
@@ -354,6 +436,12 @@ class HRLeave(models.Model):
         return result
 
     def _check_leave_allocation_available(self):
+        """Check that an allocation is available when one is needed.
+
+        :return: ``False`` when the leave type requires an allocation
+            (``need_allocation``) but ``leave_allocation_id`` is
+            empty, ``True`` otherwise
+        """
         self.ensure_one()
         result = True
         if self.type_id.need_allocation:
@@ -363,6 +451,12 @@ class HRLeave(models.Model):
 
     @ssi_decorator.pre_confirm_action()
     def _compute_schedule_leave_allocation(self):
+        """Refresh schedules and allocation right before confirming.
+
+        Runs as a ``pre_confirm_action`` hook so ``schedule_ids`` and
+        ``leave_allocation_id`` reflect the latest data before the
+        confirm policy checks are evaluated.
+        """
         self.ensure_one()
         if not self.schedule_ids:
             self._compute_schedule_ids()
@@ -370,9 +464,20 @@ class HRLeave(models.Model):
 
     @ssi_decorator.pre_cancel_action()
     def _reopen_leave_allocation(self):
+        """Reopen a ``done`` leave allocation when cancelling a leave.
+
+        Runs as a ``pre_cancel_action`` hook so days freed by the
+        cancellation become available again on the allocation.
+        """
         self.ensure_one()
         leave_allocation_ids = self.mapped("leave_allocation_id").filtered(
             lambda allocation: allocation.state == "done"
         )
         if leave_allocation_ids:
             leave_allocation_ids.action_open()
+
+    @ssi_decorator.insert_on_form_view()
+    def _insert_form_element(self, view_arch):
+        if self._automatically_insert_view_element:
+            view_arch = self._reconfigure_statusbar_visible(view_arch)
+        return view_arch
