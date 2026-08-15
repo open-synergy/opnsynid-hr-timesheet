@@ -6,6 +6,11 @@
 Leave + Operating Unit
 ======================
 
+Work Instruction
+=================
+
+* `Create Leave <docs/hr_leave/index.html>`_
+* `Create Leave Allocation <docs/hr_leave_allocation/index.html>`_
 
 Installation
 ============

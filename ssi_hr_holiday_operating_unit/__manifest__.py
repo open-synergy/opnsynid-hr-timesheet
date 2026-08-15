@@ -12,11 +12,13 @@
     "depends": [
         "ssi_hr_holiday",
         "ssi_operating_unit_mixin",
+        "web_tour",
     ],
     "data": [
         "security/res_group/res_group_data.xml",
         "security/ir_rule/ir_rule_data.xml",
         "views/hr_leave_views.xml",
         "views/hr_leave_allocation_views.xml",
+        "views/ssi_hr_holiday_operating_unit_assets_tests.xml",
     ],
 }
