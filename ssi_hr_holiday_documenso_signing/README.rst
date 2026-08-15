@@ -13,6 +13,12 @@ platform.
 It adds a *Documenso* tab to both the HR Leave and HR Leave Allocation form
 views, allowing users to manage signature requests directly from each record.
 
+Work Instruction
+================
+
+* `Approve Leave <docs/hr_leave/index.html>`_
+* `Approve Leave Allocation <docs/hr_leave_allocation/index.html>`_
+
 Configuration
 =============
 
