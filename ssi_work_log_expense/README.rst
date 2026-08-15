@@ -7,6 +7,28 @@ Work Log Expense
 ================
 
 
+Work Instruction
+================
+
+* `Create Work Log Expense <docs/work_log_expense/index.html>`_
+* `Edit Work Log Expense <docs/work_log_expense/index.html>`_
+* `Delete Work Log Expense <docs/work_log_expense/index.html>`_
+* `Confirm Work Log Expense <docs/work_log_expense/index.html>`_
+* `Approve Work Log Expense <docs/work_log_expense/index.html>`_
+* `Reject Work Log Expense <docs/work_log_expense/index.html>`_
+* `Cancel Work Log Expense <docs/work_log_expense/index.html>`_
+* `Restart Work Log Expense <docs/work_log_expense/index.html>`_
+* `Reset Document Number — Work Log Expense <docs/work_log_expense/index.html>`_
+* `Restart Approval Process — Work Log Expense <docs/work_log_expense/index.html>`_
+* `Create Work Log Expense Type <docs/work_log_expense_type/index.html>`_
+* `Edit Work Log Expense Type <docs/work_log_expense_type/index.html>`_
+* `Delete Work Log Expense Type <docs/work_log_expense_type/index.html>`_
+* `Deactivate Work Log Expense Type <docs/work_log_expense_type/index.html>`_
+* `Activate Work Log Expense Type <docs/work_log_expense_type/index.html>`_
+* `Reset Code — Work Log Expense Type <docs/work_log_expense_type/index.html>`_
+* `Generate Work Log Expense <docs/work_log_expense_type/index.html>`_
+
+
 Installation
 ============
 
