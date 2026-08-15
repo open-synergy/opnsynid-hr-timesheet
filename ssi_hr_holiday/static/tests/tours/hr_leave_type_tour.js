@@ -317,9 +317,29 @@ odoo.define("ssi_hr_holiday.hr_leave_type_tour", function (require) {
             {
                 // Gate: the archived TOUR-LTYPE-ACTIVATE record is only
                 // reachable once the Archived filter is actually applied.
+                //
+                // This step's trigger matches the row itself (via
+                // `:contains`), so it MUST declare an explicit no-op
+                // `run` like every other assertion-only gate in this
+                // file. Without it, the tour engine's default action
+                // for a step with no `run` is to CLICK the matched
+                // trigger element — which opens TOUR-LTYPE-ACTIVATE's
+                // FORM view (the same default-click behavior the "Open
+                // the record" step in the edit tour above relies on
+                // *intentionally*). That accidental navigation away
+                // from the list is what left the final Post-Condition
+                // step below polling for `.o_list_view` on a DOM that
+                // no longer had one, timing out after 10s even though
+                // the Unarchive RPC itself succeeded immediately
+                // (confirmed via CI screenshot: the tour landed on the
+                // record's form, pager "1/1", Active toggled on).
                 content: "Archived leave type is displayed in the list",
                 trigger: ".o_data_row:contains(TOUR-LTYPE-ACTIVATE)",
                 extra_trigger: ".o_list_view",
+                run: function () {
+                    // Assertion only; do not trigger the default click
+                    // action.
+                },
             },
             // ── Flow 3-4 — Select the record and click Action > Unarchive.
             {
