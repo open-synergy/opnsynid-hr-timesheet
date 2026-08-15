@@ -82,10 +82,12 @@ odoo.define("ssi_holiday_state_change_constrain.hr_leave_allocation_tour", funct
             {
                 // Gate: the tab content only exists once the tab
                 // above is actually selected, so this cannot
-                // match before the click above ran.
+                // match before the click above ran. Odoo 14 wraps
+                // the active page in `.tab-pane.active` (Bootstrap
+                // tabs) — there is no `.o_notebook_content` class
+                // in this series.
                 content: "Status Checks tab content is rendered",
-                trigger:
-                    ".o_notebook_content " + ".o_field_x2many[name='status_check_ids']",
+                trigger: ".tab-pane.active .o_field_x2many[name='status_check_ids']",
                 run: function () {
                     // Assertion only; do not trigger the default
                     // click action. Delta-only tour: stop here, do
