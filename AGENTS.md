@@ -385,6 +385,43 @@ Menu: **Human Resource > Timesheets > Timesheets** (open a timesheet, then use i
 > (additional fields) on top of the base `hr.work_log` IK, only relevant when
 > `ssi_work_log_cost` is installed and the actor has `show_cost_setting_ok` access.
 
+### `ssi_work_log_expense` — Model: `work_log_expense`
+
+Menu: **Human Resource > Timesheets > Work Log Expenses**
+
+| File                                                                | Action                                           |
+| ------------------------------------------------------------------- | ------------------------------------------------ |
+| `ssi_work_log_expense/docs/work_log_expense/01-create.md`           | Create a new work log expense                    |
+| `ssi_work_log_expense/docs/work_log_expense/02-edit.md`             | Edit a work log expense                          |
+| `ssi_work_log_expense/docs/work_log_expense/03-delete.md`           | Delete a work log expense                        |
+| `ssi_work_log_expense/docs/work_log_expense/04-confirm.md`          | Confirm a work log expense (submit for approval) |
+| `ssi_work_log_expense/docs/work_log_expense/05-approve.md`          | Approve a work log expense                       |
+| `ssi_work_log_expense/docs/work_log_expense/06-reject.md`           | Reject a work log expense                        |
+| `ssi_work_log_expense/docs/work_log_expense/10-cancel.md`           | Cancel a work log expense                        |
+| `ssi_work_log_expense/docs/work_log_expense/12-restart.md`          | Restart a cancelled/rejected work log expense    |
+| `ssi_work_log_expense/docs/work_log_expense/13-reset-number.md`     | Reset a work log expense's document number       |
+| `ssi_work_log_expense/docs/work_log_expense/14-restart-approval.md` | Restart a work log expense's approval process    |
+
+> There is no `07-start.md`/`09-finish.md` — approving (`05-approve.md`) transitions the
+> record directly to **Done**; there is no separate Start/Finish button. The
+> **Populate** and **Clear** buttons that fill/empty the **Details** tab are documented
+> inline in `01-create.md`/`02-edit.md` (`Inline Actions:` metadata), not as their own
+> files.
+
+### `ssi_work_log_expense` — Model: `work_log_expense_type`
+
+Menu: **Human Resource > Configuration > Timesheets > Work Log Expense Types**
+
+| File                                                               | Action                                                                                  |
+| ------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
+| `ssi_work_log_expense/docs/work_log_expense_type/01-create.md`     | Create a new work log expense type                                                      |
+| `ssi_work_log_expense/docs/work_log_expense_type/02-edit.md`       | Edit a work log expense type                                                            |
+| `ssi_work_log_expense/docs/work_log_expense_type/03-delete.md`     | Delete a work log expense type                                                          |
+| `ssi_work_log_expense/docs/work_log_expense_type/04-deactivate.md` | Deactivate a work log expense type                                                      |
+| `ssi_work_log_expense/docs/work_log_expense_type/05-activate.md`   | Activate a work log expense type                                                        |
+| `ssi_work_log_expense/docs/work_log_expense_type/06-reset-code.md` | Reset the code of one or more types                                                     |
+| `ssi_work_log_expense/docs/work_log_expense_type/07-generate.md`   | Generate work log expenses from this type (per-employee, using the **Generate** wizard) |
+
 ---
 
 ## Module Development Guidelines
