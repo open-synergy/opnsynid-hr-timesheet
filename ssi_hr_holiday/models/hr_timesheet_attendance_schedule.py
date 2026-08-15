@@ -5,7 +5,13 @@
 from odoo import fields, models
 
 
-class HRTimesheetAttendanceSchedule(models.Model):
+class HrTimesheetAttendanceSchedule(models.Model):
+    """
+    Adds leave traceability to attendance schedule days.
+    Links each leave request that covers this schedule day back to
+    it, so a schedule day shows which leaves apply to it.
+    """
+
     _name = "hr.timesheet_attendance_schedule"
     _inherit = "hr.timesheet_attendance_schedule"
 

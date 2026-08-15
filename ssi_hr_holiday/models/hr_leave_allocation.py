@@ -6,8 +6,17 @@ from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 from odoo.tools import pytz
 
+from odoo.addons.ssi_decorator import ssi_decorator
+
 
 class HrLeaveAllocation(models.Model):
+    """
+    Represents an allocation of leave days granted to an employee.
+    Tracks how many days were granted, used, planned, and still
+    available, and automatically terminates allocations past their
+    extended expiry date via a scheduled action.
+    """
+
     _name = "hr.leave_allocation"
     _inherit = [
         "mixin.transaction_confirm",
@@ -89,6 +98,12 @@ class HrLeaveAllocation(models.Model):
         "number_of_days",
     )
     def _compute_num_of_days(self):
+        """Compute used, planned and available days on this allocation.
+
+        Sums ``number_of_days`` of ``leave_ids`` grouped by state
+        (``done`` counts as used, ``confirm`` counts as planned), and
+        derives available days as ``number_of_days`` minus both.
+        """
         for leave in self:
             num_of_days_used = num_of_days_planned = 0.0
             for record in leave.leave_ids:
@@ -179,6 +194,12 @@ class HrLeaveAllocation(models.Model):
 
     @api.depends("policy_template_id")
     def _compute_policy(self):
+        """Recompute approval policy on ``policy_template_id`` change.
+
+        Overridden only to add ``policy_template_id`` as an explicit
+        dependency on top of the mixin's own compute; delegates the
+        whole computation to ``super()``.
+        """
         _super = super(HrLeaveAllocation, self)
         _super._compute_policy()
 
@@ -204,11 +225,22 @@ class HrLeaveAllocation(models.Model):
         "employee_id",
     )
     def onchange_policy_template_id(self):
+        """Set the policy template when ``employee_id`` changes.
+
+        Resolves the template through ``_get_template_policy`` so the
+        approval policy fields follow the selected employee.
+        """
         template_id = self._get_template_policy()
         self.policy_template_id = template_id
 
     @api.constrains("state")
     def _constrains_leave(self):
+        """Forbid cancelling an allocation that still has active leaves.
+
+        Delegates to ``_check_leave`` and raises ``UserError`` when
+        the allocation is being cancelled while it still has leaves
+        that are not ``cancel``/``reject``.
+        """
         for record in self.sudo():
             if record.state == "cancel" and not record._check_leave():
                 error_message = _(
@@ -228,6 +260,12 @@ class HrLeaveAllocation(models.Model):
         "employee_id",
     )
     def _constrains_overlap(self):
+        """Forbid allocations whose dates overlap another allocation.
+
+        Delegates the check to ``_check_overlap`` and raises
+        ``UserError`` when an overlapping, non-cancelled/rejected
+        allocation already exists for the same employee.
+        """
         for record in self.sudo():
             if not record._check_overlap():
                 error_message = _(
@@ -242,6 +280,11 @@ class HrLeaveAllocation(models.Model):
                 raise UserError(error_message)
 
     def _check_leave(self):
+        """Check that no active leave still references this allocation.
+
+        :return: ``False`` when ``leave_ids`` has a leave whose state
+            is not ``cancel``/``reject``, ``True`` otherwise
+        """
         result = True
         if self.leave_ids.filtered(
             lambda leave: leave.state not in ("cancel", "reject")
@@ -250,6 +293,12 @@ class HrLeaveAllocation(models.Model):
         return result
 
     def _check_overlap(self):
+        """Check whether this allocation overlaps another allocation.
+
+        :return: ``False`` when another non-cancelled/rejected
+            allocation of the same employee overlaps this record's
+            date range, ``True`` otherwise
+        """
         self.ensure_one()
         result = True
         criteria = [
@@ -271,6 +320,13 @@ class HrLeaveAllocation(models.Model):
         "date_extended",
     )
     def onchange_date_extended(self):
+        """Keep ``date_extended`` consistent with ``date_end``.
+
+        Resets ``date_extended`` to ``date_end`` when it is empty or
+        ``can_be_extended`` is off, and warns (clamping the value)
+        when a manually set ``date_extended`` is earlier than
+        ``date_end``.
+        """
         if not self.date_extended or not self.can_be_extended:
             self.date_extended = self.date_end
         if self.date_end and self.date_extended < self.date_end:
@@ -283,6 +339,16 @@ class HrLeaveAllocation(models.Model):
             }
 
     def _cron_terminate(self, terminate_reason_code=False):
+        """Terminate allocations whose extended date has passed.
+
+        Scheduled action entry point: searches ``open`` allocations
+        whose ``date_extended`` is before today (in the admin user's,
+        or current user's, timezone) and terminates them using the
+        terminate reason matching ``terminate_reason_code``.
+
+        :param terminate_reason_code: ``code`` of the
+            ``base.terminate_reason`` applied to matched allocations
+        """
         try:
             user_id = self.env.ref("base.user_admin")
         except Exception:
@@ -302,3 +368,9 @@ class HrLeaveAllocation(models.Model):
             limit=1,
         )
         allocation_ids.action_terminate(terminate_reason=terminate_reason__id)
+
+    @ssi_decorator.insert_on_form_view()
+    def _insert_form_element(self, view_arch):
+        if self._automatically_insert_view_element:
+            view_arch = self._reconfigure_statusbar_visible(view_arch)
+        return view_arch
