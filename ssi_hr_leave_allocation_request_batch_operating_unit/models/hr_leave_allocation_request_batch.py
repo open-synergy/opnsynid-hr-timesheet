@@ -6,6 +6,14 @@ from odoo import models
 
 
 class HrLeaveAllocationRequestBatch(models.Model):
+    """Add operating unit ownership to leave allocation request batches.
+
+    Mixes in ``mixin.single_operating_unit`` so every batch document
+    carries an ``operating_unit_id``, gating its visibility to users
+    granted the operating units the record belongs to (see the
+    ``ir.rule`` shipped by this module).
+    """
+
     _name = "hr.leave_allocation_request_batch"
     _inherit = [
         "hr.leave_allocation_request_batch",

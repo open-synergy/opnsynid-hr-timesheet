@@ -6,6 +6,10 @@
 Leave Allocation Request Batch + Operating Unit
 ===============================================
 
+Work Instruction
+=================
+
+* `Create Leave Allocation Request Batch <docs/hr_leave_allocation_request_batch/index.html>`_
 
 Installation
 ============
