@@ -26,12 +26,18 @@ class TestUiHrLeave(HttpSavepointCase):
         ``_check_leave_allocation_available`` when the type needs
         allocation and none is available (see
         ``ssi_hr_holiday/tests/test_data_hr_holiday.yaml``, "Sick Leave
-        Test", for the same pattern). Pre-Condition IK 05-approve.md
-        (delta): the record is already Waiting for Approval, reached
-        here via ``action_confirm()`` in Python, not via UI clicks. The
-        "Standard" approval template used by ``ssi_hr_holiday`` demo
-        data has no Documenso Signing Template configured, so the
-        Signature Requests tab is present
+        Test", for the same pattern). An ``hr.timesheet`` covering the
+        leave's date range is also created for the employee --
+        ``_constrains_sheet_id`` requires ``sheet_id`` (computed from a
+        matching ``hr.timesheet``) to be set once ``sheet_id`` is
+        (re)computed and flushed, which can happen well after
+        ``action_confirm()`` returns (e.g. during a later test's own
+        ``setUp()``), so the timesheet must exist regardless. Pre-
+        Condition IK 05-approve.md (delta): the record is already
+        Waiting for Approval, reached here via ``action_confirm()`` in
+        Python, not via UI clicks. The "Standard" approval template
+        used by ``ssi_hr_holiday`` demo data has no Documenso Signing
+        Template configured, so the Signature Requests tab is present
         (``_documenso_signing_create_page = True``) but the base
         Approve/OK Flow is unaffected -- this tour does not exercise
         it.
@@ -55,6 +61,18 @@ class TestUiHrLeave(HttpSavepointCase):
                 }
             )
         )
+        # Pre-Condition (implicit, `_constrains_sheet_id`): the leave's
+        # date range must fall within an existing hr.timesheet for the
+        # same employee, or `action_confirm()` is rejected with
+        # "Timesheet not found for employee ...".
+        cls.env["hr.timesheet"].with_user(cls.admin).create(
+            {
+                "employee_id": employee.id,
+                "date_start": "2026-01-01",
+                "date_end": "2026-01-31",
+                "working_schedule_id": cls.env.company.resource_calendar_id.id,
+            }
+        )
         cls.leave = (
             cls.env["hr.leave"]
             .with_user(cls.admin)
@@ -62,8 +80,8 @@ class TestUiHrLeave(HttpSavepointCase):
                 {
                     "employee_id": employee.id,
                     "type_id": leave_type.id,
-                    "date_start": "2026-01-15 08:00:00",
-                    "date_end": "2026-01-15 17:00:00",
+                    "date_start": "2026-01-15",
+                    "date_end": "2026-01-15",
                 }
             )
         )
