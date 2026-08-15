@@ -2,9 +2,28 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-==============
-Work Log Mixin
-==============
+=============
+Work Log Cost
+=============
+
+
+Work Instruction
+================
+
+* `Create Work Log Rate <docs/work_log_rate/index.html>`_
+* `Edit Work Log Rate <docs/work_log_rate/index.html>`_
+* `Delete Work Log Rate <docs/work_log_rate/index.html>`_
+* `Confirm Work Log Rate <docs/work_log_rate/index.html>`_
+* `Approve Work Log Rate <docs/work_log_rate/index.html>`_
+* `Reject Work Log Rate <docs/work_log_rate/index.html>`_
+* `Start Work Log Rate <docs/work_log_rate/index.html>`_
+* `Finish Work Log Rate <docs/work_log_rate/index.html>`_
+* `Cancel Work Log Rate <docs/work_log_rate/index.html>`_
+* `Restart Work Log Rate <docs/work_log_rate/index.html>`_
+* `Reset Document Number — Work Log Rate <docs/work_log_rate/index.html>`_
+* `Restart Approval Process — Work Log Rate <docs/work_log_rate/index.html>`_
+* `Create Work Log (additional fields) <docs/hr_work_log/index.html>`_
+* `Edit Work Log (additional fields) <docs/hr_work_log/index.html>`_
 
 
 Installation

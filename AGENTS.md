@@ -349,6 +349,42 @@ Menu: **Human Resource > Timesheets > Timesheets**
 > (additional fields/effects) on top of the base `hr.timesheet` IK, only relevant when
 > `ssi_work_log_mixin` is installed.
 
+### `ssi_work_log_cost` — Model: `work_log_rate`
+
+Menu: **Human Resource > Timesheets > Work Log Rates**
+
+| File                                                          | Action                                        |
+| ------------------------------------------------------------- | --------------------------------------------- |
+| `ssi_work_log_cost/docs/work_log_rate/01-create.md`           | Create a new work log rate                    |
+| `ssi_work_log_cost/docs/work_log_rate/02-edit.md`             | Edit a work log rate                          |
+| `ssi_work_log_cost/docs/work_log_rate/03-delete.md`           | Delete a work log rate                        |
+| `ssi_work_log_cost/docs/work_log_rate/04-confirm.md`          | Confirm a work log rate (submit for approval) |
+| `ssi_work_log_cost/docs/work_log_rate/05-approve.md`          | Approve a work log rate                       |
+| `ssi_work_log_cost/docs/work_log_rate/06-reject.md`           | Reject a work log rate                        |
+| `ssi_work_log_cost/docs/work_log_rate/07-start.md`            | Start a work log rate                         |
+| `ssi_work_log_cost/docs/work_log_rate/09-finish.md`           | Finish a work log rate                        |
+| `ssi_work_log_cost/docs/work_log_rate/10-cancel.md`           | Cancel a work log rate                        |
+| `ssi_work_log_cost/docs/work_log_rate/12-restart.md`          | Restart a cancelled/rejected work log rate    |
+| `ssi_work_log_cost/docs/work_log_rate/13-reset-number.md`     | Reset a work log rate's document number       |
+| `ssi_work_log_cost/docs/work_log_rate/14-restart-approval.md` | Restart a work log rate's approval process    |
+
+> There is no `08-ready.md` — approving (`05-approve.md`) transitions the record
+> directly to **Ready to Start**; there is no separate Set Ready button.
+
+### `ssi_work_log_cost` — Model: `hr.work_log` (extends `ssi_work_log_mixin`)
+
+Menu: **Human Resource > Timesheets > Timesheets** (open a timesheet, then use its
+**Work Log** tab)
+
+| File                                              | Action                                                    |
+| ------------------------------------------------- | --------------------------------------------------------- |
+| `ssi_work_log_cost/docs/hr_work_log/01-create.md` | Additional fields when creating a work log (**Cost** tab) |
+| `ssi_work_log_cost/docs/hr_work_log/02-edit.md`   | Additional fields when editing a work log (**Cost** tab)  |
+
+> Read together with `ssi_work_log_mixin/docs/hr_work_log/*` — these files are deltas
+> (additional fields) on top of the base `hr.work_log` IK, only relevant when
+> `ssi_work_log_cost` is installed and the actor has `show_cost_setting_ok` access.
+
 ---
 
 ## Module Development Guidelines
