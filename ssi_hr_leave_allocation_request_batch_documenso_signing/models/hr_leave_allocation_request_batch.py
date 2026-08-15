@@ -6,6 +6,16 @@ from odoo import models
 
 
 class HrLeaveAllocationRequestBatch(models.Model):
+    """Enable Documenso-signed approval on leave allocation batches.
+
+    Adds the Documenso Signing tab to the
+    ``hr.leave_allocation_request_batch`` form and lets an
+    ``approval.template`` route this document to a single
+    ``documenso.signature.request`` instead of the regular
+    approval-record flow, whenever the template defines a
+    ``documenso_signing_template_id``.
+    """
+
     _name = "hr.leave_allocation_request_batch"
     _inherit = [
         "hr.leave_allocation_request_batch",

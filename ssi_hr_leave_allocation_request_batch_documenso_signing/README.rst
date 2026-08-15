@@ -13,6 +13,11 @@ digital signature platform.
 It adds a *Documenso* tab to the HR Leave Allocation Request Batch form view,
 allowing users to manage signature requests directly from the batch record.
 
+Work Instruction
+================
+
+* `Approve Leave Allocation Request Batch <docs/hr_leave_allocation_request_batch/index.html>`_
+
 Configuration
 =============
 
