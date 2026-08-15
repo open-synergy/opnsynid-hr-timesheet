@@ -130,18 +130,37 @@ odoo.define("ssi_hr_overtime_batch.hr_overtime_batch_tour", function (require) {
                 content: "Open the Employee tab",
                 trigger: ".o_notebook .nav-link:contains(Employee)",
             },
+            // `employee_ids` has no `widget=` attribute in the view, so it
+            // renders as the default FieldMany2Many — an embedded list
+            // with an "Add a line" control that opens a
+            // SelectCreateDialog, not a tag-input with a free-type
+            // autocomplete (verified against web/static/src/js/fields/
+            // relational_fields.js FieldMany2Many.onAddRecordOpenDialog
+            // and web/static/src/js/views/view_dialogs.js
+            // SelectCreateDialog: a single click on a dialog row fires
+            // `select_record`, which selects that record and closes the
+            // dialog immediately).
             {
-                content: "Select an Employee",
-                trigger: ".o_field_widget[name='employee_ids'] input",
+                content: "Add an Employee line",
+                trigger:
+                    ".o_field_widget[name='employee_ids'] " +
+                    ".o_field_x2many_list_row_add a",
                 extra_trigger: ".o_form_view.o_form_editable",
+            },
+            {
+                content: "Search for the Employee in the dialog",
+                trigger: ".o_searchview_input",
                 run: "text TOUR-BATCH-EMP-CREATE",
             },
             {
-                content: "Pick the Employee from the dropdown",
+                content: "Validate the search",
+                trigger: ".o_searchview_autocomplete li.o_menu_item:first",
+            },
+            {
+                content: "Select the Employee from the dialog list",
                 trigger:
-                    ".ui-autocomplete .ui-menu-item a:contains(" +
-                    "TOUR-BATCH-EMP-CREATE)",
-                in_modal: false,
+                    ".o_data_row:contains(TOUR-BATCH-EMP-CREATE) " +
+                    ".o_data_cell:first",
             },
             {
                 content: "Fill in Date Start",
