@@ -29,7 +29,7 @@ Available addons
 ----------------
 addon | version | maintainers | summary
 --- | --- | --- | ---
-[ssi_holiday_state_change_constrain](ssi_holiday_state_change_constrain/) | 14.0.1.1.0 |  | Employee Holiday + State Change Constrain Integration
+[ssi_holiday_state_change_constrain](ssi_holiday_state_change_constrain/) | 14.0.1.1.1 |  | Employee Holiday + State Change Constrain Integration
 [ssi_hr_holiday](ssi_hr_holiday/) | 14.0.2.2.0 |  | Leave Management
 [ssi_hr_holiday_documenso_signing](ssi_hr_holiday_documenso_signing/) | 14.0.2.1.0 |  | HR Holiday - Documenso Signing Integration
 [ssi_hr_holiday_operating_unit](ssi_hr_holiday_operating_unit/) | 14.0.1.1.0 |  | Leave + Operating Unit
