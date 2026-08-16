@@ -193,7 +193,29 @@ odoo.define("ssi_work_log_mixin.hr_work_log_tour", function (require) {
                 // dialog (which — per CI failure screenshots, PR #245,
                 // run 31921263812 — was already rendering correctly the
                 // whole time) is detected immediately.
-                trigger: ".o_form_view",
+                //
+                // Gate on the record's OWN Description field showing the
+                // fixture value, not merely ".o_form_view" existing as a
+                // bare container. A generic selector like that is exactly
+                // the "penunggu yang salah" trap in patterns.md §M — it
+                // matches the dialog's empty/loading shell before its
+                // `read` RPC resolves, not after. Diagnosed locally (PR
+                // #245, round 8, via Playwright + network capture against
+                // a scratch DB): clicking a `type="action"` header button
+                // (e.g. Cancel) before that RPC settles intermittently
+                // sends an EMPTY `active_ids` in the window-action context
+                // — `base.select_cancel_reason`'s `_confirm_cancel()`
+                // (ssi_transaction_cancel_mixin) reads
+                // `context.get("active_ids", [])` and silently no-ops
+                // when it is empty (`if len(record_ids) > 0:`), and in a
+                // slower environment the same race was observed to
+                // resolve `active_model` to the PARENT record's model
+                // instead of this dialog's own — both symptoms trace back
+                // to the same "clicked before the dialog's record binding
+                // settled" race, not to the button-click scoping itself
+                // (already fixed above via `.modal:visible().last()`).
+                trigger:
+                    ".o_field_widget[name='description']:contains(" + description + ")",
                 timeout: WORK_LOG_DIALOG_TIMEOUT,
                 run: function () {
                     // Assertion only; do not trigger the default click
@@ -687,7 +709,21 @@ odoo.define("ssi_work_log_mixin.hr_work_log_tour", function (require) {
                 // was never :visible, hence the timeout. No ".modal:
                 // visible" prefix either — same in_modal scoping reason as
                 // the dialog-open steps above.
-                trigger: ".o_field_widget[name='display_name']:contains(/)",
+                //
+                // The VALUE asserted is "*" (not a literal "/"), though.
+                // `name` is genuinely written to "/" server-side
+                // (mixin_transaction.py's `_reset_document_number`:
+                // `self.write({"name": "/"})`), but `display_name` is a
+                // DIFFERENT, derived value: `mixin.transaction.name_get()`
+                // (ssi_transaction_mixin/models/mixin_transaction.py)
+                // explicitly special-cases the "/" placeholder and
+                // returns `"*" + str(record.id)` instead, as a
+                // human-friendly "not yet numbered" label. Confirmed via
+                // CI screenshot (PR #245, run 31926625054): the "#
+                // Document" field showed "*8" (record id 8) after the
+                // reset click succeeded — matching this exact business
+                // rule, not a stale/failed reset.
+                trigger: ".o_field_widget[name='display_name']:contains(*)",
                 extra_trigger: nestedDialogSettledExtraTrigger,
                 run: function () {
                     // Assertion only; do not trigger the default click
