@@ -18,12 +18,17 @@ odoo.define("ssi_work_log_mixin.hr_work_log_tag_tour", function (require) {
                     ".o_menu_sections " +
                     '[data-menu-xmlid="ssi_hr.menu_human_resource_configuration"]',
             },
-            {
-                content: "Open the Timesheets configuration menu",
-                trigger:
-                    ".o_menu_sections " +
-                    '[data-menu-xmlid="ssi_timesheet.menu_hr_timesheet_configuration"]',
-            },
+            // "Timesheets" (ssi_timesheet.menu_hr_timesheet_configuration) is a
+            // level-3 <menuitem> WITHOUT an `action` and WITH two children
+            // (ssi_timesheet's own hr_timesheet_computation_item_menu, and
+            // this module's hr_work_log_tag_menu) — per 14.0's Menu.link
+            // template (web/static/src/xml/menu.xml) a level-3+ item with
+            // children renders as a non-clickable
+            // `<div class="dropdown-header">` WITHOUT `data-menu-xmlid`, not
+            // an `<a>` (odoo-development-ui-test skill, patterns.md §A "Jumlah
+            // level menu di IK ≠ jumlah step tour"). Its children are
+            // flattened into the SAME "Configuration" dropdown opened above,
+            // so no step targets it — skip straight to the Work Log Tags leaf.
             {
                 content: "Open the Work Log Tags menu",
                 trigger:

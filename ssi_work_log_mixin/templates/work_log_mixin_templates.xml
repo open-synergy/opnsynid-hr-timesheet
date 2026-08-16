@@ -18,7 +18,30 @@
                 name="work_log_ids"
                 nolabel="1"
                 context="{'work_log_model': active_model}"
-            />
+            >
+            <!-- Explicit inline list, WITHOUT editable= (so a row click still
+                 opens the hr.work_log form in a dialog, per the Flow of every
+                 docs/hr_work_log/*.md IK — "click the line to open it").
+
+                 Without this inline <tree>, ir_ui_view.py's
+                 _postprocess_tag_field only fills `views` from CHILD nodes of
+                 the <field> tag; a field with no children gets `views: {}`.
+                 relational_fields.js's FieldX2Many.init() then does
+                 `this.view = this.attrs.views[this.attrs.mode]`, which
+                 resolves to `undefined`. FieldX2Many.start()/_render() both
+                 guard on `if (this.view)` before wiring up the renderer,
+                 buttons, and (critically) the click-to-open-dialog handling
+                 in FieldOne2Many._onOpenRecord/_openFormDialog — so without
+                 an inline sub-view the row-click-to-dialog path is never
+                 armed. -->
+            <tree>
+                <field name="date" />
+                <field name="description" />
+                <field name="analytic_account_id" />
+                <field name="tag_ids" widget="many2many_tags" />
+                <field name="amount" widget="float_time" />
+            </tree>
+        </field>
     </page>
 </template>
 </odoo>
