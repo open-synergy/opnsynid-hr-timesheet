@@ -50,9 +50,18 @@ odoo.define("ssi_work_log_mixin.hr_work_log_tag_tour", function (require) {
 
     // Open the control panel's "Action" menu (works both in the list view,
     // scoped to the current selection, and in a record's own form view).
+    // Owl dropdowns in 14.0 (Action menu control-panel & Filters
+    // search-panel) are not always opened by web_tour's default synthetic
+    // click — use a native click instead (odoo-development-ui-test skill,
+    // patterns.md §I box). Confirmed via CI (PR #245, run 31925098655):
+    // "Click Unarchive" timed out waiting for ANY `.o_menu_item a` at all,
+    // meaning the dropdown itself never opened.
     var openActionMenuStep = {
         content: "Open the Action menu",
         trigger: ".o_cp_action_menus button:contains(Action)",
+        run: function () {
+            this.$anchor[0].click();
+        },
     };
 
     // Click an item inside the (already open) Action menu, matched by its

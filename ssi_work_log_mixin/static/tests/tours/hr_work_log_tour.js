@@ -72,14 +72,35 @@ odoo.define("ssi_work_log_mixin.hr_work_log_tour", function (require) {
     // Click a statusbar/header button by its exact visible label — needed
     // for the Cancel button, whose `name` attribute is a numeric action id
     // (base_select_cancel_reason_action) rather than a method name.
+    //
+    // The `run` callback below is a PLAIN jQuery query, not a web_tour
+    // trigger — it is never routed through web_tour's own
+    // `$modal_displayed.find(...)` scoping, so it is NOT covered by the
+    // in_modal auto-scoping used elsewhere in this file. Left unscoped,
+    // `$(".o_statusbar_buttons button")` matches globally: the underlying
+    // hr.timesheet form (also using mixin.transaction_cancel, so it has
+    // its OWN "Cancel" button) is still in the DOM behind the work log
+    // dialog, and `[0]` can pick that wrong, hidden button instead of the
+    // one inside the currently open modal — confirmed via CI (PR #245,
+    // run 31925098655): the click silently canceled the TIMESHEET
+    // ("Document Type: timesheet" in the policy error), which the
+    // fixture's timesheet policy rejects, so the work log itself never
+    // transitioned and "Status is Cancelled" timed out. Scope the query
+    // to the topmost open modal explicitly.
     function clickHeaderButtonByLabel(label) {
         return {
             content: "Click the " + label + " button",
             trigger: ".o_statusbar_buttons button",
             run: function () {
-                var $button = $(".o_statusbar_buttons button").filter(function () {
-                    return $(this).text().trim() === label;
-                });
+                var $scope = $(".modal:visible").last();
+                if (!$scope.length) {
+                    $scope = $(document);
+                }
+                var $button = $scope
+                    .find(".o_statusbar_buttons button")
+                    .filter(function () {
+                        return $(this).text().trim() === label;
+                    });
                 $button[0].click();
             },
         };
@@ -89,6 +110,28 @@ odoo.define("ssi_work_log_mixin.hr_work_log_tour", function (require) {
         content: "Confirm the dialog",
         trigger: ".modal-footer button.btn-primary",
         in_modal: true,
+    };
+
+    // Click the primary Save button of the currently open one2many-line
+    // FormViewDialog. Its LABEL depends on `multi_select`
+    // (view_dialogs.js FormViewDialog.init): a brand-new record (no
+    // `res_id` yet, e.g. "Add a line") gets "Save & Close" (+ a separate
+    // "Save & New"), while an EXISTING record (`res_id` set, e.g. "click
+    // the line to edit") is single-select and gets plain "Save" instead —
+    // confirmed via CI (PR #245, run 31925098655): the edit tour's
+    // "Save & Close" text match found zero buttons on the edit dialog
+    // (label there is just "Save"), causing `$button[0].click()` to throw
+    // "Cannot read properties of undefined". Match either label.
+    var clickDialogSaveStep = {
+        content: "Click Save (or Save & Close)",
+        trigger: ".modal-footer button",
+        run: function () {
+            var $button = $(".modal-footer button").filter(function () {
+                var t = $(this).text().trim();
+                return t === "Save & Close" || t === "Save";
+            });
+            $button[0].click();
+        },
     };
 
     // Post-condition gate for state transitions that happen INSIDE the
@@ -247,16 +290,7 @@ odoo.define("ssi_work_log_mixin.hr_work_log_tour", function (require) {
                 run: "text_blur 4:00",
             },
             // ── Flow 3 (repeat) — Click Save & Close.
-            {
-                content: "Click Save & Close",
-                trigger: ".modal-footer button",
-                run: function () {
-                    var $button = $(".modal-footer button").filter(function () {
-                        return $(this).text().trim() === "Save & Close";
-                    });
-                    $button[0].click();
-                },
-            },
+            clickDialogSaveStep,
             {
                 // Gate: dialog fully closed before touching the parent
                 // form again (odoo-development-ui-test skill, patterns.md
@@ -340,16 +374,7 @@ odoo.define("ssi_work_log_mixin.hr_work_log_tour", function (require) {
                 run: "text TOUR-WL-EDITED",
             },
             // ── Flow 5 — Click Save & Close.
-            {
-                content: "Click Save & Close",
-                trigger: ".modal-footer button",
-                run: function () {
-                    var $button = $(".modal-footer button").filter(function () {
-                        return $(this).text().trim() === "Save & Close";
-                    });
-                    $button[0].click();
-                },
-            },
+            clickDialogSaveStep,
             {
                 content: "Line shows the new Description",
                 trigger:
@@ -652,9 +677,17 @@ odoo.define("ssi_work_log_mixin.hr_work_log_tour", function (require) {
             // ── Post-Condition — document number returns to "/".
             {
                 content: "Document number is reset to /",
-                // No ".modal:visible" prefix — same in_modal scoping
-                // reason as the dialog-open steps above.
-                trigger: ".o_field_widget[name='name']:contains(/)",
+                // `name` (mixin_transaction_view_form's <h1>) carries
+                // class="oe_edit_only" — hidden by CSS whenever the form
+                // is in READONLY mode, which this dialog is (no "Click
+                // Edit" step in this Flow). Its read-only counterpart,
+                // shown instead, is `display_name` (class="oe_read_only")
+                // — confirmed via CI (PR #245, run 31925098655): the
+                // "name" element existed in the DOM (trigger count 1) but
+                // was never :visible, hence the timeout. No ".modal:
+                // visible" prefix either — same in_modal scoping reason as
+                // the dialog-open steps above.
+                trigger: ".o_field_widget[name='display_name']:contains(/)",
                 extra_trigger: nestedDialogSettledExtraTrigger,
                 run: function () {
                     // Assertion only; do not trigger the default click

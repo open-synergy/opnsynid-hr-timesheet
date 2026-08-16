@@ -41,14 +41,28 @@ class TestUiHrWorkLog(HttpSavepointCase):
         adding a work log line, so it must resolve through a default —
         this satisfies both that default and the
         ``hr_work_log_internal_user_rule`` record rule.
+
+        The link is written from the ``hr.employee`` side
+        (``user_id``), not via ``res.users.employee_id`` — the latter
+        (``hr/models/res_users.py``) is ``compute='_compute_company_
+        employee', store=False`` with **no inverse**, so writing it
+        directly is silently a no-op; confirmed via CI (PR #245, run
+        31925098655): the create tour's new work log line kept
+        defaulting to admin's original demo employee ("Timesheet for
+        Mitchell Admin ... not found"). ``hr.employee`` also carries a
+        ``unique (user_id, company_id)`` SQL constraint, so admin's
+        pre-existing demo employee is unlinked first.
         """
         super().setUpClass()
         employee_model = cls.env["hr.employee"]
         timesheet_model = cls.env["hr.timesheet"]
         work_log_model = cls.env["hr.work_log"]
 
+        admin_user = cls.env.ref("base.user_admin")
+        if admin_user.employee_id:
+            admin_user.employee_id.sudo().write({"user_id": False})
         cls.employee = employee_model.create({"name": "TOUR-EMP-WORKLOG"})
-        cls.env.ref("base.user_admin").sudo().write({"employee_id": cls.employee.id})
+        cls.employee.sudo().write({"user_id": admin_user.id})
 
         working_schedule = cls.env["resource.calendar"].search(
             [], limit=1, order="id asc"
