@@ -18,43 +18,7 @@
                 name="work_log_ids"
                 nolabel="1"
                 context="{'work_log_model': active_model}"
-            >
-            <!-- Explicit inline list, WITHOUT editable= (so a row click still
-                 opens the hr.work_log form in a dialog, per the Flow of every
-                 docs/hr_work_log/*.md IK — "click the line to open it").
-
-                 Without this inline <tree>, ir_ui_view.py's
-                 _postprocess_tag_field only fills `views` from CHILD nodes of
-                 the <field> tag; a field with no children gets `views: {}`.
-                 relational_fields.js's FieldX2Many.init() then does
-                 `this.view = this.attrs.views[this.attrs.mode]`, which
-                 resolves to `undefined`. FieldX2Many.start()/_render() both
-                 guard on `if (this.view)` before wiring up the renderer,
-                 buttons, and (critically) the click-to-open-dialog handling
-                 in FieldOne2Many._onOpenRecord/_openFormDialog — so without
-                 an inline sub-view the row-click-to-dialog path is never
-                 armed. -->
-            <tree>
-                <!-- date/description/analytic_account_id/tag_ids/amount are
-                     all declared on hr.work_log with
-                     states={"draft": [("readonly", False)]} (models/
-                     hr_work_log.py) — the ORM compiles that into a
-                     `readonly` modifier whose domain reads the `state`
-                     field. ir_ui_view.py only resolves modifier domains
-                     against fields actually present in THIS arch (see
-                     Class._registerModifiers), so `state` must be listed
-                     here too, even though it isn't shown as a column
-                     (mirrors ssi_transaction_mixin's own
-                     mixin_transaction_view_tree, which carries `state`
-                     as its last, visible column). -->
-                <field name="state" invisible="1" />
-                <field name="date" />
-                <field name="description" />
-                <field name="analytic_account_id" />
-                <field name="tag_ids" widget="many2many_tags" />
-                <field name="amount" widget="float_time" />
-            </tree>
-        </field>
+            />
     </page>
 </template>
 </odoo>
