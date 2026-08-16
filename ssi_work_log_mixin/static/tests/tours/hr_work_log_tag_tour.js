@@ -60,7 +60,50 @@ odoo.define("ssi_work_log_mixin.hr_work_log_tag_tour", function (require) {
         content: "Open the Action menu",
         trigger: ".o_cp_action_menus button:contains(Action)",
         run: function () {
-            this.$anchor[0].click();
+            // A single native click is not always enough either: CI
+            // has been observed to fail "Click Unarchive" waiting for
+            // ANY ".o_cp_action_menus .o_menu_item a" at all (PR #245,
+            // run 31925098655) — and, on the SAME unchanged commit, to
+            // pass in one CI run (round 7, run 31926625054) and fail
+            // again the next (round 8, run 31928xxxxxx). That pattern
+            // — identical code, non-deterministic outcome — points to
+            // a genuine race in Owl's own event-listener wiring for
+            // this dropdown (the button can be present in the DOM,
+            // matching this step's `trigger`, a moment before Owl
+            // finishes mounting its click handler), not a selector or
+            // click-type problem; the native click above already rules
+            // out the synthetic-click cause documented in
+            // odoo-development-ui-test skill, patterns.md §I.
+            //
+            // web_tour calls a step's `run()` exactly once and never
+            // retries it, so a click that silently misses here has no
+            // second chance. Re-click on a short interval instead,
+            // bounded well under the next step's default 10s timeout,
+            // stopping as soon as the dropdown's own items are in the
+            // DOM (idempotent: re-clicking an already-open dropdown
+            // menu item trigger is a no-op once the guard is true, so
+            // this cannot toggle it back closed). This does NOT
+            // replace the correct wait — clickActionMenuItem's own
+            // trigger poll on ".o_cp_action_menus .o_menu_item a" is
+            // still what the tour engine actually waits on (patterns.md
+            // §M); this loop only improves the odds that condition
+            // becomes true before that poll times out.
+            var $anchor = this.$anchor;
+            var attempts = 0;
+            var maxAttempts = 20; // 20 * 150ms = 3s.
+            var retry = function () {
+                if (
+                    $(".o_cp_action_menus .o_menu_item a").length ||
+                    attempts >= maxAttempts
+                ) {
+                    return;
+                }
+                attempts += 1;
+                $anchor[0].click();
+                setTimeout(retry, 150);
+            };
+            $anchor[0].click();
+            setTimeout(retry, 150);
         },
     };
 
