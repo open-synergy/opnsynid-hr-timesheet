@@ -9,7 +9,10 @@ from odoo.tests import tagged
 
 @tagged("post_install", "-at_install")
 class TestHrLeaveRequestBatchDocumensoSigning(YamlTransactionCase):
+    """Cover Documenso-backed approval on ``hr.leave_request_batch``."""
+
     def test_hr_leave_request_batch_documenso_signing(self):
+        """Run the Documenso signing approval scenario."""
         self.run_yaml_scenario(
             "test_data_hr_leave_request_batch_documenso_signing.yaml"
         )

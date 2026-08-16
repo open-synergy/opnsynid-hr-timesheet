@@ -6,6 +6,14 @@ from odoo import models
 
 
 class HrLeaveRequestBatch(models.Model):
+    """Add Documenso-backed approval to the leave request batch.
+
+    When the batch's approval template defines a Documenso signing
+    template, its multiple-approval flow is replaced by a single
+    ``documenso.signature.request``: the batch is approved once that
+    request is signed, and rejected if it is cancelled.
+    """
+
     _name = "hr.leave_request_batch"
     _inherit = [
         "hr.leave_request_batch",
