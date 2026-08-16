@@ -15,3 +15,4 @@ odoo14-addon-ssi-state-change-constrain-mixin
 odoo14-addon-base-public-holiday
 odoo14-addon-ssi-operating-unit-mixin
 freezegun
+odoo-yaml-test

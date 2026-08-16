@@ -20,7 +20,7 @@
                         name="action_generate"
                         type="object"
                         string="Generate"
-                        class="oe_highlight"
+                        class="btn-primary"
                     />
                 or
                 <button special="cancel" string="Cancel" />
@@ -36,14 +36,5 @@
     <field name="view_id" ref="generate_timesheet_view_form" />
     <field name="target">new</field>
 </record>
-
-<menuitem
-        id="menu_generate_timesheet"
-        name="Generate Timesheet"
-        parent="timesheet_menu"
-        groups="hr_timesheet_generate_timesheet_group"
-        action="generate_timesheet_action"
-        sequence="1"
-    />
 
 </odoo>

@@ -1,0 +1,95 @@
+scenarios:
+  - name: "Generate Timesheet wizard - configurator group can create and read"
+    steps:
+      - step: "Create employee for wizard input"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Generate Timesheet"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create configurator group user"
+        action: "create"
+        model: "res.users"
+        save_as: "configurator"
+        values:
+          name: "Timesheet Configurator"
+          login: "timesheet_configurator@example.com"
+          groups_id:
+            [
+              [
+                6,
+                0,
+                [
+                  "REF: base.group_user",
+                  "REF: ssi_timesheet.hr_timesheet_generate_timesheet_group",
+                ],
+              ],
+            ]
+
+      - step: "Configurator user creates the wizard"
+        action: "create"
+        model: "hr.generate_timesheet"
+        save_as: "wizard"
+        as_user: "configurator"
+        values:
+          employee_ids: [[6, 0, ["REC: employee.id"]]]
+          working_schedule_id: "REC: working_schedule.id"
+          date_start: 2024-01-01
+          date_end: 2024-01-31
+
+      - step: "Assert wizard values read back unchanged"
+        action: "assert"
+        target: "wizard"
+        asserts:
+          employee_ids:
+            type: "m2m"
+            check: "exact"
+            expected_records:
+              - "REC: employee"
+          working_schedule_id:
+            type: "m2o"
+            expected: "REC: working_schedule"
+          date_start:
+            type: "value"
+            expected: 2024-01-01
+          date_end:
+            type: "value"
+            expected: 2024-01-31
+
+  - name: "Generate Timesheet wizard - plain internal user is denied"
+    steps:
+      - step: "Create employee for wizard input"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Generate Timesheet Denied"
+
+      - step: "Create plain internal user without the configurator group"
+        action: "create"
+        model: "res.users"
+        save_as: "plain_user"
+        values:
+          name: "Plain Internal User"
+          login: "plain_generate_timesheet@example.com"
+          groups_id: [[6, 0, ["REF: base.group_user"]]]
+
+      - step: "Plain internal user is denied creating the wizard"
+        action: "create"
+        model: "hr.generate_timesheet"
+        as_user: "plain_user"
+        expect_error:
+          type: "AccessError"
+        values:
+          employee_ids: [[6, 0, ["REC: employee.id"]]]
+          date_start: 2024-02-01
+          date_end: 2024-02-28

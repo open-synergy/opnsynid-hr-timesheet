@@ -38,6 +38,7 @@
         "views/ssi_timesheet_assets.xml",
         "wizards/generate_timesheet.xml",
         "wizards/timesheet_summary_report.xml",
+        "views/wizard_menu.xml",
         "reports/hr_timesheet_computation_analysis.xml",
         "reports/timesheet_summary.xml",
     ],

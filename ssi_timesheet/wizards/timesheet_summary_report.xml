@@ -18,7 +18,7 @@
                         name="action_export_xlsx"
                         type="object"
                         string="Export XLSX"
-                        class="oe_highlight"
+                        class="btn-primary"
                     />
                     or
                     <button special="cancel" string="Cancel" />
@@ -34,14 +34,5 @@
         <field name="view_id" ref="timesheet_summary_report_view_form" />
         <field name="target">new</field>
     </record>
-
-    <menuitem
-        id="menu_timesheet_summary_report"
-        name="Timesheet Summary"
-        parent="reporting_menu"
-        groups="hr_timesheet_summary_report_group"
-        action="timesheet_summary_report_action"
-        sequence="10"
-    />
 
 </odoo>
