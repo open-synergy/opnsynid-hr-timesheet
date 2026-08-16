@@ -1,0 +1,62 @@
+scenarios:
+  - name: "Timesheet Summary Report wizard - report group can create and read"
+    steps:
+      - step: "Create report group user"
+        action: "create"
+        model: "res.users"
+        save_as: "reporter"
+        values:
+          name: "Timesheet Reporter"
+          login: "timesheet_reporter@example.com"
+          groups_id:
+            [
+              [
+                6,
+                0,
+                [
+                  "REF: base.group_user",
+                  "REF: ssi_timesheet.hr_timesheet_summary_report_group",
+                ],
+              ],
+            ]
+
+      - step: "Reporter creates the wizard"
+        action: "create"
+        model: "hr.timesheet_summary_report"
+        save_as: "wizard"
+        as_user: "reporter"
+        values:
+          date_start: 2024-01-01
+          date_end: 2024-01-31
+
+      - step: "Assert wizard values read back unchanged"
+        action: "assert"
+        target: "wizard"
+        asserts:
+          date_start:
+            type: "value"
+            expected: 2024-01-01
+          date_end:
+            type: "value"
+            expected: 2024-01-31
+
+  - name: "Timesheet Summary Report wizard - plain internal user is denied"
+    steps:
+      - step: "Create plain internal user without the report group"
+        action: "create"
+        model: "res.users"
+        save_as: "plain_user"
+        values:
+          name: "Plain Internal User"
+          login: "plain_timesheet_summary_report@example.com"
+          groups_id: [[6, 0, ["REF: base.group_user"]]]
+
+      - step: "Plain internal user is denied creating the wizard"
+        action: "create"
+        model: "hr.timesheet_summary_report"
+        as_user: "plain_user"
+        expect_error:
+          type: "AccessError"
+        values:
+          date_start: 2024-02-01
+          date_end: 2024-02-28

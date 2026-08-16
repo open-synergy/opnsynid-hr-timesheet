@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+<!-- Menu entries for wizards/generate_timesheet.xml and
+     wizards/timesheet_summary_report.xml. Kept out of wizards/ itself
+     (10-wizard.md: wizard XML never carries its own <menuitem>) and out
+     of menu.xml (loaded at manifest position 9, before wizards/ at
+     position 10 — a <menuitem action="..."> referencing a wizard's
+     act_window here would fail to resolve). This file is loaded after
+     both wizard files instead, so their actions already exist. -->
+
+<menuitem
+        id="menu_generate_timesheet"
+        name="Generate Timesheet"
+        parent="timesheet_menu"
+        groups="hr_timesheet_generate_timesheet_group"
+        action="generate_timesheet_action"
+        sequence="1"
+    />
+
+<menuitem
+        id="menu_timesheet_summary_report"
+        name="Timesheet Summary"
+        parent="reporting_menu"
+        groups="hr_timesheet_summary_report_group"
+        action="timesheet_summary_report_action"
+        sequence="10"
+    />
+
+</odoo>

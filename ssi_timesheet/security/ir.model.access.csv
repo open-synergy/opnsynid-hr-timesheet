@@ -7,9 +7,7 @@ access_hr_timesheet_user,hr.timesheet - user,model_hr_timesheet,hr_timesheet_use
 access_hr_timesheet_computation_all,hr.timesheet_computation - all,model_hr_timesheet_computation,,1,0,0,0
 access_hr_timesheet_computation_viewer,hr.timesheet_computation - viewer,model_hr_timesheet_computation,hr_timesheet_viewer_group,1,0,0,0
 access_hr_timesheet_computation_user,hr.timesheet_computation - user,model_hr_timesheet_computation,hr_timesheet_user_group,1,1,1,1
-access_hr_generate_timesheet_configurator,hr.generate_timesheet - configurator,model_hr_generate_timesheet,hr_timesheet_generate_timesheet_group,1,1,1,1
-access_hr_generate_timesheet_all,hr.generate_timesheet - all,model_hr_generate_timesheet,,1,0,0,0
+hr_generate_timesheet_user_access,hr.generate_timesheet - user,model_hr_generate_timesheet,hr_timesheet_generate_timesheet_group,1,1,1,1
 access_hr_timesheet_daily_summary_all,hr.hr_timesheet_daily_summary - all,model_hr_timesheet_daily_summary,,1,1,1,1
 access_hr_timesheet_computation_analysis_report,hr.timesheet_computation_analysis – report,model_hr_timesheet_computation_analysis,hr_timesheet_computation_analysis_group,1,1,1,1
-access_hr_timesheet_summary_report_report,hr.timesheet_summary_report - report,model_hr_timesheet_summary_report,hr_timesheet_summary_report_group,1,1,1,1
-access_hr_timesheet_summary_report_all,hr.timesheet_summary_report - all,model_hr_timesheet_summary_report,,1,0,0,0
+hr_timesheet_summary_report_user_access,hr.timesheet_summary_report - user,model_hr_timesheet_summary_report,hr_timesheet_summary_report_group,1,1,1,1

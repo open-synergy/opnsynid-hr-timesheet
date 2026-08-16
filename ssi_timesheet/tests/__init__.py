@@ -3,9 +3,11 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from . import test_daily_summary
+from . import test_generate_timesheet
 from . import test_timesheet
 from . import test_timesheet_computation
 from . import test_timesheet_computation_analysis
 from . import test_timesheet_summary_report
+from . import test_timesheet_summary_report_acl
 from . import test_ui_hr_timesheet
 from . import test_ui_hr_timesheet_computation_item
