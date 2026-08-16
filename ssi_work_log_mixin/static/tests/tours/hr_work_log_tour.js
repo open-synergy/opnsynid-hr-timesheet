@@ -107,19 +107,15 @@ odoo.define("ssi_work_log_mixin.hr_work_log_tour", function (require) {
     // still-open dialog.
     var nestedDialogSettledExtraTrigger = "body:not(:has(.modal:eq(1)))";
 
-    // Default web_tour step timeout (14.0) is 10000ms
-    // (odoo-development-ui-test skill, tour-14.md). The hr.work_log form
-    // dialog opened below is assembled by several ssi_decorator hooks
-    // (multiple-approval page, status-check page, header buttons per
-    // _header_button_order, plus this module's own Cost tab) on top of an
-    // RPC fetch of the full view — confirmed via CI failure screenshots
-    // (PR #245, run 31921263812): the dialog renders correctly with every
-    // expected field/tab/button, just after the default 10s step timeout
-    // already elapsed. Triple it rather than fight the race with a
-    // narrower gate — there is no earlier DOM signal to gate on, since the
-    // dialog's own root (`.modal .o_form_view`) IS the first thing that
-    // exists once rendering finishes.
-    var WORK_LOG_DIALOG_TIMEOUT = 30000;
+    // Small safety margin over the web_tour step default (10000ms, 14.0,
+    // odoo-development-ui-test skill tour-14.md): the hr.work_log form
+    // dialog is assembled by several ssi_decorator hooks (multiple-approval
+    // page, status-check page, header buttons per _header_button_order,
+    // plus this module's own Cost tab) on top of an RPC fetch of the full
+    // view, so it is reasonable for it to render slightly slower than a
+    // bare form. This is NOT the fix for the dialog-never-detected CI
+    // failure (PR #245, rounds 3-5) — see the trigger selector note below.
+    var WORK_LOG_DIALOG_TIMEOUT = 15000;
 
     // Open the fixture work log line identified by its Description, from
     // inside the (already open) Work Log tab. Used by every state
@@ -140,7 +136,21 @@ odoo.define("ssi_work_log_mixin.hr_work_log_tour", function (require) {
             },
             {
                 content: "Work log dialog is open",
-                trigger: ".modal .o_form_view",
+                // NOT ".modal .o_form_view". 14.0's web_tour, when a step
+                // doesn't set `in_modal: false` (default true), resolves
+                // the trigger via `$modal_displayed.find(tip.trigger)` —
+                // already scoped to the currently open modal. Prefixing
+                // the selector with `.modal` then asks it to find a
+                // SECOND, nested `.modal` ancestor inside the modal that's
+                // already the search root, which never exists — the
+                // trigger silently never matches, no matter how long the
+                // timeout is (odoo-development-ui-test skill, patterns.md
+                // §H: "14.0 — JANGAN prefiks trigger in-modal dengan
+                // `.modal`"). Confirmed locally: with this exact fix, the
+                // dialog (which — per CI failure screenshots, PR #245,
+                // run 31921263812 — was already rendering correctly the
+                // whole time) is detected immediately.
+                trigger: ".o_form_view",
                 timeout: WORK_LOG_DIALOG_TIMEOUT,
                 run: function () {
                     // Assertion only; do not trigger the default click
@@ -191,7 +201,9 @@ odoo.define("ssi_work_log_mixin.hr_work_log_tour", function (require) {
             },
             {
                 content: "Work log dialog is open in edit mode",
-                trigger: ".modal .o_form_view.o_form_editable",
+                // No ".modal" prefix — see the comment on
+                // openWorkLogLineSteps's "Work log dialog is open" step.
+                trigger: ".o_form_view.o_form_editable",
                 timeout: WORK_LOG_DIALOG_TIMEOUT,
                 run: function () {
                     // Assertion only; do not trigger the default click
@@ -310,7 +322,9 @@ odoo.define("ssi_work_log_mixin.hr_work_log_tour", function (require) {
             },
             {
                 content: "Work log dialog is open in edit mode",
-                trigger: ".modal .o_form_view.o_form_editable",
+                // No ".modal" prefix — see the comment on
+                // openWorkLogLineSteps's "Work log dialog is open" step.
+                trigger: ".o_form_view.o_form_editable",
                 timeout: WORK_LOG_DIALOG_TIMEOUT,
                 run: function () {
                     // Assertion only; do not trigger the default click
@@ -571,7 +585,11 @@ odoo.define("ssi_work_log_mixin.hr_work_log_tour", function (require) {
             },
             {
                 content: "Cancellation reason is displayed",
-                trigger: ".modal:visible h2:contains(Cancellation reason)",
+                // No ".modal:visible" prefix — same in_modal scoping
+                // reason as the dialog-open steps above; $modal_displayed
+                // already IS the currently open modal, so the trigger is
+                // written relative to its content.
+                trigger: "h2:contains(Cancellation reason)",
                 run: function () {
                     // Assertion only; do not trigger the default click
                     // action.
@@ -634,7 +652,9 @@ odoo.define("ssi_work_log_mixin.hr_work_log_tour", function (require) {
             // ── Post-Condition — document number returns to "/".
             {
                 content: "Document number is reset to /",
-                trigger: ".modal:visible .o_field_widget[name='name']:contains(/)",
+                // No ".modal:visible" prefix — same in_modal scoping
+                // reason as the dialog-open steps above.
+                trigger: ".o_field_widget[name='name']:contains(/)",
                 extra_trigger: nestedDialogSettledExtraTrigger,
                 run: function () {
                     // Assertion only; do not trigger the default click
