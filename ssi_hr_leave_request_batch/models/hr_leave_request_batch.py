@@ -4,8 +4,21 @@
 
 from odoo import api, fields, models
 
+from odoo.addons.ssi_decorator import ssi_decorator
+
 
 class HrLeaveRequestBatch(models.Model):
+    """
+    Groups a single time off request into one approvable document so
+    that an identical leave period can be granted to many employees at
+    once.
+
+    Confirming the batch materialises one ``hr.leave`` record per
+    selected employee, and every later transition of the batch
+    (approve, reject, restart, cancel) is relayed to those child time
+    off requests so the batch and its children never drift apart.
+    """
+
     _name = "hr.leave_request_batch"
     _description = "Leave Request Batch"
     _inherit = [
@@ -83,6 +96,12 @@ class HrLeaveRequestBatch(models.Model):
         res += policy_field
         return res
 
+    @ssi_decorator.insert_on_form_view()
+    def _insert_form_element(self, view_arch):
+        if self._automatically_insert_view_element:
+            view_arch = self._reconfigure_statusbar_visible(view_arch)
+        return view_arch
+
     state = fields.Selection(
         string="State",
         selection=[
@@ -128,6 +147,16 @@ class HrLeaveRequestBatch(models.Model):
     )
 
     def _create_leave_request(self, employee_ids):
+        """Materialise one ``hr.leave`` per employee of this batch.
+
+        Employees that already own a child time off request on this
+        batch are skipped, so the method stays safe to call again after
+        a restart. Each new request copies ``date_start``, ``date_end``
+        and ``type_id`` from the batch, then gets its dependent fields
+        filled by ``_trigger_onchange``.
+
+        :param employee_ids: ``hr.employee`` recordset to grant leave to
+        """
         self.ensure_one()
         obj_leave_request = self.env["hr.leave"]
         for employee_id in employee_ids:
@@ -147,6 +176,15 @@ class HrLeaveRequestBatch(models.Model):
                 self._trigger_onchange(leave_id)
 
     def _trigger_onchange(self, leave):
+        """Fill the derived fields of a batch-created time off request.
+
+        ``hr.leave`` computes its number of days and its department,
+        manager and job from onchange handlers, which never run when the
+        record is created programmatically. Calling them here keeps a
+        batch-created request identical to one typed in by a user.
+
+        :param leave: a single ``hr.leave`` record created by this batch
+        """
         self.ensure_one()
         leave.onchange_number_of_day()
         leave.onchange_department_id()
@@ -154,12 +192,23 @@ class HrLeaveRequestBatch(models.Model):
         leave.onchange_job_id()
 
     def _confirm_leave_request(self, leave_request_ids):
+        """Send every child time off request into its approval flow.
+
+        :param leave_request_ids: ``hr.leave`` recordset of this batch
+        """
         self.ensure_one()
         for leave_request in leave_request_ids:
             leave_request.action_confirm()
 
     # BUTTON CONFIRM
     def action_confirm(self):
+        """Submit the batch and its time off requests for approval.
+
+        On top of the mixin transition, this creates the missing child
+        ``hr.leave`` records for every selected employee and confirms
+        all of them, so the approver reviews the batch and its children
+        in one pass.
+        """
         _super = super(HrLeaveRequestBatch, self)
         _super.action_confirm()
         for record in self.sudo():
@@ -169,12 +218,22 @@ class HrLeaveRequestBatch(models.Model):
                 record._confirm_leave_request(record.leave_request_ids)
 
     def _approve_leave_request(self, leave_request_ids):
+        """Approve every child time off request of this batch.
+
+        :param leave_request_ids: ``hr.leave`` recordset of this batch
+        """
         self.ensure_one()
         for leave_request in leave_request_ids:
             leave_request.action_approve_approval()
 
     # BUTTON APPROVAL
     def action_approve_approval(self):
+        """Approve the batch and cascade the approval to its children.
+
+        Once the last approver signs off, the batch reaches ``done`` and
+        every child ``hr.leave`` is approved as well, granting the time
+        off to all employees of the batch at the same moment.
+        """
         _super = super(HrLeaveRequestBatch, self)
         _super.action_approve_approval()
         for record in self.sudo():
@@ -182,12 +241,21 @@ class HrLeaveRequestBatch(models.Model):
                 record._approve_leave_request(record.leave_request_ids)
 
     def _reject_leave_request(self, leave_request_ids):
+        """Reject every child time off request of this batch.
+
+        :param leave_request_ids: ``hr.leave`` recordset of this batch
+        """
         self.ensure_one()
         for leave_request in leave_request_ids:
             leave_request.action_reject_approval()
 
     # BUTTON REJECT
     def action_reject_approval(self):
+        """Reject the batch and cascade the rejection to its children.
+
+        No employee of the batch keeps the requested time off: every
+        child ``hr.leave`` is rejected together with the batch itself.
+        """
         _super = super(HrLeaveRequestBatch, self)
         _super.action_reject_approval()
         for record in self.sudo():
@@ -195,12 +263,22 @@ class HrLeaveRequestBatch(models.Model):
                 record._reject_leave_request(record.leave_request_ids)
 
     def _restart_leave_request(self, leave_request_ids):
+        """Send every child time off request back to ``draft``.
+
+        :param leave_request_ids: ``hr.leave`` recordset of this batch
+        """
         self.ensure_one()
         for leave_request in leave_request_ids:
             leave_request.action_restart()
 
     # BUTTON RESTART
     def action_restart(self):
+        """Reopen the batch and its children for editing.
+
+        The batch returns to ``draft`` and every child ``hr.leave`` is
+        restarted with it, so the employee list or the leave period can
+        be corrected and submitted again.
+        """
         _super = super(HrLeaveRequestBatch, self)
         _super.action_restart()
         for record in self.sudo():
@@ -208,12 +286,25 @@ class HrLeaveRequestBatch(models.Model):
                 record._restart_leave_request(record.leave_request_ids)
 
     def _cancel_leave_request(self, leave_request_ids, cancel_reason):
+        """Cancel every child time off request with the batch reason.
+
+        :param leave_request_ids: ``hr.leave`` recordset of this batch
+        :param cancel_reason: ``base.cancel_reason`` recorded on the
+            batch, reused as the reason of each child request
+        """
         self.ensure_one()
         for leave_request in leave_request_ids:
             leave_request.action_cancel(cancel_reason)
 
     # BUTTON CANCEL
     def action_cancel(self, cancel_reason=False):
+        """Cancel the batch and cascade the cancellation downwards.
+
+        The reason picked by the user on the batch is passed on to every
+        child ``hr.leave``, so the whole batch carries one explanation.
+
+        :param cancel_reason: ``base.cancel_reason`` chosen by the user
+        """
         _super = super(HrLeaveRequestBatch, self)
         _super.action_cancel()
         for record in self.sudo():
