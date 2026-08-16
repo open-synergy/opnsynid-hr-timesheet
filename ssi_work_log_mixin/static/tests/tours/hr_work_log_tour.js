@@ -186,7 +186,13 @@ odoo.define("ssi_work_log_mixin.hr_work_log_tour", function (require) {
             // Account, Duration.
             {
                 content: "Fill in Description",
-                trigger: ".o_field_widget[name='description'] input",
+                // No ` input` suffix: InputField.init() (basic_fields.js)
+                // sets `this.tagName = 'input'` in edit mode for plain
+                // Char/Float fields that don't override `start()` (unlike
+                // Date/Many2one below, which replace $el with a wrapping
+                // element) — so `.o_field_widget[name='description']` in
+                // edit mode IS the `<input>` itself.
+                trigger: ".o_field_widget[name='description']",
                 run: "text TOUR-WL-CREATE-UI",
             },
             {
@@ -206,7 +212,10 @@ odoo.define("ssi_work_log_mixin.hr_work_log_tour", function (require) {
             },
             {
                 content: "Fill in Duration",
-                trigger: ".o_field_widget[name='amount'] input",
+                // No ` input` suffix — float_time (FieldFloatTime) extends
+                // FieldFloat/NumericField, which never overrides `start()`,
+                // so the same InputField edit-mode rule applies.
+                trigger: ".o_field_widget[name='amount']",
                 run: "text_blur 4:00",
             },
             // ── Flow 3 (repeat) — Click Save & Close.
@@ -294,7 +303,9 @@ odoo.define("ssi_work_log_mixin.hr_work_log_tour", function (require) {
             // ── Flow 4 — Change Description.
             {
                 content: "Change Description",
-                trigger: ".o_field_widget[name='description'] input",
+                // No ` input` suffix — see the comment on the create tour's
+                // "Fill in Description" step above.
+                trigger: ".o_field_widget[name='description']",
                 run: "text TOUR-WL-EDITED",
             },
             // ── Flow 5 — Click Save & Close.

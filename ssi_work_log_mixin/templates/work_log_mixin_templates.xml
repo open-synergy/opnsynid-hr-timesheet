@@ -35,6 +35,19 @@
                  an inline sub-view the row-click-to-dialog path is never
                  armed. -->
             <tree>
+                <!-- date/description/analytic_account_id/tag_ids/amount are
+                     all declared on hr.work_log with
+                     states={"draft": [("readonly", False)]} (models/
+                     hr_work_log.py) — the ORM compiles that into a
+                     `readonly` modifier whose domain reads the `state`
+                     field. ir_ui_view.py only resolves modifier domains
+                     against fields actually present in THIS arch (see
+                     Class._registerModifiers), so `state` must be listed
+                     here too, even though it isn't shown as a column
+                     (mirrors ssi_transaction_mixin's own
+                     mixin_transaction_view_tree, which carries `state`
+                     as its last, visible column). -->
+                <field name="state" invisible="1" />
                 <field name="date" />
                 <field name="description" />
                 <field name="analytic_account_id" />

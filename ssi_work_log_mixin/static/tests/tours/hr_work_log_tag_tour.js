@@ -99,7 +99,15 @@ odoo.define("ssi_work_log_mixin.hr_work_log_tag_tour", function (require) {
             // ── Flow 3 — Fill in Work Log Tag.
             {
                 content: "Fill in Work Log Tag",
-                trigger: ".o_field_widget[name='name'] input",
+                // No ` input` suffix: InputField.init() (basic_fields.js)
+                // sets `this.tagName = 'input'` in edit mode for plain
+                // Char/Float fields that don't override `start()` (unlike
+                // Date/Many2one, which replace $el with a wrapping element)
+                // — so `.o_field_widget[name='name']` in edit mode IS the
+                // `<input>` itself, matching the working precedent in
+                // ssi_timesheet_hr_timesheet_computation_item_create /
+                // ssi_timesheet_attendance_shift_hr_attendance_shift_pattern_create.
+                trigger: ".o_field_widget[name='name']",
                 extra_trigger: ".o_form_view.o_form_editable",
                 run: "text TOUR-TAG-CREATE-UI",
             },
@@ -113,7 +121,9 @@ odoo.define("ssi_work_log_mixin.hr_work_log_tag_tour", function (require) {
             // convention for "assign automatically later".
             {
                 content: "Ensure Code is /",
-                trigger: ".o_field_widget[name='code'] input",
+                // No ` input` suffix — see the comment on the "Fill in Work
+                // Log Tag" step above.
+                trigger: ".o_field_widget[name='code']",
                 extra_trigger: ".o_form_view.o_form_editable",
                 run: "text_blur /",
             },
@@ -184,7 +194,9 @@ odoo.define("ssi_work_log_mixin.hr_work_log_tag_tour", function (require) {
             // ── Flow 3 — Change the Work Log Tag.
             {
                 content: "Change Work Log Tag",
-                trigger: ".o_field_widget[name='name'] input",
+                // No ` input` suffix — see the comment on the create tour's
+                // "Fill in Work Log Tag" step above.
+                trigger: ".o_field_widget[name='name']",
                 extra_trigger: ".o_form_view.o_form_editable",
                 run: "text TOUR-TAG-EDITED",
             },
