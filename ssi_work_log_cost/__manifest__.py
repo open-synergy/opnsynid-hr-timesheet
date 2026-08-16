@@ -13,6 +13,7 @@
         "ssi_work_log_mixin",
         "ssi_product_line_account_mixin",
         "ssi_transaction_ready_mixin",
+        "web_tour",
     ],
     "data": [
         "security/ir_module_category_data.xml",
@@ -27,5 +28,6 @@
         "views/ir_model_views.xml",
         "views/work_log_rate_views.xml",
         "views/hr_employee_views.xml",
+        "views/ssi_work_log_cost_assets.xml",
     ],
 }
