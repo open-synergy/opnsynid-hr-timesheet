@@ -60,37 +60,70 @@ odoo.define("ssi_work_log_mixin.hr_work_log_tag_tour", function (require) {
         content: "Open the Action menu",
         trigger: ".o_cp_action_menus button:contains(Action)",
         run: function () {
-            // A single native click is not always enough either: CI
-            // has been observed to fail "Click Unarchive" waiting for
-            // ANY ".o_cp_action_menus .o_menu_item a" at all (PR #245,
-            // run 31925098655) — and, on the SAME unchanged commit, to
-            // pass in one CI run (round 7, run 31926625054) and fail
-            // again the next (round 8, run 31928xxxxxx). That pattern
-            // — identical code, non-deterministic outcome — points to
-            // a genuine race in Owl's own event-listener wiring for
-            // this dropdown (the button can be present in the DOM,
-            // matching this step's `trigger`, a moment before Owl
-            // finishes mounting its click handler), not a selector or
-            // click-type problem; the native click above already rules
-            // out the synthetic-click cause documented in
-            // odoo-development-ui-test skill, patterns.md §I.
+            // Round 7: a single `HTMLElement.click()` (native click,
+            // replacing web_tour's own jQuery `.trigger('click')`
+            // synthetic event per odoo-development-ui-test skill,
+            // patterns.md §I) fixed it once (run 31926625054), but
+            // round 8 failed the SAME identical commit at this exact
+            // step. Round 9: wrapped that same `.click()` in a 150ms x
+            // 20 (~3s) retry loop — `test with Odoo` then passed
+            // 190/190 on commit 41499e3, but `test with OCB` FAILED on
+            // that very same commit, at this very same trigger. Retrying
+            // the SAME click harder did not close the gap under OCB's
+            // heavier load — so the click MECHANISM itself, not just
+            // the retry budget, is suspect.
             //
-            // web_tour calls a step's `run()` exactly once and never
-            // retries it, so a click that silently misses here has no
-            // second chance. Re-click on a short interval instead,
-            // bounded well under the next step's default 10s timeout,
-            // stopping as soon as the dropdown's own items are in the
-            // DOM (idempotent: re-clicking an already-open dropdown
-            // menu item trigger is a no-op once the guard is true, so
-            // this cannot toggle it back closed). This does NOT
-            // replace the correct wait — clickActionMenuItem's own
-            // trigger poll on ".o_cp_action_menus .o_menu_item a" is
-            // still what the tour engine actually waits on (patterns.md
-            // §M); this loop only improves the odds that condition
-            // becomes true before that poll times out.
+            // `HTMLElement.click()` dispatches exactly one synthetic
+            // "click" MouseEvent — no mouseover/mousedown/mouseup. If
+            // Owl's dropdown-toggle handler is wired to "mousedown"
+            // (a common toggle pattern, e.g. to open on press rather
+            // than release), a bare `.click()` would never reach it.
+            // web_tour's OWN built-in `run: "click"` action helper
+            // (RunningTourActionHelper._click(),
+            // running_tour_action_helper.js) does NOT have this gap —
+            // it dispatches a full native-style sequence (mouseover,
+            // mouseenter, mousedown, mouseup, click, mouseout,
+            // mouseleave) via `document.createEvent("MouseEvents")` +
+            // `dispatchEvent`, genuine native-level events indistinguishable
+            // from a real pointer interaction. Reproduce that same
+            // sequence here (mouseover/mousedown/mouseup/click is
+            // enough to cover both click- and mousedown-bound
+            // handlers) instead of a bare `.click()`, on every retry
+            // attempt — keeping the retry loop itself (widened to
+            // ~6s) as a safety net per the round-9 evidence that a
+            // single attempt, however dispatched, is not reliably
+            // enough under load. web_tour's own trigger poll on
+            // clickActionMenuItem below is still what the tour engine
+            // actually waits on (patterns.md §M) — its timeout is
+            // widened too, so a slow-but-eventually-successful open
+            // still has room to be caught.
             var $anchor = this.$anchor;
             var attempts = 0;
-            var maxAttempts = 20; // 20 * 150ms = 3s.
+            var maxAttempts = 30; // 30 * 200ms = 6s.
+            var dispatchClick = function ($el) {
+                var el = $el[0];
+                ["mouseover", "mousedown", "mouseup", "click"].forEach(function (type) {
+                    var e = document.createEvent("MouseEvents");
+                    e.initMouseEvent(
+                        type,
+                        true,
+                        true,
+                        window,
+                        1,
+                        0,
+                        0,
+                        0,
+                        0,
+                        false,
+                        false,
+                        false,
+                        false,
+                        0,
+                        el
+                    );
+                    el.dispatchEvent(e);
+                });
+            };
             var retry = function () {
                 if (
                     $(".o_cp_action_menus .o_menu_item a").length ||
@@ -99,11 +132,11 @@ odoo.define("ssi_work_log_mixin.hr_work_log_tag_tour", function (require) {
                     return;
                 }
                 attempts += 1;
-                $anchor[0].click();
-                setTimeout(retry, 150);
+                dispatchClick($anchor);
+                setTimeout(retry, 200);
             };
-            $anchor[0].click();
-            setTimeout(retry, 150);
+            dispatchClick($anchor);
+            setTimeout(retry, 200);
         },
     };
 
@@ -115,6 +148,12 @@ odoo.define("ssi_work_log_mixin.hr_work_log_tag_tour", function (require) {
         return {
             content: "Click " + label,
             trigger: ".o_cp_action_menus .o_menu_item a",
+            // Widened from the 10s default: openActionMenuStep's own
+            // retry loop (round 9→10 fix, see the comment there) now
+            // spends up to ~6s trying to get the dropdown open under
+            // load before this step's trigger has anything to match —
+            // give it room to actually be caught instead of racing it.
+            timeout: 20000,
             run: function () {
                 var $item = $(".o_cp_action_menus .o_menu_item a").filter(function () {
                     return $(this).text().trim() === label;
