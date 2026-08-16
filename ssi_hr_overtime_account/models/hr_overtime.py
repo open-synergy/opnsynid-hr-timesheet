@@ -8,6 +8,15 @@ from odoo.tools.safe_eval import safe_eval
 
 
 class HROvertime(models.Model):
+    """Add analytic account selection to ``hr.overtime``.
+
+    Depending on the configuration of ``hr.overtime_type``, the allowed
+    analytic accounts are either a fixed list or the result of a Python
+    code evaluation. The chosen analytic account is stored on
+    ``analytic_account_id`` and is editable only while the document is
+    in ``draft`` state.
+    """
+
     _inherit = "hr.overtime"
 
     @api.depends(
@@ -15,6 +24,13 @@ class HROvertime(models.Model):
         "employee_id",
     )
     def _compute_allowed_analytic_account_ids(self):
+        """Compute the analytic accounts allowed for this document.
+
+        The result depends on ``type_id.analytic_account_method``: for
+        ``fixed`` it is the type's configured ``analytic_account_ids``;
+        for ``python`` it is the result of evaluating
+        ``type_id.python_code`` via ``_evaluate_analytic_account``.
+        """
         for document in self:
             result = []
             if document.type_id:
@@ -46,6 +62,12 @@ class HROvertime(models.Model):
     )
 
     def _get_localdict(self):
+        """Build the local variables available to ``python_code``.
+
+        :return: dict exposing ``env`` (Odoo Environment) and
+            ``document`` (this ``hr.overtime`` record) to the
+            ``safe_eval`` call in ``_evaluate_analytic_account``
+        """
         self.ensure_one()
         return {
             "env": self.env,
@@ -53,6 +75,17 @@ class HROvertime(models.Model):
         }
 
     def _evaluate_analytic_account(self):
+        """Evaluate ``type_id.python_code`` to get analytic accounts.
+
+        Executes the overtime type's ``python_code`` with the
+        ``env``/``document`` variables from ``_get_localdict``. The
+        code is expected to assign a list of ``account.analytic.account``
+        ids to a ``result`` variable.
+
+        :return: list of analytic account ids, or ``False`` when the
+            code does not set ``result``
+        :raises UserError: when the code evaluation raises an exception
+        """
         self.ensure_one()
         res = False
         localdict = self._get_localdict()
