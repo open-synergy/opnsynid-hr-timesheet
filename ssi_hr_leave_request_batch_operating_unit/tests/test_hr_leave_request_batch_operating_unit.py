@@ -9,5 +9,8 @@ from odoo.tests import tagged
 
 @tagged("post_install", "-at_install")
 class TestHrLeaveRequestBatchOperatingUnit(YamlTransactionCase):
+    """Cover the Operating Unit extension on ``hr.leave_request_batch``."""
+
     def test_hr_leave_request_batch_operating_unit(self):
+        """Run the Operating Unit scenario for ``hr.leave_request_batch``."""
         self.run_yaml_scenario("test_data_hr_leave_request_batch_operating_unit.yaml")
