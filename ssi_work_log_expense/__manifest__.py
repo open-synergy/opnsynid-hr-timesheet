@@ -16,6 +16,7 @@
         "ssi_transaction_done_mixin",
         "ssi_transaction_cancel_mixin",
         "ssi_work_log_cost",
+        "web_tour",
     ],
     "data": [
         "security/ir_module_category_data.xml",
@@ -30,6 +31,7 @@
         "wizards/generate_work_log_expense_views.xml",
         "views/work_log_expense_type_views.xml",
         "views/work_log_expense_views.xml",
+        "views/ssi_work_log_expense_assets.xml",
     ],
     "demo": [
         "demo/account_journal_demo.xml",

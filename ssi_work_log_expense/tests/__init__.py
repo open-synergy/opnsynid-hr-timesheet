@@ -2,4 +2,4 @@
 # Copyright 2026 PT. Simetri Sinergi Indonesia
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from . import test_work_log_expense
+from . import test_work_log_expense, test_ui_work_log_expense
