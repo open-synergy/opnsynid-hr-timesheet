@@ -13,6 +13,7 @@
         "analytic",
         "ssi_timesheet",
         "ssi_hr",
+        "web_tour",
     ],
     "data": [
         "menu.xml",
@@ -30,6 +31,7 @@
         "views/hr_work_log_views.xml",
         "views/hr_timesheet_views.xml",
         "views/account_analytic_account_views.xml",
+        "views/ssi_work_log_mixin_assets.xml",
         "report/hr_work_log_analysis.xml",
         "report/hr_project_work_log_analysis.xml",
     ],
