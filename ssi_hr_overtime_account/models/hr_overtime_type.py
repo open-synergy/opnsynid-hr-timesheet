@@ -6,6 +6,14 @@ from odoo import fields, models
 
 
 class HROvertimeType(models.Model):
+    """Add analytic account configuration to ``hr.overtime_type``.
+
+    Configures how the analytic account offered on ``hr.overtime``
+    documents of this type is determined: a fixed list
+    (``analytic_account_ids``) or a Python code
+    (``python_code``) evaluated per document.
+    """
+
     _inherit = "hr.overtime_type"
 
     analytic_account_method = fields.Selection(
