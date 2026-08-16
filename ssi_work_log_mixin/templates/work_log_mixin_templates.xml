@@ -18,7 +18,60 @@
                 name="work_log_ids"
                 nolabel="1"
                 context="{'work_log_model': active_model}"
-            />
+            >
+            <!-- Explicit inline list, WITHOUT editable= (so a row click still
+                 opens the hr.work_log form in a dialog, per the Flow of every
+                 docs/hr_work_log/*.md IK — "click the line to open it").
+
+                 Kept for COLUMN CONTROL, not for the click-to-open-dialog
+                 path. Falsification experiment (issue #247, PR #248, CI run
+                 https://github.com/open-synergy/opnsynid-hr-timesheet/actions/runs/31942486324)
+                 removed this sub-view entirely and re-ran the full
+                 tests/test_ui_hr_work_log.py suite (test_create, test_edit,
+                 test_delete, test_confirm, test_approve, test_reject),
+                 including every step that clicks
+                 `.o_data_row … .o_data_cell:first` to open a work log row
+                 from this tab — ALL PASSED. That disproves the original
+                 claim that ir_ui_view.py's _postprocess_tag_field leaving
+                 `views: {}` on a childless field breaks
+                 FieldOne2Many._onOpenRecord/_openFormDialog: without an
+                 inline sub-view, Odoo falls back to hr.work_log's own
+                 default list view (ssi_work_log_mixin.hr_work_log_view_tree,
+                 which inherits ssi_transaction_mixin.mixin_transaction_view_tree
+                 — see views/hr_work_log_views.xml), and that fallback view's
+                 row click still opens the form dialog correctly.
+
+                 What that fallback view does NOT have is a `tag_ids` column:
+                 hr_work_log_view_tree only adds date/employee_id/
+                 department_id/manager_id/job_id/model_id/work_object_reference/
+                 analytic_account_id/analytic_partner_id/analytic_group_id/
+                 description/amount after `company_id` — tag_ids exists only
+                 on the search view and the form view, never on the tree.
+                 This inline sub-view is what surfaces tag_ids (as
+                 many2many_tags) in the Work Log tab; without it, users lose
+                 that column entirely. That is the sole remaining reason this
+                 sub-view is kept. -->
+            <tree>
+                <!-- date/description/analytic_account_id/tag_ids/amount are
+                     all declared on hr.work_log with
+                     states={"draft": [("readonly", False)]} (models/
+                     hr_work_log.py) — the ORM compiles that into a
+                     `readonly` modifier whose domain reads the `state`
+                     field. ir_ui_view.py only resolves modifier domains
+                     against fields actually present in THIS arch (see
+                     Class._registerModifiers), so `state` must be listed
+                     here too, even though it isn't shown as a column
+                     (mirrors ssi_transaction_mixin's own
+                     mixin_transaction_view_tree, which carries `state`
+                     as its last, visible column). -->
+                <field name="state" invisible="1" />
+                <field name="date" />
+                <field name="description" />
+                <field name="analytic_account_id" />
+                <field name="tag_ids" widget="many2many_tags" />
+                <field name="amount" widget="float_time" />
+            </tree>
+        </field>
     </page>
 </template>
 </odoo>
