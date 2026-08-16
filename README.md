@@ -36,7 +36,7 @@ addon | version | maintainers | summary
 [ssi_hr_leave_allocation_request_batch](ssi_hr_leave_allocation_request_batch/) | 14.0.2.2.0 |  | Leave Allocation Request Batch
 [ssi_hr_leave_allocation_request_batch_documenso_signing](ssi_hr_leave_allocation_request_batch_documenso_signing/) | 14.0.2.1.1 |  | HR Leave Allocation Request Batch - Documenso Signing Integration
 [ssi_hr_leave_allocation_request_batch_operating_unit](ssi_hr_leave_allocation_request_batch_operating_unit/) | 14.0.1.1.1 |  | Leave Allocation Request Batch + Operating Unit
-[ssi_hr_leave_request_batch](ssi_hr_leave_request_batch/) | 14.0.2.1.1 |  | Leave Request Batch
+[ssi_hr_leave_request_batch](ssi_hr_leave_request_batch/) | 14.0.2.1.2 |  | Leave Request Batch
 [ssi_hr_leave_request_batch_documenso_signing](ssi_hr_leave_request_batch_documenso_signing/) | 14.0.2.1.0 |  | HR Leave Request Batch - Documenso Signing Integration
 [ssi_hr_leave_request_batch_operating_unit](ssi_hr_leave_request_batch_operating_unit/) | 14.0.1.1.0 |  | Leave Request Batch + Operating Unit
 [ssi_hr_overtime](ssi_hr_overtime/) | 14.0.2.2.1 |  | Overtime Management
