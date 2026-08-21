@@ -9,5 +9,8 @@ from odoo.tests import tagged
 
 @tagged("post_install", "-at_install")
 class TestHrOvertimeBatchOperatingUnit(YamlTransactionCase):
+    """Cover the Operating Unit extension on ``hr.overtime_batch``."""
+
     def test_hr_overtime_batch_operating_unit(self):
+        """Run the Operating Unit scenario for ``hr.overtime_batch``."""
         self.run_yaml_scenario("test_data_hr_overtime_batch_operating_unit.yaml")

@@ -6,6 +6,10 @@
 Overtime Batch + Operating Unit
 ===============================
 
+Work Instruction
+=================
+
+* `Create Overtime Batch <docs/hr_overtime_batch/index.html>`_
 
 Installation
 ============
