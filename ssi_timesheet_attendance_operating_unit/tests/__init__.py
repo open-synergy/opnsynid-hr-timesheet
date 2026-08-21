@@ -3,3 +3,4 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from . import test_timesheet_attendance_operating_unit
+from . import test_ui_hr_timesheet_attendance

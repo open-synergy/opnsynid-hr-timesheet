@@ -7,6 +7,12 @@ Timesheet + Attendance + Operating Unit
 =======================================
 
 
+Work Instruction
+================
+
+* `Create Timesheet Attendance <docs/hr_timesheet_attendance/index.html>`_
+
+
 Installation
 ============
 

@@ -12,9 +12,11 @@
     "depends": [
         "ssi_timesheet_attendance",
         "ssi_timesheet_operating_unit",
+        "web_tour",
     ],
     "data": [
         "security/ir_rule/hr_timesheet_attendance.xml",
         "views/hr_timesheet_attendance_views.xml",
+        "views/assets.xml",
     ],
 }
