@@ -5,7 +5,15 @@
 from odoo import models
 
 
-class HROvertime(models.Model):
+class HrOvertime(models.Model):
+    """
+    Blocks ``hr.overtime`` state transitions until configured Status
+    Check items are satisfied. Adds ``mixin.state_change_constrain``
+    and ``mixin.status_check`` on top of the base overtime document,
+    so the ``state`` constraint enforces any active
+    ``state.change.constrain.template`` that targets this model.
+    """
+
     _name = "hr.overtime"
     _inherit = [
         "hr.overtime",
