@@ -42,7 +42,7 @@ addon | version | maintainers | summary
 [ssi_hr_overtime](ssi_hr_overtime/) | 14.0.2.2.1 |  | Overtime Management
 [ssi_hr_overtime_account](ssi_hr_overtime_account/) | 14.0.1.2.0 |  | Overtime Account
 [ssi_hr_overtime_batch](ssi_hr_overtime_batch/) | 14.0.2.1.1 |  | Human Resource Overtime Batch
-[ssi_hr_overtime_batch_operating_unit](ssi_hr_overtime_batch_operating_unit/) | 14.0.1.1.0 |  | Overtime Batch + Operating Unit
+[ssi_hr_overtime_batch_operating_unit](ssi_hr_overtime_batch_operating_unit/) | 14.0.1.1.1 |  | Overtime Batch + Operating Unit
 [ssi_hr_overtime_documenso_signing](ssi_hr_overtime_documenso_signing/) | 14.0.2.1.0 |  | HR Overtime - Documenso Signing Integration
 [ssi_hr_overtime_operating_unit](ssi_hr_overtime_operating_unit/) | 14.0.1.1.0 |  | Overtime Management + Operating Unit
 [ssi_hr_overtime_state_change_constrain](ssi_hr_overtime_state_change_constrain/) | 14.0.1.1.0 |  | Overtime State Change Constrain
