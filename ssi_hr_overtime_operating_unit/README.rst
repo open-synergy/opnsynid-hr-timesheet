@@ -7,6 +7,12 @@ Overtime Management + Operating Unit
 ====================================
 
 
+Work Instruction
+================
+
+* `Create Overtime <docs/hr_overtime/index.html>`_
+
+
 Installation
 ============
 
