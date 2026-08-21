@@ -4,7 +4,7 @@
 # pylint: disable=C8101
 {
     "name": "HR Overtime - Documenso Signing Integration",
-    "version": "14.0.2.1.0",
+    "version": "14.0.2.1.1",
     "website": "https://simetri-sinergi.id",
     "author": "OpenSynergy Indonesia, PT. Simetri Sinergi Indonesia",
     "license": "AGPL-3",
