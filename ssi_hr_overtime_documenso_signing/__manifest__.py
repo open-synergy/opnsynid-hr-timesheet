@@ -12,8 +12,11 @@
     "depends": [
         "ssi_hr_overtime",
         "ssi_connector_documenso_signing",
+        "web_tour",
     ],
-    "data": [],
+    "data": [
+        "views/assets.xml",
+    ],
     "demo": [],
     "images": [],
 }

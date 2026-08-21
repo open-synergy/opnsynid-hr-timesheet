@@ -12,6 +12,11 @@ an open-source digital signature platform.
 It adds a *Documenso* tab to the HR Overtime form view, allowing users to
 manage signature requests directly from the overtime record.
 
+Work Instruction
+================
+
+* `Approve Overtime <docs/hr_overtime/index.html>`_
+
 Configuration
 =============
 
