@@ -5,7 +5,17 @@
 from odoo import api, models
 
 
-class HRTimesheetAttendance(models.Model):
+class HrTimesheetAttendance(models.Model):
+    """Adds Operating Unit ownership to timesheet attendance records.
+
+    Restricts each attendance record to a single operating unit via
+    ``mixin.single_operating_unit``, enabling operating unit based
+    visibility and security rules for the document. The field
+    auto-fills from the linked ``sheet_id`` (see
+    ``onchange_operating_unit_id``) instead of only the current user's
+    default operating unit.
+    """
+
     _name = "hr.timesheet_attendance"
     _inherit = [
         "hr.timesheet_attendance",
