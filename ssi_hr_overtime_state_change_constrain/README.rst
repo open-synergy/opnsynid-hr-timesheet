@@ -7,6 +7,12 @@ Overtime State Change Constrain
 ===============================
 
 
+Work Instruction
+================
+
+* `Create Overtime <docs/hr_overtime/index.html>`_
+
+
 Installation
 ============
 
