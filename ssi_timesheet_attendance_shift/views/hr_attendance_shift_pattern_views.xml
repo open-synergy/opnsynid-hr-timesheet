@@ -49,6 +49,12 @@
                             <field name="day_index" />
                             <field name="shift_id" />
                         </tree>
+                        <form>
+                            <group name="detail_group_1">
+                                <field name="day_index" />
+                                <field name="shift_id" />
+                            </group>
+                        </form>
                     </field>
                 </page>
             </xpath>
