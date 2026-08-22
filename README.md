@@ -49,7 +49,7 @@ addon | version | maintainers | summary
 [ssi_timesheet](ssi_timesheet/) | 14.0.3.4.1 |  | Timesheets
 [ssi_timesheet_attendance](ssi_timesheet_attendance/) | 14.0.1.18.6 |  | Timesheet Attendance
 [ssi_timesheet_attendance_operating_unit](ssi_timesheet_attendance_operating_unit/) | 14.0.1.1.1 |  | Timesheet + Attendance + Operating Unit
-[ssi_timesheet_attendance_shift](ssi_timesheet_attendance_shift/) | 14.0.1.4.0 |  | Timesheet Attendance Shift
+[ssi_timesheet_attendance_shift](ssi_timesheet_attendance_shift/) | 14.0.1.4.1 |  | Timesheet Attendance Shift
 [ssi_timesheet_attendance_work_log](ssi_timesheet_attendance_work_log/) | 14.0.1.4.1 |  | Timesheet + Attendance + Work Log
 [ssi_timesheet_documenso_signing](ssi_timesheet_documenso_signing/) | 14.0.1.1.0 |  | Timesheet - Documenso Signing Integration
 [ssi_timesheet_operating_unit](ssi_timesheet_operating_unit/) | 14.0.1.2.1 |  | Timesheet + Operating Unit
