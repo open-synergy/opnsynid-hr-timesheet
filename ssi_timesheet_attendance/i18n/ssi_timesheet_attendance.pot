@@ -66,6 +66,20 @@ msgid "Absence"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_timesheet_attendance__check_in_accuracy
+msgid ""
+"Accuracy of the check-in location reading, in meters, as reported by the "
+"device. 0.0 when no geolocation reading was taken."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_timesheet_attendance__check_out_accuracy
+msgid ""
+"Accuracy of the check-out location reading, in meters, as reported by the "
+"device. 0.0 when no geolocation reading was taken."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_needaction
 msgid "Action Needed"
 msgstr ""
@@ -177,6 +191,21 @@ msgid "Check In"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__check_in_accuracy
+msgid "Check In Accuracy"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__check_in_latitude
+msgid "Check In Latitude"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__check_in_longitude
+msgid "Check In Longitude"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_company__check_in_reason_id
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_config_settings__check_in_reason_id
 #: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.res_config_settings_view_form
@@ -189,10 +218,25 @@ msgid "Check Out"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__check_out_accuracy
+msgid "Check Out Accuracy"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_company__checkout_buffer
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_config_settings__checkout_buffer
 #: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.res_config_settings_view_form
 msgid "Check Out Buffer"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__check_out_latitude
+msgid "Check Out Latitude"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__check_out_longitude
+msgid "Check Out Longitude"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
@@ -307,6 +351,38 @@ msgid ""
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_timesheet_attendance__check_in_latitude
+msgid ""
+"Device latitude recorded at check-in time. Filled by the attendance mobile "
+"client; 0.0 on records created without a geolocation reading (menu, Sign "
+"In/Sign Out, top bar widget)."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_timesheet_attendance__check_out_latitude
+msgid ""
+"Device latitude recorded at check-out time. Filled by the attendance mobile "
+"client; 0.0 on records created without a geolocation reading (menu, Sign "
+"In/Sign Out, top bar widget)."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_timesheet_attendance__check_in_longitude
+msgid ""
+"Device longitude recorded at check-in time. Filled by the attendance mobile "
+"client; 0.0 on records created without a geolocation reading (menu, Sign "
+"In/Sign Out, top bar widget)."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_timesheet_attendance__check_out_longitude
+msgid ""
+"Device longitude recorded at check-out time. Filled by the attendance mobile"
+" client; 0.0 on records created without a geolocation reading (menu, Sign "
+"In/Sign Out, top bar widget)."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__display_name
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee_base__display_name
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet__display_name
@@ -357,6 +433,11 @@ msgstr ""
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__activity_type_icon
 msgid "Font awesome icon e.g. fa-tasks"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.hr_timesheet_attendance_view_form
+msgid "Geolocation"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
@@ -439,6 +520,18 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee_public__latest_attendance_id
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet__latest_attendance_id
 msgid "Latest Attedance"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: code:addons/ssi_timesheet_attendance/models/hr_timesheet_attendance.py:0
+#, python-format
+msgid "Latitude must be between -90 and 90 degrees."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: code:addons/ssi_timesheet_attendance/models/hr_timesheet_attendance.py:0
+#, python-format
+msgid "Longitude must be between -180 and 180 degrees."
 msgstr ""
 
 #. module: ssi_timesheet_attendance
