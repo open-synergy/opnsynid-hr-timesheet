@@ -501,6 +501,19 @@ scenarios:
             type: "value"
             operator: "is_falsy"
 
+      - step:
+          "Delete this attendance now that the assertion above has proven it - its
+          check_out_location_id was never read, so it stays pending in Odoo's recompute
+          queue; if left alive, a later flush (triggered by an unrelated record once the
+          setting below is re-enabled) sweeps this record into the same @api.constrains
+          batch and re-raises against its still-uncovered check-in coordinate under the
+          NEW (enabled) setting - scenarios share one transaction in this file, so
+          nothing rolls this back on its own"
+        action: "call"
+        target: "attendance_far_disabled"
+        method: "unlink"
+        as_user: "base.user_admin"
+
   - name: "Attendance Location Link - Check-Out Outside All Locations Rejected By Write"
     steps:
       - step: "Get the main company"
