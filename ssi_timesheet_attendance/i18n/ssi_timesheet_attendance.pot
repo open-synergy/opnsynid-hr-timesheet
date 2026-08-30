@@ -80,11 +80,13 @@ msgid ""
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__message_needaction
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_needaction
 msgid "Action Needed"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__active
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__active
 msgid "Active"
 msgstr ""
@@ -97,21 +99,25 @@ msgid "Active Timesheet"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__activity_ids
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__activity_ids
 msgid "Activities"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__activity_exception_decoration
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__activity_exception_decoration
 msgid "Activity Exception Decoration"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__activity_state
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__activity_state
 msgid "Activity State"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__activity_type_icon
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__activity_type_icon
 msgid "Activity Type Icon"
 msgstr ""
@@ -122,6 +128,7 @@ msgid "Atendance Schedules"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__message_attachment_count
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_attachment_count
 msgid "Attachment Count"
 msgstr ""
@@ -132,6 +139,18 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.hr_timesheet_view_attendance_form
 #: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.res_config_settings_view_form
 msgid "Attendance"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.actions.act_window,name:ssi_timesheet_attendance.hr_attendance_location_action
+#: model:ir.model,name:ssi_timesheet_attendance.model_hr_attendance_location
+#: model:res.groups,name:ssi_timesheet_attendance.hr_attendance_location_group
+msgid "Attendance Location"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.ui.menu,name:ssi_timesheet_attendance.hr_attendance_location_menu
+msgid "Attendance Locations"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
@@ -247,6 +266,7 @@ msgid "Check Out Reason"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__code
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__code
 msgid "Code"
 msgstr ""
@@ -278,6 +298,7 @@ msgid "Created By System"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__create_uid
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__create_uid
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__create_uid
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__create_uid
@@ -285,6 +306,7 @@ msgid "Created by"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__create_date
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__create_date
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__create_date
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__create_date
@@ -383,6 +405,7 @@ msgid ""
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__display_name
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__display_name
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee_base__display_name
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet__display_name
@@ -416,21 +439,25 @@ msgid "Finish Late"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__message_follower_ids
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_follower_ids
 msgid "Followers"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__message_channel_ids
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_channel_ids
 msgid "Followers (Channels)"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__message_partner_ids
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_partner_ids
 msgid "Followers (Partners)"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__activity_type_icon
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__activity_type_icon
 msgid "Font awesome icon e.g. fa-tasks"
 msgstr ""
@@ -446,6 +473,7 @@ msgid "HR Timesheet Daily Summary"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__id
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__id
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee_base__id
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet__id
@@ -458,32 +486,39 @@ msgid "ID"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__activity_exception_icon
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__activity_exception_icon
 msgid "Icon"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__activity_exception_icon
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__activity_exception_icon
 msgid "Icon to indicate an exception activity."
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__message_needaction
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__message_unread
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__message_needaction
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__message_unread
 msgid "If checked, new messages require your attention."
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__message_has_error
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__message_has_error
 msgid "If checked, some messages have a delivery error."
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__message_is_follower
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_is_follower
 msgid "Is Follower"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location____last_update
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason____last_update
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee_base____last_update
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet____last_update
@@ -496,6 +531,7 @@ msgid "Last Modified on"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__write_uid
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__write_uid
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__write_uid
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__write_uid
@@ -503,6 +539,7 @@ msgid "Last Updated by"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__write_date
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__write_date
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__write_date
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__write_date
@@ -523,23 +560,66 @@ msgid "Latest Attedance"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__latitude
+msgid "Latitude"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: code:addons/ssi_timesheet_attendance/models/hr_attendance_location.py:0
+#, python-format
+msgid ""
+"Latitude and longitude cannot both be 0. Enter the actual coordinate of the "
+"location."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: code:addons/ssi_timesheet_attendance/models/hr_attendance_location.py:0
 #: code:addons/ssi_timesheet_attendance/models/hr_timesheet_attendance.py:0
 #, python-format
 msgid "Latitude must be between -90 and 90 degrees."
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__latitude
+msgid ""
+"Latitude of the location's center point, in decimal degrees (-90 to 90). "
+"Stored with 7 decimal digits of precision (~1 cm) so the tolerance radius "
+"stays meaningful."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__name
+msgid "Location"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__longitude
+msgid "Longitude"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: code:addons/ssi_timesheet_attendance/models/hr_attendance_location.py:0
 #: code:addons/ssi_timesheet_attendance/models/hr_timesheet_attendance.py:0
 #, python-format
 msgid "Longitude must be between -180 and 180 degrees."
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__longitude
+msgid ""
+"Longitude of the location's center point, in decimal degrees (-180 to 180). "
+"Stored with 7 decimal digits of precision (~1 cm) so the tolerance radius "
+"stays meaningful."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__message_main_attachment_id
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_main_attachment_id
 msgid "Main Attachment"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__active
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__active
 msgid ""
 "Master data status\n"
@@ -551,6 +631,7 @@ msgid ""
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__code
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__code
 msgid ""
 "Master data unique identifier.\n"
@@ -562,31 +643,37 @@ msgid ""
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__message_has_error
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_has_error
 msgid "Message Delivery error"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__message_ids
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_ids
 msgid "Messages"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__my_activity_date_deadline
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__my_activity_date_deadline
 msgid "My Activity Deadline"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__activity_date_deadline
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__activity_date_deadline
 msgid "Next Activity Deadline"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__activity_summary
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__activity_summary
 msgid "Next Activity Summary"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__activity_type_id
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__activity_type_id
 msgid "Next Activity Type"
 msgstr ""
@@ -597,31 +684,37 @@ msgid "No Check Out"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__note
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__note
 msgid "Note"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__message_needaction_counter
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_needaction_counter
 msgid "Number of Actions"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__message_has_error_counter
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_has_error_counter
 msgid "Number of errors"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__message_needaction_counter
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__message_needaction_counter
 msgid "Number of messages which requires an action"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__message_has_error_counter
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__message_has_error_counter
 msgid "Number of messages with delivery error"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__message_unread_counter
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__message_unread_counter
 msgid "Number of unread messages"
 msgstr ""
@@ -636,6 +729,17 @@ msgstr ""
 #: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__hr_timesheet_attendance__state__present
 #: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__hr_timesheet_attendance_schedule__state__present
 msgid "Present"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__radius
+msgid "Radius (meter)"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: code:addons/ssi_timesheet_attendance/models/hr_attendance_location.py:0
+#, python-format
+msgid "Radius must be greater than 0."
 msgstr ""
 
 #. module: ssi_timesheet_attendance
@@ -674,6 +778,7 @@ msgid "Reason Out"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__activity_user_id
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__activity_user_id
 msgid "Responsible User"
 msgstr ""
@@ -736,6 +841,7 @@ msgid "State"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__activity_state
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__activity_state
 msgid ""
 "Status based on activities\n"
@@ -770,6 +876,14 @@ msgstr ""
 #. module: ssi_timesheet_attendance
 #: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.hr_timesheet_attendance_view_search
 msgid "Today"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__radius
+msgid ""
+"Tolerance radius around the center point, in METERS. An attendance reading "
+"within this distance of the center point is considered to be taken at this "
+"location."
 msgstr ""
 
 #. module: ssi_timesheet_attendance
@@ -811,16 +925,19 @@ msgid "Total Valid Hour"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__activity_exception_decoration
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__activity_exception_decoration
 msgid "Type of the exception activity on record."
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__message_unread
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_unread
 msgid "Unread Messages"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__message_unread_counter
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_unread_counter
 msgid "Unread Messages Counter"
 msgstr ""
@@ -836,11 +953,13 @@ msgid "Valid Check Out"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__website_message_ids
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__website_message_ids
 msgid "Website Messages"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__website_message_ids
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__website_message_ids
 msgid "Website communication history"
 msgstr ""
