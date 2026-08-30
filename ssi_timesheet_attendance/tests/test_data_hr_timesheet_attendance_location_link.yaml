@@ -66,6 +66,28 @@ scenarios:
   - name:
       "Attendance Location Link - No Coordinate At All Still Saves When Setting Enabled"
     steps:
+      # NOTE: the record registry (REC:/save_as aliases) is reset at the
+      # start of every scenario in this file - only the underlying
+      # transaction/rows are shared, not the alias names (see
+      # ``odoo_yaml_test.case.YamlTransactionCase.run_yaml_scenario``).
+      # Every scenario below re-binds the fixtures it needs from the
+      # first scenario instead of assuming its aliases still exist.
+      - step: "Re-bind the employee created in the first scenario"
+        action: "search"
+        model: "hr.employee"
+        domain: [["name", "=", "Test Employee Attendance Location Link"]]
+        save_as: "employee"
+        limit: 1
+
+      - step: "Re-bind the timesheet created in the first scenario"
+        action: "search"
+        model: "hr.timesheet"
+        domain:
+          [["employee_id", "=", "REC: employee.id"], ["date_start", "=", "2025-01-01"]]
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        limit: 1
+
       - step: "Create attendance without mentioning any geolocation field"
         action: "create"
         model: "hr.timesheet_attendance"
@@ -87,6 +109,22 @@ scenarios:
 
   - name: "Attendance Location Link - Zero Coordinate Pair Resolves Empty Without Error"
     steps:
+      - step: "Re-bind the employee created in the first scenario"
+        action: "search"
+        model: "hr.employee"
+        domain: [["name", "=", "Test Employee Attendance Location Link"]]
+        save_as: "employee"
+        limit: 1
+
+      - step: "Re-bind the timesheet created in the first scenario"
+        action: "search"
+        model: "hr.timesheet"
+        domain:
+          [["employee_id", "=", "REC: employee.id"], ["date_start", "=", "2025-01-01"]]
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        limit: 1
+
       - step: "Create attendance with an explicit (0, 0) check-in coordinate"
         action: "create"
         model: "hr.timesheet_attendance"
@@ -114,6 +152,22 @@ scenarios:
   - name:
       "Attendance Location Link - Within Radius Resolves And Saves When Setting Enabled"
     steps:
+      - step: "Re-bind the employee created in the first scenario"
+        action: "search"
+        model: "hr.employee"
+        domain: [["name", "=", "Test Employee Attendance Location Link"]]
+        save_as: "employee"
+        limit: 1
+
+      - step: "Re-bind the timesheet created in the first scenario"
+        action: "search"
+        model: "hr.timesheet"
+        domain:
+          [["employee_id", "=", "REC: employee.id"], ["date_start", "=", "2025-01-01"]]
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        limit: 1
+
       - step: "Register Location A"
         action: "create"
         model: "hr.attendance_location"
@@ -154,6 +208,30 @@ scenarios:
 
   - name: "Attendance Location Link - Distance Exactly At Radius Boundary Is Accepted"
     steps:
+      - step: "Re-bind the employee created in the first scenario"
+        action: "search"
+        model: "hr.employee"
+        domain: [["name", "=", "Test Employee Attendance Location Link"]]
+        save_as: "employee"
+        limit: 1
+
+      - step: "Re-bind the timesheet created in the first scenario"
+        action: "search"
+        model: "hr.timesheet"
+        domain:
+          [["employee_id", "=", "REC: employee.id"], ["date_start", "=", "2025-01-01"]]
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        limit: 1
+
+      - step: "Re-bind Location A registered in the 'Within Radius' scenario"
+        action: "search"
+        model: "hr.attendance_location"
+        domain: [["code", "=", "LOCLINK01"]]
+        save_as: "location_a"
+        as_user: "base.user_admin"
+        limit: 1
+
       - step:
           "Create attendance with a check-in coordinate engineered to land at Location
           A's radius edge - the true distance is 99.9977 m against a 100.00 m radius, a
@@ -182,6 +260,22 @@ scenarios:
 
   - name: "Attendance Location Link - Nearest Of Two Overlapping Locations Wins"
     steps:
+      - step: "Re-bind the employee created in the first scenario"
+        action: "search"
+        model: "hr.employee"
+        domain: [["name", "=", "Test Employee Attendance Location Link"]]
+        save_as: "employee"
+        limit: 1
+
+      - step: "Re-bind the timesheet created in the first scenario"
+        action: "search"
+        model: "hr.timesheet"
+        domain:
+          [["employee_id", "=", "REC: employee.id"], ["date_start", "=", "2025-01-01"]]
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        limit: 1
+
       - step:
           "Register Location B so that a single point sits ~30 m from B and ~80 m from A
           - both radii cover it"
@@ -222,6 +316,30 @@ scenarios:
   - name:
       "Attendance Location Link - Check-In And Check-Out Resolve Different Locations"
     steps:
+      - step: "Re-bind the employee created in the first scenario"
+        action: "search"
+        model: "hr.employee"
+        domain: [["name", "=", "Test Employee Attendance Location Link"]]
+        save_as: "employee"
+        limit: 1
+
+      - step: "Re-bind the timesheet created in the first scenario"
+        action: "search"
+        model: "hr.timesheet"
+        domain:
+          [["employee_id", "=", "REC: employee.id"], ["date_start", "=", "2025-01-01"]]
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        limit: 1
+
+      - step: "Re-bind Location A registered in the 'Within Radius' scenario"
+        action: "search"
+        model: "hr.attendance_location"
+        domain: [["code", "=", "LOCLINK01"]]
+        save_as: "location_a"
+        as_user: "base.user_admin"
+        limit: 1
+
       - step: "Register Location C, far away from A and B"
         action: "create"
         model: "hr.attendance_location"
@@ -265,6 +383,30 @@ scenarios:
 
   - name: "Attendance Location Link - Write Fills Check-Out Location Later"
     steps:
+      - step: "Re-bind the employee created in the first scenario"
+        action: "search"
+        model: "hr.employee"
+        domain: [["name", "=", "Test Employee Attendance Location Link"]]
+        save_as: "employee"
+        limit: 1
+
+      - step: "Re-bind the timesheet created in the first scenario"
+        action: "search"
+        model: "hr.timesheet"
+        domain:
+          [["employee_id", "=", "REC: employee.id"], ["date_start", "=", "2025-01-01"]]
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        limit: 1
+
+      - step: "Re-bind Location A registered in the 'Within Radius' scenario"
+        action: "search"
+        model: "hr.attendance_location"
+        domain: [["code", "=", "LOCLINK01"]]
+        save_as: "location_a"
+        as_user: "base.user_admin"
+        limit: 1
+
       - step: "Create an open attendance without a check-out yet"
         action: "create"
         model: "hr.timesheet_attendance"
@@ -305,6 +447,27 @@ scenarios:
       "Attendance Location Link - Setting Disabled Allows Coordinate Outside Every
       Location"
     steps:
+      - step: "Get the main company"
+        action: "ref"
+        xml_id: "base.main_company"
+        save_as: "main_company"
+
+      - step: "Re-bind the employee created in the first scenario"
+        action: "search"
+        model: "hr.employee"
+        domain: [["name", "=", "Test Employee Attendance Location Link"]]
+        save_as: "employee"
+        limit: 1
+
+      - step: "Re-bind the timesheet created in the first scenario"
+        action: "search"
+        model: "hr.timesheet"
+        domain:
+          [["employee_id", "=", "REC: employee.id"], ["date_start", "=", "2025-01-01"]]
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        limit: 1
+
       - step: "Disable the registered-location requirement"
         action: "write"
         target: "main_company"
@@ -340,6 +503,27 @@ scenarios:
 
   - name: "Attendance Location Link - Check-Out Outside All Locations Rejected By Write"
     steps:
+      - step: "Get the main company"
+        action: "ref"
+        xml_id: "base.main_company"
+        save_as: "main_company"
+
+      - step: "Re-bind the employee created in the first scenario"
+        action: "search"
+        model: "hr.employee"
+        domain: [["name", "=", "Test Employee Attendance Location Link"]]
+        save_as: "employee"
+        limit: 1
+
+      - step: "Re-bind the timesheet created in the first scenario"
+        action: "search"
+        model: "hr.timesheet"
+        domain:
+          [["employee_id", "=", "REC: employee.id"], ["date_start", "=", "2025-01-01"]]
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        limit: 1
+
       - step: "Re-enable the registered-location requirement"
         action: "write"
         target: "main_company"
@@ -372,6 +556,22 @@ scenarios:
 
   - name: "Attendance Location Link - Check-In Outside All Locations Rejected"
     steps:
+      - step: "Re-bind the employee created in the first scenario"
+        action: "search"
+        model: "hr.employee"
+        domain: [["name", "=", "Test Employee Attendance Location Link"]]
+        save_as: "employee"
+        limit: 1
+
+      - step: "Re-bind the timesheet created in the first scenario"
+        action: "search"
+        model: "hr.timesheet"
+        domain:
+          [["employee_id", "=", "REC: employee.id"], ["date_start", "=", "2025-01-01"]]
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        limit: 1
+
       - step:
           "Create attendance with a check-in coordinate ~5000 m from every registered
           location, setting still enabled"
@@ -391,6 +591,30 @@ scenarios:
 
   - name: "Attendance Location Link - Deactivated Location Excluded From Resolution"
     steps:
+      - step: "Re-bind the employee created in the first scenario"
+        action: "search"
+        model: "hr.employee"
+        domain: [["name", "=", "Test Employee Attendance Location Link"]]
+        save_as: "employee"
+        limit: 1
+
+      - step: "Re-bind the timesheet created in the first scenario"
+        action: "search"
+        model: "hr.timesheet"
+        domain:
+          [["employee_id", "=", "REC: employee.id"], ["date_start", "=", "2025-01-01"]]
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        limit: 1
+
+      - step: "Re-bind Location A registered in the 'Within Radius' scenario"
+        action: "search"
+        model: "hr.attendance_location"
+        domain: [["code", "=", "LOCLINK01"]]
+        save_as: "location_a"
+        as_user: "base.user_admin"
+        limit: 1
+
       - step: "Deactivate Location A"
         action: "write"
         target: "location_a"
@@ -419,6 +643,26 @@ scenarios:
       "Attendance Location Link - Radius Change Does Not Retroactively Move Past
       Attendance"
     steps:
+      - step:
+          "Re-bind Location A - the previous scenario deactivated it, so match
+          regardless of its active state"
+        action: "search"
+        model: "hr.attendance_location"
+        domain: [["code", "=", "LOCLINK01"], ["active", "in", [true, false]]]
+        save_as: "location_a"
+        as_user: "base.user_admin"
+        limit: 1
+
+      - step:
+          "Re-bind the attendance created in the 'Within Radius' scenario by its unique
+          date"
+        action: "search"
+        model: "hr.timesheet_attendance"
+        domain: [["date", "=", "2025-01-04"]]
+        save_as: "attendance_within"
+        as_user: "base.user_admin"
+        limit: 1
+
       - step: "Shrink Location A's radius from 100 m to 20 m"
         action: "write"
         target: "location_a"
