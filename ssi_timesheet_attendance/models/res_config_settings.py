@@ -5,6 +5,15 @@ from odoo import fields, models
 
 
 class ResConfigSettings(models.TransientModel):
+    """
+    Exposes timesheet attendance company configuration on Settings.
+
+    Mirrors ``res.company``'s checkout buffer, its default
+    check-in/check-out reasons, and the registered attendance
+    location requirement, so they can be edited from the Settings
+    screen instead of the Companies form.
+    """
+
     _inherit = "res.config.settings"
 
     checkout_buffer = fields.Float(
@@ -17,5 +26,9 @@ class ResConfigSettings(models.TransientModel):
     )
     check_in_reason_id = fields.Many2one(
         related="company_id.check_in_reason_id",
+        readonly=False,
+    )
+    attendance_location_required = fields.Boolean(
+        related="company_id.attendance_location_required",
         readonly=False,
     )

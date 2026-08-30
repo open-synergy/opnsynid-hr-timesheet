@@ -1,0 +1,439 @@
+scenarios:
+  - name:
+      "Attendance Location Link - No Registered Location Rejects When Setting Enabled"
+    steps:
+      - step: "Get the main company"
+        action: "ref"
+        xml_id: "base.main_company"
+        save_as: "main_company"
+
+      - step: "Enable the registered-location requirement"
+        action: "write"
+        target: "main_company"
+        as_user: "base.user_admin"
+        values:
+          attendance_location_required: true
+
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Attendance Location Link"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet for employee"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date_start: 2025-01-01
+          date_end: 2025-01-31
+          working_schedule_id: "REC: working_schedule.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step:
+          "Create attendance with a check-in coordinate while no location is registered
+          at all"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        as_user: "base.user_admin"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "check in"
+        values:
+          employee_id: "REC: employee.id"
+          date: 2025-01-01
+          check_in: "2025-01-01 08:00:00"
+          sheet_id: "REC: timesheet.id"
+          check_in_latitude: -6.2000000
+          check_in_longitude: 106.8000000
+
+  - name:
+      "Attendance Location Link - No Coordinate At All Still Saves When Setting Enabled"
+    steps:
+      - step: "Create attendance without mentioning any geolocation field"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_no_coordinate"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date: 2025-01-02
+          check_in: "2025-01-02 08:00:00"
+          sheet_id: "REC: timesheet.id"
+
+      - step: "Assert it saved despite the setting being enabled"
+        action: "assert"
+        target: "attendance_no_coordinate"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+
+  - name: "Attendance Location Link - Zero Coordinate Pair Resolves Empty Without Error"
+    steps:
+      - step: "Create attendance with an explicit (0, 0) check-in coordinate"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_zero"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date: 2025-01-03
+          check_in: "2025-01-03 08:00:00"
+          sheet_id: "REC: timesheet.id"
+          check_in_latitude: 0.0
+          check_in_longitude: 0.0
+
+      - step: "Assert both location fields stay empty, no error raised"
+        action: "assert"
+        target: "attendance_zero"
+        asserts:
+          check_in_location_id:
+            type: "value"
+            operator: "is_falsy"
+          check_out_location_id:
+            type: "value"
+            operator: "is_falsy"
+
+  - name:
+      "Attendance Location Link - Within Radius Resolves And Saves When Setting Enabled"
+    steps:
+      - step: "Register Location A"
+        action: "create"
+        model: "hr.attendance_location"
+        save_as: "location_a"
+        as_user: "base.user_admin"
+        values:
+          name: "Test Location Link A"
+          code: "LOCLINK01"
+          latitude: -6.2000000
+          longitude: 106.8000000
+          radius: 100.0
+
+      - step:
+          "Create attendance with a check-in coordinate ~50 m from Location A (within
+          its 100 m radius)"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_within"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date: 2025-01-04
+          check_in: "2025-01-04 08:00:00"
+          sheet_id: "REC: timesheet.id"
+          check_in_latitude: -6.1995503
+          check_in_longitude: 106.8000000
+
+      - step: "Assert it saved and resolved to Location A"
+        action: "assert"
+        target: "attendance_within"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          check_in_location_id:
+            type: "m2o"
+            expected: "REC: location_a"
+
+  - name: "Attendance Location Link - Distance Exactly At Radius Boundary Is Accepted"
+    steps:
+      - step:
+          "Create attendance with a check-in coordinate engineered to land at Location
+          A's radius edge - the true distance is 99.9977 m against a 100.00 m radius, a
+          2 mm margin that is below the ~1 cm resolution of the 7-decimal-digit
+          coordinate storage, so this is effectively the inclusive boundary case without
+          risking storage-rounding flakiness"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_boundary"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date: 2025-01-05
+          check_in: "2025-01-05 08:00:00"
+          sheet_id: "REC: timesheet.id"
+          check_in_latitude: -6.1991007
+          check_in_longitude: 106.8000000
+
+      - step: "Assert the boundary point still resolves to Location A"
+        action: "assert"
+        target: "attendance_boundary"
+        asserts:
+          check_in_location_id:
+            type: "m2o"
+            expected: "REC: location_a"
+
+  - name: "Attendance Location Link - Nearest Of Two Overlapping Locations Wins"
+    steps:
+      - step:
+          "Register Location B so that a single point sits ~30 m from B and ~80 m from A
+          - both radii cover it"
+        action: "create"
+        model: "hr.attendance_location"
+        save_as: "location_b"
+        as_user: "base.user_admin"
+        values:
+          name: "Test Location Link B"
+          code: "LOCLINK02"
+          latitude: -6.1990107
+          longitude: 106.8000000
+          radius: 50.0
+
+      - step:
+          "Create attendance checking in at the shared point (~80 m from A, ~30 m from
+          B)"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_overlap"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date: 2025-01-06
+          check_in: "2025-01-06 08:00:00"
+          sheet_id: "REC: timesheet.id"
+          check_in_latitude: -6.1992805
+          check_in_longitude: 106.8000000
+
+      - step: "Assert the nearer Location B was chosen, not Location A"
+        action: "assert"
+        target: "attendance_overlap"
+        asserts:
+          check_in_location_id:
+            type: "m2o"
+            expected: "REC: location_b"
+
+  - name:
+      "Attendance Location Link - Check-In And Check-Out Resolve Different Locations"
+    steps:
+      - step: "Register Location C, far away from A and B"
+        action: "create"
+        model: "hr.attendance_location"
+        save_as: "location_c"
+        as_user: "base.user_admin"
+        values:
+          name: "Test Location Link C"
+          code: "LOCLINK03"
+          latitude: -6.9147440
+          longitude: 107.6098100
+          radius: 100.0
+
+      - step:
+          "Create attendance checking in exactly at Location A's center and checking out
+          exactly at Location C's center"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_two_locations"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date: 2025-01-07
+          check_in: "2025-01-07 08:00:00"
+          check_out: "2025-01-07 17:00:00"
+          sheet_id: "REC: timesheet.id"
+          check_in_latitude: -6.2000000
+          check_in_longitude: 106.8000000
+          check_out_latitude: -6.9147440
+          check_out_longitude: 107.6098100
+
+      - step: "Assert check-in resolved to A and check-out resolved to C"
+        action: "assert"
+        target: "attendance_two_locations"
+        asserts:
+          check_in_location_id:
+            type: "m2o"
+            expected: "REC: location_a"
+          check_out_location_id:
+            type: "m2o"
+            expected: "REC: location_c"
+
+  - name: "Attendance Location Link - Write Fills Check-Out Location Later"
+    steps:
+      - step: "Create an open attendance without a check-out yet"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_write_later"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date: 2025-01-08
+          check_in: "2025-01-08 08:00:00"
+          sheet_id: "REC: timesheet.id"
+
+      - step: "Assert precondition: check-out location is empty"
+        action: "assert"
+        target: "attendance_write_later"
+        asserts:
+          check_out_location_id:
+            type: "value"
+            operator: "is_falsy"
+
+      - step: "Write check-out coordinate exactly at Location A's center"
+        action: "write"
+        target: "attendance_write_later"
+        as_user: "base.user_admin"
+        values:
+          check_out: "2025-01-08 17:00:00"
+          check_out_latitude: -6.2000000
+          check_out_longitude: 106.8000000
+
+      - step: "Assert check-out location was filled in by the write"
+        action: "assert"
+        target: "attendance_write_later"
+        asserts:
+          check_out_location_id:
+            type: "m2o"
+            expected: "REC: location_a"
+
+  - name:
+      "Attendance Location Link - Setting Disabled Allows Coordinate Outside Every
+      Location"
+    steps:
+      - step: "Disable the registered-location requirement"
+        action: "write"
+        target: "main_company"
+        as_user: "base.user_admin"
+        values:
+          attendance_location_required: false
+
+      - step:
+          "Create attendance with a check-in coordinate ~5000 m from every registered
+          location"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_far_disabled"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date: 2025-01-09
+          check_in: "2025-01-09 08:00:00"
+          sheet_id: "REC: timesheet.id"
+          check_in_latitude: -6.2449660
+          check_in_longitude: 106.8000000
+
+      - step: "Assert it saved, with the check-in location left empty"
+        action: "assert"
+        target: "attendance_far_disabled"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          check_in_location_id:
+            type: "value"
+            operator: "is_falsy"
+
+  - name: "Attendance Location Link - Check-Out Outside All Locations Rejected By Write"
+    steps:
+      - step: "Re-enable the registered-location requirement"
+        action: "write"
+        target: "main_company"
+        as_user: "base.user_admin"
+        values:
+          attendance_location_required: true
+
+      - step: "Create an open attendance without any coordinate"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_checkout_reject"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          date: 2025-01-10
+          check_in: "2025-01-10 08:00:00"
+          sheet_id: "REC: timesheet.id"
+
+      - step: "Write a check-out coordinate ~5000 m from every registered location"
+        action: "write"
+        target: "attendance_checkout_reject"
+        as_user: "base.user_admin"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "check out"
+        values:
+          check_out: "2025-01-10 17:00:00"
+          check_out_latitude: -6.2449660
+          check_out_longitude: 106.8000000
+
+  - name: "Attendance Location Link - Check-In Outside All Locations Rejected"
+    steps:
+      - step:
+          "Create attendance with a check-in coordinate ~5000 m from every registered
+          location, setting still enabled"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        as_user: "base.user_admin"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "check in"
+        values:
+          employee_id: "REC: employee.id"
+          date: 2025-01-11
+          check_in: "2025-01-11 08:00:00"
+          sheet_id: "REC: timesheet.id"
+          check_in_latitude: -6.2449660
+          check_in_longitude: 106.8000000
+
+  - name: "Attendance Location Link - Deactivated Location Excluded From Resolution"
+    steps:
+      - step: "Deactivate Location A"
+        action: "write"
+        target: "location_a"
+        as_user: "base.user_admin"
+        values:
+          active: false
+
+      - step:
+          "Create attendance checking in exactly at Location A's (now inactive) center -
+          Location B and C are both far away from this point and do not cover it"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        as_user: "base.user_admin"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "check in"
+        values:
+          employee_id: "REC: employee.id"
+          date: 2025-01-12
+          check_in: "2025-01-12 08:00:00"
+          sheet_id: "REC: timesheet.id"
+          check_in_latitude: -6.2000000
+          check_in_longitude: 106.8000000
+
+  - name:
+      "Attendance Location Link - Radius Change Does Not Retroactively Move Past
+      Attendance"
+    steps:
+      - step: "Shrink Location A's radius from 100 m to 20 m"
+        action: "write"
+        target: "location_a"
+        as_user: "base.user_admin"
+        values:
+          active: true
+          radius: 20.0
+
+      - step:
+          "Assert the ~50 m attendance created earlier (attendance_within) still points
+          to Location A, unaffected by the radius change"
+        action: "assert"
+        target: "attendance_within"
+        refresh: true
+        asserts:
+          check_in_location_id:
+            type: "m2o"
+            expected: "REC: location_a"
