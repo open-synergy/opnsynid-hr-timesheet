@@ -111,3 +111,125 @@ scenarios:
           checkout_buffer:
             type: "value"
             expected: 0.0
+
+  - name:
+      "Attendance Schedule - Single Slot Crossing Midnight Passes The 24-Hour Constraint"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_midnight"
+        values:
+          name: "Test Employee Schedule Midnight"
+
+      - step: "Create timesheet spanning the midnight boundary"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_midnight"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_midnight.id"
+          date_start: 2024-07-20
+          date_end: 2024-07-21
+          working_schedule_id: "REC: working_schedule.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_midnight"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create a single slot from 20:00 to next day 06:00"
+        action: "create"
+        model: "hr.timesheet_attendance_schedule"
+        save_as: "schedule_midnight"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_midnight.id"
+          date_start: "2024-07-20 20:00:00"
+          date_end: "2024-07-21 06:00:00"
+
+      - step:
+          "Assert the 10-hour slot is saved and passes the 23.99-hour
+          _check_schedule_work_hour constraint"
+        action: "assert"
+        target: "schedule_midnight"
+        asserts:
+          schedule_work_hour:
+            type: "value"
+            expected: 10.0
+
+  - name: "Attendance Schedule - Finish Late Hour Recomputes When Check-Out Is Written"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_finish_late"
+        values:
+          name: "Test Employee Schedule Finish Late"
+
+      - step: "Create timesheet spanning the midnight boundary"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_finish_late"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_finish_late.id"
+          date_start: 2024-07-22
+          date_end: 2024-07-23
+          working_schedule_id: "REC: working_schedule.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_finish_late"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create a slot from 20:00 to next day 06:00"
+        action: "create"
+        model: "hr.timesheet_attendance_schedule"
+        save_as: "schedule_finish_late"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_finish_late.id"
+          date_start: "2024-07-22 20:00:00"
+          date_end: "2024-07-23 06:00:00"
+
+      - step: "Create an open attendance attached to the slot (no check-out yet)"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_finish_late"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_finish_late.id"
+          date: 2024-07-22
+          check_in: "2024-07-22 20:30:00"
+          sheet_id: "REC: timesheet_finish_late.id"
+
+      - step: "Assert finish_late_hour is zero before check-out is filled"
+        action: "assert"
+        target: "schedule_finish_late"
+        refresh: true
+        asserts:
+          finish_late_hour:
+            type: "value"
+            expected: 0.0
+
+      - step: "Write check-out one hour past the slot's own end"
+        action: "write"
+        target: "attendance_finish_late"
+        as_user: "base.user_admin"
+        values:
+          check_out: "2024-07-23 07:00:00"
+
+      - step:
+          "Assert finish_late_hour recomputed - this is the exact regression guard for
+          the duplicated 'real_date_start' entry that used to replace 'real_date_end' in
+          _compute_work_hour's @api.depends"
+        action: "assert"
+        target: "schedule_finish_late"
+        refresh: true
+        asserts:
+          finish_late_hour:
+            type: "value"
+            expected: 1.0

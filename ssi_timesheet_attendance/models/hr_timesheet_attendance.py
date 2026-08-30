@@ -263,8 +263,22 @@ class HRTimesheetAttendance(models.Model):
         "check_out",
     )
     def _compute_valid(self):
+        """Derive the valid check-in/out window and its duration.
+
+        ``valid_check_in``/``valid_check_out`` are the start/end of
+        the intersection between ``[check_in, check_out]`` and
+        ``[schedule_id.date_start, schedule_id.date_end]``.
+        ``total_valid_hour`` is that intersection's duration, in
+        hours. All three fields are assigned on every branch -
+        including the branch where no valid window exists - so a
+        stale value from a previous computation never survives.
+
+        :raises: nothing; the absence of a valid window is not an
+            error, it yields ``False``/``0.0``.
+        """
         for record in self:
-            total_valid_hour = 0
+            valid_check_in = valid_check_out = False
+            total_valid_hour = 0.0
             if (
                 record.schedule_id.date_start
                 and record.schedule_id.date_end
@@ -281,6 +295,10 @@ class HRTimesheetAttendance(models.Model):
                     date_end = min(record.schedule_id.date_end, record.check_out)
                     delta = date_end - date_start
                     total_valid_hour = delta.total_seconds() / 3600.0
+                    valid_check_in = date_start
+                    valid_check_out = date_end
+            record.valid_check_in = valid_check_in
+            record.valid_check_out = valid_check_out
             record.total_valid_hour = total_valid_hour
 
     @api.depends(
@@ -294,17 +312,67 @@ class HRTimesheetAttendance(models.Model):
                 result = (record.check_out - record.check_in).total_seconds() / 3600.0
             record.total_hour = result
 
-    @api.depends("date")
+    @api.depends(
+        "date",
+        "check_in",
+        "employee_id",
+    )
     def _compute_schedule(self):
+        """Resolve the schedule slot that covers this attendance.
+
+        Runs a three-tier search, per record, stopping at the first
+        tier that matches - always among slots of the same
+        ``employee_id`` and always with an explicit ``order`` so the
+        result is deterministic even when more than one slot could
+        match:
+
+        1. the slot whose ``date_start``/``date_end`` window
+           **contains** ``check_in``, without any date filter - this
+           also covers a check-in that falls after midnight on a
+           shift that started the day before;
+        2. failing that, among the slots dated ``date``, the one
+           whose ``date_start`` is **closest** to ``check_in`` - this
+           covers an early arrival or a late departure that falls
+           outside every slot's window;
+        3. failing both, ``schedule_id`` is left ``False`` - a
+           legitimate outcome for attendance recorded on a day with
+           no schedule slot (holiday, unplanned overtime, or an
+           employee without a schedule).
+
+        :raises: nothing; an unresolved schedule is not an error.
+        """
         obj_schedule = self.env["hr.timesheet_attendance_schedule"]
         for attn in self:
-            # company = attn.employee_id.company_id
-            criteria = [
-                ("employee_id", "=", attn.employee_id.id),
-                ("date", "=", attn.date),
-            ]
-            schedules = obj_schedule.search(criteria, limit=1)
-            attn.schedule_id = schedules[0].id if len(schedules) > 0 else False
+            schedule = obj_schedule.browse()
+            if attn.check_in:
+                schedule = obj_schedule.search(
+                    [
+                        ("employee_id", "=", attn.employee_id.id),
+                        ("date_start", "<=", attn.check_in),
+                        ("date_end", ">=", attn.check_in),
+                    ],
+                    order="date_start",
+                    limit=1,
+                )
+            if not schedule:
+                candidates = obj_schedule.search(
+                    [
+                        ("employee_id", "=", attn.employee_id.id),
+                        ("date", "=", attn.date),
+                    ],
+                    order="date_start",
+                )
+                if candidates:
+                    if attn.check_in:
+                        schedule = min(
+                            candidates,
+                            key=lambda candidate: abs(
+                                (candidate.date_start - attn.check_in).total_seconds()
+                            ),
+                        )
+                    else:
+                        schedule = candidates[0]
+            attn.schedule_id = schedule.id if schedule else False
 
     @api.model
     def create(self, values):
