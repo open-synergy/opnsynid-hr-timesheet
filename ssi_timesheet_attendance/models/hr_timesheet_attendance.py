@@ -2,11 +2,48 @@
 # Copyright 2022 PT. Simetri Sinergi Indonesia
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+import math
 from datetime import datetime
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools import format_datetime
+
+# Mean Earth radius (IUGG), in meters, used by ``_haversine_distance_meters``
+# below. An average sphere is accurate enough at the hundreds-of-meters scale
+# attendance geofencing operates at; a full geodesic model (WGS84 ellipsoid)
+# would need a heavier dependency (PostGIS, geopy, ...) for no practical
+# benefit here.
+ATTENDANCE_LOCATION_EARTH_RADIUS_METERS = 6_371_008.8
+
+
+def _haversine_distance_meters(latitude_1, longitude_1, latitude_2, longitude_2):
+    """Compute the great-circle distance between two coordinates.
+
+    Uses the haversine formula against
+    :data:`ATTENDANCE_LOCATION_EARTH_RADIUS_METERS`.
+
+    :param latitude_1: latitude of the first point, in decimal degrees
+    :param longitude_1: longitude of the first point, in decimal
+        degrees
+    :param latitude_2: latitude of the second point, in decimal
+        degrees
+    :param longitude_2: longitude of the second point, in decimal
+        degrees
+    :return: the distance between the two points, in meters
+    """
+    phi_1 = math.radians(latitude_1)
+    phi_2 = math.radians(latitude_2)
+    delta_phi = math.radians(latitude_2 - latitude_1)
+    delta_lambda = math.radians(longitude_2 - longitude_1)
+    sin_half_phi = math.sin(delta_phi / 2.0)
+    sin_half_lambda = math.sin(delta_lambda / 2.0)
+    haversine = (
+        sin_half_phi * sin_half_phi
+        + math.cos(phi_1) * math.cos(phi_2) * sin_half_lambda * sin_half_lambda
+    )
+    central_angle = 2.0 * math.atan2(math.sqrt(haversine), math.sqrt(1.0 - haversine))
+    return ATTENDANCE_LOCATION_EARTH_RADIUS_METERS * central_angle
 
 
 class HRTimesheetAttendance(models.Model):
@@ -230,6 +267,179 @@ class HRTimesheetAttendance(models.Model):
                 if value < -180.0 or value > 180.0:
                     raise ValidationError(
                         _("Longitude must be between -180 and 180 degrees.")
+                    )
+
+    check_in_location_id = fields.Many2one(
+        string="Check In Location",
+        comodel_name="hr.attendance_location",
+        compute="_compute_check_in_location_id",
+        store=True,
+        readonly=True,
+        compute_sudo=True,
+        help="Registered location whose radius covers the check-in "
+        "coordinate, chosen by nearest distance when more than one "
+        "covers it. Computed once from the check-in coordinate and "
+        "left untouched afterwards - editing a registered location's "
+        "coordinate or radius later does not retroactively move past "
+        "attendance.",
+    )
+    check_out_location_id = fields.Many2one(
+        string="Check Out Location",
+        comodel_name="hr.attendance_location",
+        compute="_compute_check_out_location_id",
+        store=True,
+        readonly=True,
+        compute_sudo=True,
+        help="Registered location whose radius covers the check-out "
+        "coordinate, chosen by nearest distance when more than one "
+        "covers it. Computed once from the check-out coordinate and "
+        "left untouched afterwards - editing a registered location's "
+        "coordinate or radius later does not retroactively move past "
+        "attendance.",
+    )
+
+    def _get_attendance_location_criteria(self):
+        """Build the domain selecting candidate attendance locations.
+
+        Extension point: override to narrow or widen which registered
+        locations are eligible when resolving a coordinate to a
+        location. Only active locations are considered by default - a
+        deactivated location stops binding new attendance without
+        invalidating attendance already linked to it.
+
+        :return: an Odoo search domain
+        """
+        return [("active", "=", True)]
+
+    def _get_nearest_attendance_location(self, latitude, longitude):
+        """Resolve the registered location covering a coordinate pair.
+
+        A location covers the point when the great-circle distance to
+        its center is within its ``radius`` (inclusive). When more
+        than one location covers the point, the nearest one wins;
+        ties are broken by the smallest ``id`` - candidates are read
+        in ascending ``id`` order and only a strictly smaller distance
+        replaces the current pick - so the outcome is deterministic
+        across repeated calls on the same data. ``(0.0, 0.0)`` is
+        treated as "no GPS reading", consistent with how the
+        coordinate fields themselves treat that pair, so it never
+        resolves to a location.
+
+        :param latitude: coordinate latitude, in decimal degrees
+        :param longitude: coordinate longitude, in decimal degrees
+        :return: the nearest covering ``hr.attendance_location``, or
+            an empty recordset if none covers the point (or the point
+            is ``(0.0, 0.0)``)
+        """
+        obj_location = self.env["hr.attendance_location"]
+        result = obj_location.browse()
+        if latitude == 0.0 and longitude == 0.0:
+            return result
+        best_distance = None
+        candidates = obj_location.search(
+            self._get_attendance_location_criteria(), order="id asc"
+        )
+        for candidate in candidates:
+            distance = _haversine_distance_meters(
+                latitude, longitude, candidate.latitude, candidate.longitude
+            )
+            if distance <= candidate.radius and (
+                best_distance is None or distance < best_distance
+            ):
+                best_distance = distance
+                result = candidate
+        return result
+
+    @api.depends(
+        "check_in_latitude",
+        "check_in_longitude",
+    )
+    def _compute_check_in_location_id(self):
+        """Resolve the registered location matching the check-in point.
+
+        See :meth:`_get_nearest_attendance_location` for the coverage
+        and tie-break rule.
+
+        :return: nothing; assigns ``check_in_location_id``
+        """
+        for record in self:
+            result = record._get_nearest_attendance_location(
+                record.check_in_latitude, record.check_in_longitude
+            )
+            record.check_in_location_id = result.id if result else False
+
+    @api.depends(
+        "check_out_latitude",
+        "check_out_longitude",
+    )
+    def _compute_check_out_location_id(self):
+        """Resolve the location matching the check-out point.
+
+        Mirrors :meth:`_compute_check_in_location_id` for the
+        check-out coordinate.
+
+        :return: nothing; assigns ``check_out_location_id``
+        """
+        for record in self:
+            result = record._get_nearest_attendance_location(
+                record.check_out_latitude, record.check_out_longitude
+            )
+            record.check_out_location_id = result.id if result else False
+
+    @api.constrains(
+        "check_in_latitude",
+        "check_in_longitude",
+        "check_out_latitude",
+        "check_out_longitude",
+        "check_in_location_id",
+        "check_out_location_id",
+    )
+    def _check_attendance_location(self):
+        """Reject an unmatched coordinate when the company requires it.
+
+        Only bites when all three hold for a side (check-in or
+        check-out): the owning company's
+        ``attendance_location_required`` is enabled, that side's
+        coordinate is filled in (not ``(0.0, 0.0)``), and that side's
+        location field is empty. A record without any coordinate at
+        all always passes - this setting narrows *where* a GPS
+        reading is accepted, it does not make GPS itself mandatory.
+
+        :raises ValidationError: if a filled-in coordinate does not
+            resolve to any registered location while the owning
+            company's ``attendance_location_required`` is enabled.
+        """
+        for record in self:
+            company = record.employee_id.company_id or self.env.company
+            if not company.attendance_location_required:
+                continue
+            sides = (
+                (
+                    "check in",
+                    record.check_in_latitude,
+                    record.check_in_longitude,
+                    record.check_in_location_id,
+                ),
+                (
+                    "check out",
+                    record.check_out_latitude,
+                    record.check_out_longitude,
+                    record.check_out_location_id,
+                ),
+            )
+            for label, latitude, longitude, location in sides:
+                has_coordinate = not (latitude == 0.0 and longitude == 0.0)
+                if has_coordinate and not location:
+                    raise ValidationError(
+                        _(
+                            "No registered location covers the %(side)s "
+                            "coordinate (%(latitude)s, %(longitude)s)."
+                        )
+                        % {
+                            "side": label,
+                            "latitude": latitude,
+                            "longitude": longitude,
+                        }
                     )
 
     @api.depends(

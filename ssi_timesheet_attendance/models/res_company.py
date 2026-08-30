@@ -9,8 +9,10 @@ class ResCompany(models.Model):
     Adds timesheet attendance configuration to the company record.
 
     Defines the checkout buffer tolerance used to detect anomalous
-    (cross-date) sign-outs, and the default reasons applied when the
-    system auto-creates check-in/check-out entries for them.
+    (cross-date) sign-outs, the default reasons applied when the
+    system auto-creates check-in/check-out entries for them, and
+    whether an attendance coordinate outside every registered
+    ``hr.attendance_location`` is rejected.
     """
 
     _inherit = "res.company"
@@ -49,5 +51,18 @@ class ResCompany(models.Model):
             "sign-out is detected as an anomaly (outside the check "
             "out buffer). Falls back to the module's default check "
             "in reason when left empty."
+        ),
+    )
+    attendance_location_required = fields.Boolean(
+        string="Require Registered Attendance Location",
+        default=False,
+        help=(
+            "When enabled, an attendance whose check-in or check-out "
+            "coordinate does not fall within any registered "
+            "attendance location's radius is rejected. Does not, by "
+            "itself, make a GPS reading mandatory - an attendance "
+            "created without any coordinate at all (Sign In/Sign Out, "
+            "the top bar widget, or the backend menu) is unaffected "
+            "either way."
         ),
     )

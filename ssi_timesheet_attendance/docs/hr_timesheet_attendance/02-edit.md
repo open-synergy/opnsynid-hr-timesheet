@@ -35,3 +35,8 @@
   Latitude**, **Check Out Longitude**, and **Check Out Accuracy** are recorded data:
   they are readonly and cannot be changed from this form. They are only ever written by
   the attendance mobile app over the REST API.
+- **Check In Location** and **Check Out Location** are recomputed automatically whenever
+  the matching coordinate pair changes (e.g. **Check Out Latitude**/**Check Out
+  Longitude** filled in by a later Sign Out), following the same rule as `01-create`. If
+  the company setting **Require Registered Attendance Location** is enabled and a
+  filled-in coordinate resolves to no location, saving fails with an error instead.

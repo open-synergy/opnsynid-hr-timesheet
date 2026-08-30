@@ -47,6 +47,14 @@
   they are readonly and only get a non-zero value when the record is created by the
   attendance mobile app over the REST API. Created from this menu, all six stay
   **`0.00`**.
+- **Check In Location** and **Check Out Location** are computed automatically from the
+  matching coordinate pair: the registered attendance location (Human Resource >
+  Timesheets > Configuration > Attendance Location) whose radius covers the point,
+  nearest one first if more than one covers it. They stay empty when the coordinate is
+  `0.00` (no GPS reading) or falls outside every registered location's radius. If the
+  company setting **Require Registered Attendance Location** is enabled (Settings >
+  Human Resource) and a filled-in coordinate resolves to no location, saving fails with
+  an error instead.
 - This record is more commonly created automatically via the **Sign In** / **Sign Out**
   action on the timesheet (see `ssi_timesheet_attendance/hr_timesheet/15-sign-in.md` and
   `ssi_timesheet_attendance/hr_timesheet/16-sign-out.md`), or via the attendance widget

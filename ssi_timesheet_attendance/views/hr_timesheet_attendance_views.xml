@@ -91,9 +91,11 @@
                     <field name="check_in_latitude" />
                     <field name="check_in_longitude" />
                     <field name="check_in_accuracy" />
+                    <field name="check_in_location_id" />
                     <field name="check_out_latitude" />
                     <field name="check_out_longitude" />
                     <field name="check_out_accuracy" />
+                    <field name="check_out_location_id" />
                 </group>
             </sheet>
         </form>
