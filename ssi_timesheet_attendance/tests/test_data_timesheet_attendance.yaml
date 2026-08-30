@@ -813,7 +813,7 @@ scenarios:
         values:
           check_out: "2024-05-16 17:00:00"
           check_out_latitude: -6.9147500
-          check_out_longitude: 107.6098000
+          check_out_longitude: 107.6098123
           check_out_accuracy: 9.0
 
       - step: "Assert check-out geolocation stored exactly"
@@ -825,7 +825,7 @@ scenarios:
             expected: -6.9147500
           check_out_longitude:
             type: "value"
-            expected: 107.6098000
+            expected: 107.6098123
           check_out_accuracy:
             type: "value"
             expected: 9.0
