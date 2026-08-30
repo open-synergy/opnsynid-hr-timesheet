@@ -23,6 +23,7 @@
         "menu.xml",
         "views/res_config_settings_view.xml",
         "views/hr_attendance_reason_views.xml",
+        "views/hr_attendance_location_views.xml",
         "views/hr_timesheet_views.xml",
         "views/hr_timesheet_attendance_views.xml",
         "views/hr_employee_views.xml",

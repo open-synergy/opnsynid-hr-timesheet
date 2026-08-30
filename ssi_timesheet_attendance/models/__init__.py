@@ -6,6 +6,7 @@ from . import (
     res_company,
     res_config_settings,
     hr_attendance_reason,
+    hr_attendance_location,
     hr_timesheet,
     hr_timesheet_attendance_schedule,
     hr_timesheet_attendance,

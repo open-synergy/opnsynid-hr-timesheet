@@ -19,6 +19,12 @@ Work Instruction
 * `Deactivate Attendance Reason <docs/hr_attendance_reason/index.html>`_
 * `Activate Attendance Reason <docs/hr_attendance_reason/index.html>`_
 * `Reset Code — Attendance Reason <docs/hr_attendance_reason/index.html>`_
+* `Create Attendance Location <docs/hr_attendance_location/index.html>`_
+* `Edit Attendance Location <docs/hr_attendance_location/index.html>`_
+* `Delete Attendance Location <docs/hr_attendance_location/index.html>`_
+* `Deactivate Attendance Location <docs/hr_attendance_location/index.html>`_
+* `Activate Attendance Location <docs/hr_attendance_location/index.html>`_
+* `Reset Code — Attendance Location <docs/hr_attendance_location/index.html>`_
 * `Create Timesheet (additional fields) <docs/hr_timesheet/index.html>`_
 * `Edit Timesheet (additional fields) <docs/hr_timesheet/index.html>`_
 * `Start Timesheet (additional effect) <docs/hr_timesheet/index.html>`_

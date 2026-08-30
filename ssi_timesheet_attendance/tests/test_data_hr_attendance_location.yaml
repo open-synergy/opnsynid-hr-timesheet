@@ -1,0 +1,204 @@
+scenarios:
+  - name: "Attendance Location - Create with explicit values"
+    steps:
+      - step: "Create attendance location"
+        action: "create"
+        model: "hr.attendance_location"
+        save_as: "location"
+        values:
+          name: "Kantor Pusat"
+          code: "LOC001"
+          latitude: -6.9147440
+          longitude: 107.6098100
+          radius: 150.0
+
+      - step: "Assert attendance location created with exact values"
+        action: "assert"
+        target: "location"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          name:
+            type: "value"
+            expected: "Kantor Pusat"
+          latitude:
+            type: "value"
+            expected: -6.9147440
+          longitude:
+            type: "value"
+            expected: 107.6098100
+          radius:
+            type: "value"
+            expected: 150.0
+
+  - name: "Attendance Location - Create without radius uses default"
+    steps:
+      - step: "Create attendance location without radius"
+        action: "create"
+        model: "hr.attendance_location"
+        save_as: "location_default_radius"
+        values:
+          name: "Kantor Cabang"
+          code: "LOC002"
+          latitude: -6.2
+          longitude: 106.8
+
+      - step: "Assert radius defaults to 100.0"
+        action: "assert"
+        target: "location_default_radius"
+        asserts:
+          radius:
+            type: "value"
+            expected: 100.0
+
+  - name: "Attendance Location - Boundary coordinates accepted"
+    steps:
+      - step: "Create attendance location at boundary coordinates"
+        action: "create"
+        model: "hr.attendance_location"
+        save_as: "location_boundary"
+        values:
+          name: "Boundary Location"
+          code: "LOC003"
+          latitude: -90.0
+          longitude: 180.0
+          radius: 10.0
+
+      - step: "Assert boundary coordinates saved"
+        action: "assert"
+        target: "location_boundary"
+        asserts:
+          latitude:
+            type: "value"
+            expected: -90.0
+          longitude:
+            type: "value"
+            expected: 180.0
+
+  - name: "Attendance Location - Edit radius"
+    steps:
+      - step: "Create attendance location to edit"
+        action: "create"
+        model: "hr.attendance_location"
+        save_as: "location_edit"
+        values:
+          name: "Location To Edit"
+          code: "LOC004"
+          latitude: -6.9
+          longitude: 107.6
+          radius: 100.0
+
+      - step: "Edit radius"
+        action: "write"
+        target: "location_edit"
+        values:
+          radius: 50.0
+
+      - step: "Assert radius updated"
+        action: "assert"
+        target: "location_edit"
+        asserts:
+          radius:
+            type: "value"
+            expected: 50.0
+
+  - name: "Attendance Location - Deactivate"
+    steps:
+      - step: "Create attendance location to deactivate"
+        action: "create"
+        model: "hr.attendance_location"
+        save_as: "location_deactivate"
+        values:
+          name: "Location To Deactivate"
+          code: "LOC005"
+          latitude: -6.9
+          longitude: 107.6
+
+      - step: "Deactivate the location"
+        action: "write"
+        target: "location_deactivate"
+        values:
+          active: false
+
+      - step: "Assert record is inactive"
+        action: "assert"
+        target: "location_deactivate"
+        asserts:
+          active:
+            type: "value"
+            expected: false
+
+      - step: "Assert record no longer in default search"
+        action: "search"
+        model: "hr.attendance_location"
+        domain: [["id", "=", "REC: location_deactivate.id"]]
+        save_as: "deactivated_search_result"
+        expect_count: 0
+
+  - name: "Attendance Location - Reject latitude out of range"
+    steps:
+      - step: "Create with latitude above 90"
+        action: "create"
+        model: "hr.attendance_location"
+        values:
+          name: "Invalid Latitude High"
+          code: "LOC006"
+          latitude: 91.0
+          longitude: 107.6
+        expect_error:
+          type: "ValidationError"
+
+  - name: "Attendance Location - Reject longitude out of range"
+    steps:
+      - step: "Create with longitude below -180"
+        action: "create"
+        model: "hr.attendance_location"
+        values:
+          name: "Invalid Longitude Low"
+          code: "LOC007"
+          latitude: -6.9
+          longitude: -181.0
+        expect_error:
+          type: "ValidationError"
+
+  - name: "Attendance Location - Reject zero radius"
+    steps:
+      - step: "Create with radius equal to 0"
+        action: "create"
+        model: "hr.attendance_location"
+        values:
+          name: "Invalid Radius Zero"
+          code: "LOC008"
+          latitude: -6.9
+          longitude: 107.6
+          radius: 0.0
+        expect_error:
+          type: "ValidationError"
+
+  - name: "Attendance Location - Reject negative radius"
+    steps:
+      - step: "Create with negative radius"
+        action: "create"
+        model: "hr.attendance_location"
+        values:
+          name: "Invalid Radius Negative"
+          code: "LOC009"
+          latitude: -6.9
+          longitude: 107.6
+          radius: -5.0
+        expect_error:
+          type: "ValidationError"
+
+  - name: "Attendance Location - Reject (0, 0) coordinate pair"
+    steps:
+      - step: "Create with latitude and longitude both 0"
+        action: "create"
+        model: "hr.attendance_location"
+        values:
+          name: "Invalid Null Island"
+          code: "LOC010"
+          latitude: 0.0
+          longitude: 0.0
+        expect_error:
+          type: "ValidationError"

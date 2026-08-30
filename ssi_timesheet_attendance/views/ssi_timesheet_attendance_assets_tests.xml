@@ -15,6 +15,10 @@
             />
             <script
                 type="text/javascript"
+                src="/ssi_timesheet_attendance/static/tests/tours/hr_attendance_location_tour.js"
+            />
+            <script
+                type="text/javascript"
                 src="/ssi_timesheet_attendance/static/tests/tours/hr_timesheet_attendance_tour.js"
             />
             <script
