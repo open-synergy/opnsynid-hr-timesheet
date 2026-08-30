@@ -1247,10 +1247,10 @@ scenarios:
         asserts:
           valid_check_in:
             type: "value"
-            expected: "2024-07-01 20:30:00"
+            expected: "EVAL: datetime(2024, 7, 1, 20, 30, 0)"
           valid_check_out:
             type: "value"
-            expected: "2024-07-02 06:00:00"
+            expected: "EVAL: datetime(2024, 7, 2, 6, 0, 0)"
           total_valid_hour:
             type: "value"
             expected: 9.5
@@ -1317,7 +1317,7 @@ scenarios:
         asserts:
           valid_check_out:
             type: "value"
-            expected: "2024-07-04 04:00:00"
+            expected: "EVAL: datetime(2024, 7, 4, 4, 0, 0)"
 
       - step: "Assert finish_early_hour on the resolved schedule"
         action: "assert"
@@ -1390,7 +1390,7 @@ scenarios:
         asserts:
           valid_check_out:
             type: "value"
-            expected: "2024-07-06 06:00:00"
+            expected: "EVAL: datetime(2024, 7, 6, 6, 0, 0)"
 
       - step: "Assert finish_late_hour on the resolved schedule"
         action: "assert"
@@ -1570,7 +1570,7 @@ scenarios:
         asserts:
           real_date_start:
             type: "value"
-            expected: "2024-07-08 08:00:00"
+            expected: "EVAL: datetime(2024, 7, 8, 8, 0, 0)"
           real_work_hour:
             type: "value"
             expected: 8.0
@@ -1814,7 +1814,7 @@ scenarios:
         asserts:
           real_date_start:
             type: "value"
-            expected: "2024-07-12 08:00:00"
+            expected: "EVAL: datetime(2024, 7, 12, 8, 0, 0)"
           real_work_hour:
             type: "value"
             expected: 9.0
