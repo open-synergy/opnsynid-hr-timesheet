@@ -182,7 +182,9 @@ scenarios:
             second=0, microsecond=0)"
           sheet_id: "REC: timesheet.id"
 
-      - step: "Assert precondition: attendance has no schedule"
+      - step:
+          "Assert precondition: attendance has no schedule (employee has no schedule
+          slot at all, on any date - tier 3 of _compute_schedule)"
         action: "assert"
         target: "attendance"
         asserts:
@@ -295,7 +297,10 @@ scenarios:
             second=0, microsecond=0)"
           sheet_id: "REC: timesheet.id"
 
-      - step: "Assert precondition: attendance schedule is resolved"
+      - step:
+          "Assert precondition: attendance schedule is resolved (check-in 08:00 exactly
+          matches the slot's date_start - tier 1, inclusive boundary of
+          _compute_schedule)"
         action: "assert"
         target: "attendance"
         asserts:
@@ -1165,3 +1170,861 @@ scenarios:
           message_contains: "Latitude"
         values:
           check_out_latitude: 90.1
+
+  - name: "Compute Schedule - Cross-Midnight Slot Resolves And Valid Window Computed"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_cm_window"
+        values:
+          name: "Test Employee Cross Midnight Window"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_cm_window"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet spanning the midnight boundary"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_cm_window"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_cm_window.id"
+          date_start: 2024-07-01
+          date_end: 2024-07-02
+          working_schedule_id: "REC: working_schedule_cm_window.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_cm_window"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create a single slot from 20:00 to next day 06:00"
+        action: "create"
+        model: "hr.timesheet_attendance_schedule"
+        save_as: "schedule_cm_window"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_cm_window.id"
+          date_start: "2024-07-01 20:00:00"
+          date_end: "2024-07-02 06:00:00"
+
+      - step: "Create attendance checking in inside the slot"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_cm_window"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_cm_window.id"
+          date: 2024-07-01
+          check_in: "2024-07-01 20:30:00"
+          sheet_id: "REC: timesheet_cm_window.id"
+
+      - step: "Assert schedule_id resolved to the cross-midnight slot"
+        action: "assert"
+        target: "attendance_cm_window"
+        asserts:
+          schedule_id:
+            type: "m2o"
+            expected: "REC: schedule_cm_window"
+
+      - step: "Write check-out at the slot's exact end"
+        action: "write"
+        target: "attendance_cm_window"
+        as_user: "base.user_admin"
+        values:
+          check_out: "2024-07-02 06:00:00"
+
+      - step: "Assert the valid window and its duration"
+        action: "assert"
+        target: "attendance_cm_window"
+        asserts:
+          valid_check_in:
+            type: "value"
+            expected: "EVAL: datetime(2024, 7, 1, 20, 30, 0)"
+          valid_check_out:
+            type: "value"
+            expected: "EVAL: datetime(2024, 7, 2, 6, 0, 0)"
+          total_valid_hour:
+            type: "value"
+            expected: 9.5
+
+  - name: "Compute Schedule - Early Check-Out Bounded By Valid Window"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_cm_early"
+        values:
+          name: "Test Employee Cross Midnight Early"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_cm_early"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet spanning the midnight boundary"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_cm_early"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_cm_early.id"
+          date_start: 2024-07-03
+          date_end: 2024-07-04
+          working_schedule_id: "REC: working_schedule_cm_early.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_cm_early"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create a single slot from 20:00 to next day 06:00"
+        action: "create"
+        model: "hr.timesheet_attendance_schedule"
+        save_as: "schedule_cm_early"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_cm_early.id"
+          date_start: "2024-07-03 20:00:00"
+          date_end: "2024-07-04 06:00:00"
+
+      - step: "Create attendance and write an early check-out"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_cm_early"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_cm_early.id"
+          date: 2024-07-03
+          check_in: "2024-07-03 20:30:00"
+          check_out: "2024-07-04 04:00:00"
+          sheet_id: "REC: timesheet_cm_early.id"
+
+      - step: "Assert valid check-out is bounded by the actual early check-out"
+        action: "assert"
+        target: "attendance_cm_early"
+        asserts:
+          valid_check_out:
+            type: "value"
+            expected: "EVAL: datetime(2024, 7, 4, 4, 0, 0)"
+
+      - step: "Assert finish_early_hour on the resolved schedule"
+        action: "assert"
+        target: "schedule_cm_early"
+        refresh: true
+        asserts:
+          finish_early_hour:
+            type: "value"
+            expected: 2.0
+
+  - name: "Compute Schedule - Late Check-Out Bounded By Slot End"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_cm_late"
+        values:
+          name: "Test Employee Cross Midnight Late"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_cm_late"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet spanning the midnight boundary"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_cm_late"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_cm_late.id"
+          date_start: 2024-07-05
+          date_end: 2024-07-06
+          working_schedule_id: "REC: working_schedule_cm_late.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_cm_late"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create a single slot from 20:00 to next day 06:00"
+        action: "create"
+        model: "hr.timesheet_attendance_schedule"
+        save_as: "schedule_cm_late"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_cm_late.id"
+          date_start: "2024-07-05 20:00:00"
+          date_end: "2024-07-06 06:00:00"
+
+      - step: "Create attendance and write a late check-out"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_cm_late"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_cm_late.id"
+          date: 2024-07-05
+          check_in: "2024-07-05 20:30:00"
+          check_out: "2024-07-06 07:00:00"
+          sheet_id: "REC: timesheet_cm_late.id"
+
+      - step: "Assert valid check-out is bounded by the slot's own end"
+        action: "assert"
+        target: "attendance_cm_late"
+        asserts:
+          valid_check_out:
+            type: "value"
+            expected: "EVAL: datetime(2024, 7, 6, 6, 0, 0)"
+
+      - step: "Assert finish_late_hour on the resolved schedule"
+        action: "assert"
+        target: "schedule_cm_late"
+        refresh: true
+        asserts:
+          finish_late_hour:
+            type: "value"
+            expected: 1.0
+
+  - name: "Compute Schedule - Two Slots Same Date Resolve By Containing Check-In"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_two_slots"
+        values:
+          name: "Test Employee Two Slots Same Date"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_two_slots"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_two_slots"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_two_slots.id"
+          date_start: 2024-07-07
+          date_end: 2024-07-07
+          working_schedule_id: "REC: working_schedule_two_slots.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_two_slots"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create the morning slot 06:00-10:00"
+        action: "create"
+        model: "hr.timesheet_attendance_schedule"
+        save_as: "schedule_two_slots_morning"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_two_slots.id"
+          date_start: "2024-07-07 06:00:00"
+          date_end: "2024-07-07 10:00:00"
+
+      - step: "Create the evening slot 16:00-20:00"
+        action: "create"
+        model: "hr.timesheet_attendance_schedule"
+        save_as: "schedule_two_slots_evening"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_two_slots.id"
+          date_start: "2024-07-07 16:00:00"
+          date_end: "2024-07-07 20:00:00"
+
+      - step: "Create attendance checking in during the evening slot"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_two_slots_evening"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_two_slots.id"
+          date: 2024-07-07
+          check_in: "2024-07-07 16:30:00"
+          sheet_id: "REC: timesheet_two_slots.id"
+
+      - step: "Assert it attaches to the evening slot, not the morning one"
+        action: "assert"
+        target: "attendance_two_slots_evening"
+        asserts:
+          schedule_id:
+            type: "m2o"
+            expected: "REC: schedule_two_slots_evening"
+
+      - step: "Create attendance checking in during the morning slot"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_two_slots_morning"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_two_slots.id"
+          date: 2024-07-07
+          check_in: "2024-07-07 06:30:00"
+          sheet_id: "REC: timesheet_two_slots.id"
+
+      - step: "Assert it attaches to the morning slot, not the evening one"
+        action: "assert"
+        target: "attendance_two_slots_morning"
+        asserts:
+          schedule_id:
+            type: "m2o"
+            expected: "REC: schedule_two_slots_morning"
+
+  - name: "Compute Schedule - Two Attendances On Same Slot Aggregate Real Work Hour"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_two_attendances"
+        values:
+          name: "Test Employee Two Attendances Same Slot"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_two_attendances"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_two_attendances"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_two_attendances.id"
+          date_start: 2024-07-08
+          date_end: 2024-07-08
+          working_schedule_id: "REC: working_schedule_two_attendances.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_two_attendances"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create the day's single slot 08:00-17:00"
+        action: "create"
+        model: "hr.timesheet_attendance_schedule"
+        save_as: "schedule_two_attendances"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_two_attendances.id"
+          date_start: "2024-07-08 08:00:00"
+          date_end: "2024-07-08 17:00:00"
+
+      - step: "Create the morning attendance (08:00-12:00, before lunch)"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_two_attendances_am"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_two_attendances.id"
+          date: 2024-07-08
+          check_in: "2024-07-08 08:00:00"
+          check_out: "2024-07-08 12:00:00"
+          sheet_id: "REC: timesheet_two_attendances.id"
+
+      - step: "Create the afternoon attendance (13:00-17:00, after lunch)"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_two_attendances_pm"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_two_attendances.id"
+          date: 2024-07-08
+          check_in: "2024-07-08 13:00:00"
+          check_out: "2024-07-08 17:00:00"
+          sheet_id: "REC: timesheet_two_attendances.id"
+
+      - step:
+          "Assert real_date_start is the FIRST check-in and real_work_hour sums both
+          attendances"
+        action: "assert"
+        target: "schedule_two_attendances"
+        refresh: true
+        asserts:
+          real_date_start:
+            type: "value"
+            expected: "EVAL: datetime(2024, 7, 8, 8, 0, 0)"
+          real_work_hour:
+            type: "value"
+            expected: 8.0
+
+  - name:
+      "Compute Schedule - Tier 1 Resolves Check-In After Midnight Regardless Of Date"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_tier1_midnight"
+        values:
+          name: "Test Employee Tier 1 After Midnight"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_tier1_midnight"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet spanning the midnight boundary"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_tier1_midnight"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_tier1_midnight.id"
+          date_start: 2024-07-09
+          date_end: 2024-07-10
+          working_schedule_id: "REC: working_schedule_tier1_midnight.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_tier1_midnight"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create a slot from 20:00 to next day 06:00 (its own date is day H)"
+        action: "create"
+        model: "hr.timesheet_attendance_schedule"
+        save_as: "schedule_tier1_midnight"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_tier1_midnight.id"
+          date_start: "2024-07-09 20:00:00"
+          date_end: "2024-07-10 06:00:00"
+
+      - step:
+          "Create attendance DATED day H+1 with a check-in after midnight - tier 2's
+          date filter alone would miss this slot (its own date is H, not H+1); only tier
+          1's date_start/date_end containment resolves it"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_tier1_midnight"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_tier1_midnight.id"
+          date: 2024-07-10
+          check_in: "2024-07-10 01:00:00"
+          sheet_id: "REC: timesheet_tier1_midnight.id"
+
+      - step: "Assert schedule_id still resolves to the cross-midnight slot"
+        action: "assert"
+        target: "attendance_tier1_midnight"
+        asserts:
+          schedule_id:
+            type: "m2o"
+            expected: "REC: schedule_tier1_midnight"
+
+  - name: "Compute Schedule - Tier 2 Resolves An Early Arrival Outside The Slot"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_tier2_early"
+        values:
+          name: "Test Employee Tier 2 Early Arrival"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_tier2_early"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_tier2_early"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_tier2_early.id"
+          date_start: 2024-07-11
+          date_end: 2024-07-11
+          working_schedule_id: "REC: working_schedule_tier2_early.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_tier2_early"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create the day's slot 08:00-17:00"
+        action: "create"
+        model: "hr.timesheet_attendance_schedule"
+        save_as: "schedule_tier2_early"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_tier2_early.id"
+          date_start: "2024-07-11 08:00:00"
+          date_end: "2024-07-11 17:00:00"
+
+      - step:
+          "Create attendance checking in 30 minutes before the slot opens - tier 1
+          (containment) misses it, tier 2 (nearest slot on the same date) resolves it"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_tier2_early"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_tier2_early.id"
+          date: 2024-07-11
+          check_in: "2024-07-11 07:30:00"
+          sheet_id: "REC: timesheet_tier2_early.id"
+
+      - step: "Assert schedule_id resolved via tier 2"
+        action: "assert"
+        target: "attendance_tier2_early"
+        asserts:
+          schedule_id:
+            type: "m2o"
+            expected: "REC: schedule_tier2_early"
+
+      - step: "Assert early_start_hour on the resolved schedule"
+        action: "assert"
+        target: "schedule_tier2_early"
+        refresh: true
+        asserts:
+          early_start_hour:
+            type: "value"
+            expected: 0.5
+
+  - name: "Compute Schedule - Holiday Attendance Has No Schedule And Zero Valid Hour"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_holiday"
+        values:
+          name: "Test Employee Holiday Attendance"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_holiday"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet spanning both days"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_holiday"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_holiday.id"
+          date_start: 2024-07-12
+          date_end: 2024-07-13
+          working_schedule_id: "REC: working_schedule_holiday.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_holiday"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create a slot on the day BEFORE the holiday (2024-07-12)"
+        action: "create"
+        model: "hr.timesheet_attendance_schedule"
+        save_as: "schedule_holiday_prev_day"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_holiday.id"
+          date_start: "2024-07-12 08:00:00"
+          date_end: "2024-07-12 17:00:00"
+
+      - step: "Create a full-day attendance against that slot"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_holiday_prev_day"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_holiday.id"
+          date: 2024-07-12
+          check_in: "2024-07-12 08:00:00"
+          check_out: "2024-07-12 17:00:00"
+          sheet_id: "REC: timesheet_holiday.id"
+
+      - step: "Create an attendance on 2024-07-13, a day WITHOUT any slot"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_holiday"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_holiday.id"
+          date: 2024-07-13
+          check_in: "2024-07-13 09:00:00"
+          check_out: "2024-07-13 11:00:00"
+          sheet_id: "REC: timesheet_holiday.id"
+
+      - step:
+          "Assert the holiday attendance has no schedule, full total_hour, and zero
+          valid hour"
+        action: "assert"
+        target: "attendance_holiday"
+        asserts:
+          schedule_id:
+            type: "value"
+            operator: "is_falsy"
+          total_hour:
+            type: "value"
+            expected: 2.0
+          total_valid_hour:
+            type: "value"
+            expected: 0.0
+          valid_check_in:
+            type: "value"
+            operator: "is_falsy"
+          valid_check_out:
+            type: "value"
+            operator: "is_falsy"
+
+      - step:
+          "Assert the PREVIOUS day's slot was left untouched by the holiday attendance"
+        action: "assert"
+        target: "schedule_holiday_prev_day"
+        refresh: true
+        asserts:
+          real_date_start:
+            type: "value"
+            expected: "EVAL: datetime(2024, 7, 12, 8, 0, 0)"
+          real_work_hour:
+            type: "value"
+            expected: 9.0
+          state:
+            type: "value"
+            expected: "present"
+
+  - name: "Compute Schedule - Single Day Shift Valid Hour Formula Unchanged"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_single_day"
+        values:
+          name: "Test Employee Single Day Shift"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_single_day"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_single_day"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_single_day.id"
+          date_start: 2024-07-14
+          date_end: 2024-07-14
+          working_schedule_id: "REC: working_schedule_single_day.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_single_day"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create the day's slot 08:00-17:00"
+        action: "create"
+        model: "hr.timesheet_attendance_schedule"
+        save_as: "schedule_single_day"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_single_day.id"
+          date_start: "2024-07-14 08:00:00"
+          date_end: "2024-07-14 17:00:00"
+
+      - step: "Create attendance fully within the slot"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_single_day"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_single_day.id"
+          date: 2024-07-14
+          check_in: "2024-07-14 08:00:00"
+          check_out: "2024-07-14 17:00:00"
+          sheet_id: "REC: timesheet_single_day.id"
+
+      - step:
+          "Assert total_valid_hour matches the unchanged intersection formula for a
+          single day shift"
+        action: "assert"
+        target: "attendance_single_day"
+        asserts:
+          total_valid_hour:
+            type: "value"
+            expected: 9.0
+
+  - name: "Compute Schedule - Attendance Without Check-Out Has No Valid Window"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_no_checkout"
+        values:
+          name: "Test Employee No Check-Out"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_no_checkout"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_no_checkout"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_no_checkout.id"
+          date_start: 2024-07-16
+          date_end: 2024-07-16
+          working_schedule_id: "REC: working_schedule_no_checkout.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_no_checkout"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create the day's slot 08:00-17:00"
+        action: "create"
+        model: "hr.timesheet_attendance_schedule"
+        save_as: "schedule_no_checkout"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_no_checkout.id"
+          date_start: "2024-07-16 08:00:00"
+          date_end: "2024-07-16 17:00:00"
+
+      - step: "Create attendance without a check-out"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_no_checkout"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_no_checkout.id"
+          date: 2024-07-16
+          check_in: "2024-07-16 08:00:00"
+          sheet_id: "REC: timesheet_no_checkout.id"
+
+      - step: "Assert no valid window and zero valid hour"
+        action: "assert"
+        target: "attendance_no_checkout"
+        asserts:
+          total_valid_hour:
+            type: "value"
+            expected: 0.0
+          valid_check_in:
+            type: "value"
+            operator: "is_falsy"
+          valid_check_out:
+            type: "value"
+            operator: "is_falsy"
+
+  - name: "Compute Schedule - Attendance Entirely Outside Slot Has Zero Valid Hour"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_outside_slot"
+        values:
+          name: "Test Employee Entirely Outside Slot"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_outside_slot"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet spanning the midnight boundary"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_outside_slot"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_outside_slot.id"
+          date_start: 2024-07-17
+          date_end: 2024-07-18
+          working_schedule_id: "REC: working_schedule_outside_slot.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_outside_slot"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create a slot from 20:00 to next day 06:00"
+        action: "create"
+        model: "hr.timesheet_attendance_schedule"
+        save_as: "schedule_outside_slot"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_outside_slot.id"
+          date_start: "2024-07-17 20:00:00"
+          date_end: "2024-07-18 06:00:00"
+
+      - step:
+          "Create attendance entirely within 12:00-13:00, hours before the slot even
+          starts"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_outside_slot"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_outside_slot.id"
+          date: 2024-07-17
+          check_in: "2024-07-17 12:00:00"
+          check_out: "2024-07-17 13:00:00"
+          sheet_id: "REC: timesheet_outside_slot.id"
+
+      - step: "Assert zero valid hour despite any schedule resolution"
+        action: "assert"
+        target: "attendance_outside_slot"
+        asserts:
+          total_valid_hour:
+            type: "value"
+            expected: 0.0
+          valid_check_in:
+            type: "value"
+            operator: "is_falsy"
+          valid_check_out:
+            type: "value"
+            operator: "is_falsy"

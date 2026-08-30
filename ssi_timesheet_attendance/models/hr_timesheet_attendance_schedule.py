@@ -125,7 +125,7 @@ Solution: Create a timesheet whose date range includes %s
         "date_start",
         "date_end",
         "real_date_start",
-        "real_date_start",
+        "real_date_end",
     )
     def _compute_work_hour(self):
         for attn in self:
