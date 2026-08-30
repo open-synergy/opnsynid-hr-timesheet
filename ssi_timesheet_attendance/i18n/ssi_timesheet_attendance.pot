@@ -220,6 +220,11 @@ msgid "Check In Latitude"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__check_in_location_id
+msgid "Check In Location"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__check_in_longitude
 msgid "Check In Longitude"
 msgstr ""
@@ -251,6 +256,11 @@ msgstr ""
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__check_out_latitude
 msgid "Check Out Latitude"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__check_out_location_id
+msgid "Check Out Location"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
@@ -684,6 +694,14 @@ msgid "No Check Out"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: code:addons/ssi_timesheet_attendance/models/hr_timesheet_attendance.py:0
+#, python-format
+msgid ""
+"No registered location covers the %(side)s coordinate (%(latitude)s, "
+"%(longitude)s)."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__note
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__note
 msgid "Note"
@@ -775,6 +793,41 @@ msgstr ""
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__reason_check_out_id
 msgid "Reason Out"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_timesheet_attendance__check_in_location_id
+msgid ""
+"Registered location whose radius covers the check-in coordinate, chosen by "
+"nearest distance when more than one covers it. Computed once from the check-"
+"in coordinate and left untouched afterwards - editing a registered "
+"location's coordinate or radius later does not retroactively move past "
+"attendance."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_timesheet_attendance__check_out_location_id
+msgid ""
+"Registered location whose radius covers the check-out coordinate, chosen by "
+"nearest distance when more than one covers it. Computed once from the check-"
+"out coordinate and left untouched afterwards - editing a registered "
+"location's coordinate or radius later does not retroactively move past "
+"attendance."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.res_config_settings_view_form
+msgid ""
+"Reject an attendance whose check-in or check-out\n"
+"                                coordinate does not fall within any registered\n"
+"                                attendance location's radius."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_company__attendance_location_required
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_config_settings__attendance_location_required
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.res_config_settings_view_form
+msgid "Require Registered Attendance Location"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
@@ -962,6 +1015,17 @@ msgstr ""
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__website_message_ids
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__website_message_ids
 msgid "Website communication history"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_res_company__attendance_location_required
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_res_config_settings__attendance_location_required
+msgid ""
+"When enabled, an attendance whose check-in or check-out coordinate does not "
+"fall within any registered attendance location's radius is rejected. Does "
+"not, by itself, make a GPS reading mandatory - an attendance created without"
+" any coordinate at all (Sign In/Sign Out, the top bar widget, or the backend"
+" menu) is unaffected either way."
 msgstr ""
 
 #. module: ssi_timesheet_attendance
