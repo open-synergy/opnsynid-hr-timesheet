@@ -87,6 +87,14 @@
                         <field name="total_valid_hour" widget="float_time" />
                     </group>
                 </group>
+                <group name="attendance_2" colspan="4" col="4" string="Geolocation">
+                    <field name="check_in_latitude" />
+                    <field name="check_in_longitude" />
+                    <field name="check_in_accuracy" />
+                    <field name="check_out_latitude" />
+                    <field name="check_out_longitude" />
+                    <field name="check_out_accuracy" />
+                </group>
             </sheet>
         </form>
     </field>

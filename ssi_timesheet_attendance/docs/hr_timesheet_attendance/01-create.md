@@ -42,6 +42,11 @@
 - Status becomes **Open** if only one of **Check In** / **Check Out** is filled, or
   **Present** once both are filled.
 - The matching timesheet's daily summary is recalculated automatically.
+- **Check In Latitude**, **Check In Longitude**, **Check In Accuracy**, **Check Out
+  Latitude**, **Check Out Longitude**, and **Check Out Accuracy** are recorded data:
+  they are readonly and only get a non-zero value when the record is created by the
+  attendance mobile app over the REST API. Created from this menu, all six stay
+  **`0.00`**.
 - This record is more commonly created automatically via the **Sign In** / **Sign Out**
   action on the timesheet (see `ssi_timesheet_attendance/hr_timesheet/15-sign-in.md` and
   `ssi_timesheet_attendance/hr_timesheet/16-sign-out.md`), or via the attendance widget

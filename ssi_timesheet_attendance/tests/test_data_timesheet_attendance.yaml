@@ -698,3 +698,470 @@ scenarios:
           total_attendance:
             type: "value"
             expected: "REC: attendance_daily_summary.total_hour"
+
+  - name: "HR Timesheet Attendance Geolocation - Create With Full Values"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_geo_full"
+        values:
+          name: "Test Employee Geolocation Full"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_geo_full"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet for employee"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_geo_full"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_geo_full.id"
+          date_start: 2024-05-01
+          date_end: 2024-05-31
+          working_schedule_id: "REC: working_schedule_geo_full.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_geo_full"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create attendance with check-in geolocation"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_geo_full"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_geo_full.id"
+          date: 2024-05-15
+          check_in: "2024-05-15 08:00:00"
+          sheet_id: "REC: timesheet_geo_full.id"
+          check_in_latitude: -6.9147440
+          check_in_longitude: 107.6098100
+          check_in_accuracy: 12.5
+
+      - step: "Assert check-in geolocation stored exactly"
+        action: "assert"
+        target: "attendance_geo_full"
+        asserts:
+          check_in_latitude:
+            type: "value"
+            expected: -6.9147440
+          check_in_longitude:
+            type: "value"
+            expected: 107.6098100
+          check_in_accuracy:
+            type: "value"
+            expected: 12.5
+
+  - name: "HR Timesheet Attendance Geolocation - Write Check Out Values"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_geo_write"
+        values:
+          name: "Test Employee Geolocation Write"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_geo_write"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet for employee"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_geo_write"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_geo_write.id"
+          date_start: 2024-05-01
+          date_end: 2024-05-31
+          working_schedule_id: "REC: working_schedule_geo_write.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_geo_write"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create open attendance without geolocation"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_geo_write"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_geo_write.id"
+          date: 2024-05-16
+          check_in: "2024-05-16 08:00:00"
+          sheet_id: "REC: timesheet_geo_write.id"
+
+      - step: "Write check-out geolocation"
+        action: "write"
+        target: "attendance_geo_write"
+        as_user: "base.user_admin"
+        values:
+          check_out: "2024-05-16 17:00:00"
+          check_out_latitude: -6.9147500
+          check_out_longitude: 107.6098123
+          check_out_accuracy: 9.0
+
+      - step: "Assert check-out geolocation stored exactly"
+        action: "assert"
+        target: "attendance_geo_write"
+        asserts:
+          check_out_latitude:
+            type: "value"
+            expected: -6.9147500
+          check_out_longitude:
+            type: "value"
+            expected: 107.6098123
+          check_out_accuracy:
+            type: "value"
+            expected: 9.0
+
+  - name: "HR Timesheet Attendance Geolocation - Create Without Geolocation Fields"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_geo_none"
+        values:
+          name: "Test Employee Geolocation None"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_geo_none"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet for employee"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_geo_none"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_geo_none.id"
+          date_start: 2024-05-01
+          date_end: 2024-05-31
+          working_schedule_id: "REC: working_schedule_geo_none.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_geo_none"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create attendance without mentioning any geolocation field"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_geo_none"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_geo_none.id"
+          date: 2024-05-17
+          check_in: "2024-05-17 08:00:00"
+          check_out: "2024-05-17 17:00:00"
+          sheet_id: "REC: timesheet_geo_none.id"
+
+      - step: "Assert all six geolocation fields default to 0.0"
+        action: "assert"
+        target: "attendance_geo_none"
+        asserts:
+          check_in_latitude:
+            type: "value"
+            expected: 0.0
+          check_in_longitude:
+            type: "value"
+            expected: 0.0
+          check_in_accuracy:
+            type: "value"
+            expected: 0.0
+          check_out_latitude:
+            type: "value"
+            expected: 0.0
+          check_out_longitude:
+            type: "value"
+            expected: 0.0
+          check_out_accuracy:
+            type: "value"
+            expected: 0.0
+
+  - name: "HR Timesheet Attendance Geolocation - Zero Coordinates Are Not An Error"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_geo_zero"
+        values:
+          name: "Test Employee Geolocation Zero"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_geo_zero"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet for employee"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_geo_zero"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_geo_zero.id"
+          date_start: 2024-05-01
+          date_end: 2024-05-31
+          working_schedule_id: "REC: working_schedule_geo_zero.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_geo_zero"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create attendance with explicit (0, 0) check-in coordinates"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_geo_zero"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_geo_zero.id"
+          date: 2024-05-18
+          check_in: "2024-05-18 08:00:00"
+          sheet_id: "REC: timesheet_geo_zero.id"
+          check_in_latitude: 0.0
+          check_in_longitude: 0.0
+
+      - step: "Assert the (0, 0) pair was accepted"
+        action: "assert"
+        target: "attendance_geo_zero"
+        asserts:
+          check_in_latitude:
+            type: "value"
+            expected: 0.0
+          check_in_longitude:
+            type: "value"
+            expected: 0.0
+
+  - name: "HR Timesheet Attendance Geolocation - Boundary Values Are Accepted"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_geo_boundary"
+        values:
+          name: "Test Employee Geolocation Boundary"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_geo_boundary"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet for employee"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_geo_boundary"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_geo_boundary.id"
+          date_start: 2024-05-01
+          date_end: 2024-05-31
+          working_schedule_id: "REC: working_schedule_geo_boundary.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_geo_boundary"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create attendance with boundary check-in coordinates"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_geo_boundary"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_geo_boundary.id"
+          date: 2024-05-19
+          check_in: "2024-05-19 08:00:00"
+          sheet_id: "REC: timesheet_geo_boundary.id"
+          check_in_latitude: -90.0
+          check_in_longitude: 180.0
+
+      - step: "Assert boundary values were accepted"
+        action: "assert"
+        target: "attendance_geo_boundary"
+        asserts:
+          check_in_latitude:
+            type: "value"
+            expected: -90.0
+          check_in_longitude:
+            type: "value"
+            expected: 180.0
+
+  - name: "HR Timesheet Attendance Geolocation - Latitude Out Of Range Raises"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_geo_lat_error"
+        values:
+          name: "Test Employee Geolocation Latitude Error"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_geo_lat_error"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet for employee"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_geo_lat_error"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_geo_lat_error.id"
+          date_start: 2024-05-01
+          date_end: 2024-05-31
+          working_schedule_id: "REC: working_schedule_geo_lat_error.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_geo_lat_error"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create attendance with out-of-range check-in latitude"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        as_user: "base.user_admin"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "Latitude"
+        values:
+          employee_id: "REC: employee_geo_lat_error.id"
+          date: 2024-05-20
+          check_in: "2024-05-20 08:00:00"
+          sheet_id: "REC: timesheet_geo_lat_error.id"
+          check_in_latitude: 91.0
+
+  - name: "HR Timesheet Attendance Geolocation - Longitude Out Of Range Raises"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_geo_lon_error"
+        values:
+          name: "Test Employee Geolocation Longitude Error"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_geo_lon_error"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet for employee"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_geo_lon_error"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_geo_lon_error.id"
+          date_start: 2024-05-01
+          date_end: 2024-05-31
+          working_schedule_id: "REC: working_schedule_geo_lon_error.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_geo_lon_error"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create attendance with out-of-range check-in longitude"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        as_user: "base.user_admin"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "Longitude"
+        values:
+          employee_id: "REC: employee_geo_lon_error.id"
+          date: 2024-05-21
+          check_in: "2024-05-21 08:00:00"
+          sheet_id: "REC: timesheet_geo_lon_error.id"
+          check_in_longitude: -181.0
+
+  - name: "HR Timesheet Attendance Geolocation - Write Latitude Out Of Range Raises"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_geo_write_error"
+        values:
+          name: "Test Employee Geolocation Write Error"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_geo_write_error"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet for employee"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_geo_write_error"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_geo_write_error.id"
+          date_start: 2024-05-01
+          date_end: 2024-05-31
+          working_schedule_id: "REC: working_schedule_geo_write_error.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_geo_write_error"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create open attendance without geolocation"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_geo_write_error"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_geo_write_error.id"
+          date: 2024-05-22
+          check_in: "2024-05-22 08:00:00"
+          sheet_id: "REC: timesheet_geo_write_error.id"
+
+      - step: "Write out-of-range check-out latitude"
+        action: "write"
+        target: "attendance_geo_write_error"
+        as_user: "base.user_admin"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "Latitude"
+        values:
+          check_out_latitude: 90.1

@@ -31,3 +31,7 @@
   filled, or back to **Open** if one of them is cleared.
 - The matching timesheet's daily summary is recalculated automatically whenever
   **Date**, **Check In**, or **Check Out** changes.
+- **Check In Latitude**, **Check In Longitude**, **Check In Accuracy**, **Check Out
+  Latitude**, **Check Out Longitude**, and **Check Out Accuracy** are recorded data:
+  they are readonly and cannot be changed from this form. They are only ever written by
+  the attendance mobile app over the REST API.

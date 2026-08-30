@@ -5,7 +5,7 @@
 from datetime import datetime
 
 from odoo import _, api, fields, models
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 from odoo.tools import format_datetime
 
 
@@ -148,6 +148,89 @@ class HRTimesheetAttendance(models.Model):
         comodel_name="hr.attendance_reason",
         ondelete="restrict",
     )
+    check_in_latitude = fields.Float(
+        string="Check In Latitude",
+        digits=(16, 7),
+        readonly=True,
+        help="Device latitude recorded at check-in time. Filled by the "
+        "attendance mobile client; 0.0 on records created without a "
+        "geolocation reading (menu, Sign In/Sign Out, top bar widget).",
+    )
+    check_in_longitude = fields.Float(
+        string="Check In Longitude",
+        digits=(16, 7),
+        readonly=True,
+        help="Device longitude recorded at check-in time. Filled by the "
+        "attendance mobile client; 0.0 on records created without a "
+        "geolocation reading (menu, Sign In/Sign Out, top bar widget).",
+    )
+    check_in_accuracy = fields.Float(
+        string="Check In Accuracy",
+        digits=(16, 2),
+        readonly=True,
+        help="Accuracy of the check-in location reading, in meters, as "
+        "reported by the device. 0.0 when no geolocation reading was "
+        "taken.",
+    )
+    check_out_latitude = fields.Float(
+        string="Check Out Latitude",
+        digits=(16, 7),
+        readonly=True,
+        help="Device latitude recorded at check-out time. Filled by the "
+        "attendance mobile client; 0.0 on records created without a "
+        "geolocation reading (menu, Sign In/Sign Out, top bar widget).",
+    )
+    check_out_longitude = fields.Float(
+        string="Check Out Longitude",
+        digits=(16, 7),
+        readonly=True,
+        help="Device longitude recorded at check-out time. Filled by the "
+        "attendance mobile client; 0.0 on records created without a "
+        "geolocation reading (menu, Sign In/Sign Out, top bar widget).",
+    )
+    check_out_accuracy = fields.Float(
+        string="Check Out Accuracy",
+        digits=(16, 2),
+        readonly=True,
+        help="Accuracy of the check-out location reading, in meters, as "
+        "reported by the device. 0.0 when no geolocation reading was "
+        "taken.",
+    )
+
+    @api.constrains(
+        "check_in_latitude",
+        "check_in_longitude",
+        "check_out_latitude",
+        "check_out_longitude",
+    )
+    def _check_geolocation_range(self):
+        """Validate that latitude/longitude stay within valid ranges.
+
+        Devices leave these fields at their default ``0.0`` on every
+        record that never captures geolocation - menu-created rows,
+        the **Sign In** / **Sign Out** actions, and the top bar
+        widget - so ``0.0`` and the ``(0, 0)`` pair are intentionally
+        accepted here. Only a value genuinely outside a valid
+        latitude/longitude range is rejected; accuracy is not
+        validated, since its acceptable threshold is an operational
+        policy, not a modeling constraint.
+
+        :raises ValidationError: if a latitude is outside ``-90..90``
+            or a longitude is outside ``-180..180``.
+        """
+        for record in self:
+            for fname in ("check_in_latitude", "check_out_latitude"):
+                value = record[fname]
+                if value < -90.0 or value > 90.0:
+                    raise ValidationError(
+                        _("Latitude must be between -90 and 90 degrees.")
+                    )
+            for fname in ("check_in_longitude", "check_out_longitude"):
+                value = record[fname]
+                if value < -180.0 or value > 180.0:
+                    raise ValidationError(
+                        _("Longitude must be between -180 and 180 degrees.")
+                    )
 
     @api.depends(
         "date",
