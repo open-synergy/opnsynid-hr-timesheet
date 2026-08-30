@@ -47,7 +47,7 @@ addon | version | maintainers | summary
 [ssi_hr_overtime_operating_unit](ssi_hr_overtime_operating_unit/) | 14.0.1.1.1 |  | Overtime Management + Operating Unit
 [ssi_hr_overtime_state_change_constrain](ssi_hr_overtime_state_change_constrain/) | 14.0.1.1.1 |  | Overtime State Change Constrain
 [ssi_timesheet](ssi_timesheet/) | 14.0.3.4.1 |  | Timesheets
-[ssi_timesheet_attendance](ssi_timesheet_attendance/) | 14.0.1.19.0 |  | Timesheet Attendance
+[ssi_timesheet_attendance](ssi_timesheet_attendance/) | 14.0.1.19.1 |  | Timesheet Attendance
 [ssi_timesheet_attendance_operating_unit](ssi_timesheet_attendance_operating_unit/) | 14.0.1.1.1 |  | Timesheet + Attendance + Operating Unit
 [ssi_timesheet_attendance_shift](ssi_timesheet_attendance_shift/) | 14.0.1.4.1 |  | Timesheet Attendance Shift
 [ssi_timesheet_attendance_work_log](ssi_timesheet_attendance_work_log/) | 14.0.1.4.1 |  | Timesheet + Attendance + Work Log
