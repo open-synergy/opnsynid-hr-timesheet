@@ -1575,8 +1575,7 @@ scenarios:
             type: "value"
             expected: 8.0
 
-  - name:
-      "Compute Schedule - Tier 1 Resolves Check-In After Midnight Regardless Of Date"
+  - name: "Compute Schedule - Window Holds A Check-In After Midnight Regardless Of Date"
     steps:
       - step: "Create employee"
         action: "create"
@@ -1642,7 +1641,7 @@ scenarios:
             type: "m2o"
             expected: "REC: schedule_tier1_midnight"
 
-  - name: "Compute Schedule - Tier 2 Resolves An Early Arrival Outside The Slot"
+  - name: "Compute Schedule - Early Arrival Inside The Check-In Buffer Resolves"
     steps:
       - step: "Create employee"
         action: "create"
@@ -1687,8 +1686,8 @@ scenarios:
           date_end: "2024-07-11 17:00:00"
 
       - step:
-          "Create attendance checking in 30 minutes before the slot opens - tier 1
-          (containment) misses it, tier 2 (nearest slot on the same date) resolves it"
+          "Create attendance checking in 30 minutes before the slot opens - inside the 3
+          hours check-in buffer, so the slot's window still holds it"
         action: "create"
         model: "hr.timesheet_attendance"
         save_as: "attendance_tier2_early"
@@ -1699,7 +1698,7 @@ scenarios:
           check_in: "2024-07-11 07:30:00"
           sheet_id: "REC: timesheet_tier2_early.id"
 
-      - step: "Assert schedule_id resolved via tier 2"
+      - step: "Assert schedule_id resolved through the check-in buffer"
         action: "assert"
         target: "attendance_tier2_early"
         asserts:
@@ -2028,3 +2027,573 @@ scenarios:
           valid_check_out:
             type: "value"
             operator: "is_falsy"
+
+  - name: "Compute Schedule - Check-In Inside The Check-In Buffer Attaches"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_buf_in"
+        values:
+          name: "Test Employee Inside Check-In Buffer"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_buf_in"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_buf_in"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_buf_in.id"
+          date_start: 2024-08-05
+          date_end: 2024-08-05
+          working_schedule_id: "REC: working_schedule_buf_in.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_buf_in"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create the slot 08:00-12:00"
+        action: "create"
+        model: "hr.timesheet_attendance_schedule"
+        save_as: "schedule_buf_in"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_buf_in.id"
+          date_start: "2024-08-05 08:00:00"
+          date_end: "2024-08-05 12:00:00"
+
+      - step: "Create attendance checking in 2 hours before the slot (buffer is 3)"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_buf_in"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_buf_in.id"
+          date: 2024-08-05
+          check_in: "2024-08-05 06:00:00"
+          sheet_id: "REC: timesheet_buf_in.id"
+
+      - step: "Assert it attaches to the slot"
+        action: "assert"
+        target: "attendance_buf_in"
+        asserts:
+          schedule_id:
+            type: "m2o"
+            expected: "REC: schedule_buf_in"
+
+  - name: "Compute Schedule - Check-In Before The Check-In Buffer Floats"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_buf_out_before"
+        values:
+          name: "Test Employee Before Check-In Buffer"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_buf_out_before"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_buf_out_before"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_buf_out_before.id"
+          date_start: 2024-08-06
+          date_end: 2024-08-06
+          working_schedule_id: "REC: working_schedule_buf_out_before.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_buf_out_before"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create the slot 08:00-12:00"
+        action: "create"
+        model: "hr.timesheet_attendance_schedule"
+        save_as: "schedule_buf_before"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_buf_out_before.id"
+          date_start: "2024-08-06 08:00:00"
+          date_end: "2024-08-06 12:00:00"
+
+      - step: "Create attendance checking in 4 hours before the slot (buffer is 3)"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_buf_before"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_buf_out_before.id"
+          date: 2024-08-06
+          check_in: "2024-08-06 04:00:00"
+          check_out: "2024-08-06 12:00:00"
+          sheet_id: "REC: timesheet_buf_out_before.id"
+
+      - step: "Assert it floats without a schedule"
+        action: "assert"
+        target: "attendance_buf_before"
+        asserts:
+          schedule_id:
+            type: "value"
+            operator: "is_falsy"
+
+      - step: "Assert the hours are still counted but none is valid"
+        action: "assert"
+        target: "attendance_buf_before"
+        asserts:
+          total_hour:
+            type: "value"
+            expected: 8.0
+          total_valid_hour:
+            type: "value"
+            expected: 0.0
+
+  - name: "Compute Schedule - Afternoon Check-In Attaches To The Afternoon Slot"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_buf_two"
+        values:
+          name: "Test Employee Morning Afternoon Slots"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_buf_two"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_buf_two"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_buf_two.id"
+          date_start: 2024-08-07
+          date_end: 2024-08-07
+          working_schedule_id: "REC: working_schedule_buf_two.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_buf_two"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create the morning slot 08:00-12:00"
+        action: "create"
+        model: "hr.timesheet_attendance_schedule"
+        save_as: "schedule_buf_two_am"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_buf_two.id"
+          date_start: "2024-08-07 08:00:00"
+          date_end: "2024-08-07 12:00:00"
+
+      - step: "Create the afternoon slot 13:00-17:00"
+        action: "create"
+        model: "hr.timesheet_attendance_schedule"
+        save_as: "schedule_buf_two_pm"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_buf_two.id"
+          date_start: "2024-08-07 13:00:00"
+          date_end: "2024-08-07 17:00:00"
+
+      - step: "Create attendance checking in at 13:05 (inside both windows)"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_buf_two"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_buf_two.id"
+          date: 2024-08-07
+          check_in: "2024-08-07 13:05:00"
+          sheet_id: "REC: timesheet_buf_two.id"
+
+      - step: "Assert it attaches to the afternoon slot, whose start is closest"
+        action: "assert"
+        target: "attendance_buf_two"
+        asserts:
+          schedule_id:
+            type: "m2o"
+            expected: "REC: schedule_buf_two_pm"
+
+  - name: "Compute Schedule - Check-Out Past The Window Still Attaches"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_buf_co"
+        values:
+          name: "Test Employee Late Check-Out"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_buf_co"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_buf_co"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_buf_co.id"
+          date_start: 2024-08-08
+          date_end: 2024-08-08
+          working_schedule_id: "REC: working_schedule_buf_co.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_buf_co"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create the slot 08:00-12:00"
+        action: "create"
+        model: "hr.timesheet_attendance_schedule"
+        save_as: "schedule_buf_co"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_buf_co.id"
+          date_start: "2024-08-08 08:00:00"
+          date_end: "2024-08-08 12:00:00"
+
+      - step: "Create attendance checking out far after the slot ends"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_buf_co"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_buf_co.id"
+          date: 2024-08-08
+          check_in: "2024-08-08 08:10:00"
+          check_out: "2024-08-08 23:00:00"
+          sheet_id: "REC: timesheet_buf_co.id"
+
+      - step: "Assert it attaches, since only check-in is tested"
+        action: "assert"
+        target: "attendance_buf_co"
+        asserts:
+          schedule_id:
+            type: "m2o"
+            expected: "REC: schedule_buf_co"
+
+  - name: "Compute Schedule - Check-In After The Check-Out Buffer Floats"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_buf_late"
+        values:
+          name: "Test Employee After Check-Out Buffer"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_buf_late"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_buf_late"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_buf_late.id"
+          date_start: 2024-08-09
+          date_end: 2024-08-09
+          working_schedule_id: "REC: working_schedule_buf_late.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_buf_late"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create the slot 08:00-12:00"
+        action: "create"
+        model: "hr.timesheet_attendance_schedule"
+        save_as: "schedule_buf_late"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_buf_late.id"
+          date_start: "2024-08-09 08:00:00"
+          date_end: "2024-08-09 12:00:00"
+
+      - step: "Create attendance checking in 4 hours after the slot ends (buffer is 3)"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_buf_late"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_buf_late.id"
+          date: 2024-08-09
+          check_in: "2024-08-09 16:00:00"
+          sheet_id: "REC: timesheet_buf_late.id"
+
+      - step: "Assert it floats without a schedule"
+        action: "assert"
+        target: "attendance_buf_late"
+        asserts:
+          schedule_id:
+            type: "value"
+            operator: "is_falsy"
+
+  - name: "Create Schedules - Refused On A Done Timesheet"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_rebuild_done"
+        values:
+          name: "Test Employee Rebuild Done"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_rebuild_done"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_rebuild_done"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_rebuild_done.id"
+          date_start: 2024-08-12
+          date_end: 2024-08-12
+          working_schedule_id: "REC: working_schedule_rebuild_done.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_rebuild_done"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create a slot"
+        action: "create"
+        model: "hr.timesheet_attendance_schedule"
+        save_as: "schedule_rebuild_done"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_rebuild_done.id"
+          date_start: "2024-08-12 08:00:00"
+          date_end: "2024-08-12 12:00:00"
+
+      - step: "Force the timesheet into the done state"
+        action: "write"
+        target: "timesheet_rebuild_done"
+        as_user: "base.user_admin"
+        values:
+          state: "done"
+
+      - step: "Create Schedules is refused and nothing is deleted"
+        action: "call"
+        target: "timesheet_rebuild_done"
+        method: "action_compute_schedule"
+        as_user: "base.user_admin"
+        expect_error:
+          type: "UserError"
+          message_contains: "Draft or In Progress"
+
+      - step: "The existing slot is still there"
+        action: "assert"
+        target: "timesheet_rebuild_done"
+        refresh: true
+        asserts:
+          schedule_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 1
+
+  - name: "Create Schedules - Refreshes The Daily Summary"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_rebuild_sum"
+        values:
+          name: "Test Employee Rebuild Summary"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule_rebuild_sum"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create timesheet"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_rebuild_sum"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_rebuild_sum.id"
+          date_start: 2024-08-13
+          date_end: 2024-08-13
+          working_schedule_id: "REC: working_schedule_rebuild_sum.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_rebuild_sum"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Create a manual slot 08:00-17:00"
+        action: "create"
+        model: "hr.timesheet_attendance_schedule"
+        save_as: "schedule_rebuild_sum"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_rebuild_sum.id"
+          date_start: "2024-08-13 08:00:00"
+          date_end: "2024-08-13 17:00:00"
+
+      - step: "Create a full-day attendance"
+        action: "create"
+        model: "hr.timesheet_attendance"
+        save_as: "attendance_rebuild_sum"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_rebuild_sum.id"
+          date: 2024-08-13
+          check_in: "2024-08-13 08:00:00"
+          check_out: "2024-08-13 17:00:00"
+          sheet_id: "REC: timesheet_rebuild_sum.id"
+
+      - step: "Find the daily summary"
+        action: "search"
+        model: "hr.timesheet_daily_summary"
+        domain: [["sheet_id", "=", "REC: timesheet_rebuild_sum.id"]]
+        save_as: "summary_rebuild_sum"
+        expect_count: 1
+
+      - step: "Make the summary stale"
+        action: "write"
+        target: "summary_rebuild_sum"
+        as_user: "base.user_admin"
+        values:
+          total_valid_attendance: 99.0
+
+      - step: "Run Create Schedules"
+        action: "call"
+        target: "timesheet_rebuild_sum"
+        method: "action_compute_schedule"
+        as_user: "base.user_admin"
+
+      - step: "The summary follows the attendance again"
+        action: "assert"
+        target: "summary_rebuild_sum"
+        refresh: true
+        asserts:
+          total_valid_attendance:
+            type: "value"
+            expected: "REC: attendance_rebuild_sum.total_valid_hour"
+
+  - name: "Create Schedules - User Without Timezone Uses The Employee Timezone"
+    steps:
+      - step: "Create a user without a timezone"
+        action: "create"
+        model: "res.users"
+        save_as: "user_no_tz"
+        values:
+          name: "Test User Without Timezone"
+          login: "test_user_without_timezone@example.com"
+          tz: false
+
+      - step: "Create employee in the Asia/Jakarta timezone"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_no_tz"
+        values:
+          name: "Test Employee Timezone Rebuild"
+          tz: "Asia/Jakarta"
+
+      - step: "Create a calendar with a single Monday slot 08:00-17:00"
+        action: "create"
+        model: "resource.calendar"
+        save_as: "calendar_no_tz"
+        as_user: "base.user_admin"
+        values:
+          name: "Test Monday Calendar"
+          tz: "Asia/Jakarta"
+          attendance_ids:
+            [
+              [
+                0,
+                0,
+                {"name": "Monday", "dayofweek": "0", "hour_from": 8.0, "hour_to": 17.0},
+              ],
+            ]
+
+      - step: "Create timesheet for one Monday"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet_no_tz"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee_no_tz.id"
+          date_start: 2024-07-01
+          date_end: 2024-07-01
+          working_schedule_id: "REC: calendar_no_tz.id"
+
+      - step: "Open timesheet"
+        action: "call"
+        target: "timesheet_no_tz"
+        method: "action_open"
+        as_user: "base.user_admin"
+
+      - step: "Run Create Schedules as the user without a timezone"
+        action: "call"
+        target: "timesheet_no_tz"
+        method: "action_compute_schedule"
+        as_user: "user_no_tz"
+
+      - step: "Find the slot that was built"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["employee_id", "=", "REC: employee_no_tz.id"]]
+        save_as: "slot_no_tz"
+        expect_count: 1
+
+      - step: "The slot follows the employee's clock, 08:00-17:00 in UTC+7"
+        action: "assert"
+        target: "slot_no_tz"
+        asserts:
+          date_start:
+            type: "value"
+            expected: "EVAL: datetime(2024, 7, 1, 1, 0, 0)"
+          date_end:
+            type: "value"
+            expected: "EVAL: datetime(2024, 7, 1, 10, 0, 0)"

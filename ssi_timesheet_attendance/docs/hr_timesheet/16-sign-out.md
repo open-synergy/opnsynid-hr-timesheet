@@ -1,6 +1,6 @@
 # Sign Out — Timesheet
 
-> **Module:** ssi_timesheet_attendance
+> **Module:** `ssi_timesheet_attendance`
 >
 > **Model:** `hr.timesheet`
 >
@@ -33,12 +33,12 @@
   filled by this button.
 - If the check-out date falls on a different date than the attendance's **Date** _and_
   the gap from the **Working Schedule**'s scheduled end exceeds the company's **Check
-  Out Buffer** (`res.company`, Attendance settings — 0.0 hours if not configured), the
-  sign-out is treated as an anomaly instead: a **new**, already-closed
-  `hr.timesheet_attendance` record is created (**Check In** = **Check Out** = now), with
-  **Reason In** / **Reason Out** defaulted from the company's **Check In Reason** /
-  **Check Out Reason** (falling back to this module's default _[SYSTEM] Automatic check
-  in/out due to inactivity_ reasons when the company fields are empty).
+  Out Buffer** (`res.company`, Attendance settings — 3.0 hours by default), the sign-out
+  is treated as an anomaly instead: a **new**, already-closed `hr.timesheet_attendance`
+  record is created (**Check In** = **Check Out** = now), with **Reason In** / **Reason
+  Out** defaulted from the company's **Check In Reason** / **Check Out Reason** (falling
+  back to this module's default _[SYSTEM] Automatic check in/out due to inactivity_
+  reasons when the company fields are empty).
 - Either way, the resulting entry can be corrected afterward by editing it directly on
   the **Attendance** tab, or via
   `ssi_timesheet_attendance/hr_timesheet_attendance/02-edit`.

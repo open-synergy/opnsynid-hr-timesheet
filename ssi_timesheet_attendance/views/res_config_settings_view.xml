@@ -14,6 +14,20 @@
                     <div class="col-12 col-lg-6 o_setting_box">
                         <div class="o_setting_left_pane" />
                         <div class="o_setting_right_pane">
+                            <label string="Check In Buffer" for="checkin_buffer" />
+                            <span
+                                class="fa fa-lg fa-building-o"
+                                title="Values set here are company-specific."
+                                groups="base.group_multi_company"
+                            />
+                            <div class="content-group mt16">
+                                <field name="checkin_buffer" widget="float_time" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane" />
+                        <div class="o_setting_right_pane">
                             <label string="Check Out Buffer" for="checkout_buffer" />
                             <span
                                 class="fa fa-lg fa-building-o"

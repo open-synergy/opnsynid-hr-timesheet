@@ -6,7 +6,8 @@ from datetime import datetime
 
 import pytz
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 from odoo.tools import format_datetime
 
 
@@ -111,9 +112,53 @@ class HRTimesheet(models.Model):
                 ).seconds / 3600.0
             record.running_attendance = result
 
-    def _prepare_schedule_data(self, start, stop):
+    def _get_schedule_timezone(self):
+        """Return the timezone the schedule intervals are computed in.
+
+        The first timezone that is set wins, in this order: the
+        employee's resource, the resource calendar of the employee's
+        company, the current user, and finally ``UTC``. A user
+        without a timezone therefore never breaks the computation.
+
+        :return: the timezone to ``localize()`` naive datetimes with
+        :rtype: pytz.tzinfo.BaseTzInfo
+        """
         self.ensure_one()
-        pytz.timezone(self.env.user.tz)
+        employee = self.employee_id
+        tz_name = (
+            employee.resource_id.tz
+            or employee.company_id.resource_calendar_id.tz
+            or self.env.user.tz
+            or "UTC"
+        )
+        return pytz.timezone(tz_name)
+
+    def _get_schedule_rebuild_blockers(self):
+        """Return the records that forbid rebuilding the schedule.
+
+        Hook for other modules: extend it, calling ``super()``, and
+        append one ``(label, recordset)`` tuple for every kind of
+        document that refers to a schedule slot of this timesheet
+        and would break, or be left dangling, if the slots were
+        deleted and created again. Attendance and overtime are not
+        blockers: attendance is mapped again and overtime only
+        refers to attendance.
+
+        :return: the blockers, each as ``(label, recordset)``
+        :rtype: list
+        """
+        self.ensure_one()
+        return []
+
+    def _prepare_schedule_data(self, start, stop):
+        """Build the values of one schedule slot.
+
+        :param start: slot start, a timezone-aware datetime
+        :param stop: slot end, a timezone-aware datetime
+        :return: values for ``hr.timesheet_attendance_schedule``
+        :rtype: dict
+        """
+        self.ensure_one()
         start_conv_dt = fields.Datetime.to_string(start.astimezone(pytz.UTC))
         stop_conv_dt = fields.Datetime.to_string(stop.astimezone(pytz.UTC))
         return {
@@ -123,17 +168,25 @@ class HRTimesheet(models.Model):
         }
 
     def _get_schedule_data(self):
+        """Build the one2many commands that create the schedule slots.
+
+        The working schedule is evaluated in the timezone returned by
+        ``_get_schedule_timezone()``; public holidays are skipped.
+
+        :return: ``(0, 0, values)`` commands for ``schedule_ids``
+        :rtype: list
+        """
         self.ensure_one()
         res = []
         obj_public_holiday = self.env["base.public.holiday"]
         if self.working_schedule_id and self.date_start and self.date_end:
             start_dt = datetime.combine(self.date_start, datetime.min.time())
             end_dt = datetime.combine(self.date_end, datetime.max.time())
-            tz = pytz.timezone(self.env.user.tz)
+            tz = self._get_schedule_timezone()
             if not start_dt.tzinfo:
-                start_dt = start_dt.replace(tzinfo=tz)
+                start_dt = tz.localize(start_dt)
             if not end_dt.tzinfo:
-                end_dt = end_dt.replace(tzinfo=tz)
+                end_dt = tz.localize(end_dt)
             resource = self.employee_id.resource_id
             schedule_ids = self.working_schedule_id._attendance_intervals_batch(
                 start_dt=start_dt,
@@ -157,7 +210,59 @@ class HRTimesheet(models.Model):
         if self.employee_id:
             self.working_schedule_id = self.employee_id.resource_calendar_id
 
+    def _check_compute_schedule_allowed(self):
+        """Refuse a schedule rebuild the timesheet cannot survive.
+
+        :raises UserError: when the timesheet is not ``draft`` or
+            ``open``, or when a record returned by
+            ``_get_schedule_rebuild_blockers()`` refers to its slots
+        :return: None
+        """
+        self.ensure_one()
+        if self.state not in ("draft", "open"):
+            error_message = _(
+                """
+Context: Create schedules
+Database ID: %s
+Problem: Schedules can only be created while the timesheet is Draft or In Progress
+Solution: Do not rebuild the schedules of a timesheet in state %s
+"""
+                % (self.id, self.state)
+            )
+            raise UserError(error_message)
+        blockers = self._get_schedule_rebuild_blockers()
+        details = []
+        for label, records in blockers:
+            if records:
+                details.append(
+                    "%s: %s" % (label, ", ".join(records.mapped("display_name")))
+                )
+        if details:
+            error_message = _(
+                """
+Context: Create schedules
+Database ID: %s
+Problem: Schedules are still used by other documents - %s
+Solution: Cancel or delete those documents first, then create the schedules again
+"""
+                % (self.id, "; ".join(details))
+            )
+            raise UserError(error_message)
+
     def action_compute_schedule(self):
+        """Rebuild the schedule slots and map the attendance again.
+
+        Allowed only while the timesheet is ``draft`` or ``open``,
+        and only when no record returned by
+        ``_get_schedule_rebuild_blockers()`` refers to a slot. Every
+        check runs before any slot is deleted. Afterwards the daily
+        summary is regenerated so that it follows the new mapping.
+
+        :raises UserError: see ``_check_compute_schedule_allowed()``
+        :return: None
+        """
+        for document in self.sudo():
+            document._check_compute_schedule_allowed()
         for document in self.sudo():
             data = []
             document.schedule_ids.unlink()
@@ -165,6 +270,7 @@ class HRTimesheet(models.Model):
             document.write({"schedule_ids": data})
             document.attendance_ids._compute_schedule()
             document.schedule_ids._compute_attendance()
+            document.generate_daily_summary()
 
     def action_sign_in(self, reason=False):
         for record in self.sudo():

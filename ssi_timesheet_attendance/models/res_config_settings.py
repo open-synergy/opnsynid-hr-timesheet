@@ -8,7 +8,7 @@ class ResConfigSettings(models.TransientModel):
     """
     Exposes timesheet attendance company configuration on Settings.
 
-    Mirrors ``res.company``'s checkout buffer, its default
+    Mirrors ``res.company``'s check-in/check-out buffers, its default
     check-in/check-out reasons, and the registered attendance
     location requirement, so they can be edited from the Settings
     screen instead of the Companies form.
@@ -16,6 +16,10 @@ class ResConfigSettings(models.TransientModel):
 
     _inherit = "res.config.settings"
 
+    checkin_buffer = fields.Float(
+        related="company_id.checkin_buffer",
+        readonly=False,
+    )
     checkout_buffer = fields.Float(
         related="company_id.checkout_buffer",
         readonly=False,

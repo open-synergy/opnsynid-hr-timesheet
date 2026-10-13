@@ -5,6 +5,7 @@
 from . import test_timesheet_attendance
 from . import test_timesheet_attendance_schedule
 from . import test_timesheet_sign_out
+from . import test_timesheet_schedule_rebuild
 from . import test_hr_attendance_location
 from . import test_hr_timesheet_attendance_location_link
 from . import test_ui_hr_attendance_reason

@@ -94,7 +94,7 @@ scenarios:
           date_start: "2024-05-05 08:00:00"
           date_end: "2024-05-05 17:00:00"
 
-  - name: "Company - Checkout Buffer Default Unchanged"
+  - name: "Company - Buffers Default To Three Hours"
     steps:
       - step: "Create company"
         action: "create"
@@ -104,13 +104,16 @@ scenarios:
         values:
           name: "Test Timesheet Attendance Company"
 
-      - step: "Assert checkout buffer keeps its default value"
+      - step: "Assert both buffers default to three hours"
         action: "assert"
         target: "new_company"
         asserts:
+          checkin_buffer:
+            type: "value"
+            expected: 3.0
           checkout_buffer:
             type: "value"
-            expected: 0.0
+            expected: 3.0
 
   - name:
       "Attendance Schedule - Single Slot Crossing Midnight Passes The 24-Hour Constraint"
