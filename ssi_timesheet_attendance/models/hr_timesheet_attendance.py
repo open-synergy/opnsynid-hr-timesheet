@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import math
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
@@ -528,26 +528,25 @@ class HRTimesheetAttendance(models.Model):
         "employee_id",
     )
     def _compute_schedule(self):
-        """Resolve the schedule slot that covers this attendance.
+        """Resolve the schedule slot whose buffered window holds check-in.
 
-        Runs a three-tier search, per record, stopping at the first
-        tier that matches - always among slots of the same
-        ``employee_id`` and always with an explicit ``order`` so the
-        result is deterministic even when more than one slot could
-        match:
+        Per record, a slot is a candidate when it belongs to the same
+        ``employee_id`` and ``check_in`` falls inside its window::
 
-        1. the slot whose ``date_start``/``date_end`` window
-           **contains** ``check_in``, without any date filter - this
-           also covers a check-in that falls after midnight on a
-           shift that started the day before;
-        2. failing that, among the slots dated ``date``, the one
-           whose ``date_start`` is **closest** to ``check_in`` - this
-           covers an early arrival or a late departure that falls
-           outside every slot's window;
-        3. failing both, ``schedule_id`` is left ``False`` - a
-           legitimate outcome for attendance recorded on a day with
-           no schedule slot (holiday, unplanned overtime, or an
-           employee without a schedule).
+            date_start - checkin_buffer <= check_in
+                                        <= date_end + checkout_buffer
+
+        Both buffers are read from the employee's company, falling
+        back to the current company. Among the candidates the one
+        whose ``date_start`` is closest to ``check_in`` wins; a tie
+        is broken by ``date_start`` and then ``id`` (ascending), so
+        the result is deterministic. Only ``check_in`` is tested;
+        ``check_out`` may fall anywhere.
+
+        There is no fallback to a slot of the same date: an
+        attendance outside every window keeps ``schedule_id`` empty
+        (it floats), which is a legitimate outcome for overtime,
+        holiday work or an employee without a schedule.
 
         :raises: nothing; an unresolved schedule is not an error.
         """
@@ -555,33 +554,30 @@ class HRTimesheetAttendance(models.Model):
         for attn in self:
             schedule = obj_schedule.browse()
             if attn.check_in:
-                schedule = obj_schedule.search(
-                    [
-                        ("employee_id", "=", attn.employee_id.id),
-                        ("date_start", "<=", attn.check_in),
-                        ("date_end", ">=", attn.check_in),
-                    ],
-                    order="date_start",
-                    limit=1,
-                )
-            if not schedule:
+                company = attn.employee_id.company_id or self.env.company
                 candidates = obj_schedule.search(
                     [
                         ("employee_id", "=", attn.employee_id.id),
-                        ("date", "=", attn.date),
+                        (
+                            "date_start",
+                            "<=",
+                            attn.check_in + timedelta(hours=company.checkin_buffer),
+                        ),
+                        (
+                            "date_end",
+                            ">=",
+                            attn.check_in - timedelta(hours=company.checkout_buffer),
+                        ),
                     ],
-                    order="date_start",
+                    order="date_start asc, id asc",
                 )
                 if candidates:
-                    if attn.check_in:
-                        schedule = min(
-                            candidates,
-                            key=lambda candidate: abs(
-                                (candidate.date_start - attn.check_in).total_seconds()
-                            ),
-                        )
-                    else:
-                        schedule = candidates[0]
+                    schedule = min(
+                        candidates,
+                        key=lambda candidate: abs(
+                            (candidate.date_start - attn.check_in).total_seconds()
+                        ),
+                    )
             attn.schedule_id = schedule.id if schedule else False
 
     @api.model
