@@ -69,11 +69,19 @@ class GenerateTimesheet(models.TransientModel):
         return True
 
     def _trigger_timesheet_onchange(self, timesheet):
+        """Fill the employee derived fields of a generated timesheet.
+
+        Runs the department, manager and job onchange methods. Schedule
+        building is not done here: it belongs to the modules that
+        provide the schedule.
+
+        :param timesheet: the ``hr.timesheet`` just generated
+        :return: nothing
+        """
         self.ensure_one()
         timesheet.onchange_department_id()
         timesheet.onchange_manager_id()
         timesheet.onchange_job_id()
-        timesheet.action_compute_schedule()
 
     def action_generate(self):
         self.ensure_one()

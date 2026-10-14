@@ -93,3 +93,132 @@ scenarios:
           employee_ids: [[6, 0, ["REC: employee.id"]]]
           date_start: 2024-02-01
           date_end: 2024-02-28
+
+  - name: "Generate Timesheet wizard - generate creates draft timesheet"
+    steps:
+      - step: "Create department"
+        action: "create"
+        model: "hr.department"
+        save_as: "department"
+        values:
+          name: "Test Department Generate Timesheet"
+
+      - step: "Create user for the employee"
+        action: "create"
+        model: "res.users"
+        save_as: "employee_user"
+        values:
+          name: "Generate Timesheet Positive User"
+          login: "generate_timesheet_positive@example.com"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create employee with user, schedule and department"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Generate Positive"
+          user_id: "REC: employee_user.id"
+          resource_calendar_id: "REC: working_schedule.id"
+          department_id: "REC: department.id"
+
+      - step: "Create the wizard"
+        action: "create"
+        model: "hr.generate_timesheet"
+        save_as: "wizard"
+        values:
+          employee_ids: [[6, 0, ["REC: employee.id"]]]
+          date_start: 2024-03-01
+          date_end: 2024-03-31
+
+      - step: "Generate the timesheet"
+        action: "call"
+        target: "wizard"
+        method: "action_generate"
+
+      - step: "Find the generated timesheet"
+        action: "search"
+        model: "hr.timesheet"
+        domain:
+          - ["employee_id", "=", "REC: employee.id"]
+        save_as: "timesheet"
+
+      - step: "Assert the generated timesheet is a draft with its data"
+        action: "assert"
+        target: "timesheet"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+          employee_id:
+            type: "m2o"
+            expected: "REC: employee"
+          date_start:
+            type: "value"
+            expected: 2024-03-01
+          date_end:
+            type: "value"
+            expected: 2024-03-31
+          department_id:
+            type: "m2o"
+            expected: "REC: department"
+
+  - name: "Generate Timesheet wizard - existing period is rejected"
+    steps:
+      - step: "Create user for the employee"
+        action: "create"
+        model: "res.users"
+        save_as: "employee_user"
+        values:
+          name: "Generate Timesheet Negative User"
+          login: "generate_timesheet_negative@example.com"
+
+      - step: "Get working schedule"
+        action: "search"
+        model: "resource.calendar"
+        domain: []
+        save_as: "working_schedule"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create employee with user and schedule"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Generate Negative"
+          user_id: "REC: employee_user.id"
+          resource_calendar_id: "REC: working_schedule.id"
+
+      - step: "Create the timesheet that already covers the period"
+        action: "create"
+        model: "hr.timesheet"
+        values:
+          employee_id: "REC: employee.id"
+          working_schedule_id: "REC: working_schedule.id"
+          date_start: 2024-04-01
+          date_end: 2024-04-30
+
+      - step: "Create the wizard for the same period"
+        action: "create"
+        model: "hr.generate_timesheet"
+        save_as: "wizard"
+        values:
+          employee_ids: [[6, 0, ["REC: employee.id"]]]
+          date_start: 2024-04-01
+          date_end: 2024-04-30
+
+      - step: "Generating again is rejected"
+        action: "call"
+        target: "wizard"
+        method: "action_generate"
+        expect_error:
+          type: "UserError"
+          message_contains: "Timesheet already exists"
