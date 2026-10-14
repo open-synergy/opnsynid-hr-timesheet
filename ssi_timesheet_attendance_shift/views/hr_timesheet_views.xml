@@ -12,9 +12,6 @@
         />
     <field name="arch" type="xml">
         <data>
-            <xpath expr="//field[@name='working_schedule_id']" position="before">
-                <field name="schedule_source" />
-            </xpath>
             <xpath
                     expr="//field[@name='schedule_ids']/tree/field[@name='date']"
                     position="after"

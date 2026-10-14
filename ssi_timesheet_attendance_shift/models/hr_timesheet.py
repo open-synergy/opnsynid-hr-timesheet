@@ -4,9 +4,7 @@
 
 from datetime import datetime, timedelta
 
-import pytz
-
-from odoo import _, api, fields, models
+from odoo import _, fields, models
 from odoo.exceptions import ValidationError
 
 from odoo.addons.ssi_decorator import ssi_decorator
@@ -29,77 +27,21 @@ class HrTimesheet(models.Model):
     _inherit = "hr.timesheet"
 
     schedule_source = fields.Selection(
-        string="Schedule Source",
-        selection=[
-            ("working_schedule", "Working Schedule"),
+        selection_add=[
             ("shift", "Shift Roster"),
         ],
-        required=True,
-        default="working_schedule",
-        readonly=True,
-        states={
-            "draft": [("readonly", False)],
-        },
-        help=(
-            "Where this timesheet's attendance schedule "
-            "(``schedule_ids``) is generated from. Working Schedule "
-            "keeps the pre-existing resource.calendar-based "
-            "generation; Shift Roster generates one schedule line "
-            "per shift from the employee's rotation assignment "
-            "instead."
-        ),
-    )
-    working_schedule_id = fields.Many2one(
-        required=False,
+        ondelete={"shift": "set default"},
     )
 
-    @api.constrains("schedule_source", "working_schedule_id")
-    def _check_working_schedule_id_required(self):
-        """Reject a missing Working Schedule when it is still needed.
+    def _get_schedule_data_shift(self):
+        """Build the schedule slots from the shift roster.
 
-        :raises ValidationError: when ``schedule_source`` is
-            ``working_schedule`` and ``working_schedule_id`` is empty
-        """
-        for record in self.sudo():
-            if not record._check_working_schedule_id_required_condition():
-                error_message = (
-                    "Working schedule is required when schedule "
-                    "source is working schedule"
-                )
-                raise ValidationError(_(error_message))
-
-    def _check_working_schedule_id_required_condition(self):
-        """Tell whether Working Schedule is set when it is required.
-
-        Reproduces, unchanged, the obligation the field used to
-        enforce unconditionally as ``required=True`` — now scoped to
-        the ``working_schedule`` source only.
-
-        Extension point: override to relax or tighten the condition.
-
-        :return: True when valid; never raises
-        """
-        self.ensure_one()
-        if self.schedule_source == "working_schedule":
-            return bool(self.working_schedule_id)
-        return True
-
-    @api.onchange("employee_id")
-    def onchange_schedule_source(self):
-        self.schedule_source = "working_schedule"
-        if self.employee_id:
-            self.schedule_source = self.employee_id.schedule_source
-
-    def _get_schedule_data(self):
-        """Dispatch schedule generation by ``schedule_source``.
-
-        Falls through to ``super()`` untouched when the source is
-        not ``shift`` — the working-schedule branch is never
-        modified by this module. When the source is ``shift``, walks
-        every calendar date from ``date_start`` to ``date_end``
-        (inclusive) and, for each date, resolves the shift owned by
-        that date via ``_get_shift_for_date``. A shift is owned by
-        its *start* date only: the generated line's end may extend
+        Called by the ``_get_schedule_data()`` dispatcher of
+        ``ssi_timesheet_attendance`` when ``schedule_source`` is
+        ``shift``. Walks every calendar date from ``date_start`` to
+        ``date_end`` (inclusive) and, for each date, resolves the
+        shift owned by that date via ``_get_shift_for_date``. A shift
+        is owned by its *start* date only: the generated line's end may extend
         past ``date_end`` without being clipped, and a shift starting
         on the period's last day is booked whole into this period —
         the next period will not regenerate it.
@@ -108,8 +50,6 @@ class HrTimesheet(models.Model):
             ``schedule_ids``
         """
         self.ensure_one()
-        if self.schedule_source != "shift":
-            return super(HrTimesheet, self)._get_schedule_data()
         res = []
         if not (self.employee_id and self.date_start and self.date_end):
             return res
@@ -136,23 +76,18 @@ class HrTimesheet(models.Model):
     def _get_shift_timezone(self):
         """Resolve the timezone used to localize shift start times.
 
-        Falls back in order: the employee's resource timezone, the
-        employee's company calendar timezone, the current user's
-        timezone, then UTC. The result is always applied with
-        ``pytz``'s ``localize()`` — never
+        Delegates to ``_get_schedule_timezone()`` of
+        ``ssi_timesheet_attendance``: the employee's resource
+        timezone, the employee's company calendar timezone, the
+        current user's timezone, then UTC. The result is always
+        applied with ``pytz``'s ``localize()`` — never
         ``datetime.replace(tzinfo=...)``, which would produce a
         historical LMT offset instead of the real UTC offset.
 
         :return: a ``pytz`` timezone object
         """
         self.ensure_one()
-        tz_name = (
-            self.employee_id.resource_id.tz
-            or self.employee_id.company_id.resource_calendar_id.tz
-            or self.env.user.tz
-            or "UTC"
-        )
-        return pytz.timezone(tz_name)
+        return self._get_schedule_timezone()
 
     def _sign_out(self, reason=False):
         """Close a cross-day shift attendance, skipping the anomaly path.

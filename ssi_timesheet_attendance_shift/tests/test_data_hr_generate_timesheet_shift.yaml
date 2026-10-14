@@ -381,3 +381,120 @@ scenarios:
         expect_error:
           type: "UserError"
           message_contains: "Timesheet already exists"
+
+  - name: "Generate Timesheet - Employee Shift Source Flows Into The Timesheet"
+    steps:
+      - step: "Create a dedicated user for the employee"
+        action: "create"
+        model: "res.users"
+        save_as: "user"
+        values:
+          name: "Source Flow Shift User"
+          login: "gt_source_flow_shift_user@example.com"
+
+      - step: "Create employee on the shift source"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Source Flow Shift Employee"
+          tz: "UTC"
+          user_id: "REC: user.id"
+          schedule_source: "shift"
+
+      - step: "Create a one-day shift"
+        action: "create"
+        model: "hr.attendance_shift"
+        save_as: "shift"
+        values:
+          name: "Source Flow Day Shift"
+          code: "/"
+          hour_start: 8.0
+          duration: 8.0
+
+      - step: "Create a single-day pattern"
+        action: "create"
+        model: "hr.attendance_shift_pattern"
+        save_as: "pattern"
+        values:
+          name: "Source Flow Pattern"
+          code: "/"
+          cycle_length: 1
+          date_anchor: 2024-01-01
+          detail_ids:
+            - - 0
+              - 0
+              - day_index: 1
+                shift_id: "REC: shift.id"
+
+      - step: "Assign the employee to the pattern with no end date"
+        action: "create"
+        model: "hr.attendance_shift_assignment"
+        save_as: "assignment"
+        values:
+          employee_id: "REC: employee.id"
+          pattern_id: "REC: pattern.id"
+          cycle_offset: 0
+          date_start: 2024-01-01
+
+      - step: "Generate the timesheet through the wizard"
+        action: "wizard"
+        model: "hr.generate_timesheet"
+        target: "employee"
+        as_user: "base.user_admin"
+        values:
+          employee_ids: [[6, 0, ["REC: employee.id"]]]
+          date_start: 2026-10-05
+          date_end: 2026-10-11
+        method: "action_generate"
+
+      - step: "Fetch the generated timesheet"
+        action: "search"
+        model: "hr.timesheet"
+        domain: [["employee_id", "=", "REC: employee.id"]]
+        save_as: "generated"
+        limit: 1
+
+      - step: "Assert the timesheet took the shift source"
+        action: "assert"
+        target: "generated"
+        asserts:
+          schedule_source:
+            type: "value"
+            expected: "shift"
+
+      - step: "Assert the schedule was built from the shift roster"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: generated.id"]]
+        save_as: "generated_schedules"
+        expect_count: 7
+
+  - name: "Generate Timesheet - Company Shift Default Flows Into A New Employee"
+    steps:
+      - step: "Set the company default to the shift source"
+        action: "write"
+        target: "company"
+        values:
+          default_schedule_source: "shift"
+
+      - step: "Create a new employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Company Default Shift Employee"
+
+      - step: "Assert the employee took the company default"
+        action: "assert"
+        target: "employee"
+        asserts:
+          schedule_source:
+            type: "value"
+            expected: "shift"
+
+      - step: "Restore the company default"
+        action: "write"
+        target: "company"
+        values:
+          default_schedule_source: "working_schedule"
