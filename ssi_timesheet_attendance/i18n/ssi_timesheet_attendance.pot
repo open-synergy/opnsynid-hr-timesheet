@@ -71,6 +71,12 @@ msgid ""
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_date__pattern_id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_line__pattern_id
+msgid "# Pattern"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__sheet_id
 msgid "# Timesheet"
 msgstr ""
@@ -104,12 +110,14 @@ msgstr ""
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__message_needaction
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_needaction
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__message_needaction
 msgid "Action Needed"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__active
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__active
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__active
 msgid "Active"
 msgstr ""
 
@@ -123,24 +131,28 @@ msgstr ""
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__activity_ids
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__activity_ids
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__activity_ids
 msgid "Activities"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__activity_exception_decoration
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__activity_exception_decoration
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__activity_exception_decoration
 msgid "Activity Exception Decoration"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__activity_state
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__activity_state
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__activity_state
 msgid "Activity State"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__activity_type_icon
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__activity_type_icon
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__activity_type_icon
 msgid "Activity Type Icon"
 msgstr ""
 
@@ -152,6 +164,7 @@ msgstr ""
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__message_attachment_count
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_attachment_count
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__message_attachment_count
 msgid "Attachment Count"
 msgstr ""
 
@@ -194,11 +207,47 @@ msgid "Attendance Schedule"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model,name:ssi_timesheet_attendance.model_hr_attendance_schedule_pattern
+#: model:res.groups,name:ssi_timesheet_attendance.attendance_schedule_pattern_group
+msgid "Attendance Schedule Pattern"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model,name:ssi_timesheet_attendance.model_hr_attendance_schedule_pattern_line
+msgid "Attendance Schedule Pattern - Line"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model,name:ssi_timesheet_attendance.model_hr_attendance_schedule_pattern_date
+msgid "Attendance Schedule Pattern - Special Date"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.actions.act_window,name:ssi_timesheet_attendance.hr_attendance_schedule_pattern_action
+#: model:ir.ui.menu,name:ssi_timesheet_attendance.hr_attendance_schedule_pattern_menu
+msgid "Attendance Schedule Patterns"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee__attendance_status
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee_base__attendance_status
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee_public__attendance_status
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet__attendance_status
 msgid "Attendance Status"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__pattern_id
+msgid ""
+"Attendance schedule pattern this slot was generated from. Empty for a slot "
+"that comes from another source. Kept only as a trace."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_timesheet__schedule_pattern_id
+msgid ""
+"Attendance schedule pattern used to generate the schedule when Schedule "
+"Source is Pattern."
 msgstr ""
 
 #. module: ssi_timesheet_attendance
@@ -219,6 +268,11 @@ msgstr ""
 #. module: ssi_timesheet_attendance
 #: model:ir.model,name:ssi_timesheet_attendance.model_hr_employee_base
 msgid "Basic Employee"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_date__date
+msgid "Calendar date this exception applies to. Unique per pattern."
 msgstr ""
 
 #. module: ssi_timesheet_attendance
@@ -307,6 +361,7 @@ msgstr ""
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__code
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__code
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__code
 msgid "Code"
 msgstr ""
 
@@ -339,6 +394,9 @@ msgstr ""
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__create_uid
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__create_uid
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__create_uid
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_date__create_uid
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_line__create_uid
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__create_uid
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__create_uid
 msgid "Created by"
@@ -347,12 +405,16 @@ msgstr ""
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__create_date
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__create_date
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__create_date
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_date__create_date
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_line__create_date
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__create_date
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__create_date
 msgid "Created on"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_date__date
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__date
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__date
 msgid "Date"
@@ -382,6 +444,39 @@ msgstr ""
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_timesheet_attendance__check_date
 msgid "Date is not the same as check in"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_company__default_schedule_pattern_id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_config_settings__default_schedule_pattern_id
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.res_config_settings_view_form
+msgid "Default Schedule Pattern"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_company__default_schedule_source
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_config_settings__default_schedule_source
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.res_config_settings_view_form
+msgid "Default Schedule Source"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_employee__schedule_pattern_id
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_employee_base__schedule_pattern_id
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_employee_public__schedule_pattern_id
+msgid ""
+"Default attendance schedule pattern copied onto a new timesheet when this "
+"employee is set on it and the Schedule Source is Pattern."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_employee__schedule_source
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_employee_base__schedule_source
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_employee_public__schedule_source
+msgid ""
+"Default attendance schedule source copied onto a new timesheet's own "
+"Schedule Source when this employee is set on it. A new employee takes the "
+"default of the company."
 msgstr ""
 
 #. module: ssi_timesheet_attendance
@@ -446,7 +541,11 @@ msgstr ""
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__display_name
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__display_name
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__display_name
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_date__display_name
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_line__display_name
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee_base__display_name
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_generate_timesheet__display_name
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet__display_name
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__display_name
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__display_name
@@ -462,9 +561,28 @@ msgid "Early Start"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_date__effect
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_line__effect
+msgid "Effect"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__employee_id
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__employee_id
 msgid "Employee"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_date__hour_to
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_line__hour_to
+msgid "End of the working slot, as hours of the day (0.0 to 24.0)."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__date_ids
+msgid ""
+"Exceptions that override the recurring rules on one calendar date. A "
+"national public holiday still wins over a special date."
 msgstr ""
 
 #. module: ssi_timesheet_attendance
@@ -478,27 +596,57 @@ msgid "Finish Late"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_line__date_start
+msgid "First day this line applies. Empty means no lower limit."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__message_follower_ids
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_follower_ids
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__message_follower_ids
 msgid "Followers"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__message_channel_ids
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_channel_ids
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__message_channel_ids
 msgid "Followers (Channels)"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__message_partner_ids
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_partner_ids
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__message_partner_ids
 msgid "Followers (Partners)"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__activity_type_icon
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__activity_type_icon
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__activity_type_icon
 msgid "Font awesome icon e.g. fa-tasks"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_date__note
+msgid "Free text that explains the exception."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_line__frequency_id
+msgid "Frequency"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: code:addons/ssi_timesheet_attendance/models/hr_attendance_schedule_pattern_line.py:0
+#, python-format
+msgid "Frequency of a pattern line must repeat every 1 interval"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model,name:ssi_timesheet_attendance.model_hr_generate_timesheet
+msgid "Generate Timesheet"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
@@ -512,9 +660,25 @@ msgid "HR Timesheet Daily Summary"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_date__hour_from
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_line__hour_from
+msgid "Hour From"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_date__hour_to
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_line__hour_to
+msgid "Hour To"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__id
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_date__id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_line__id
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee_base__id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_generate_timesheet__id
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet__id
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__id
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__id
@@ -527,12 +691,14 @@ msgstr ""
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__activity_exception_icon
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__activity_exception_icon
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__activity_exception_icon
 msgid "Icon"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__activity_exception_icon
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__activity_exception_icon
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__activity_exception_icon
 msgid "Icon to indicate an exception activity."
 msgstr ""
 
@@ -541,25 +707,33 @@ msgstr ""
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__message_unread
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__message_needaction
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__message_unread
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__message_needaction
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__message_unread
 msgid "If checked, new messages require your attention."
 msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__message_has_error
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__message_has_error
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__message_has_error
 msgid "If checked, some messages have a delivery error."
 msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__message_is_follower
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_is_follower
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__message_is_follower
 msgid "Is Follower"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location____last_update
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason____last_update
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern____last_update
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_date____last_update
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_line____last_update
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee_base____last_update
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_generate_timesheet____last_update
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet____last_update
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance____last_update
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule____last_update
@@ -572,6 +746,9 @@ msgstr ""
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__write_uid
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__write_uid
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__write_uid
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_date__write_uid
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_line__write_uid
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__write_uid
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__write_uid
 msgid "Last Updated by"
@@ -580,9 +757,17 @@ msgstr ""
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__write_date
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__write_date
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__write_date
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_date__write_date
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_line__write_date
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__write_date
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__write_date
 msgid "Last Updated on"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_line__date_end
+msgid "Last day this line applies. Empty means no upper limit."
 msgstr ""
 
 #. module: ssi_timesheet_attendance
@@ -654,12 +839,14 @@ msgstr ""
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__message_main_attachment_id
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_main_attachment_id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__message_main_attachment_id
 msgid "Main Attachment"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__active
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__active
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__active
 msgid ""
 "Master data status\n"
 "\n"
@@ -672,6 +859,7 @@ msgstr ""
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__code
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__code
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__code
 msgid ""
 "Master data unique identifier.\n"
 "\n"
@@ -684,36 +872,47 @@ msgstr ""
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__message_has_error
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_has_error
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__message_has_error
 msgid "Message Delivery error"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__message_ids
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_ids
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__message_ids
 msgid "Messages"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__my_activity_date_deadline
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__my_activity_date_deadline
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__my_activity_date_deadline
 msgid "My Activity Deadline"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__name
+msgid "Name"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__activity_date_deadline
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__activity_date_deadline
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__activity_date_deadline
 msgid "Next Activity Deadline"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__activity_summary
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__activity_summary
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__activity_summary
 msgid "Next Activity Summary"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__activity_type_id
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__activity_type_id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__activity_type_id
 msgid "Next Activity Type"
 msgstr ""
 
@@ -733,43 +932,89 @@ msgstr ""
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__note
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__note
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__note
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_date__note
 msgid "Note"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__message_needaction_counter
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_needaction_counter
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__message_needaction_counter
 msgid "Number of Actions"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__message_has_error_counter
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_has_error_counter
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__message_has_error_counter
 msgid "Number of errors"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__message_needaction_counter
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__message_needaction_counter
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__message_needaction_counter
 msgid "Number of messages which requires an action"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__message_has_error_counter
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__message_has_error_counter
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__message_has_error_counter
 msgid "Number of messages with delivery error"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__message_unread_counter
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__message_unread_counter
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__message_unread_counter
 msgid "Number of unread messages"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__hr_attendance_schedule_pattern_date__effect__off
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__hr_attendance_schedule_pattern_line__effect__off
+msgid "Off"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__hr_timesheet_attendance__state__open
 #: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__hr_timesheet_attendance_schedule__state__open
 msgid "Open"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_line__sequence
+msgid "Order of the line. The first Work line that covers a day wins."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__pattern_id
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__hr_employee__schedule_source__pattern
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__hr_employee_base__schedule_source__pattern
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__hr_employee_public__schedule_source__pattern
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__hr_timesheet__schedule_source__pattern
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__res_company__default_schedule_source__pattern
+msgid "Pattern"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__pattern_line_id
+msgid "Pattern Line"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__line_ids
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.hr_attendance_schedule_pattern_view_form
+msgid "Pattern Lines"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__pattern_line_id
+msgid ""
+"Pattern line that gave this slot. Empty when the slot comes from a special "
+"date of the pattern, or when the line was deleted. Kept only as a trace."
 msgstr ""
 
 #. module: ssi_timesheet_attendance
@@ -825,6 +1070,21 @@ msgid "Reason Out"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_line__frequency_id
+msgid ""
+"Recurrence rule that selects the days of this line. It must repeat every 1 "
+"interval; for example every week on Saturday, or every month on the second "
+"Saturday."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__line_ids
+msgid ""
+"Recurring rules of the pattern. An Off line wins over a Work line that "
+"covers the same day; among Work lines the first one by sequence wins."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_timesheet_attendance__check_in_location_id
 msgid ""
 "Registered location whose radius covers the check-in coordinate, chosen by "
@@ -862,6 +1122,7 @@ msgstr ""
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__activity_user_id
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__activity_user_id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__activity_user_id
 msgid "Responsible User"
 msgstr ""
 
@@ -877,8 +1138,51 @@ msgid "Schedule Hours Cannot Greater Than 24 Hours"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee__schedule_pattern_id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee_base__schedule_pattern_id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee_public__schedule_pattern_id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet__schedule_pattern_id
+msgid "Schedule Pattern"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee__schedule_source
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee_base__schedule_source
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_employee_public__schedule_source
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet__schedule_source
+msgid "Schedule Source"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__schedule_work_hour
 msgid "Schedule Work Hour"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_res_company__default_schedule_pattern_id
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_res_config_settings__default_schedule_pattern_id
+msgid ""
+"Schedule pattern a new employee of this company starts with, used when the "
+"schedule source is Pattern."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: code:addons/ssi_timesheet_attendance/models/hr_timesheet.py:0
+#, python-format
+msgid "Schedule pattern is required when schedule source is pattern"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_res_company__default_schedule_source
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_res_config_settings__default_schedule_source
+msgid ""
+"Schedule source a new employee of this company starts with. The employee "
+"then passes it on to the timesheets of that employee."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_line__sequence
+msgid "Sequence"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
@@ -917,6 +1221,24 @@ msgid "Sign Out"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__date_ids
+#: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.hr_attendance_schedule_pattern_view_form
+msgid "Special Dates"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: code:addons/ssi_timesheet_attendance/models/hr_attendance_schedule_pattern_date.py:0
+#, python-format
+msgid "Special date must be unique within a pattern"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_date__hour_from
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_line__hour_from
+msgid "Start of the working slot, as hours of the day (0.0 to 24.0)."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance__state
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet_attendance_schedule__state
 msgid "State"
@@ -925,6 +1247,7 @@ msgstr ""
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__activity_state
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__activity_state
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__activity_state
 msgid ""
 "Status based on activities\n"
 "Overdue: Due date is already passed\n"
@@ -1021,18 +1344,21 @@ msgstr ""
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__activity_exception_decoration
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__activity_exception_decoration
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__activity_exception_decoration
 msgid "Type of the exception activity on record."
 msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__message_unread
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_unread
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__message_unread
 msgid "Unread Messages"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__message_unread_counter
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__message_unread_counter
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__message_unread_counter
 msgid "Unread Messages Counter"
 msgstr ""
 
@@ -1047,14 +1373,26 @@ msgid "Valid Check Out"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_line__date_start
+msgid "Valid From"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_line__date_end
+msgid "Valid Until"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_location__website_message_ids
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_reason__website_message_ids
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__website_message_ids
 msgid "Website Messages"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_location__website_message_ids
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_reason__website_message_ids
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern__website_message_ids
 msgid "Website communication history"
 msgstr ""
 
@@ -1070,11 +1408,52 @@ msgid ""
 msgstr ""
 
 #. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_timesheet__schedule_source
+msgid ""
+"Where this timesheet's attendance schedule (``schedule_ids``) is generated "
+"from. Working Schedule reads the attendance intervals of the resource "
+"calendar. Pattern resolves the recurring rules and special dates of an "
+"attendance schedule pattern. Other modules can add more sources."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__hr_attendance_schedule_pattern_date__effect__work
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__hr_attendance_schedule_pattern_line__effect__work
+msgid "Work"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_line__effect
+msgid ""
+"Work gives a schedule slot on the days the frequency covers. Off removes the"
+" day, even when a Work line covers it too."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_hr_attendance_schedule_pattern_date__effect
+msgid ""
+"Work gives a schedule slot on this date, even when the recurring rules say "
+"otherwise. Off removes the date."
+msgstr ""
+
+#. module: ssi_timesheet_attendance
 #: model:ir.actions.act_window,name:ssi_timesheet_attendance.resource_calendar_action
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_hr_timesheet__working_schedule_id
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__hr_employee__schedule_source__working_schedule
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__hr_employee_base__schedule_source__working_schedule
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__hr_employee_public__schedule_source__working_schedule
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__hr_timesheet__schedule_source__working_schedule
+#: model:ir.model.fields.selection,name:ssi_timesheet_attendance.selection__res_company__default_schedule_source__working_schedule
 #: model:ir.ui.menu,name:ssi_timesheet_attendance.resource_calendar_menu
 #: model:res.groups,name:ssi_timesheet_attendance.working_schedule_group
 msgid "Working Schedule"
+msgstr ""
+
+#. module: ssi_timesheet_attendance
+#: code:addons/ssi_timesheet_attendance/models/hr_attendance_schedule_pattern_date.py:0
+#: code:addons/ssi_timesheet_attendance/models/hr_attendance_schedule_pattern_line.py:0
+#, python-format
+msgid "Working hours must satisfy 0 <= Hour From < Hour To <= 24"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
