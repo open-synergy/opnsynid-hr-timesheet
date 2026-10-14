@@ -6,28 +6,16 @@ from odoo import fields, models
 
 
 class HrEmployeeBase(models.AbstractModel):
-    """
-    Adds a default attendance schedule source to the employee.
-    ``schedule_source`` is copied onto a new ``hr.timesheet`` of this
-    employee (via ``onchange_schedule_source``) so each employee's
-    usual generation mode does not have to be re-selected on every
-    timesheet.
-    """
+    # Adds the ``shift`` value to the default attendance schedule
+    # source of the employee. The field itself is owned by
+    # ``ssi_timesheet_attendance``.
 
     _inherit = "hr.employee.base"
     _name = "hr.employee.base"
 
     schedule_source = fields.Selection(
-        string="Schedule Source",
-        selection=[
-            ("working_schedule", "Working Schedule"),
+        selection_add=[
             ("shift", "Shift Roster"),
         ],
-        required=True,
-        default="working_schedule",
-        help=(
-            "Default attendance schedule source copied onto a new "
-            "timesheet's own Schedule Source when this employee is "
-            "set on it."
-        ),
+        ondelete={"shift": "set default"},
     )

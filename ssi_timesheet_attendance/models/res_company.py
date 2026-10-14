@@ -70,6 +70,28 @@ class ResCompany(models.Model):
             "in reason when left empty."
         ),
     )
+    default_schedule_source = fields.Selection(
+        string="Default Schedule Source",
+        selection=[
+            ("working_schedule", "Working Schedule"),
+            ("pattern", "Pattern"),
+        ],
+        required=True,
+        default="working_schedule",
+        help=(
+            "Schedule source a new employee of this company starts "
+            "with. The employee then passes it on to the timesheets "
+            "of that employee."
+        ),
+    )
+    default_schedule_pattern_id = fields.Many2one(
+        string="Default Schedule Pattern",
+        comodel_name="hr.attendance_schedule_pattern",
+        help=(
+            "Schedule pattern a new employee of this company starts "
+            "with, used when the schedule source is Pattern."
+        ),
+    )
     attendance_location_required = fields.Boolean(
         string="Require Registered Attendance Location",
         default=False,

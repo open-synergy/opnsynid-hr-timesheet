@@ -2,12 +2,12 @@
 # Copyright 2022 PT. Simetri Sinergi Indonesia
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pytz
 
 from odoo import _, api, fields, models
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 from odoo.tools import format_datetime
 
 
@@ -34,14 +34,48 @@ class HRTimesheet(models.Model):
             for attendance in sheet.attendance_ids:
                 sheet.total_attendance += attendance.total_hour
 
-    working_schedule_id = fields.Many2one(
-        string="Working Schedule",
-        comodel_name="resource.calendar",
+    schedule_source = fields.Selection(
+        string="Schedule Source",
+        selection=[
+            ("working_schedule", "Working Schedule"),
+            ("pattern", "Pattern"),
+        ],
         required=True,
+        default="working_schedule",
         readonly=True,
         states={
             "draft": [("readonly", False)],
         },
+        help=(
+            "Where this timesheet's attendance schedule "
+            "(``schedule_ids``) is generated from. Working Schedule "
+            "reads the attendance intervals of the resource calendar. "
+            "Pattern resolves the recurring rules and special dates "
+            "of an attendance schedule pattern. Other modules can add "
+            "more sources."
+        ),
+    )
+    working_schedule_id = fields.Many2one(
+        string="Working Schedule",
+        comodel_name="resource.calendar",
+        required=False,
+        readonly=True,
+        states={
+            "draft": [("readonly", False)],
+        },
+    )
+    schedule_pattern_id = fields.Many2one(
+        string="Schedule Pattern",
+        comodel_name="hr.attendance_schedule_pattern",
+        ondelete="restrict",
+        readonly=True,
+        states={
+            "draft": [("readonly", False)],
+        },
+        help=(
+            "Attendance schedule pattern used to generate the "
+            "schedule when Schedule Source is Pattern."
+        ),
     )
     total_attendance = fields.Float(
         string="Total Attendance",
@@ -167,8 +201,70 @@ class HRTimesheet(models.Model):
             "employee_id": self.employee_id.id,
         }
 
+    @api.constrains("schedule_source", "working_schedule_id")
+    def _check_working_schedule_id_required(self):
+        """Reject a missing Working Schedule when it is still needed.
+
+        :raises ValidationError: when ``schedule_source`` needs a
+            working schedule and ``working_schedule_id`` is empty
+        """
+        for record in self.sudo():
+            if not record._check_working_schedule_id_required_condition():
+                error_message = (
+                    "Working schedule is required when schedule "
+                    "source is working schedule or pattern"
+                )
+                raise ValidationError(_(error_message))
+
+    def _check_working_schedule_id_required_condition(self):
+        """Tell whether Working Schedule is set when it is required.
+
+        It is required for the ``working_schedule`` and ``pattern``
+        sources. Other sources, for example a shift roster, do not
+        read it.
+
+        Extension point: override to relax or tighten the condition.
+
+        :return: True when valid; never raises
+        """
+        self.ensure_one()
+        if self.schedule_source in ("working_schedule", "pattern"):
+            return bool(self.working_schedule_id)
+        return True
+
+    @api.constrains("schedule_source", "schedule_pattern_id")
+    def _check_schedule_pattern_id_required(self):
+        """Reject a missing Schedule Pattern for the pattern source.
+
+        :raises ValidationError: when ``schedule_source`` is
+            ``pattern`` and ``schedule_pattern_id`` is empty
+        """
+        for record in self.sudo():
+            if record.schedule_source == "pattern" and not record.schedule_pattern_id:
+                error_message = _(
+                    "Schedule pattern is required when schedule source is pattern"
+                )
+                raise ValidationError(error_message)
+
     def _get_schedule_data(self):
         """Build the one2many commands that create the schedule slots.
+
+        Dispatches on ``schedule_source``: the method named
+        ``_get_schedule_data_<schedule_source>`` builds the slots.
+        Another module that adds a source implements its own
+        ``_get_schedule_data_<source>``.
+
+        :return: ``(0, 0, values)`` commands for ``schedule_ids``
+        :rtype: list
+        """
+        self.ensure_one()
+        method = getattr(self, "_get_schedule_data_%s" % self.schedule_source, None)
+        if method is None:
+            return []
+        return method()
+
+    def _get_schedule_data_working_schedule(self):
+        """Build the slots from the working schedule.
 
         The working schedule is evaluated in the timezone returned by
         ``_get_schedule_timezone()``; public holidays are skipped.
@@ -202,6 +298,43 @@ class HRTimesheet(models.Model):
                         res.append((0, 0, schedule_data))
         return res
 
+    def _get_schedule_data_pattern(self):
+        """Build the slots from the schedule pattern.
+
+        The pattern resolves one slot per working day (see
+        ``hr.attendance_schedule_pattern._get_work_slots()``). Public
+        holidays are skipped, and win over a special date. The hours
+        are localized in the timezone returned by
+        ``_get_schedule_timezone()``. Each slot keeps the pattern and
+        the pattern line it came from.
+
+        :return: ``(0, 0, values)`` commands for ``schedule_ids``
+        :rtype: list
+        """
+        self.ensure_one()
+        res = []
+        if not (self.schedule_pattern_id and self.date_start and self.date_end):
+            return res
+        obj_public_holiday = self.env["base.public.holiday"]
+        tz = self._get_schedule_timezone()
+        slots = self.schedule_pattern_id._get_work_slots(self.date_start, self.date_end)
+        for day in sorted(slots):
+            if obj_public_holiday.is_public_holiday(day, self.employee_id.id):
+                continue
+            hour_from, hour_to, line = slots[day]
+            midnight = datetime.combine(day, datetime.min.time())
+            start_dt = tz.localize(midnight + timedelta(hours=hour_from))
+            stop_dt = tz.localize(midnight + timedelta(hours=hour_to))
+            schedule_data = self._prepare_schedule_data(start_dt, stop_dt)
+            schedule_data.update(
+                {
+                    "pattern_id": self.schedule_pattern_id.id,
+                    "pattern_line_id": line.id,
+                }
+            )
+            res.append((0, 0, schedule_data))
+        return res
+
     @api.onchange(
         "employee_id",
     )
@@ -209,6 +342,22 @@ class HRTimesheet(models.Model):
         self.working_schedule_id = False
         if self.employee_id:
             self.working_schedule_id = self.employee_id.resource_calendar_id
+
+    @api.onchange(
+        "employee_id",
+    )
+    def onchange_schedule_source(self):
+        self.schedule_source = "working_schedule"
+        if self.employee_id:
+            self.schedule_source = self.employee_id.schedule_source
+
+    @api.onchange(
+        "employee_id",
+    )
+    def onchange_schedule_pattern_id(self):
+        self.schedule_pattern_id = False
+        if self.employee_id:
+            self.schedule_pattern_id = self.employee_id.schedule_pattern_id
 
     def _check_compute_schedule_allowed(self):
         """Refuse a schedule rebuild the timesheet cannot survive.

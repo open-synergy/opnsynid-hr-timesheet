@@ -6,7 +6,8 @@
 
 ## Additional Fields
 
-- **Working Schedule** _(required)_: Editable only while the record is **Draft** (same
-  restriction as the base **Edit** action). Change it to recompute a different
-  Attendance Schedule the next time
+- **Schedule Source**, **Working Schedule** _(required for the Working Schedule and
+  Pattern sources)_, and **Schedule Pattern** _(required for the Pattern source)_:
+  Editable only while the record is **Draft** (same restriction as the base **Edit**
+  action). Change them to recompute a different Attendance Schedule the next time
   `ssi_timesheet_attendance/hr_timesheet/17-compute-schedule` is used.

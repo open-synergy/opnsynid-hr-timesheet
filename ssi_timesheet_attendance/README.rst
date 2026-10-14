@@ -25,6 +25,9 @@ Work Instruction
 * `Deactivate Attendance Location <docs/hr_attendance_location/index.html>`_
 * `Activate Attendance Location <docs/hr_attendance_location/index.html>`_
 * `Reset Code — Attendance Location <docs/hr_attendance_location/index.html>`_
+* `Create Attendance Schedule Pattern <docs/hr_attendance_schedule_pattern/index.html>`_
+* `Edit Attendance Schedule Pattern <docs/hr_attendance_schedule_pattern/index.html>`_
+* `Delete Attendance Schedule Pattern <docs/hr_attendance_schedule_pattern/index.html>`_
 * `Create Timesheet (additional fields) <docs/hr_timesheet/index.html>`_
 * `Edit Timesheet (additional fields) <docs/hr_timesheet/index.html>`_
 * `Start Timesheet (additional effect) <docs/hr_timesheet/index.html>`_

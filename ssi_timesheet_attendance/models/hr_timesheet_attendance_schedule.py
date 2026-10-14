@@ -208,6 +208,28 @@ Solution: Create a timesheet whose date range includes %s
         comodel_name="hr.timesheet_attendance",
         inverse_name="schedule_id",
     )
+    pattern_id = fields.Many2one(
+        string="Pattern",
+        comodel_name="hr.attendance_schedule_pattern",
+        ondelete="restrict",
+        readonly=True,
+        help=(
+            "Attendance schedule pattern this slot was generated "
+            "from. Empty for a slot that comes from another source. "
+            "Kept only as a trace."
+        ),
+    )
+    pattern_line_id = fields.Many2one(
+        string="Pattern Line",
+        comodel_name="hr.attendance_schedule_pattern.line",
+        ondelete="set null",
+        readonly=True,
+        help=(
+            "Pattern line that gave this slot. Empty when the slot "
+            "comes from a special date of the pattern, or when the "
+            "line was deleted. Kept only as a trace."
+        ),
+    )
     real_date_start = fields.Datetime(
         string="Real Date Start",
         compute="_compute_attendance",

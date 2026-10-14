@@ -8,5 +8,6 @@ from . import hr_attendance_shift_pattern_detail
 from . import hr_attendance_shift_assignment
 from . import hr_timesheet
 from . import hr_employee_base
+from . import res_company
 from . import hr_timesheet_attendance_schedule
 from . import hr_timesheet_attendance
