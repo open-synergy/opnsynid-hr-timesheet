@@ -1,0 +1,401 @@
+setup:
+  steps:
+    - step: "Create job position"
+      action: "create"
+      model: "hr.job"
+      save_as: "job"
+      values:
+        name: "Leave Schedule Job"
+
+    - step: "Create department"
+      action: "create"
+      model: "hr.department"
+      save_as: "department"
+      values:
+        name: "Leave Schedule Department"
+
+    - step: "Create calendar with two slots per working day"
+      action: "create"
+      model: "resource.calendar"
+      save_as: "calendar"
+      values:
+        name: "Leave Schedule Two Slots Calendar"
+        tz: "Asia/Jakarta"
+
+    - step: "Create leave type"
+      action: "create"
+      model: "hr.leave_type"
+      save_as: "leave_type"
+      values:
+        name: "Leave Schedule Type"
+        code: "/"
+        need_allocation: false
+
+scenarios:
+  - name: "Leave Duration - Two Slots Per Day Count Each Day Once"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Leave Duration Two Slots Employee"
+          tz: "Asia/Jakarta"
+          job_id: "REC: job.id"
+          department_id: "REC: department.id"
+
+      - step: "Create timesheet for the week of 2026-09-14"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        values:
+          employee_id: "REC: employee.id"
+          date_start: 2026-09-14
+          date_end: 2026-09-20
+          working_schedule_id: "REC: calendar.id"
+
+      - step: "Create the schedule slots"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Assert five working days with two slots each"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"]]
+        save_as: "slots"
+        expect_count: 10
+
+      - step: "Create leave from Monday to Tuesday"
+        action: "create"
+        model: "hr.leave"
+        save_as: "leave"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          type_id: "REC: leave_type.id"
+          date_start: 2026-09-14
+          date_end: 2026-09-15
+          number_of_days: 2
+
+      - step: "Assert four slots but a duration of two days"
+        action: "assert"
+        target: "leave"
+        asserts:
+          schedule_ids:
+            type: "m2m"
+            check: "count"
+            expected_count: 4
+          leave_duration:
+            type: "value"
+            expected: 2
+
+  - name: "Leave Duration - Public Holiday Is Not Deducted Twice"
+    steps:
+      - step: "Declare a national public holiday on Friday 2026-09-25"
+        action: "create"
+        model: "base.public.holiday"
+        save_as: "holiday_year"
+        values:
+          year: 2026
+          line_ids:
+            - - 0
+              - 0
+              - name: "Leave Schedule Test National Holiday"
+                date: 2026-09-25
+
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Leave Duration Holiday Employee"
+          tz: "Asia/Jakarta"
+          job_id: "REC: job.id"
+          department_id: "REC: department.id"
+
+      - step: "Create timesheet from 2026-09-21 to 2026-09-28"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        values:
+          employee_id: "REC: employee.id"
+          date_start: 2026-09-21
+          date_end: 2026-09-28
+          working_schedule_id: "REC: calendar.id"
+
+      - step: "Create the schedule slots"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Assert the holiday has no slot"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"], ["date", "=", 2026-09-25]]
+        save_as: "holiday_slots"
+        expect_count: 0
+
+      - step: "Create leave from Thursday to the following Monday"
+        action: "create"
+        model: "hr.leave"
+        save_as: "leave"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          type_id: "REC: leave_type.id"
+          date_start: 2026-09-24
+          date_end: 2026-09-28
+          number_of_days: 2
+
+      - step: "Assert the duration is Thursday and Monday only"
+        action: "assert"
+        target: "leave"
+        asserts:
+          schedule_ids:
+            type: "m2m"
+            check: "count"
+            expected_count: 4
+          leave_duration:
+            type: "value"
+            expected: 2
+
+  - name: "Rebuild - Refused While A Draft Leave Uses The Slots"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Leave Rebuild Refused Employee"
+          tz: "Asia/Jakarta"
+          job_id: "REC: job.id"
+          department_id: "REC: department.id"
+
+      - step: "Create timesheet for the week of 2026-10-12"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        values:
+          employee_id: "REC: employee.id"
+          date_start: 2026-10-12
+          date_end: 2026-10-18
+          working_schedule_id: "REC: calendar.id"
+
+      - step: "Create the schedule slots"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Create draft leave from Monday to Tuesday"
+        action: "create"
+        model: "hr.leave"
+        save_as: "leave"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          type_id: "REC: leave_type.id"
+          date_start: 2026-10-12
+          date_end: 2026-10-13
+          number_of_days: 2
+
+      - step: "Assert the leave is linked to four slots"
+        action: "assert"
+        target: "leave"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+          schedule_ids:
+            type: "m2m"
+            check: "count"
+            expected_count: 4
+
+      - step: "Rebuilding the schedule is refused and names the leave"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+        expect_error:
+          type: "UserError"
+          message_contains: "Leave: *"
+
+      - step: "Assert the slots are untouched"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"]]
+        save_as: "slots"
+        expect_count: 10
+
+      - step: "Assert the leave keeps its four slots and its duration"
+        action: "assert"
+        target: "leave"
+        asserts:
+          schedule_ids:
+            type: "m2m"
+            check: "count"
+            expected_count: 4
+          leave_duration:
+            type: "value"
+            expected: 2
+
+  - name: "Rebuild - Cancelled And Rejected Leaves Do Not Block"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Leave Rebuild Allowed Employee"
+          tz: "Asia/Jakarta"
+          job_id: "REC: job.id"
+          department_id: "REC: department.id"
+
+      - step: "Create timesheet for the week of 2026-10-12"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        values:
+          employee_id: "REC: employee.id"
+          date_start: 2026-10-12
+          date_end: 2026-10-18
+          working_schedule_id: "REC: calendar.id"
+
+      - step: "Create the schedule slots"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Create draft leave from Monday to Tuesday"
+        action: "create"
+        model: "hr.leave"
+        save_as: "leave_cancel"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          type_id: "REC: leave_type.id"
+          date_start: 2026-10-12
+          date_end: 2026-10-13
+          number_of_days: 2
+
+      - step: "Create draft leave from Wednesday to Thursday"
+        action: "create"
+        model: "hr.leave"
+        save_as: "leave_reject"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          type_id: "REC: leave_type.id"
+          date_start: 2026-10-14
+          date_end: 2026-10-15
+          number_of_days: 2
+
+      - step: "Cancel the first leave"
+        action: "call"
+        target: "leave_cancel"
+        method: "action_cancel"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+        asserts:
+          state:
+            type: "value"
+            expected: "cancel"
+
+      - step: "Mark the second leave as rejected"
+        action: "write"
+        target: "leave_reject"
+        values:
+          state: "reject"
+
+      - step: "Rebuilding the schedule is allowed"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Assert the slots were created again"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"]]
+        save_as: "slots"
+        expect_count: 10
+
+      - step: "Assert the cancelled leave is not linked again"
+        action: "assert"
+        target: "leave_cancel"
+        asserts:
+          schedule_ids:
+            type: "m2m"
+            check: "count"
+            expected_count: 0
+
+      - step: "Assert the rejected leave is not linked again"
+        action: "assert"
+        target: "leave_reject"
+        asserts:
+          schedule_ids:
+            type: "m2m"
+            check: "count"
+            expected_count: 0
+
+  - name: "Rebuild - Leave Created Before The Schedule Is Linked"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Leave Before Schedule Employee"
+          tz: "Asia/Jakarta"
+          job_id: "REC: job.id"
+          department_id: "REC: department.id"
+
+      - step: "Create timesheet for the week of 2026-10-19"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        values:
+          employee_id: "REC: employee.id"
+          date_start: 2026-10-19
+          date_end: 2026-10-25
+          working_schedule_id: "REC: calendar.id"
+
+      - step: "Create leave from Monday to Tuesday before any slot exists"
+        action: "create"
+        model: "hr.leave"
+        save_as: "leave"
+        as_user: "base.user_admin"
+        values:
+          employee_id: "REC: employee.id"
+          type_id: "REC: leave_type.id"
+          date_start: 2026-10-19
+          date_end: 2026-10-20
+          number_of_days: 2
+
+      - step: "Assert the leave has no slot and a duration of zero"
+        action: "assert"
+        target: "leave"
+        asserts:
+          schedule_ids:
+            type: "m2m"
+            check: "count"
+            expected_count: 0
+          leave_duration:
+            type: "value"
+            expected: 0
+
+      - step: "Create the schedule slots"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Assert the leave is linked and has the right duration"
+        action: "assert"
+        target: "leave"
+        asserts:
+          schedule_ids:
+            type: "m2m"
+            check: "count"
+            expected_count: 4
+          leave_duration:
+            type: "value"
+            expected: 2
