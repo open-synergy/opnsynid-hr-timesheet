@@ -56,10 +56,13 @@
 - A new leave record is created in **Draft** status.
 - **# Timesheet** is automatically linked to the `hr.timesheet` whose date range covers
   this leave; saving fails if no matching timesheet is found.
-- **Duration** is automatically computed from the **Schedules** tab, which lists the
-  attendance schedules matching **Employee**/**Date Start**/**Date End** — public
-  holidays within that range are excluded from **Duration** (see the note on
-  `ssi_hr_holiday/docs/hr_leave_type/01-create.md`).
+- **Duration** is automatically computed as the number of distinct dates in the
+  **Schedules** tab, which lists the attendance schedules matching **Employee**/**Date
+  Start**/**Date End**. A day with several schedule slots counts once, and a public
+  holiday has no schedule slot, so it is not counted (see the note on
+  `ssi_hr_holiday/docs/hr_leave_type/01-create.md`). If the schedules are created after
+  the leave, **Schedules** and **Duration** are filled when the schedules of the
+  timesheet are created.
 - **# Leave Allocation** is automatically linked to a matching, available leave
   allocation for **Employee**/**Leave Type**, if one exists.
 - The document number stays **/** until the record transitions to **Done**, which

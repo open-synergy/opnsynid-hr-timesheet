@@ -2,8 +2,6 @@
 # Copyright 2022 PT. Simetri Sinergi Indonesia
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from dateutil.rrule import DAILY, rrule
-
 from odoo import _, api, fields, models
 from odoo.exceptions import Warning as UserError
 
@@ -159,29 +157,20 @@ class HrLeave(models.Model):
     )
 
     @api.depends(
-        "date_start",
-        "date_end",
+        "schedule_ids",
+        "schedule_ids.date",
     )
     def _compute_leave_duration(self):
         """Compute the leave duration in days.
 
-        Starts from the number of covered ``schedule_ids`` and
-        subtracts any day that falls on a public holiday.
+        The duration is the number of distinct ``date`` values of the
+        linked ``schedule_ids``. A calendar with several slots per
+        day counts that day once, and a public holiday has no slot
+        at all, so it is not counted either.
         """
-        PublicHoliday = self.env["base.public.holiday"]
         for record in self:
-            leave_duration = 0
-            if record.date_start and record.date_end:
-                leave_duration = len(record.schedule_ids)
-                leave_dates = rrule(
-                    DAILY,
-                    dtstart=record.date_start,
-                    count=leave_duration,
-                )
-                for leave_date in list(leave_dates):
-                    if PublicHoliday.is_public_holiday(leave_date):
-                        leave_duration -= 1
-            record.leave_duration = leave_duration
+            result = len(set(record.schedule_ids.mapped("date")))
+            record.leave_duration = result
 
     leave_duration = fields.Integer(
         string="Duration",
