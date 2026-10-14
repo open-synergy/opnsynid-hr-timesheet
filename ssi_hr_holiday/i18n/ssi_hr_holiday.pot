@@ -589,8 +589,10 @@ msgid "Last Updated on"
 msgstr ""
 
 #. module: ssi_hr_holiday
+#: code:addons/ssi_hr_holiday/models/hr_timesheet.py:0
 #: model:ir.module.category,name:ssi_hr_holiday.hr_leave_data_ownership_module_category
 #: model:ir.module.category,name:ssi_hr_holiday.hr_leave_module_category
+#, python-format
 msgid "Leave"
 msgstr ""
 
