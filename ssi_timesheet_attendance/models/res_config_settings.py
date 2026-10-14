@@ -36,3 +36,11 @@ class ResConfigSettings(models.TransientModel):
         related="company_id.attendance_location_required",
         readonly=False,
     )
+    default_schedule_source = fields.Selection(
+        related="company_id.default_schedule_source",
+        readonly=False,
+    )
+    default_schedule_pattern_id = fields.Many2one(
+        related="company_id.default_schedule_pattern_id",
+        readonly=False,
+    )

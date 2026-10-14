@@ -16,8 +16,9 @@
 
 - **Record:** Status is **Draft** or **On Progress**. Create Schedules is refused on any
   other status (**Confirmed**, **Done**, ...), even if the button is called by other
-  means. **Working Schedule**, **Date Start**, and **Date End** must be filled — they
-  are required to compute the schedule intervals.
+  means. **Date Start** and **Date End** must be filled, together with what the
+  **Schedule Source** needs: **Working Schedule** for the Working Schedule source,
+  **Schedule Pattern** for the Pattern source.
 - **Record:** No other document refers to the existing **Attendance Schedules** lines.
   Modules that link documents to a schedule slot (for example leave or attendance
   revision) add themselves to this check; when one of them still refers to a slot,
@@ -38,10 +39,17 @@
 ## Post-Condition
 
 - Existing `hr.timesheet_attendance_schedule` lines for this timesheet are removed and
-  regenerated from **Working Schedule**'s attendance intervals between **Date Start**
-  and **Date End**, excluding public holidays. The intervals are read in the employee's
-  timezone, so the result does not depend on the timezone of the user who clicks the
-  button.
+  regenerated, excluding public holidays, from the **Schedule Source**:
+  - **Working Schedule**: the attendance intervals of **Working Schedule** between
+    **Date Start** and **Date End**.
+  - **Pattern**: one slot for each working day that **Schedule Pattern** resolves
+    between **Date Start** and **Date End**. A special date overrides the recurring
+    rules; otherwise an **Off** line removes the day, and the first **Work** line that
+    covers the day gives the slot. A national public holiday wins over a special date.
+    Each slot records the pattern and the pattern line it came from (the line stays
+    empty for a special date).
+  - The hours are read in the employee's timezone, so the result does not depend on the
+    timezone of the user who clicks the button.
 - Each attendance record already recorded on the **Attendance** tab is matched again to
   the schedule slot whose window holds its **Check In**. The window of a slot starts
   **Check In Buffer** hours before the slot starts and ends **Check Out Buffer** hours

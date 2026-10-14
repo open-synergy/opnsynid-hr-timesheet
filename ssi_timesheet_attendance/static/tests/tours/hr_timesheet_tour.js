@@ -50,8 +50,9 @@ odoo.define("ssi_timesheet_attendance.hr_timesheet_tour", function (require) {
 
     // ═══════════════════════════════════════════════════════════════
     // IK: docs/hr_timesheet/01-create.md (delta on top of
-    // ssi_timesheet/hr_timesheet/01-create.md — adds the required
-    // Working Schedule field). Per the E1 extension pattern
+    // ssi_timesheet/hr_timesheet/01-create.md — adds the Schedule
+    // Source, Working Schedule and Schedule Pattern fields). Per the
+    // E1 extension pattern
     // (odoo-development-ui-test skill, patterns.md §O /
     // scope-and-boundaries.md §3): navigation is taken from the base
     // tour (open menu → New), then a single assertion proves the added
@@ -84,6 +85,14 @@ odoo.define("ssi_timesheet_attendance.hr_timesheet_tour", function (require) {
             // still safe to anchor to, but the label is unambiguous and
             // matches the pattern recommended for delta tours
             // (patterns.md §O).
+            {
+                content: "Schedule Source field is displayed",
+                trigger: ".o_form_label:contains(Schedule Source)",
+                run: function () {
+                    // Assertion only; do not trigger the default click
+                    // action.
+                },
+            },
             {
                 content: "Working Schedule field is displayed",
                 trigger: ".o_form_label:contains(Working Schedule)",

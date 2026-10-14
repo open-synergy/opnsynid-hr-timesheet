@@ -16,6 +16,11 @@
                         <field name="active_timesheet_id" />
                         <field name="timesheet_ids" nolabel="1" colspan="2" />
                         <field name="attendance_status" />
+                        <field name="schedule_source" />
+                        <field
+                                name="schedule_pattern_id"
+                                attrs="{'invisible': [('schedule_source', '!=', 'pattern')], 'required': [('schedule_source', '=', 'pattern')]}"
+                            />
                         <field name="attendance_ids" nolabel="1" colspan="2" />
                     </group>
                 </page>

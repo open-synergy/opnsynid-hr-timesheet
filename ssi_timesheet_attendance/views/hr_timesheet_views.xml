@@ -24,7 +24,15 @@
     <field name="arch" type="xml">
         <data>
             <xpath expr="//field[@name='job_id']" position="after">
-                <field name="working_schedule_id" />
+                <field name="schedule_source" />
+                <field
+                        name="working_schedule_id"
+                        attrs="{'required': [('schedule_source', 'in', ['working_schedule', 'pattern'])]}"
+                    />
+                <field
+                        name="schedule_pattern_id"
+                        attrs="{'invisible': [('schedule_source', '!=', 'pattern')], 'required': [('schedule_source', '=', 'pattern')]}"
+                    />
             </xpath>
             <xpath expr="//field[@name='date_end']" position="after">
                 <field name="total_attendance" widget="float_time" />
@@ -127,6 +135,7 @@
                             <field invisible="1" name="sheet_id" />
                             <field invisible="1" name="employee_id" />
                             <field name="date" />
+                            <field name="pattern_id" optional="hide" />
                             <field name="date_start" />
                             <field name="date_end" />
                             <field name="real_date_start" />
@@ -170,6 +179,8 @@
                                     <field invisible="1" name="sheet_id" />
                                     <field invisible="1" name="employee_id" />
                                     <field invisible="0" name="date" />
+                                    <field name="pattern_id" />
+                                    <field name="pattern_line_id" />
                                     <field name="date_start" />
                                     <field name="date_end" />
                                     <field name="real_date_start" />

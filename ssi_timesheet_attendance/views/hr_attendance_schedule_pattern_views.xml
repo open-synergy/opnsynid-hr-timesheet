@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+<record id="hr_attendance_schedule_pattern_view_search" model="ir.ui.view">
+    <field name="name">hr.attendance_schedule_pattern - search</field>
+    <field name="model">hr.attendance_schedule_pattern</field>
+    <field
+            name="inherit_id"
+            ref="ssi_master_data_mixin.mixin_master_data_view_search"
+        />
+    <field name="mode">primary</field>
+    <field name="arch" type="xml">
+        <data />
+    </field>
+</record>
+
+<record id="hr_attendance_schedule_pattern_view_tree" model="ir.ui.view">
+    <field name="name">hr.attendance_schedule_pattern - tree</field>
+    <field name="model">hr.attendance_schedule_pattern</field>
+    <field name="inherit_id" ref="ssi_master_data_mixin.mixin_master_data_view_tree" />
+    <field name="mode">primary</field>
+    <field name="arch" type="xml">
+        <data />
+    </field>
+</record>
+
+<record id="hr_attendance_schedule_pattern_view_form" model="ir.ui.view">
+    <field name="name">hr.attendance_schedule_pattern - form</field>
+    <field name="model">hr.attendance_schedule_pattern</field>
+    <field name="inherit_id" ref="ssi_master_data_mixin.mixin_master_data_view_form" />
+    <field name="mode">primary</field>
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//notebook/page[@name='note']" position="before">
+                <page name="pattern_lines" string="Pattern Lines">
+                    <field name="line_ids">
+                        <tree editable="bottom">
+                            <field name="sequence" widget="handle" />
+                            <field
+                                    name="frequency_id"
+                                    domain="[('interval', '=', 1)]"
+                                />
+                            <field name="effect" />
+                            <field
+                                    name="hour_from"
+                                    widget="float_time"
+                                    attrs="{'required': [('effect', '=', 'work')], 'invisible': [('effect', '!=', 'work')]}"
+                                />
+                            <field
+                                    name="hour_to"
+                                    widget="float_time"
+                                    attrs="{'required': [('effect', '=', 'work')], 'invisible': [('effect', '!=', 'work')]}"
+                                />
+                            <field name="date_start" />
+                            <field name="date_end" />
+                        </tree>
+                        <form>
+                            <group name="line_group_1">
+                                <field
+                                        name="frequency_id"
+                                        domain="[('interval', '=', 1)]"
+                                    />
+                                <field name="effect" />
+                                <field
+                                        name="hour_from"
+                                        widget="float_time"
+                                        attrs="{'required': [('effect', '=', 'work')], 'invisible': [('effect', '!=', 'work')]}"
+                                    />
+                                <field
+                                        name="hour_to"
+                                        widget="float_time"
+                                        attrs="{'required': [('effect', '=', 'work')], 'invisible': [('effect', '!=', 'work')]}"
+                                    />
+                                <field name="date_start" />
+                                <field name="date_end" />
+                            </group>
+                        </form>
+                    </field>
+                </page>
+                <page name="special_dates" string="Special Dates">
+                    <field name="date_ids">
+                        <tree editable="bottom">
+                            <field name="date" />
+                            <field name="effect" />
+                            <field
+                                    name="hour_from"
+                                    widget="float_time"
+                                    attrs="{'required': [('effect', '=', 'work')], 'invisible': [('effect', '!=', 'work')]}"
+                                />
+                            <field
+                                    name="hour_to"
+                                    widget="float_time"
+                                    attrs="{'required': [('effect', '=', 'work')], 'invisible': [('effect', '!=', 'work')]}"
+                                />
+                            <field name="note" />
+                        </tree>
+                        <form>
+                            <group name="date_group_1">
+                                <field name="date" />
+                                <field name="effect" />
+                                <field
+                                        name="hour_from"
+                                        widget="float_time"
+                                        attrs="{'required': [('effect', '=', 'work')], 'invisible': [('effect', '!=', 'work')]}"
+                                    />
+                                <field
+                                        name="hour_to"
+                                        widget="float_time"
+                                        attrs="{'required': [('effect', '=', 'work')], 'invisible': [('effect', '!=', 'work')]}"
+                                    />
+                                <field name="note" />
+                            </group>
+                        </form>
+                    </field>
+                </page>
+            </xpath>
+        </data>
+    </field>
+</record>
+
+<record id="hr_attendance_schedule_pattern_action" model="ir.actions.act_window">
+    <field name="name">Attendance Schedule Patterns</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">hr.attendance_schedule_pattern</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+<menuitem
+        id="hr_attendance_schedule_pattern_menu"
+        name="Attendance Schedule Patterns"
+        parent="menu_hr_attendance_configuration"
+        groups="attendance_schedule_pattern_group"
+        action="hr_attendance_schedule_pattern_action"
+        sequence="3"
+    />
+
+</odoo>

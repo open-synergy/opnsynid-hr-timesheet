@@ -42,6 +42,50 @@ class HrEmployeeBase(models.AbstractModel):
         store=True,
     )
 
+    @api.model
+    def _default_schedule_source(self):
+        """Return the schedule source set on the current company.
+
+        :return: the company's ``default_schedule_source``
+        :rtype: str
+        """
+        return self.env.company.default_schedule_source
+
+    @api.model
+    def _default_schedule_pattern_id(self):
+        """Return the schedule pattern set on the current company.
+
+        :return: the company's ``default_schedule_pattern_id``
+        :rtype: hr.attendance_schedule_pattern recordset
+        """
+        return self.env.company.default_schedule_pattern_id
+
+    schedule_source = fields.Selection(
+        string="Schedule Source",
+        selection=[
+            ("working_schedule", "Working Schedule"),
+            ("pattern", "Pattern"),
+        ],
+        required=True,
+        default=lambda self: self._default_schedule_source(),
+        help=(
+            "Default attendance schedule source copied onto a new "
+            "timesheet's own Schedule Source when this employee is "
+            "set on it. A new employee takes the default of the "
+            "company."
+        ),
+    )
+    schedule_pattern_id = fields.Many2one(
+        string="Schedule Pattern",
+        comodel_name="hr.attendance_schedule_pattern",
+        default=lambda self: self._default_schedule_pattern_id(),
+        help=(
+            "Default attendance schedule pattern copied onto a new "
+            "timesheet when this employee is set on it and the "
+            "Schedule Source is Pattern."
+        ),
+    )
+
     attendance_ids = fields.One2many(
         string="Attendance(s)",
         comodel_name="hr.timesheet_attendance",

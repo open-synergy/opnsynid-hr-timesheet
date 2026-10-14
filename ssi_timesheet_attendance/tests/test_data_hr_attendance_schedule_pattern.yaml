@@ -1,0 +1,795 @@
+setup:
+  steps:
+    - step: "Get a working schedule"
+      action: "search"
+      model: "resource.calendar"
+      domain: []
+      save_as: "calendar"
+      limit: 1
+      order: "id asc"
+
+    - step: "Create employee in UTC"
+      action: "create"
+      model: "hr.employee"
+      save_as: "employee"
+      values:
+        name: "Pattern Test Employee"
+        tz: "UTC"
+
+    - step: "Create frequency: every work day"
+      action: "create"
+      model: "frequency"
+      save_as: "freq_weekdays"
+      values:
+        name: "Pattern Test - Every Work Day"
+        code: "/"
+        interval: 1
+        interval_type: "daily"
+        use_byweekday: true
+        mo: true
+        tu: true
+        we: true
+        th: true
+        fr: true
+
+    - step: "Create frequency: every Saturday"
+      action: "create"
+      model: "frequency"
+      save_as: "freq_saturday"
+      values:
+        name: "Pattern Test - Every Saturday"
+        code: "/"
+        interval: 1
+        interval_type: "weekly"
+        use_byweekday: true
+        sa: true
+
+    - step: "Create frequency: second Saturday of the month"
+      action: "create"
+      model: "frequency"
+      save_as: "freq_second_saturday"
+      values:
+        name: "Pattern Test - Second Saturday"
+        code: "/"
+        interval: 1
+        interval_type: "monthly"
+        use_byweekday: true
+        sa: true
+        use_setpos: true
+        set_pos: 2
+
+    - step: "Create frequency: last Saturday of the month"
+      action: "create"
+      model: "frequency"
+      save_as: "freq_last_saturday"
+      values:
+        name: "Pattern Test - Last Saturday"
+        code: "/"
+        interval: 1
+        interval_type: "monthly"
+        use_byweekday: true
+        sa: true
+        use_setpos: true
+        set_pos: -1
+
+    - step: "Create frequency: every second week"
+      action: "create"
+      model: "frequency"
+      save_as: "freq_biweekly"
+      values:
+        name: "Pattern Test - Every Second Saturday Week"
+        code: "/"
+        interval: 2
+        interval_type: "weekly"
+        use_byweekday: true
+        sa: true
+
+scenarios:
+  - name: "Pattern - Work Days Plus Second Saturday In A Five Saturday Month"
+    steps:
+      - step: "Create pattern: Monday to Friday plus the second Saturday"
+        action: "create"
+        model: "hr.attendance_schedule_pattern"
+        save_as: "pattern"
+        values:
+          name: "Weekdays And Second Saturday"
+          code: "/"
+          line_ids:
+            - - 0
+              - 0
+              - sequence: 10
+                frequency_id: "REC: freq_weekdays.id"
+                effect: "work"
+                hour_from: 8.0
+                hour_to: 16.0
+            - - 0
+              - 0
+              - sequence: 20
+                frequency_id: "REC: freq_second_saturday.id"
+                effect: "work"
+                hour_from: 8.0
+                hour_to: 12.0
+
+      - step: "Create pattern timesheet for October 2026 (5 Saturdays)"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "pattern"
+          schedule_pattern_id: "REC: pattern.id"
+          working_schedule_id: "REC: calendar.id"
+          date_start: 2026-10-01
+          date_end: 2026-10-31
+
+      - step: "Generate the schedule"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Assert 22 work days plus one Saturday"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"]]
+        save_as: "all_schedules"
+        expect_count: 23
+
+      - step: "Assert the second Saturday has a slot"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"], ["date", "=", 2026-10-10]]
+        save_as: "second_saturday"
+        expect_count: 1
+
+      - step: "Assert the first Saturday has no slot"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"], ["date", "=", 2026-10-03]]
+        save_as: "first_saturday"
+        expect_count: 0
+
+      - step: "Assert the fourth Saturday has no slot"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"], ["date", "=", 2026-10-24]]
+        save_as: "fourth_saturday"
+        expect_count: 0
+
+      - step: "Assert the fifth Saturday has no slot"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"], ["date", "=", 2026-10-31]]
+        save_as: "fifth_saturday"
+        expect_count: 0
+
+      - step: "Assert the Saturday slot length"
+        action: "assert"
+        target: "second_saturday"
+        asserts:
+          schedule_work_hour:
+            type: "value"
+            expected: 4.0
+
+  - name: "Pattern - Every Saturday Except The Last One"
+    steps:
+      - step: "Create pattern: every Saturday works, the last Saturday is off"
+        action: "create"
+        model: "hr.attendance_schedule_pattern"
+        save_as: "pattern"
+        values:
+          name: "Saturdays Except Last"
+          code: "/"
+          line_ids:
+            - - 0
+              - 0
+              - sequence: 10
+                frequency_id: "REC: freq_saturday.id"
+                effect: "work"
+                hour_from: 8.0
+                hour_to: 12.0
+            - - 0
+              - 0
+              - sequence: 20
+                frequency_id: "REC: freq_last_saturday.id"
+                effect: "off"
+
+      - step: "Create pattern timesheet for October 2026"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "pattern"
+          schedule_pattern_id: "REC: pattern.id"
+          working_schedule_id: "REC: calendar.id"
+          date_start: 2026-10-01
+          date_end: 2026-10-31
+
+      - step: "Generate the schedule"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Assert four Saturdays have a slot"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"]]
+        save_as: "all_schedules"
+        expect_count: 4
+
+      - step: "Assert the last Saturday has no slot"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"], ["date", "=", 2026-10-31]]
+        save_as: "last_saturday"
+        expect_count: 0
+
+      - step: "Assert the Saturday before it has a slot"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"], ["date", "=", 2026-10-24]]
+        save_as: "fourth_saturday"
+        expect_count: 1
+
+  - name: "Pattern - Special Dates And National Holiday"
+    steps:
+      - step: "Declare a national public holiday on Wednesday"
+        action: "create"
+        model: "base.public.holiday"
+        save_as: "holiday_year"
+        values:
+          year: 2026
+          line_ids:
+            - - 0
+              - 0
+              - name: "Pattern Test National Holiday"
+                date: 2026-10-07
+
+      - step: "Create pattern: work days with three special dates"
+        action: "create"
+        model: "hr.attendance_schedule_pattern"
+        save_as: "pattern"
+        values:
+          name: "Weekdays With Special Dates"
+          code: "/"
+          line_ids:
+            - - 0
+              - 0
+              - sequence: 10
+                frequency_id: "REC: freq_weekdays.id"
+                effect: "work"
+                hour_from: 8.0
+                hour_to: 16.0
+          date_ids:
+            - - 0
+              - 0
+              - date: 2026-10-03
+                effect: "work"
+                hour_from: 9.0
+                hour_to: 13.0
+            - - 0
+              - 0
+              - date: 2026-10-05
+                effect: "off"
+            - - 0
+              - 0
+              - date: 2026-10-07
+                effect: "work"
+                hour_from: 9.0
+                hour_to: 13.0
+
+      - step: "Create pattern timesheet for the first nine days of October"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "pattern"
+          schedule_pattern_id: "REC: pattern.id"
+          working_schedule_id: "REC: calendar.id"
+          date_start: 2026-10-01
+          date_end: 2026-10-09
+
+      - step: "Generate the schedule"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Assert 5 work days (7 minus Monday off, minus holiday) plus Saturday"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"]]
+        save_as: "all_schedules"
+        expect_count: 6
+
+      - step: "Fetch the special Saturday slot"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"], ["date", "=", 2026-10-03]]
+        save_as: "special_saturday"
+        limit: 1
+
+      - step: "Assert the special Saturday slot has no pattern line"
+        action: "assert"
+        target: "special_saturday"
+        asserts:
+          schedule_work_hour:
+            type: "value"
+            expected: 4.0
+          pattern_id:
+            type: "m2o"
+            expected: "REC: pattern"
+          pattern_line_id:
+            type: "value"
+            operator: "is_falsy"
+
+      - step: "Assert the special off Monday has no slot"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"], ["date", "=", 2026-10-05]]
+        save_as: "special_off_monday"
+        expect_count: 0
+
+      - step: "Assert the national holiday wins over the special work date"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"], ["date", "=", 2026-10-07]]
+        save_as: "holiday_slot"
+        expect_count: 0
+
+  - name: "Pattern - Rebuild Is Idempotent And Keeps The Trace"
+    steps:
+      - step: "Create pattern: work days"
+        action: "create"
+        model: "hr.attendance_schedule_pattern"
+        save_as: "pattern"
+        values:
+          name: "Weekdays Only"
+          code: "/"
+          line_ids:
+            - - 0
+              - 0
+              - sequence: 10
+                frequency_id: "REC: freq_weekdays.id"
+                effect: "work"
+                hour_from: 8.0
+                hour_to: 16.0
+
+      - step: "Fetch the pattern line"
+        action: "search"
+        model: "hr.attendance_schedule_pattern.line"
+        domain: [["pattern_id", "=", "REC: pattern.id"]]
+        save_as: "line"
+        limit: 1
+
+      - step: "Create pattern timesheet for one week"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "pattern"
+          schedule_pattern_id: "REC: pattern.id"
+          working_schedule_id: "REC: calendar.id"
+          date_start: 2026-10-05
+          date_end: 2026-10-11
+
+      - step: "Generate the schedule the first time"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Generate the schedule the second time"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Assert still exactly five slots"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"]]
+        save_as: "all_schedules"
+        expect_count: 5
+
+      - step: "Fetch the Monday slot"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"], ["date", "=", 2026-10-05]]
+        save_as: "monday_slot"
+        limit: 1
+
+      - step: "Assert the slot carries the pattern and the line"
+        action: "assert"
+        target: "monday_slot"
+        asserts:
+          pattern_id:
+            type: "m2o"
+            expected: "REC: pattern"
+          pattern_line_id:
+            type: "m2o"
+            expected: "REC: line"
+          schedule_work_hour:
+            type: "value"
+            expected: 8.0
+
+  - name: "Pattern - Slot Hours Follow The Employee Timezone"
+    steps:
+      - step: "Create employee in Jakarta time"
+        action: "create"
+        model: "hr.employee"
+        save_as: "jakarta_employee"
+        values:
+          name: "Pattern Test Jakarta Employee"
+          tz: "Asia/Jakarta"
+
+      - step: "Create pattern: work days"
+        action: "create"
+        model: "hr.attendance_schedule_pattern"
+        save_as: "pattern"
+        values:
+          name: "Weekdays Jakarta"
+          code: "/"
+          line_ids:
+            - - 0
+              - 0
+              - sequence: 10
+                frequency_id: "REC: freq_weekdays.id"
+                effect: "work"
+                hour_from: 8.0
+                hour_to: 16.0
+
+      - step: "Create pattern timesheet for one week"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        values:
+          employee_id: "REC: jakarta_employee.id"
+          schedule_source: "pattern"
+          schedule_pattern_id: "REC: pattern.id"
+          working_schedule_id: "REC: calendar.id"
+          date_start: 2026-10-05
+          date_end: 2026-10-11
+
+      - step: "Generate the schedule"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Fetch the Monday slot"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"], ["date", "=", 2026-10-05]]
+        save_as: "monday_slot"
+        limit: 1
+
+      - step: "Assert 08:00 Jakarta is stored as 01:00 UTC"
+        action: "assert"
+        target: "monday_slot"
+        asserts:
+          date_start:
+            type: "value"
+            expected: 2026-10-05 01:00:00
+          date_end:
+            type: "value"
+            expected: 2026-10-05 09:00:00
+
+  - name: "Pattern - Line Validity Range Limits The Days"
+    steps:
+      - step: "Create pattern: work days valid for one week only"
+        action: "create"
+        model: "hr.attendance_schedule_pattern"
+        save_as: "pattern"
+        values:
+          name: "Weekdays One Week"
+          code: "/"
+          line_ids:
+            - - 0
+              - 0
+              - sequence: 10
+                frequency_id: "REC: freq_weekdays.id"
+                effect: "work"
+                hour_from: 8.0
+                hour_to: 16.0
+                date_start: 2026-10-12
+                date_end: 2026-10-16
+
+      - step: "Create pattern timesheet for October 2026"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "pattern"
+          schedule_pattern_id: "REC: pattern.id"
+          working_schedule_id: "REC: calendar.id"
+          date_start: 2026-10-01
+          date_end: 2026-10-31
+
+      - step: "Generate the schedule"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+
+      - step: "Assert only the valid week has slots"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: timesheet.id"]]
+        save_as: "all_schedules"
+        expect_count: 5
+
+  - name: "Pattern - Employee Defaults Come From The Company"
+    steps:
+      - step: "Create pattern"
+        action: "create"
+        model: "hr.attendance_schedule_pattern"
+        save_as: "pattern"
+        values:
+          name: "Company Default Pattern"
+          code: "/"
+
+      - step: "Set the company default to the pattern source"
+        action: "write"
+        target: "company"
+        values:
+          default_schedule_source: "pattern"
+          default_schedule_pattern_id: "REC: pattern.id"
+
+      - step: "Create a new employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "defaults_employee"
+        values:
+          name: "Pattern Test Defaults Employee"
+
+      - step: "Assert the employee took the company defaults"
+        action: "assert"
+        target: "defaults_employee"
+        asserts:
+          schedule_source:
+            type: "value"
+            expected: "pattern"
+          schedule_pattern_id:
+            type: "m2o"
+            expected: "REC: pattern"
+
+      - step: "Restore the company default"
+        action: "write"
+        target: "company"
+        values:
+          default_schedule_source: "working_schedule"
+          default_schedule_pattern_id: false
+
+  - name: "Pattern - Timesheet Takes Source And Pattern From The Employee"
+    steps:
+      - step: "Create pattern"
+        action: "create"
+        model: "hr.attendance_schedule_pattern"
+        save_as: "pattern"
+        values:
+          name: "Employee Pattern"
+          code: "/"
+
+      - step: "Set the employee to the pattern source"
+        action: "write"
+        target: "employee"
+        values:
+          schedule_source: "pattern"
+          schedule_pattern_id: "REC: pattern.id"
+
+      - step: "Pick the employee on a new timesheet form"
+        action: "form"
+        model: "hr.timesheet"
+        save: false
+        values:
+          employee_id: "REC: employee"
+        asserts:
+          schedule_source:
+            type: "value"
+            expected: "pattern"
+          schedule_pattern_id:
+            type: "m2o"
+            expected: "REC: pattern"
+
+  - name: "Pattern - Generate Timesheet Wizard Carries Source And Pattern"
+    steps:
+      - step: "Create a dedicated user for the employee"
+        action: "create"
+        model: "res.users"
+        save_as: "wizard_user"
+        values:
+          name: "Pattern Wizard User"
+          login: "pattern_wizard_user@example.com"
+
+      - step: "Create pattern: work days"
+        action: "create"
+        model: "hr.attendance_schedule_pattern"
+        save_as: "pattern"
+        values:
+          name: "Wizard Pattern"
+          code: "/"
+          line_ids:
+            - - 0
+              - 0
+              - sequence: 10
+                frequency_id: "REC: freq_weekdays.id"
+                effect: "work"
+                hour_from: 8.0
+                hour_to: 16.0
+
+      - step: "Create employee on the pattern source"
+        action: "create"
+        model: "hr.employee"
+        save_as: "wizard_employee"
+        values:
+          name: "Pattern Wizard Employee"
+          tz: "UTC"
+          user_id: "REC: wizard_user.id"
+          schedule_source: "pattern"
+          schedule_pattern_id: "REC: pattern.id"
+
+      - step: "Generate the timesheet through the wizard"
+        action: "wizard"
+        model: "hr.generate_timesheet"
+        target: "wizard_employee"
+        as_user: "base.user_admin"
+        values:
+          employee_ids: [[6, 0, ["REC: wizard_employee.id"]]]
+          date_start: 2026-10-05
+          date_end: 2026-10-11
+        method: "action_generate"
+
+      - step: "Fetch the generated timesheet"
+        action: "search"
+        model: "hr.timesheet"
+        domain: [["employee_id", "=", "REC: wizard_employee.id"]]
+        save_as: "generated"
+        limit: 1
+
+      - step: "Assert the timesheet carries the source and the pattern"
+        action: "assert"
+        target: "generated"
+        asserts:
+          schedule_source:
+            type: "value"
+            expected: "pattern"
+          schedule_pattern_id:
+            type: "m2o"
+            expected: "REC: pattern"
+
+      - step: "Assert the schedule was built from the pattern"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain: [["sheet_id", "=", "REC: generated.id"]]
+        save_as: "generated_schedules"
+        expect_count: 5
+
+  - name: "Pattern - Frequency Must Repeat Every One Interval"
+    steps:
+      - step: "Create pattern with a two-week frequency"
+        action: "create"
+        model: "hr.attendance_schedule_pattern"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "must repeat every 1 interval"
+        values:
+          name: "Biweekly Pattern"
+          code: "/"
+          line_ids:
+            - - 0
+              - 0
+              - frequency_id: "REC: freq_biweekly.id"
+                effect: "work"
+                hour_from: 8.0
+                hour_to: 12.0
+
+  - name: "Pattern - Working Hours Must Fit One Day"
+    steps:
+      - step: "Create pattern whose end is not after its start"
+        action: "create"
+        model: "hr.attendance_schedule_pattern"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "Working hours must satisfy"
+        values:
+          name: "Backwards Hours Pattern"
+          code: "/"
+          line_ids:
+            - - 0
+              - 0
+              - frequency_id: "REC: freq_weekdays.id"
+                effect: "work"
+                hour_from: 16.0
+                hour_to: 8.0
+
+      - step: "Create pattern whose end is after midnight"
+        action: "create"
+        model: "hr.attendance_schedule_pattern"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "Working hours must satisfy"
+        values:
+          name: "Over Midnight Pattern"
+          code: "/"
+          line_ids:
+            - - 0
+              - 0
+              - frequency_id: "REC: freq_weekdays.id"
+                effect: "work"
+                hour_from: 20.0
+                hour_to: 25.0
+
+      - step: "Create pattern with a special date whose end is not after its start"
+        action: "create"
+        model: "hr.attendance_schedule_pattern"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "Working hours must satisfy"
+        values:
+          name: "Backwards Special Date Pattern"
+          code: "/"
+          date_ids:
+            - - 0
+              - 0
+              - date: 2026-10-03
+                effect: "work"
+                hour_from: 13.0
+                hour_to: 9.0
+
+  - name: "Pattern - Special Date Must Be Unique Within A Pattern"
+    steps:
+      - step: "Create pattern with the same special date twice"
+        action: "create"
+        model: "hr.attendance_schedule_pattern"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "Special date must be unique"
+        values:
+          name: "Duplicate Special Date Pattern"
+          code: "/"
+          date_ids:
+            - - 0
+              - 0
+              - date: 2026-10-03
+                effect: "off"
+            - - 0
+              - 0
+              - date: 2026-10-03
+                effect: "off"
+
+  - name: "Pattern - Pattern Source Requires A Pattern"
+    steps:
+      - step: "Create pattern timesheet without a pattern"
+        action: "create"
+        model: "hr.timesheet"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "Schedule pattern is required"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "pattern"
+          working_schedule_id: "REC: calendar.id"
+          date_start: 2026-10-05
+          date_end: 2026-10-11
+
+  - name: "Pattern - Pattern Source Requires A Working Schedule"
+    steps:
+      - step: "Create pattern"
+        action: "create"
+        model: "hr.attendance_schedule_pattern"
+        save_as: "pattern"
+        values:
+          name: "Needs Working Schedule Pattern"
+          code: "/"
+
+      - step: "Create pattern timesheet without a working schedule"
+        action: "create"
+        model: "hr.timesheet"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "Working schedule is required"
+        values:
+          employee_id: "REC: employee.id"
+          schedule_source: "pattern"
+          schedule_pattern_id: "REC: pattern.id"
+          date_start: 2026-10-05
+          date_end: 2026-10-11
