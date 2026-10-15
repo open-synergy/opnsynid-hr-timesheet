@@ -448,14 +448,14 @@ msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_company__default_schedule_pattern_id
-#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_config_settings__default_schedule_pattern_id
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_config_settings__schedule_pattern_id
 #: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.res_config_settings_view_form
 msgid "Default Schedule Pattern"
 msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_company__default_schedule_source
-#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_config_settings__default_schedule_source
+#: model:ir.model.fields,field_description:ssi_timesheet_attendance.field_res_config_settings__schedule_source
 #: model_terms:ir.ui.view,arch_db:ssi_timesheet_attendance.res_config_settings_view_form
 msgid "Default Schedule Source"
 msgstr ""
@@ -1160,7 +1160,7 @@ msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_res_company__default_schedule_pattern_id
-#: model:ir.model.fields,help:ssi_timesheet_attendance.field_res_config_settings__default_schedule_pattern_id
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_res_config_settings__schedule_pattern_id
 msgid ""
 "Schedule pattern a new employee of this company starts with, used when the "
 "schedule source is Pattern."
@@ -1174,7 +1174,7 @@ msgstr ""
 
 #. module: ssi_timesheet_attendance
 #: model:ir.model.fields,help:ssi_timesheet_attendance.field_res_company__default_schedule_source
-#: model:ir.model.fields,help:ssi_timesheet_attendance.field_res_config_settings__default_schedule_source
+#: model:ir.model.fields,help:ssi_timesheet_attendance.field_res_config_settings__schedule_source
 msgid ""
 "Schedule source a new employee of this company starts with. The employee "
 "then passes it on to the timesheets of that employee."
