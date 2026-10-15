@@ -75,7 +75,7 @@
                         <div class="o_setting_right_pane">
                             <label
                                 string="Default Schedule Source"
-                                for="default_schedule_source"
+                                for="schedule_source"
                             />
                             <span
                                 class="fa fa-lg fa-building-o"
@@ -83,7 +83,7 @@
                                 groups="base.group_multi_company"
                             />
                             <div class="content-group mt16">
-                                <field name="default_schedule_source" />
+                                <field name="schedule_source" />
                             </div>
                         </div>
                     </div>
@@ -92,7 +92,7 @@
                         <div class="o_setting_right_pane">
                             <label
                                 string="Default Schedule Pattern"
-                                for="default_schedule_pattern_id"
+                                for="schedule_pattern_id"
                             />
                             <span
                                 class="fa fa-lg fa-building-o"
@@ -101,7 +101,7 @@
                             />
                             <div class="content-group mt16">
                                 <field
-                                    name="default_schedule_pattern_id"
+                                    name="schedule_pattern_id"
                                     can_create="false"
                                     can_write="false"
                                     can_delete="false"
