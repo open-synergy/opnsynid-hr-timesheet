@@ -12,6 +12,10 @@ class ResConfigSettings(models.TransientModel):
     check-in/check-out reasons, and the registered attendance
     location requirement, so they can be edited from the Settings
     screen instead of the Companies form.
+
+    The schedule fields are not prefixed with ``default_`` because
+    Odoo treats such names as default value settings that need a
+    ``default_model`` attribute.
     """
 
     _inherit = "res.config.settings"
@@ -36,11 +40,11 @@ class ResConfigSettings(models.TransientModel):
         related="company_id.attendance_location_required",
         readonly=False,
     )
-    default_schedule_source = fields.Selection(
+    schedule_source = fields.Selection(
         related="company_id.default_schedule_source",
         readonly=False,
     )
-    default_schedule_pattern_id = fields.Many2one(
+    schedule_pattern_id = fields.Many2one(
         related="company_id.default_schedule_pattern_id",
         readonly=False,
     )

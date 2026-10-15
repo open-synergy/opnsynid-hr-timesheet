@@ -9,6 +9,7 @@ from . import test_timesheet_schedule_rebuild
 from . import test_hr_attendance_schedule_pattern
 from . import test_hr_attendance_location
 from . import test_hr_timesheet_attendance_location_link
+from . import test_res_config_settings
 from . import test_ui_hr_attendance_reason
 from . import test_ui_hr_attendance_schedule_pattern
 from . import test_ui_hr_timesheet_attendance

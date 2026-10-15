@@ -1,0 +1,41 @@
+scenarios:
+  - name: "Settings - Default Schedule Is Saved To The Company"
+    steps:
+      - step: "Create pattern"
+        action: "create"
+        model: "hr.attendance_schedule_pattern"
+        save_as: "pattern"
+        values:
+          name: "Settings Test Pattern"
+          code: "/"
+
+      - step: "Open the Settings form and choose the pattern source"
+        action: "form"
+        model: "res.config.settings"
+        save_as: "settings"
+        values:
+          schedule_source: "pattern"
+          schedule_pattern_id: "REC: pattern"
+
+      - step: "Apply the settings"
+        action: "call"
+        target: "settings"
+        method: "execute"
+
+      - step: "Assert the company took the schedule source"
+        action: "assert"
+        target: "company"
+        asserts:
+          default_schedule_source:
+            type: "value"
+            expected: "pattern"
+          default_schedule_pattern_id:
+            type: "m2o"
+            expected: "REC: pattern"
+
+      - step: "Restore the company default"
+        action: "write"
+        target: "company"
+        values:
+          default_schedule_source: "working_schedule"
+          default_schedule_pattern_id: false
